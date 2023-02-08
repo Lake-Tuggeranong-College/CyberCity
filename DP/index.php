@@ -1,3 +1,4 @@
-<?php
+<?php include "template.php"; ?>
+<title>Cyber City</title>
 
-echo "Hello World!";
+<h1 class='text-primary'>Welcome to our Cyber City</h1>
