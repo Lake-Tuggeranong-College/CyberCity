@@ -13,5 +13,5 @@ try {
     echo "Error: " . $e->getMessage();
 }
 
-$conn = null;
+//$conn = null;
 ?>
