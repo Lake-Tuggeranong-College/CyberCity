@@ -2,9 +2,9 @@
 session_start();
 
 $servername = "10.76.43.63";
-$username = "DP";
-$password = "thomakindofcute1!";
-$dbname = "DP";
+$username = "OD";
+$password = "OD";
+$dbname = "OD";
 
 try {
     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
@@ -13,3 +13,5 @@ try {
     echo "Error: " . $e->getMessage();
 }
 
+//$conn = null;
+?>
