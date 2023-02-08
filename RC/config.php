@@ -16,8 +16,9 @@ try {
 }
 
 if (!$errorCaught) {
-    echo "Database connection configured correctly, and database connection good.";
+    // This is for debugging purposes only.
+//    echo "Database connection configured correctly, and database connection good.";
 }
 
-$conn = null;
+//$conn = null;
 ?>
