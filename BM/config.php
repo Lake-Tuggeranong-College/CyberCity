@@ -15,7 +15,7 @@ try {
     echo "Error: " . $e->getMessage();
 }
 if (!$errorCaught) {
-    echo "Database connection configured correctly, and database connection good.";
+    //echo "Database connection configured correctly, and database connection good.";
 }
 
 //$conn = null;
