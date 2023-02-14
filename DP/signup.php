@@ -24,10 +24,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = sanitise_data($_POST['username']);
     $password = sanitise_data($_POST['password']);
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
     $query = $conn->query("SELECT COUNT(*) FROM users WHERE Username='$username'");
-    $data = $query->fetchAll();
-    $numberOfUsers = (int)$data;
-    echo $numberOfUsers;
+    $data = $query->fetch();
+    $numberOfUsers = (int)$data[0];
 
     if ($numberOfUsers == 0) {
         $sql = "INSERT INTO users (Username, HashedPassword, AccessLevel) VALUES (:newUsername, :newPassword, 1)";
@@ -35,9 +35,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bindValue(':newUsername', $username);
         $stmt->bindValue(':newPassword', $hashed_password);
         $stmt->execute();
-        //echo "User " . $username . " was created";
+        echo "User " . $username . " was created";
     } else {
-        //echo "User " . $username . " already exist, please chose a new username";
+        echo "User " . $username . " already exist, please chose a new username";
     }
 
 }
