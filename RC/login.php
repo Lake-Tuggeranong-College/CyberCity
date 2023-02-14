@@ -35,6 +35,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $query = $conn->query("SELECT * FROM `user` WHERE `username`='$username'");
         $row = $query->fetch();
         if (password_verify($password, $row[2])) {
+            // successful log on.
+            $_SESSION["user_id"] = $row[0];
+            $_SESSION["username"] = $row[1];
+            $_SESSION['access_level'] = $row[3];
+        } else {
+            // unsuccessful log on.
+            echo "<div class='alert alert-danger'>Invalid username or password</div>";
+        }
+    }
+}
+
+?>
+
+
+<!--
+
+
+
             $_SESSION["user_id"] = $row[0];
             $_SESSION["username"] = $row[1];
             $_SESSION['access_level'] = $row[3];
@@ -43,7 +61,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             echo "<div class='alert alert-danger'>Invalid username or password</div>";
         }
-    }
-}
 
-?>
+-->
