@@ -36,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     //TODO check if user already exists
     $query = $conn->query("SELECT COUNT(*) FROM User WHERE username='$username'");
-    $data = $query->fetchArray();
+    $data = $query->fetch();
     $numberOfUsers = (int)$data[0];
 
     if ($numberOfUsers > 0) {
