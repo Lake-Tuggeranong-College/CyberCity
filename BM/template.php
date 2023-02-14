@@ -4,7 +4,6 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
 </head>
@@ -35,7 +34,6 @@
     </div>
 </nav>
 
-
 <script src="js/bootstrap.bundle.js"></script>
 
 <?php
@@ -52,5 +50,4 @@ function outputFooter()
     date_default_timezone_set('Australia/Canberra');
     echo "<footer>This page was last modified: " . date("F d Y H:i:s.", filemtime("index.php")) . "</footer>";
 }
-
 ?>
