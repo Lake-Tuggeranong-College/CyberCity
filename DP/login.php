@@ -1,5 +1,5 @@
 <?php include "template.php"; ?>
-
+<title>Log In</title>
 <h1 class='text-primary'>Log Up Below</h1>
 
 <form action="index.php">
