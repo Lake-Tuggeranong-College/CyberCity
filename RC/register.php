@@ -35,8 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = sanitise_data($_POST['username']);
     $password = sanitise_data($_POST['password']);
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-//    echo $username;
-//    echo $hashed_password;
+
 
 
     // TODO CHECK IF USER EXISTS
