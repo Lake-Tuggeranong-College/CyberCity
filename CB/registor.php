@@ -34,24 +34,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = sanitise_data($_POST['username']);
     $password = sanitise_data($_POST['password']);
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+    //echo $username;
+    //echo $hashed_password;
 
-    $query = $conn->query("SELECT COUNT(*) FROM users WHERE username='$username'")
-    $data = $query->fetchAll();
+    $query = $conn->query("SELECT COUNT(*) FROM user WHERE username='$username'");
+    $data = $query->fetch();
     $numberOfUsers = (int)$data[0];
 
     if ($numberOfUsers > 0) {
-        echo "this username has already been taken";
-} else {
+        echo "This username has already been taken.";
+    } else {
 
-    }
     $sql = "INSERT INTO user (username, hashed_password, access_level) VALUES (:newUsername, :newPassword, 1)";
     $stmt = $conn->prepare($sql);
     $stmt->bindValue(':newUsername', $username);
     $stmt->bindValue(':newPassword', $hashed_password);
-    echo $hashed_password;
-    echo $username;
     $stmt->execute();
-
-}
-
-?>
+}}
