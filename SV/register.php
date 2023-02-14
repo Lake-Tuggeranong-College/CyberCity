@@ -1,3 +1,15 @@
+<?php include "template.php"; ?>
+<title>Cyber City - Registration</title>
+
+<h1 class='text-primary'>Please register for our site</h1>
+
+<!--
+Create a bootstrapped form for 2 fields
+- username
+- password
+data will be need collected, and stored in the 'user' table with an access level of 1.
+IMPORTANT - the password needs to be 'hashed' prior to saving to the database.
+-->
 <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" enctype="multipart/form-data">
     <div class="container-fluid">
         <div class="row">
@@ -25,22 +37,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     //echo $hashed_password;
 
     // TODO CHECK IF USER EXISTS
-    $query = $conn->query(statment: "SELECT COUNT(*) FROM user WHERE username='$username'");
-    $data = $query->fetchArray();
+    $query = $conn->query("SELECT COUNT(*) FROM user WHERE username='$username'");
+    $data = $query->fetch();
     $numberOfUsers = (int)$data[0];
 
     if ($numberOfUsers > 0) {
-        echo "this username has already been taken.";
+        echo "This username has already been taken.";
     } else {
-
-
         $sql = "INSERT INTO user (username, hashed_password, access_level) VALUES (:newUsername, :newPassword, 1)";
         $stmt = $conn->prepare($sql);
         $stmt->bindValue(':newUsername', $username);
         $stmt->bindValue(':newPassword', $hashed_password);
         $stmt->execute();
     }
+
+
 }
+
+
 ?>
 
 
