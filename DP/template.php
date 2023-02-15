@@ -24,14 +24,13 @@
                 <li class="nav-item">
                     <a class="nav-link" href="index.php">Home</a>
                 </li>
-                <li class="nav-item">
-                    <a class="alert alert-info d-flex" href="signup.php">Sign Up</a>
-                </li>
+
             </ul>
-            <?php if (isset($_SESSION["name"])) {
-                echo "<div class='alert alert-success d-flex'><span>Welcome, " . $_SESSION["name"] . "<br><a href='logout.php'>Logout</a></span></div>";
+            <?php if (isset($_SESSION["username"])) {
+                echo "<div class='alert alert-success d-flex'><span>Welcome, " . $_SESSION["username"] . "<br><a href='logout.php'>Logout</a></span></div>";
             } else {
-                echo "<div class='alert alert-info d-flex'><a href='login.php'>Sign In</a>";
+                echo "<div class='alert alert-info d-flex'> <a href='signup.php'>Sign Up</a> </div>";
+                echo "<div class='alert alert-info d-flex'><a href='signin.php'>Sign In</a></div>";
             }
             ?>
         </div>
