@@ -15,7 +15,7 @@
                 </div>
             </div>
         </div>
-        <input type="submit" name="formSubmit" value="Submit">
+        <input type="submit" name="formSubmit" value="Sign Up">
     </form>
 
 
@@ -42,3 +42,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 }
 ?>
+
+</body>
+</html>
