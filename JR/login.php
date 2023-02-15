@@ -1,4 +1,5 @@
 <?php include "template.php"; ?>
+
 <title>Cyber City - login</title>
 
 
@@ -31,9 +32,30 @@
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = sanitise_data($_POST['username']);
     $password = sanitise_data($_POST['password']);
-    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+    $query = $conn->query("SELECT COUNT(*) as count FROM `user` WHERE `username`='$username'");
+    $row = $query->fetch();
+    $count = $row[0];
+
+    if ($count > 0) {
+        $query = $conn->query("SELECT * FROM `user` WHERE `username`='$username'");
+        $row = $query->fetch();
+        if (password_verify($password, $row[2])) {
+            $_SESSION["user_id"] = $row[0];
+            $_SESSION["username"] = $row[1];
+            $_SESSION['access_level'] = $row[3];
+            header("Location:index.php");
+        }
+        else {
+            // unsuccessful log on.
+            echo "<div class='alert alert-danger'>Invalid username or password</div>";
+        }
+    }
+//    header("refresh: 3;");
 }
-?>
+
+
+
 
 
 
