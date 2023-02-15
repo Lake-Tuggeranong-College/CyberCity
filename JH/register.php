@@ -1,14 +1,14 @@
 <?php include "template.php"; ?>
-    <title>Cyber City - registration</title>
+    <title>Cyber City - Registration</title>
 
-    <h1 class='text-primary'>please register for our sight</h1>
-    <! --
-    create bootstrap form for 2 fields
+    <h1 class='text-primary'>Please register for our site</h1>
 
-    -user
-    -pass
-    data need cloceted and stored user databace acess level 1
-    IMPORTANT - password be hashed prior ro save databace
+    <!--
+    Create a bootstrapped form for 2 fields
+    - username
+    - password
+    data will be need collected, and stored in the 'user' table with an access level of 1.
+    IMPORTANT - the password needs to be 'hashed' prior to saving to the database.
     -->
 
     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" enctype="multipart/form-data">
@@ -28,15 +28,16 @@
         <input type="submit" name="formSubmit" value="Submit">
     </form>
 
-
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = sanitise_data($_POST['username']);
     $password = sanitise_data($_POST['password']);
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-    //echo $username;
-    //echo $hashed_password;
+//    echo $username;
+//    echo $hashed_password;
 
+
+    // TODO CHECK IF USER EXISTS
     $query = $conn->query("SELECT COUNT(*) FROM user WHERE username='$username'");
     $data = $query->fetch();
     $numberOfUsers = (int)$data[0];
@@ -44,10 +45,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($numberOfUsers > 0) {
         echo "This username has already been taken.";
     } else {
+        $sql = "INSERT INTO user (username, hashed_password, access_level) VALUES (:newUsername, :newPassword, 1)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue(':newUsername', $username);
+        $stmt->bindValue(':newPassword', $hashed_password);
+        $stmt->execute();
+    }
 
-    $sql = "INSERT INTO user (username, hashed_password, access_level) VALUES (:newUsername, :newPassword, 1)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bindValue(':newUsername', $username);
-    $stmt->bindValue(':newPassword', $hashed_password);
-    $stmt->execute();
-}}
+
+}
+
+
+?>
