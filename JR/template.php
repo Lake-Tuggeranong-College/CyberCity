@@ -1,3 +1,5 @@
+
+
 <?php require_once 'config.php'; ?>
 <html>
 <head>
@@ -25,17 +27,21 @@
                     <a class="nav-link" href="index.php">Home</a>
                 </li>
             </ul>
-            <?php if (isset($_SESSION["name"])) {
-                echo "<div class='alert alert-success d-flex'><span>Welcome, " . $_SESSION["name"] . "<br><a href='logout.php'>Logout</a></span></div>";
+            <?php if (isset($_SESSION["username"])) {
+                echo "<div class='alert alert-success d-flex'><span>Welcome, " . $_SESSION["username"] . "<br><a href='logout.php'>Logout</a></span></div>";
             } else {
-                echo "<div class='alert alert-info d-flex'><a href='index.php'>Sign In</a>";
+                echo "<div class='alert alert-info d-flex'><a href='login.php'>Sign In</a></div>";
+                echo "<div class='alert alert-info d-flex'><a href='register.php'>Sign up</a></div>";
+
             }
+
             ?>
         </div>
     </div>
 </nav>
 
-
+</body>
+</html>
 <script src="js/bootstrap.bundle.js"></script>
 
 <?php
@@ -54,3 +60,22 @@ function outputFooter()
 }
 
 ?>
+
+
+<!--<form action="--><?php //echo htmlspecialchars($_SERVER["PHP_SELF"]); ?><!--" method="post" enctype="multipart/form-data">-->
+<!--    <div class="container-fluid">-->
+<!--        <div class="row">-->
+<!--            <!--Customer Details-->-->
+<!---->
+<!--            <div class="col-md-12">-->
+<!--                <h2>Account Details</h2>-->
+<!--                <p>Please enter wanted username and password:</p>-->
+<!--                <p>User Name<input type="text" name="username" class="form-control" required="required"></p>-->
+<!--                <p>Password<input type="password" name="password" class="form-control" required="required"></p>-->
+<!---->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <input type="submit" name="formSubmit" value="Submit">-->
+<!--</form>-->
+
