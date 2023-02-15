@@ -1,7 +1,8 @@
 <?php include "template.php"; ?>
-<title>Cyber city Registration</title>
+<title>Cyber City - login</title>
+<h1 class='text-primary'>login</h1>
 
-<h1 class='text-primary'>Please register on our site</h1>
+//form
 <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" enctype="multipart/form-data">
     <div class="container-fluid">
         <div class="row">
@@ -20,29 +21,9 @@
 </form>
 
 <?php
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = sanitise_data($_POST['username']);
     $password = sanitise_data($_POST['password']);
-    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-    //  echo $username;
-    //   echo $hashed_password;
-
-// check username in database
-    $query = $conn->query("SELECT COUNT(*) FROM user WHERE username='$username'");
-    $data = $query->fetch();
-    $numberOfUsers = (int)$data[0];
-
-    if ($numberOfUsers > 0) {
-        echo "This username has already been taken.";
-    } else {
-        $sql = "INSERT INTO user (username, hashed_password, access_level) VALUES (:newUsername, :newPassword, 1)";
-        $stmt = $conn->prepare($sql);
-        $stmt->bindValue(':newUsername', $username);
-        $stmt->bindValue(':newPassword', $hashed_password);
-        $stmt->execute();
-    }
 
 }
-?>
-
+    ?>
