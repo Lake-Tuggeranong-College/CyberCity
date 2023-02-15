@@ -40,12 +40,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
     // TODO CHECK IF USER EXISTS
+    $query = $conn->query("SELECT COUNT(*) FROM user WHERE username='$username'");
+    $data = $query->fetch();
+    $numberOfUsers = (int)$data[0];
 
-    $sql = "INSERT INTO user (username, hashed_password, access_level) VALUES (:newUsername, :newPassword, 1)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bindValue(':newUsername', $username);
-    $stmt->bindValue(':newPassword', $hashed_password);
-    $stmt->execute();
+    if ($numberOfUsers > 0) {
+        echo "This username has already been taken.";
+    } else {
+        $sql = "INSERT INTO user (username, hashed_password, access_level) VALUES (:newUsername, :newPassword, 1)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue(':newUsername', $username);
+        $stmt->bindValue(':newPassword', $hashed_password);
+        $stmt->execute();
+    }
+
 
 }
 

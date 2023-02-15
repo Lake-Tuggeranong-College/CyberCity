@@ -4,7 +4,6 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
 </head>
@@ -13,7 +12,7 @@
 <nav class="navbar navbar-expand-sm navbar-light bg-light">
     <div class="container-fluid">
         <a class="navbar-brand" href="index.php">
-            <img src="images/logo.png" alt="" width="80" height="80">
+            <img src="images/logo.jpg" alt="" width="80" height="80">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,7 +34,6 @@
     </div>
 </nav>
 
-
 <script src="js/bootstrap.bundle.js"></script>
 
 <?php
@@ -52,5 +50,4 @@ function outputFooter()
     date_default_timezone_set('Australia/Canberra');
     echo "<footer>This page was last modified: " . date("F d Y H:i:s.", filemtime("index.php")) . "</footer>";
 }
-
 ?>

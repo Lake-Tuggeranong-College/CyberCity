@@ -1,6 +1,5 @@
 <?php
 session_start();
-
 $servername = "10.76.43.63";
 $username = "BM";
 $password = "DeltaAce070605";
@@ -15,7 +14,7 @@ try {
     echo "Error: " . $e->getMessage();
 }
 if (!$errorCaught) {
-    echo "Database connection configured correctly, and database connection good.";
+    //echo "Database connection configured correctly, and database connection good.";
 }
 
 //$conn = null;
