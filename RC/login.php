@@ -39,6 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION["user_id"] = $row[0];
             $_SESSION["username"] = $row[1];
             $_SESSION['access_level'] = $row[3];
+            header("Location:index.php");
         } else {
             // unsuccessful log on.
             echo "<div class='alert alert-danger'>Invalid username or password</div>";
@@ -47,6 +48,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 ?>
+
+</body>
+</html>
 
 
 <!--
