@@ -13,7 +13,7 @@
 <nav class="navbar navbar-expand-sm navbar-light bg-light">
     <div class="container-fluid">
         <a class="navbar-brand" href="index.php">
-            <img src="images/logo.png" alt="" width="200" height="80">
+            <img src="images/logo.png" alt="" width="220" height="80">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -25,10 +25,11 @@
                     <a class="nav-link" href="index.php">Home</a>
                 </li>
             </ul>
-            <?php if (isset($_SESSION["name"])) {
-                echo "<div class='alert alert-success d-flex'><span>Welcome, " . $_SESSION["name"] . "<br><a href='logout.php'>Logout</a></span></div>";
+            <?php if (isset($_SESSION["username"])) {
+                echo "<div class='alert alert-success d-flex'><span>Welcome, " . $_SESSION["username"] . "<br><a href='logout.php'>Logout</a></span></div>";
             } else {
-                echo "<div class='alert alert-info d-flex'><a href='index.php'>Sign In</a>";
+                echo "<div class='alert alert-info d-flex'><a href='login.php'>Sign In</a>";
+                echo "<div class='alert alert-info d-flex'><a href='register.php'>Register</a>";
             }
             ?>
         </div>
@@ -54,3 +55,6 @@ function outputFooter()
 }
 
 ?>
+
+</body>
+    </html>
