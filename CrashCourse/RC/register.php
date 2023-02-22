@@ -1,4 +1,8 @@
-<?php include "template.php"; ?>
+
+<?php
+include "template.php";
+/** @var TYPE_NAME $conn */
+?>
 <title>Cyber City - Registration</title>
 
 <h1 class='text-primary'>Please register for our site</h1>
@@ -37,7 +41,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
 
-
     // TODO CHECK IF USER EXISTS
     $query = $conn->query("SELECT COUNT(*) FROM user WHERE username='$username'");
     $data = $query->fetch();
@@ -58,7 +61,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
 ?>
-
 
 
 </body>
