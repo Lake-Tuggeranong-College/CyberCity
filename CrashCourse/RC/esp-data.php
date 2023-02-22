@@ -23,8 +23,8 @@ $sql = "SELECT id, sensor, location, value1, value2, value3, reading_time FROM S
         <div class="col-md-1">Sensor</div>
         <div class="col-md-2">Location</div>
         <div class="col-md-2">Value 1</div>
-        <div class="col-md-2">Value 2</div>
-        <div class="col-md-2">Value 3</div>
+<!--        <div class="col-md-2">Value 2</div>-->
+<!--        <div class="col-md-2">Value 3</div>-->
         <div class="col-md-2">Timestamp</div>
     </div>
 
@@ -37,8 +37,8 @@ $sql = "SELECT id, sensor, location, value1, value2, value3, reading_time FROM S
             $row_sensor = $row["sensor"];
             $row_location = $row["location"];
             $row_value1 = $row["value1"];
-            $row_value2 = $row["value2"];
-            $row_value3 = $row["value3"];
+//            $row_value2 = $row["value2"];
+//            $row_value3 = $row["value3"];
             $row_reading_time = $row["reading_time"];
             echo '
     <div class="row">
@@ -46,8 +46,7 @@ $sql = "SELECT id, sensor, location, value1, value2, value3, reading_time FROM S
         <div class="col-md-1">' . $row_sensor . '</div>
         <div class="col-md-2">' . $row_location . '</div>
         <div class="col-md-2">' . $row_value1 . '</div>
-        <div class="col-md-2">' . $row_value2 . '</div>
-        <div class="col-md-2">' . $row_value3 . '</div>
+
         <div class="col-md-2">' . $row_reading_time . '</div>
     </div>
 ';
