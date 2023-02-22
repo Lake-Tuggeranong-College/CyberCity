@@ -1,13 +1,13 @@
 <?php require_once 'config.php'; ?>
-<html>
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <html>
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-</head>
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+    </head>
 <body>
 <!-- Navigation Bar -->
 <nav class="navbar navbar-expand-sm navbar-light bg-light">
@@ -24,6 +24,10 @@
                 <li class="nav-item">
                     <a class="nav-link" href="index.php">Home</a>
                 </li>
+                <?php if (isset($_SESSION["username"])) {
+                    echo "<li class='nav-item'><a class='nav-link' href='esp-data.php'>ESP Sensor Data</a></li>";
+                }
+                ?>
             </ul>
             <?php if (isset($_SESSION["username"])) {
                 echo "<div class='alert alert-success d-flex'><span>Welcome, " . $_SESSION["username"] . "<br><a href='logout.php'>Logout</a></span></div>";
