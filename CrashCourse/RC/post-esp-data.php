@@ -25,12 +25,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $sensor = sanitise_data($_POST["sensor"]);
         $location = sanitise_data($_POST["location"]);
         $value1 = sanitise_data($_POST["value1"]);
-        $value2 = sanitise_data($_POST["value2"]);
-        $value3 = sanitise_data($_POST["value3"]);
+//        $value2 = sanitise_data($_POST["value2"]);
+//        $value3 = sanitise_data($_POST["value3"]);
 
-        $sql = "INSERT INTO SensorData (sensor, location, value1, value2, value3)
-        VALUES ('" . $sensor . "', '" . $location . "', '" . $value1 . "', '" . $value2 . "', '" . $value3 . "')";
+        $sql = "INSERT INTO SensorData (sensor, location, value1)
+        VALUES ('" . $sensor . "', '" . $location . "', '" . $value1 . "')";
 
+        /** @var TYPE_NAME $conn */
         if ($conn->query($sql) === TRUE) {
             echo "New record created successfully";
         }
