@@ -20,7 +20,6 @@
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = sanitise_data($_POST['username']);
     $password = sanitise_data($_POST['password']);
-
     $query = $conn->query("SELECT COUNT(*) as count FROM `user` WHERE `username`='$username'");
     $row = $query->fetch();
     $count = $row[0];
@@ -40,7 +39,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
-
 </body>
 </html>
 
