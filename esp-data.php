@@ -28,7 +28,7 @@ echo '<table cellspacing="5" cellpadding="5">
       </tr>';
 
 if ($result = $conn->query($sql)) {
-    while ($row = $result->fetch_assoc()) {
+    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
         $row_id = $row["id"];
         $row_sensor = $row["sensor"];
         $row_location = $row["location"];
@@ -52,10 +52,10 @@ if ($result = $conn->query($sql)) {
                 <td>' . $row_reading_time . '</td> 
               </tr>';
     }
-    $result->free();
+    $result = null;
 }
 
-$conn->close();
+//$conn->close();
 ?>
 </table>
 </body>
