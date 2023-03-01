@@ -1,0 +1,19 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+participant "ESP32 Feather" as esp
+Actor User as User
+participant "PHP Server" as PHP
+participant "MySQL Db server" as MySQL
+
+esp -> PHP: Post Temperature Sensor Data
+PHP -> MySQL: Store data in table
+
+User -> PHP: Load ESP Data Page
+PHP -> MySQL: Request Data
+MySQL -> PHP: Return Data
+
+PHP -> User: Display Data
+
+@enduml
