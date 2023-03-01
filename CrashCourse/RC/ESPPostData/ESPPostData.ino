@@ -31,6 +31,7 @@ Adafruit_ADT7410 tempsensor = Adafruit_ADT7410();
 #include "sensitiveInformation.h"
 
 // REPLACE with your Domain name and URL path or IP address with path
+// const char* serverName = "http://192.168.1.2/CyberCity/CrashCourse/RC/post-esp-data.php";
 const char* serverName = "http://192.168.1.106/espPost/post-esp-data.php";
 
 // Keep this API Key value to be compatible with the PHP code provided in the project page. 
@@ -80,8 +81,7 @@ void loop() {
     
     // Prepare your HTTP POST request data
     String httpRequestData = "api_key=" + apiKeyValue + "&sensor=" + sensorName
-                          + "&location=" + sensorLocation + "&value1=" + String(tempsensor.readTempC())
-                          + "&value2=" + String(tempsensor.readTempC()) + "&value3=" + String(tempsensor.readTempC()) + "";
+                          + "&location=" + sensorLocation + "&value1=" + String(tempsensor.readTempC()) + "";
     Serial.print("httpRequestData: ");
     Serial.println(httpRequestData);
     
