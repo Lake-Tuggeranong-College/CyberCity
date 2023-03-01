@@ -4,6 +4,7 @@
 # Jetbrains files
 *.xml
 *.iml
+CrashCourse/DP/ESP_Code/config.h
 /CrashCourse/RC/ESPPostDnsitiveInformation.h
 ata/se
 CrashCourse/RC/ESPPostData/debug.cfg
