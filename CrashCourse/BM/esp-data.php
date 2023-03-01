@@ -19,7 +19,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$sql = "SELECT id, sensor, location, value1, value2, value3, reading_time FROM SensorData ORDER BY id DESC";
+$sql = "SELECT id, sensor, location, value1, reading_time FROM SensorData ORDER BY id DESC";
 
 echo '<table cellspacing="5" cellpadding="5">
       <tr> 
@@ -33,7 +33,7 @@ echo '<table cellspacing="5" cellpadding="5">
       </tr>';
 
 if ($result = $conn->query($sql)) {
-    while ($row = $result->fetch_assoc()) {
+    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
         $row_id = $row["id"];
         $row_sensor = $row["sensor"];
         $row_location = $row["location"];
@@ -57,10 +57,10 @@ if ($result = $conn->query($sql)) {
                 <td>' . $row_reading_time . '</td> 
               </tr>';
     }
-    $result->free();
+    $result = null;
 }
 
-$conn->close();
+//$conn->close();
 ?>
 </table>
 </body>
