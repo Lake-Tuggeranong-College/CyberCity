@@ -8,6 +8,6 @@
  * 
  */
 
-const char* host            = "";
-const char* ssid            = "";        // Wifi Network Name
-const char* password        = "";       // Wifi Password
+const char* host            = "RMS";
+const char* ssid            = "RoboRange";        // Wifi Network Name
+const char* password        = "Password01";       // Wifi Password
