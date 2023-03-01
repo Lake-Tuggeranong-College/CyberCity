@@ -10,20 +10,17 @@
 
 */
 
-#ifdef ESP32
+
 #include <WiFi.h>
 #include <HTTPClient.h>
-#else
-#include <ESP8266WiFi.h>
-#include <ESP8266HTTPClient.h>
-#include <WiFiClient.h>
-#endif
 
 
 // Temperature START
+
 #include "Adafruit_ADT7410.h"
 // Create the ADT7410 temperature sensor object
 Adafruit_ADT7410 tempsensor = Adafruit_ADT7410();
+
 // Temperature END
 
 #include "sensitiveInformation.h"
@@ -35,8 +32,8 @@ const char* serverName = "http://192.168.1.8/CyberCity/CrashCourse/RC/post-esp-d
 // If you change the apiKeyValue value, the PHP file /post-esp-data.php also needs to have the same key
 String apiKeyValue = "tPmAT5Ab3j7F9";
 
-String sensorName = "Ben";
-String sensorLocation = "Bens Desk";
+String sensorName = "temp";
+String sensorLocation = "joels-Desk";
 
 
 void setup() {
@@ -116,3 +113,4 @@ void loop() {
   //Send an HTTP POST request every 30 seconds
   delay(30000);
 }
+// Temperature START
