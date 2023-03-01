@@ -4,3 +4,8 @@
 # Jetbrains files
 *.xml
 *.iml
+/CrashCourse/RC/ESPPostDnsitiveInformation.h
+ata/se
+CrashCourse/RC/ESPPostData/debug.cfg
+CrashCourse/RC/ESPPostData/debug_custom.json
+CrashCourse/RC/ESPPostData/sensitiveInformation.h
