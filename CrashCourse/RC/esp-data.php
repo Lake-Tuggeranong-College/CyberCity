@@ -14,7 +14,7 @@
 include "template.php";
 
 
-$sql = "SELECT id, sensor, location, value1, value2, value3, reading_time FROM SensorData ORDER BY id DESC";
+$sql = "SELECT id, sensor, location, value1, reading_time FROM SensorData ORDER BY id DESC";
 
 ?>
 <div class="container-fluid">
@@ -53,6 +53,8 @@ $sql = "SELECT id, sensor, location, value1, value2, value3, reading_time FROM S
         }
         // $result->free();
         $result = null;
+    } else {
+        echo "Error in SQL";
     }
 
     //$conn->close();
