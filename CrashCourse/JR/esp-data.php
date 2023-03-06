@@ -1,4 +1,3 @@
-
 <?php
 /*
   Rui Santos
@@ -14,7 +13,7 @@
 include "template.php";
 
 
-$sql = "SELECT id, sensor, location, value1, reading_time FROM SensorData ORDER BY id DESC";
+$sql = "SELECT id, sensor, location, value1, value2, value3, reading_time FROM SensorData ORDER BY id DESC";
 
 ?>
 <div class="container-fluid">
@@ -23,8 +22,8 @@ $sql = "SELECT id, sensor, location, value1, reading_time FROM SensorData ORDER 
         <div class="col-md-1">Sensor</div>
         <div class="col-md-2">Location</div>
         <div class="col-md-2">Value 1</div>
-<!--        <div class="col-md-2">Value 2</div>-->
-<!--        <div class="col-md-2">Value 3</div>-->
+        <!--        <div class="col-md-2">Value 2</div>-->
+        <!--        <div class="col-md-2">Value 3</div>-->
         <div class="col-md-2">Timestamp</div>
     </div>
 
@@ -53,8 +52,6 @@ $sql = "SELECT id, sensor, location, value1, reading_time FROM SensorData ORDER 
         }
         // $result->free();
         $result = null;
-    } else {
-        echo "Error in SQL";
     }
 
     //$conn->close();
