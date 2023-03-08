@@ -24,11 +24,19 @@
                     <a class="nav-link" href="index.php">Home</a>
                 </li>
             </ul>
-            <?php if (isset($_SESSION["username"])) {
+            <?php
+            $accessLevel = 2;
+            if (isset($_SESSION["username"])) {
                 echo "<div class='alert alert-success d-flex'><span>Welcome, " . $_SESSION["username"] . "<br><a href='logout.php'>Logout</a></span></div>";
+                // access level in database
+                if ($conn->query("SELECT COUNT(*) FROM Users WHERE AccessLevel='$accessLevel'")) {
+                    echo "<div class='alert alert-info d-flex'><a href='Register-ESP32.php'>ESp32 registration</a> </div>";
+                }
             } else {
                 echo "<div class='alert alert-info d-flex'><a href='register.php'>Sign Up</a> </div>";
                 echo "<div class='alert alert-info d-flex'><a href='login.php'>Sign In</a> </div>";
+
+
             }
             ?>
         </div>
@@ -36,14 +44,18 @@
 </nav>
 <script src="js/bootstrap.bundle.js"></script>
 <?php
-function sanitise_data($data) {
+function sanitise_data($data)
+{
     $data = trim($data);
     $data = stripslashes($data);
     $data = htmlspecialchars($data);
     return $data;
 }
-function outputFooter() {
+
+function outputFooter()
+{
     date_default_timezone_set('Australia/Canberra');
     echo "<footer>This page was last modified: " . date("F d Y H:i:s.", filemtime("index.php")) . "</footer>";
 }
+
 ?>

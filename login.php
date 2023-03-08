@@ -55,9 +55,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
 <!--
-
-
-
             $_SESSION["user_id"] = $row[0];
             $_SESSION["username"] = $row[1];
             $_SESSION['access_level'] = $row[3];
@@ -66,5 +63,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             echo "<div class='alert alert-danger'>Invalid username or password</div>";
         }
-
 -->
