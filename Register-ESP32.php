@@ -34,10 +34,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 // check Module and location in database
     $query = $conn->query("SELECT COUNT(*) FROM `Registered ESPs` WHERE Location='$Location'");
-    $query = $conn->query("SELECT COUNT(*) FROM `Registered ESPs` WHERE Module='$Module'");
+    $query2 = $conn->query("SELECT COUNT(*) FROM `Registered ESPs` WHERE Module='$Module'");
     $data = $query->fetch();
+    $data2 = $query2->fetch();
     $CheckModule = (int)$data[0];
-    $CheckLoaction = (int)$data[0];
+    $CheckLoaction = (int)$data2[0];
 
     if ($CheckModule > 0 && $CheckLoaction > 0) {
         echo "This Module is already in use at this location";
