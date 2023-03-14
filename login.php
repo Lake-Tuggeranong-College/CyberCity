@@ -1,5 +1,5 @@
 <?php include "template.php";
-/** @var TYPE_NAME $conn */?>
+/** @var TYPE_NAME $conn */ ?>
 
 <title>Cyber City - Login</title>
 
@@ -36,16 +36,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($count > 0) {
         $query = $conn->query("SELECT * FROM `Users` WHERE `Username`='$username'");
         $row = $query->fetch();
-        if (password_verify($password, $row[2])) {
-            // successful log on.
-            $_SESSION["user_id"] = $row[0];
-            $_SESSION["username"] = $row[1];
-            $_SESSION['access_level'] = $row[3];
-            header("Location:index.php");
+        if ($row[4] == 1) {
+            if (password_verify($password, $row[2])) {
+                // successful log on.
+                $_SESSION["user_id"] = $row[0];
+                $_SESSION["username"] = $row[1];
+                $_SESSION['access_level'] = $row[3];
+                header("Location:index.php");
+            } else {
+                // unsuccessful log on.
+                echo "<div class='alert alert-danger'>Invalid Username or Password</div>";
+            }
         } else {
-            // unsuccessful log on.
-            echo "<div class='alert alert-danger'>Invalid username or password</div>";
+            echo "<div class='alert alert-danger'>Account Disabled</div>";
         }
+    } else {
+        echo "<div class='alert alert-danger'>Invalid Username or Password</div>";
     }
 }
 
