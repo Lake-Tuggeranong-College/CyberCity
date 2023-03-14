@@ -1,4 +1,6 @@
-<?php include "template.php"; ?>
+<?php include "template.php";
+/** @var $conn */?>
+
 <title>Register Page</title>
 
 <h1 class='text-primary'>Please register on our site</h1>
