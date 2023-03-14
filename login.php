@@ -1,5 +1,6 @@
 <?php include "template.php";
 /** @var TYPE_NAME $conn */?>
+
 <title>Cyber City - Login</title>
 
 <h1 class='text-primary'>Login</h1>

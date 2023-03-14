@@ -1,4 +1,6 @@
-<?php include "template.php"; ?>
+<?php include "template.php";
+/** @var $conn */?>
+
 <title>ESP32 Register page</title>
 
 <h1 class='text-primary'>Please enter new ESP32 details below</h1>
