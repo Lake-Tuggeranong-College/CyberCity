@@ -28,8 +28,7 @@
             $accessLevel = 2;
             if (isset($_SESSION["username"])) {
                 echo "<div class='alert alert-success d-flex'><span>Welcome, " . $_SESSION["username"] . "<br><a href='logout.php'>Logout</a></span></div>";
-                // access level in database
-                if ($conn->query("SELECT COUNT(*) FROM Users WHERE AccessLevel='$accessLevel'")) {
+                if ($_SESSION["access_level"]  == $accessLevel ) {
                     echo "<div class='alert alert-info d-flex'><a href='Register-ESP32.php'>ESp32 registration</a> </div>";
                 }
             } else {
