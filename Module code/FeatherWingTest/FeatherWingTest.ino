@@ -14,15 +14,10 @@
 #include "WiFi.h"
 #include "sensitiveInformation.h"
 
-
-
-
 // RTC
 #include "RTClib.h"
 
 RTC_PCF8523 rtc;
-
-
 
 // EINK
 #include "Adafruit_ThinkInk.h"
@@ -34,8 +29,7 @@ RTC_PCF8523 rtc;
 #define EPD_BUSY    -1 // can set to -1 to not use a pin (will wait a fixed delay)
 
 // 2.13" Monochrome displays with 250x122 pixels and SSD1675 chipset
-//ThinkInk_213_Mono_B72 display(EPD_DC, EPD_RESET, EPD_CS, SRAM_CS, EPD_BUSY);
-ThinkInk_213_Mono_BN display(EPD_DC, EPD_RESET, EPD_CS, SRAM_CS, EPD_BUSY);
+ThinkInk_213_Mono_B72 display(EPD_DC, EPD_RESET, EPD_CS, SRAM_CS, EPD_BUSY);
 
 
 //Temperature Sensor
@@ -96,7 +90,7 @@ void setup() {
 }
 
 void loop() {
-  updateEPD();
+  updateEPD("Fire Dept", "Temp \tC", tempsensor.readTempC());
 
 
   // waits 180 seconds (3 minutes) as per guidelines from adafruit.
@@ -105,28 +99,23 @@ void loop() {
 
 }
 
-void updateEPD() {
+void updateEPD(String title, String dataTitle, float dataToDisplay) {
 
   // Indigenous Country Name
-  drawText("Namadgi", EPD_BLACK, 2, 0, 0);
-
+  drawText(title, EPD_BLACK, 2, 0, 0);
 
   // Config
   drawText(WiFi.localIP().toString(), EPD_BLACK, 1, 130, 80);
   drawText(getTimeAsString(), EPD_BLACK, 1, 130, 100);
   drawText(getDateAsString(), EPD_BLACK, 1, 130, 110);
 
-
   // Draw lines to divvy up the EPD
   display.drawLine(0, 20, 250, 20, EPD_BLACK);
   display.drawLine(125, 20, 125, 122, EPD_BLACK);
   display.drawLine(0, 75, 250, 75, EPD_BLACK);
 
-  
-
-
-  drawText("Temp \tC", EPD_BLACK, 2, 0, 80);
-  drawText(String(tempsensor.readTempC()), EPD_BLACK, 4, 0, 95);
+  drawText(dataTitle, EPD_BLACK, 2, 0, 80);
+  drawText(String(dataToDisplay), EPD_BLACK, 4, 0, 95);
 
   logEvent("Updating the EPD");
   display.display();
