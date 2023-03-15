@@ -33,6 +33,7 @@
                 echo "<div class='alert alert-success d-flex'><span>Welcome, " . $_SESSION["username"] . "<br><a href='logout.php'>Logout</a></span></div>";
                 if ($_SESSION["access_level"] == $accessLevel) {
                     echo "<div class='alert alert-info d-flex'><a href='Register-ESP32.php'>ESP32 registration</a> </div>";
+                    echo "<div class='alert alert-info d-flex'><a href='user-search.php'>User Search</a> </div>";
                 }
             } else {
                 echo "<div class='alert alert-info d-flex'><a href='register.php'>Sign Up</a> </div>";

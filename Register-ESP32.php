@@ -42,7 +42,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($checkModule > 0 && $checkLocation > 0) {
         echo "This Module is already in use at this location";
     } else {
-        $sql = "INSERT INTO RegisteredModules (Location, Module, HashedAPIKey) VALUES (:newLocation, :newModule, :newHashedAPIkey)";
+        $sql = "INSERT INTO `RegisteredModules` (Location, Module, HashedAPIKey) VALUES (:newLocation, :newModule, :newHashedAPIkey)";
+
         $stmt = $conn->prepare($sql);
         $stmt->bindValue(':newLocation', $location);
         $stmt->bindValue(':newModule', $module);
