@@ -22,7 +22,6 @@
 </form>
 
 <?php
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $location = ($_POST['Location']);
     $module = ($_POST['Module']);
@@ -33,8 +32,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     echo  $hashed_APIkey;
 
 // check Module and location in database
-    $query = $conn->query("SELECT COUNT(*) FROM `Registered ESPs` WHERE Location='$location'");
-    $query2 = $conn->query("SELECT COUNT(*) FROM `Registered ESPs` WHERE Module='$module'");
+    $query = $conn->query("SELECT COUNT(*) FROM `RegisteredModules` WHERE Location='$location'");
+    $query2 = $conn->query("SELECT COUNT(*) FROM `RegisteredModules` WHERE Module='$module'");
     $data = $query->fetch();
     $data2 = $query2->fetch();
     $checkModule = (int)$data[0];
@@ -43,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($checkModule > 0 && $checkLocation > 0) {
         echo "This Module is already in use at this location";
     } else {
-        $sql = "INSERT INTO `Registered ESPs` (Location, Module, HashedAPIKey) VALUES (:newLocation, :newModule, :newHashedAPIkey)";
+        $sql = "INSERT INTO RegisteredModules (Location, Module, HashedAPIKey) VALUES (:newLocation, :newModule, :newHashedAPIkey)";
         $stmt = $conn->prepare($sql);
         $stmt->bindValue(':newLocation', $location);
         $stmt->bindValue(':newModule', $module);
@@ -53,5 +52,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 }
 ?>
-
-
