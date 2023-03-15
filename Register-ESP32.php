@@ -22,7 +22,6 @@
 </form>
 
 <?php
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $location = ($_POST['Location']);
     $module = ($_POST['Module']);
@@ -44,6 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "This Module is already in use at this location";
     } else {
         $sql = "INSERT INTO `RegisteredModules` (Location, Module, HashedAPIKey) VALUES (:newLocation, :newModule, :newHashedAPIkey)";
+
         $stmt = $conn->prepare($sql);
         $stmt->bindValue(':newLocation', $location);
         $stmt->bindValue(':newModule', $module);
@@ -53,5 +53,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 }
 ?>
-
-
