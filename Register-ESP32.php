@@ -24,8 +24,6 @@
 <?php
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    //$username = sanitise_data($_POST['username']);
-    //$password = sanitise_data($_POST['password']);
     $location = ($_POST['Location']);
     $module = ($_POST['Module']);
     $APIkey = ($_POST['APIkey']);
