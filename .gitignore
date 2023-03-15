@@ -1,5 +1,11 @@
+# MacOS files
 **/.DS_Store
 .DS_Store
+
+# Arduino 2.0 files
+**/debug.cfg
+**/debug_custom.json
+**/esp32.svd
 
 # Jetbrains files
 *.xml
