@@ -20,7 +20,7 @@
         </div>
     </div>
     <input type="submit" name="formSubmit" value="Submit">
-</form>
+</form >
 
 
 <?php
@@ -45,13 +45,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 header("Location:index.php");
             } else {
                 // unsuccessful log on.
-                echo "<div class='alert alert-danger'>Invalid Username or Password</div>";
+                echo "<div class='alert alert-danger'>Invalid Username or Password. <a href='contact.php'>Contact Us</a></div>";
             }
         } else {
-            echo "<div class='alert alert-danger'>Account Disabled</div>";
+            echo "<div class='alert alert-danger'>Account Disabled. <a href='contact.php'>Contact Us</a></div>";
         }
     } else {
-        echo "<div class='alert alert-danger'>Invalid Username or Password</div>";
+        echo "<div class='alert alert-danger'>Invalid Username or Password. <a href='contact.php'>Contact Us</a></div>";
     }
 }
 
