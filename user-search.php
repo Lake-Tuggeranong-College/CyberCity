@@ -24,7 +24,7 @@ if (isset($_SESSION['access_level']) == 2 ) {
     $results = $userCount->fetchArray();
     $userCountNumber = $results[0];
     */
-    $userCount = $conn->query("SELECT COUNT(*) as count FROM `Users`");
+    $userCount = $conn->query("SELECT COUNT(*)  FROM `Users`");
     $row = $userCount->fetch();
     $userCountNumber = $row[0];
     // this uses row 0 (id) to display how mnay user accounts have been created
@@ -34,19 +34,19 @@ if (isset($_SESSION['access_level']) == 2 ) {
     if (isset($_POST['search'])) {
         $userToSearch = sanitise_data($_POST['search-user']);
 
-        $userSearch = $conn->query("SELECT COUNT(*) as count  FROM Users WHERE Username LIKE '$userToSearch'");
+        $userSearch = $conn->query("SELECT COUNT(*) as count  FROM Users WHERE Username like '$userToSearch'");
         $row = $userSearch->fetch();
-        $userNumberOfRows = $row[1];
+        $userNumberOfRows = $row[0];
         if ($userNumberOfRows > 0) {
-            $user_id = $row[1];
-            $username = $results[1];
-            $accessLevel = $results[3];
+            $user_id = $row[0];
+            $username = $row[1];
+            $accessLevel = $row[3];
             ?>
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-6">
-                        <h3>UserID : <?php echo $user_id;    ?></h3>
-                        <h3>Username : <?php echo $username; ?></h3>
+                        <h3>UserID : <?php echo  "<br>". $user_id . "</br>";  ?></h3>
+                        <h3>Username : <?php echo  "<br>". $username . "</br>"; ?></h3>
 
                     </div>
                     <div class="col-md-6">
@@ -59,7 +59,8 @@ if (isset($_SESSION['access_level']) == 2 ) {
             </div>
             <?php
         } else {
-            echo "No Users Found";
+            //echo "No Users Found";
+            echo "<br> No user found under:". $userToSearch . "</br>";
         }
 
     }
