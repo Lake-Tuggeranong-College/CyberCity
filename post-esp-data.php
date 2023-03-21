@@ -17,7 +17,7 @@
 // Keep this API Key value to be compatible with the ESP32 code provided in the project page.
 // If you change this value, the ESP32 sketch needs to match
 
-$api_key= $sensor = $location = $value1 = "";
+$api_key= $sensor = $location = $sensorValue = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $api_key = sanitise_data($_POST["api_key"]);
@@ -31,11 +31,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $row = $query->fetch();
         $api_key_value = $row[3];
         if (password_verify($api_key, $api_key_value)) {
-            $value1 = sanitise_data($_POST["value1"]);
+            $sensorValue = sanitise_data($_POST["sensorValue"]);
+            date_default_timezone_set('Australia/Canberra');
+            $date = date("Y-m-d h:i:sa");
+            $ModuleID = $row[0];
 
-            $ModuleID = $row(0);
-
-            $sql = "INSERT INTO ModuleData (ModuleID, DateTime, Data) VALUES ()";
+            $sql = "INSERT INTO ModuleData (ModuleID, DateTime, Data) VALUES (:ModuleID, :date, :sensorValue)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue(':ModuleID', $ModuleID);
+            $stmt->bindValue(':date', $date);
+            $stmt->bindValue(':sensorValue', $sensorValue);
+            $stmt->execute();
 
             if ($conn->query($sql) === TRUE) {
                 echo "New record created successfully";
