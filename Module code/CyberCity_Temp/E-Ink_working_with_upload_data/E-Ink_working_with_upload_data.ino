@@ -11,9 +11,16 @@
 
 
 // Wifi & Webserver
-#include "WiFi.h"
+#ifdef ESP32
+  #include <WiFi.h>
+  #include <HTTPClient.h>
+#else
+  #include <ESP8266WiFi.h>
+  #include <ESP8266HTTPClient.h>
+  #include <WiFiClient.h>
+#endif
 #include "sensitiveInformation.h"
-#include <HTTPClient.h>
+
 
 // RTC
 #include "RTClib.h"
@@ -31,7 +38,14 @@ RTC_PCF8523 rtc;
 
 // 2.13" Monochrome displays with 250x122 pixels and SSD1675 chipset
 ThinkInk_213_Mono_B72 display(EPD_DC, EPD_RESET, EPD_CS, SRAM_CS, EPD_BUSY);
+const char* serverName = "http://192.168.1.18/CyberCity/CrashCourse/RC/post-esp-data.php";
 
+// Keep this API Key value to be compatible with the PHP code provided in the project page. 
+// If you change the apiKeyValue value, the PHP file /post-esp-data.php also needs to have the same key 
+String apiKeyValue = "tPmAT5Ab3j7F9";
+
+String sensorName = "FireStationTemp";
+String sensorLocation = "FireStation";
 
 //Temperature Sensor
 #include <Wire.h>
@@ -67,7 +81,7 @@ void setup() {
 
   pinMode(LED_BUILTIN, OUTPUT);
 
-
+  
 
 
   // RTC
@@ -86,9 +100,10 @@ void setup() {
   display.begin();
   display.clearBuffer();
 
-
+  
   logEvent("System Initialisation...");
 }
+
 
 void loop() {
   updateEPD("Fire Dept", "Temp \tC", tempsensor.readTempC());
@@ -97,42 +112,40 @@ void loop() {
   // waits 180 seconds (3 minutes) as per guidelines from adafruit.
   delay(180000);
   display.clearBuffer();
-
-}
-void uploadData () {
-  if (WiFi.status() == WL_CONNECTED) {
+   //Check WiFi connection status
+  if(WiFi.status()== WL_CONNECTED){
     WiFiClient client;
     HTTPClient http;
-
+    
     // Your Domain name with URL path or IP address with path
     http.begin(client, serverName);
-
+    
     // Specify content-type header
     http.addHeader("Content-Type", "application/x-www-form-urlencoded");
-
+    
     // Prepare your HTTP POST request data
     String httpRequestData = "api_key=" + apiKeyValue + "&sensor=" + sensorName
-                             + "&location=" + sensorLocation + "&value1=" + String(tempsensor.readTempC()) + "";
+                          + "&location=" + sensorLocation + "&value1=" + "&value3=" + String(tempsensor.readTempC()) + "";
     Serial.print("httpRequestData: ");
     Serial.println(httpRequestData);
-
+    
     // You can comment the httpRequestData variable above
     // then, use the httpRequestData variable below (for testing purposes without the BME280 sensor)
     // String httpRequestData = "api_key=tPmAT5Ab3j7F9&sensor=BME280&location=Office&value1=24.75&value2=49.54&value3=1005.14";
 
     // Send HTTP POST request
     int httpResponseCode = http.POST(httpRequestData);
-
+     
     // If you need an HTTP request with a content type: text/plain
     //http.addHeader("Content-Type", "text/plain");
     // int httpResponseCode = http.POST("Hello, World!");
-
+    
     // If you need an HTTP request with a content type: application/json, use the following:
     // http.addHeader("Content-Type", "application/json");
     // int httpResponseCode = http.POST("{\"value1\":\"19\",\"value2\":\"67\",\"value3\":\"78\"}");
+    
 
-
-    if (httpResponseCode > 0) {
+    if (httpResponseCode>0) {
       Serial.print("HTTP Response code: ");
       Serial.println(httpResponseCode);
     }
@@ -147,11 +160,8 @@ void uploadData () {
     Serial.println("WiFi Disconnected");
   }
   //Send an HTTP POST request every 30 seconds
-  delay(30000);
-
+  delay(30000);  
 }
-
-
 
 
 void updateEPD(String title, String dataTitle, float dataToDisplay) {
@@ -176,6 +186,8 @@ void updateEPD(String title, String dataTitle, float dataToDisplay) {
   display.display();
 
 }
+
+
 
 void drawText(String text, uint16_t color, int textSize, int x, int y) {
   display.setCursor(x, y);
