@@ -17,5 +17,5 @@ const char* password        = "Password01";       // Wifi Password
 
 String apiKeyValue = "1";
 
-String sensorName = "Fire Department";
-String sensorLocation = "Fire Department";
+String sensorName = "FireDept";
+String sensorLocation = "FireDept";
