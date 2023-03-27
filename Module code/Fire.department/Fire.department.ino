@@ -111,7 +111,7 @@ void uploadData () {
 
     // Prepare your HTTP POST request data
     String httpRequestData = "api_key=" + apiKeyValue + "&sensor=" + sensorName
-                             + "&location=" + sensorLocation + "&sensorData=" + String(tempsensor.readTempC());
+                             + "&location=" + sensorLocation + "&sensorValue=" + String(tempsensor.readTempC());
     Serial.print("httpRequestData: ");
     Serial.println(httpRequestData);
 
