@@ -36,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "api correct";
             $sensorValue = sanitise_data($_POST["sensorValue"]);
             date_default_timezone_set('Australia/Canberra');
-            $date = date("Y-m-d h:i:sa");
+            $date = date("Y-m-d H:i:s");
             $ModuleID = $row[0];
 
             $sql = "INSERT INTO ModuleData (ModuleID, DateTime, Data) VALUES (:ModuleID, :date, :sensorValue)";
