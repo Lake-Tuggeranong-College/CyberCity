@@ -1,4 +1,5 @@
-<?php include "template.php"; ?>
+<?php include "template.php";
+/** @var $conn */?>
 
 <title>Search Users</title>
 <h1>Search Users</h1>
@@ -23,7 +24,7 @@ if (isset($_SESSION['access_level']) == 2 ) {
     $userCount = $conn->query("SELECT COUNT(*)  FROM `Users`");
     $row = $userCount->fetch();
     $userCountNumber = $row[0];
-    // this uses row 0 (id) to display how mnay user accounts have been created
+    // this uses row 0 (id) to display how many user accounts have been created
     echo "<br>The number of users is :" . $userCountNumber . "</br>";
 
 
