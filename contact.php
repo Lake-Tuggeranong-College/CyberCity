@@ -3,7 +3,7 @@
 
     <h1>Contact Us</h1>
 
-    <h1 class='text-primary'>Please fill out the form below so we can get in contact with you.</h1>
+    <h1 class='text-primary'>Please fill out the form below, so we can get in contact with you.</h1>
     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" enctype="multipart/form-data">
         <div class="container-fluid">
             <div class="row">
@@ -24,14 +24,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     //takes username and email from form above.
     $username = sanitise_data($_POST['username']);
     $email = sanitise_data($_POST['email']);
-//will connect to the server.
+    //will connect to the server.
     $query = $conn->query("SELECT COUNT(*) as count FROM ContactUs WHERE `Email` ='$email'");
     $data = $query->fetch();
     $complaintInProgress = (int)$data[0];
-
-
-
-
 
         if ($complaintInProgress > 0) {
             //if the username is already in the complaint table do not allow them to send another one.
