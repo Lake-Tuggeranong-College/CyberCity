@@ -1,5 +1,5 @@
 <?php include "template.php";
-/** @var $conn */?>
+/** @var $conn */ ?>
 
 <title>Register Page</title>
 
@@ -28,8 +28,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = sanitise_data($_POST['password']);
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
     $accessLevel = 1;
-       //$username;
-     //  $hashed_password;
+    //$username;
+    //$hashed_password;
 
 // check username in database
     $query = $conn->query("SELECT COUNT(*) FROM Users WHERE Username='$username'");
@@ -45,6 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bindValue(':newPassword', $hashed_password);
         $stmt->bindValue(':newAccessLevel', $accessLevel);
         $stmt->execute();
+        echo "Account Created!";
     }
 
 }
