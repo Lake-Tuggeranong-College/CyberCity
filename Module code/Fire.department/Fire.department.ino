@@ -91,11 +91,10 @@ void setup() {
 }
 
 void loop() {
-  updateEPD("Fire Dept", "Temp \tC", tempsensor.readTempC());
+//  updateEPD("Fire Dept", "Temp \tC", tempsensor.readTempC());
 
-
+  uploadData();
   // waits 180 seconds (3 minutes) as per guidelines from adafruit.
-  delay(180000);
   display.clearBuffer();
 
 }
@@ -112,7 +111,7 @@ void uploadData () {
 
     // Prepare your HTTP POST request data
     String httpRequestData = "api_key=" + apiKeyValue + "&sensor=" + sensorName
-                             + "&location=" + sensorLocation + "&value1=" + String(tempsensor.readTempC()) + "";
+                             + "&location=" + sensorLocation + "&sensorValue=" + String(tempsensor.readTempC());
     Serial.print("httpRequestData: ");
     Serial.println(httpRequestData);
 
