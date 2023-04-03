@@ -1,5 +1,9 @@
 <?php include "template.php";
-/** @var $conn */ ?>
+/** @var $conn */
+$username = "";
+$accessLevel = "";
+$enabled = "";
+?>
 
 <title>Search Users</title>
 <h1>Search Users</h1>
@@ -28,7 +32,7 @@ if (isset($_SESSION['access_level']) == 2) {
 
     if (isset($_POST['search'])) {
         $userToSearch = sanitise_data($_POST['search-user']);
-        $userSearch = $conn->query("SELECT COUNT(*) as count  FROM Users WHERE Username like '$userToSearch'");
+        $userSearch = $conn->query("SELECT * FROM Users WHERE Username='$userToSearch'");
         $row = $userSearch->fetch();
         $userNumberOfRows = $row[0];
         if ($userNumberOfRows > 0) {
@@ -39,7 +43,6 @@ if (isset($_SESSION['access_level']) == 2) {
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-6">
-
             <h3>Username: <?php echo $username; ?></h3>
             <h3>AccessLevel: <?php echo $accessLevel; ?></h3>
             <h3>Enabled: <?php echo $enabled; ?></h3>
@@ -53,6 +56,6 @@ if (isset($_SESSION['access_level']) == 2) {
 
     }
 } else {
-    echo "You do not have the permissions to use this";
+    echo "You do not have permission to use this";
 }
     ?>
