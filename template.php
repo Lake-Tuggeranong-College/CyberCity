@@ -30,11 +30,11 @@
                 <?php
                 $accessLevel = 2;
                 if (isset($_SESSION["username"])) {
-                    echo '<li class="nav-item"><a class="nav-link" href="ModuleDisplay.php">Module Display Table</a> </li>';
+                    echo '<li class="nav-item"><a class="nav-link" href="moduleDisplay.php">Module Display Table</a> </li>';
 
                     if ($_SESSION["access_level"] == $accessLevel) {
-                        echo "<a href='Register-ESP32.php'>ESP32 registration</a> </div>";
-                        echo "<a href='user-search.php'>User Search</a> </div>";
+                        echo "<a href='registerESP32.php'>ESP32 registration</a> </div>";
+                        echo "<a href='userSearch.php'>User Search</a> </div>";
                     }
                 } else {
                     echo "<div class='alert alert-info d-flex'><a href='register.php'>Sign Up</a> </div>";
