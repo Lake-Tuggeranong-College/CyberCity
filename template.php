@@ -37,7 +37,7 @@
 
                         echo '<li class="nav-item"><a class="nav-link" href="registerESP32.php">ESP32 Registration</a> </li>';
 
-                        echo '<li class="nav-item"><a class="nav-link" href="user-search.php">User Search</a> </li>';
+                        echo '<li class="nav-item"><a class="nav-link" href="userSearch.php">User Search</a> </li>';
                     }
                 } else {
                     echo '<li class="nav-item"><a class="nav-link" href="register.php">Register Page</a> </li>';
