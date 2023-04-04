@@ -1,5 +1,6 @@
-void commonSetup(){
-   WiFi.begin(ssid, password);
+//version 1.0.0 28.03.2023
+void commonSetup() {
+  WiFi.begin(ssid, password);
 
   while (WiFi.status() != WL_CONNECTED) {
     delay(1000);
@@ -121,8 +122,7 @@ void uploadData (String dataToPost, int delayBetweenPosts) {
     http.addHeader("Content-Type", "application/x-www-form-urlencoded");
 
     // Prepare your HTTP POST request data
-    String httpRequestData = "api_key=" + apiKeyValue + "&sensor=" + sensorName
-                             + "&location=" + sensorLocation + "&sensorValue=" + dataToPost);
+    String httpRequestData = "api_key=" + apiKeyValue + "&sensor=" + sensorName + "&location=" + sensorLocation + "&sensorValue=" + dataToPost;
     Serial.print("httpRequestData: ");
     Serial.println(httpRequestData);
 
@@ -143,7 +143,7 @@ void uploadData (String dataToPost, int delayBetweenPosts) {
 
 
     if (httpResponseCode > 0) {
-      Serial.print("HTTP Response code: ");
+    Serial.print("HTTP Response code: ");
       Serial.println(httpResponseCode);
     }
     else {
