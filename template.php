@@ -1,5 +1,6 @@
 <?php require_once 'config.php'; ?>
 <html>
+
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -21,7 +22,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="index.php">Home</a>
+                    <a class="nav-link"  href="index.php">Home</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="contact.php">Contact Us</a>
@@ -33,12 +34,14 @@
                     echo '<li class="nav-item"><a class="nav-link" href="moduleDisplay.php">Module Display Table</a> </li>';
 
                     if ($_SESSION["access_level"] == $accessLevel) {
-                        echo "<a href='registerESP32.php'>ESP32 registration</a> </div>";
-                        echo "<a href='userSearch.php'>User Search</a> </div>";
+
+                        echo '<li class="nav-item"><a class="nav-link" href="register-ESP32.php">ESP32 Registration.</a> </li>';
+
+                        echo '<li class="nav-item"><a class="nav-link" href="user-search.php">User Search</a> </li>';
                     }
                 } else {
-                    echo "<div class='alert alert-info d-flex'><a href='register.php'>Sign Up</a> </div>";
-                    echo "<div class='alert alert-info d-flex'><a href='login.php'>Sign In</a> </div>";
+                    echo '<li class="nav-item"><a class="nav-link" href="register.php">Register Page</a> </li>';
+                    echo '<li class="nav-item"><a class="nav-link" href="login.php">Login Page</a> </li>';
 
 
                 }
