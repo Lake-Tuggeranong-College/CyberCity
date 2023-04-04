@@ -1,3 +1,4 @@
+//version 1.0.0 28.03.2023
 void commonSetup(){
    WiFi.begin(ssid, password);
 
