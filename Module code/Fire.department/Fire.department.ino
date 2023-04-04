@@ -59,8 +59,8 @@ void setup() {
 void loop() {
   float sensorData = tempsensor.readTempC();
   updateEPD("Fire Dept", "Temp \tC", sensorData);
-
-  uploadData(sensorData, 30000);
+  String dataToPost = String(sensorData);
+  uploadData(dataToPost, 30000);
   // waits 180 seconds (3 minutes) as per guidelines from adafruit.
   display.clearBuffer();
 
