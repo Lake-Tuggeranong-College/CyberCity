@@ -26,25 +26,30 @@
                 <li class="nav-item">
                     <a class="nav-link" href="contact.php">Contact Us</a>
                 </li>
-            </ul>
-            <?php
-            $accessLevel = 2;
-            if (isset($_SESSION["username"])) {
-                echo "<div class='alert alert-success d-flex'><span>Welcome, " . $_SESSION["username"] . "<br><a href='logout.php'>Logout</a></span></div>";
-                echo "<a href='ModuleDisplay.php'>Module Display Table</a> </div>";
 
-                if ($_SESSION["access_level"] == $accessLevel) {
-                    echo "<a href='Register-ESP32.php'>ESP32 registration</a> </div>";
-                    echo "<a href='user-search.php'>User Search</a> </div>";
+                <?php
+                $accessLevel = 2;
+                if (isset($_SESSION["username"])) {
+                    echo '<li class="nav-item"><a class="nav-link" href="ModuleDisplay.php">Module Display Table</a> </li>';
+
+                    if ($_SESSION["access_level"] == $accessLevel) {
+                        echo "<a href='Register-ESP32.php'>ESP32 registration</a> </div>";
+                        echo "<a href='user-search.php'>User Search</a> </div>";
+                    }
+                } else {
+                    echo "<div class='alert alert-info d-flex'><a href='register.php'>Sign Up</a> </div>";
+                    echo "<div class='alert alert-info d-flex'><a href='login.php'>Sign In</a> </div>";
+
+
                 }
-            } else {
-                echo "<div class='alert alert-info d-flex'><a href='register.php'>Sign Up</a> </div>";
-                echo "<div class='alert alert-info d-flex'><a href='login.php'>Sign In</a> </div>";
-
-
-            }
-            ?>
+                ?>
+            </ul>
         </div>
+        <?php
+        if (isset($_SESSION["username"])) {
+            echo "<div class='alert alert-success d-flex'><span>Welcome, " . $_SESSION["username"] . "<br><a href='logout.php'>Logout</a></span></div>";
+        }
+        ?>
     </div>
 </nav>
 <script src="js/bootstrap.bundle.js"></script>
