@@ -13,8 +13,7 @@ include("template.php");
     <table class="table table-bordered">
         <thead>
         <tr>
-            <th>EventID</th>
-            <th>ModuleID</th>
+           // <th>Module</th>
             <th>Date & Time</th>
             <th>Data</th>
 
@@ -30,6 +29,7 @@ include("template.php");
 }
 
         $sql = "SELECT EventID, ModuleID, DateTime, Data FROM ModuleData WHERE ModuleID = ".$moduleToLoad." ORDER BY EventID DESC";
+
         if ($result = $conn->query($sql)) {
             while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
                 $row_id = $row["EventID"];
@@ -37,9 +37,9 @@ include("template.php");
                 $row_dateTime = $row["DateTime"];
                 $row_data = $row["Data"];
 
+
                 echo "<tr>";
-                echo "<td>" . $row_id . "</td>";
-                echo "<td>" . $row_moduleID . "</td>";
+
                 echo "<td>" . $row_dateTime . "</td>";
                 echo "<td>" . $row_data . "</td>";
                 echo "</tr>";
