@@ -31,7 +31,7 @@
                 <?php
                 $accessLevel = 2;
                 if (isset($_SESSION["username"])) {
-                    echo '<li class="nav-item"><a class="nav-link" href="moduleDisplay.php">Module Display Table</a> </li>';
+                    echo '<li class="nav-item"><a class="nav-link" href="moduleList.php">Module Display</a> </li>';
 
                     if ($_SESSION["access_level"] == $accessLevel) {
 
