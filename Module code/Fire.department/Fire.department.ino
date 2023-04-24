@@ -1,3 +1,9 @@
+#include "sensitiveInformation.h"
+
+#include <CyberCityShareFuntionality.h>
+
+
+
 
 
 /***************************************************
@@ -12,8 +18,9 @@
 
 // Wifi & Webserver
 #include "WiFi.h"
-#include "sensitiveInformation.h"
 #include <HTTPClient.h>
+
+//test
 
 // RTC
 #include "RTClib.h"
@@ -39,6 +46,8 @@ ThinkInk_213_Mono_B72 display(EPD_DC, EPD_RESET, EPD_CS, SRAM_CS, EPD_BUSY);
 // Create the ADT7410 temperature sensor object
 Adafruit_ADT7410 tempsensor = Adafruit_ADT7410();
 
+CyberCityShareFuntionality cyberCity;
+
 void setup() {
   /*
   */
@@ -47,20 +56,51 @@ void setup() {
     delay(10);
   }
   delay(1000);
+  WiFi.begin(ssid, password);
 
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(1000);
+    Serial.println("Connecting to WiFi..");
+  }
+  Serial.println();
+  Serial.print("Connected to the Internet");
+  Serial.print("IP address: ");
+  Serial.println(WiFi.localIP());
+pinMode(LED_BUILTIN, OUTPUT);
+
+
+
+
+  // RTC
+  if (! rtc.begin()) {
+    Serial.println("Couldn't find RTC");
+    Serial.flush();
+    //    abort();
+  }
+
+  // The following line can be uncommented if the time needs to be reset.
+  rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+
+  rtc.start();
+
+  //EINK
+  display.begin();
+  display.clearBuffer();
+
+
+  cyberCity.logEvent("System Initialisation...");
 
   if (!tempsensor.begin()) {
     Serial.println("Couldn't find ADT7410!");
     while (1);
   }
-  commonSetup();
 }
 
 void loop() {
   float sensorData = tempsensor.readTempC();
-  updateEPD("Fire Dept", "Temp \tC", sensorData);
+  cyberCity.updateEPD("Fire Dept", "Temp \tC", sensorData);
   String dataToPost = String(sensorData);
-  uploadData(dataToPost, 30000);
+  cyberCity.uploadData(dataToPost, 30000);
   // waits 180 seconds (3 minutes) as per guidelines from adafruit.
   display.clearBuffer();
 
