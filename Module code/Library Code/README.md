@@ -99,3 +99,5 @@ void loop() {
 }
 
 ```
+
+```sensitiveInformation.h``` remains the same as done previously.
