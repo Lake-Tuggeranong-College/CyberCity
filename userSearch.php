@@ -1,5 +1,6 @@
 <?php include "template.php";
 /** @var $conn */
+
 $username = "";
 $accessLevel = "";
 $enabled = "";

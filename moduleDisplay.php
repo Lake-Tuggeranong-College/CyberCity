@@ -1,6 +1,6 @@
-<?php
-include("template.php");
-?>
+<?php include "template.php";
+/** @var $conn */ ?>
+
 <!DOCTYPE html>
 <html>
 <head>

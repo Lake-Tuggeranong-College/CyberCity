@@ -1,4 +1,5 @@
-<?php include "template.php"; ?>
+<?php include "template.php";
+/** @var $conn */ ?>
 
 <title>Module List</title>
 
