@@ -36,7 +36,7 @@ void commonSetup() {
   logEvent("System Initialisation...");
 
 }
-
+//   V ?  should it go to fd code? 
 void updateEPD(String title, String dataTitle, float dataToDisplay) {
 
   // Indigenous Country Name
@@ -57,7 +57,7 @@ void updateEPD(String title, String dataTitle, float dataToDisplay) {
 
   logEvent("Updating the EPD");
   display.display();
-
+    
 }
 
 void drawText(String text, uint16_t color, int textSize, int x, int y) {
@@ -67,7 +67,7 @@ void drawText(String text, uint16_t color, int textSize, int x, int y) {
   display.setTextWrap(true);
   display.print(text);
 }
-
+//    I
 String getDateAsString() {
   DateTime now = rtc.now();
 
