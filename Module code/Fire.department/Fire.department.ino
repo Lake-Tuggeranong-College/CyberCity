@@ -1,11 +1,3 @@
-#include "sensitiveInformation.h"
-
-#include <CyberCityShareFuntionality.h>
-
-
-
-
-
 /***************************************************
   Adafruit invests time and resources providing this open source code,
   please support Adafruit and open-source hardware by purchasing
@@ -15,29 +7,9 @@
  ****************************************************/
 
 
-
-// Wifi & Webserver
-#include "WiFi.h"
-#include <HTTPClient.h>
-
-//test
-
-// RTC
-#include "RTClib.h"
-
-RTC_PCF8523 rtc;
-
-// EINK
-#include "Adafruit_ThinkInk.h"
-
-#define EPD_CS      15
-#define EPD_DC      33
-#define SRAM_CS     32
-#define EPD_RESET   -1 // can set to -1 and share with microcontroller Reset!
-#define EPD_BUSY    -1 // can set to -1 to not use a pin (will wait a fixed delay)
-
-// 2.13" Monochrome displays with 250x122 pixels and SSD1675 chipset
-ThinkInk_213_Mono_B72 display(EPD_DC, EPD_RESET, EPD_CS, SRAM_CS, EPD_BUSY);
+#include "sensitiveInformation.h"
+#include <CyberCityShareFuntionality.h>
+CyberCityShareFuntionality cyberCity;
 
 
 //Temperature Sensor
@@ -46,7 +18,6 @@ ThinkInk_213_Mono_B72 display(EPD_DC, EPD_RESET, EPD_CS, SRAM_CS, EPD_BUSY);
 // Create the ADT7410 temperature sensor object
 Adafruit_ADT7410 tempsensor = Adafruit_ADT7410();
 
-CyberCityShareFuntionality cyberCity;
 
 void setup() {
   /*
@@ -66,13 +37,10 @@ void setup() {
   Serial.print("Connected to the Internet");
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
-pinMode(LED_BUILTIN, OUTPUT);
-
-
-
+  pinMode(LED_BUILTIN, OUTPUT);
 
   // RTC
-  if (! rtc.begin()) {
+  if (!rtc.begin()) {
     Serial.println("Couldn't find RTC");
     Serial.flush();
     //    abort();
@@ -87,12 +55,12 @@ pinMode(LED_BUILTIN, OUTPUT);
   display.begin();
   display.clearBuffer();
 
-
   cyberCity.logEvent("System Initialisation...");
 
   if (!tempsensor.begin()) {
     Serial.println("Couldn't find ADT7410!");
-    while (1);
+    while (1)
+      ;
   }
 }
 
@@ -100,8 +68,7 @@ void loop() {
   float sensorData = tempsensor.readTempC();
   cyberCity.updateEPD("Fire Dept", "Temp \tC", sensorData);
   String dataToPost = String(sensorData);
-  cyberCity.uploadData(dataToPost, 30000);
+  cyberCity.uploadData(dataToPost, apiKeyValue, sensorName, sensorLocation, 30000, serverName);
   // waits 180 seconds (3 minutes) as per guidelines from adafruit.
   display.clearBuffer();
-
 }
