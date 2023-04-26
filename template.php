@@ -22,7 +22,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link"  href="index.php">Home</a>
+                    <a class="nav-link" href="index.php">Home</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="contact.php">Contact Us</a>
@@ -40,8 +40,8 @@
                         echo '<li class="nav-item"><a class="nav-link" href="userSearch.php">User Search</a> </li>';
                     }
                 } else {
-                    echo '<li class="nav-item"><a class="nav-link" href="register.php">Register Page</a> </li>';
-                    echo '<li class="nav-item"><a class="nav-link" href="login.php">Login Page</a> </li>';
+                    echo '<li class="nav-item"><a class="nav-link" href="register.php">Register</a> </li>';
+                    echo '<li class="nav-item"><a class="nav-link" href="login.php">Login</a> </li>';
 
 
                 }
@@ -55,6 +55,7 @@
         ?>
     </div>
 </nav>
+
 <script src="js/bootstrap.bundle.js"></script>
 <?php
 function sanitise_data($data)
@@ -68,7 +69,11 @@ function sanitise_data($data)
 function outputFooter()
 {
     date_default_timezone_set('Australia/Canberra');
-    echo "<footer>This page was last modified: " . date("F d Y H:i:s.", filemtime("index.php")) . "</footer>";
+    $filename = basename($_SERVER["SCRIPT_FILENAME"]);
+    $footer = "<footer>This page was last modified: " . date("F d Y H:i:s.", filemtime($filename)) . "</footer>";
+    return $footer;
 }
 
 ?>
+
+<!-- <p style=" position: absolute; bottom: 0; left: 0; width: 100%; text-align: center;">This will stick at the bottom no matter what :).</p>
