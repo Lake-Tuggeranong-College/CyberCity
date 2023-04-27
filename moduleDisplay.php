@@ -13,9 +13,9 @@
     <table class="table table-bordered">
         <thead>
         <tr>
-           // <th>Module</th>
+
             <th>Date & Time</th>
-            <th>Data</th>
+            <th>Data </th>
 
         </thead>
 </body>
@@ -41,7 +41,7 @@
                 echo "<tr>";
 
                 echo "<td>" . $row_dateTime . "</td>";
-                echo "<td>" . $row_data . "</td>";
+                echo "<td>" . $row_data .  " C </td>";
                 echo "</tr>";
 
             }
