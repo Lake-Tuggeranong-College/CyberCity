@@ -48,3 +48,5 @@
             $result = null;
         }
         ?>
+
+<?php echo outputFooter(); ?>

@@ -15,7 +15,7 @@ const char* password        = "Password01";       // Wifi Password
 //const char* serverName = "http://192.168.1.106/espPost/post-esp-data.php";
  const char* serverName = "http://192.168.1.18/post-esp-data.php";
 
-String apiKeyValue = "1";
+String apiKeyValue = "3";
 
-String sensorName = "TrainTimer";
-String sensorLocation = "TrainTimer";
+String sensorName = "TrafLight";
+String sensorLocation = "TrafLight";

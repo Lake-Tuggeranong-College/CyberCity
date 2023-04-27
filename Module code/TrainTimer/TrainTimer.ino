@@ -5,6 +5,7 @@ long countdown_time = (minute * 60) + second;
 #include <Wire.h> 
 #include "WiFi.h"
 #include "sensitiveInformation.h"
+void(* resetFunc) (void) = 0;
 
 void setup() {
  lcd.init();
@@ -32,4 +33,7 @@ void loop() {
     lcd.print(countdown_sec);
   }
   delay(500);
+   if (countdown_sec == 0 ) {
+      resetFunc()
+   }
 }

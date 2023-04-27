@@ -32,3 +32,4 @@ $moduleList = $conn->query("SELECT Location, Module, ID FROM RegisteredModules")
     }
     ?>
 
+    <?php echo outputFooter(); ?>
