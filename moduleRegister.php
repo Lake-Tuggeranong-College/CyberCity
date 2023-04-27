@@ -1,7 +1,7 @@
 <?php include "template.php";
 /** @var $conn */?>
 
-<title>ESP32 Register page</title>
+<title>Module Register page</title>
 
 <h1 class='text-primary'>Please enter new ESP32 details below</h1>
 <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" enctype="multipart/form-data">
