@@ -19,12 +19,6 @@ $moduleID = $moduleInformation["ID"];
 $moduleLocation = $moduleInformation["Location"];
 $moduleName = $moduleInformation["Module"];
 $moduleOutput = $moduleInformation["CurrentOutput"];
-
-
-echo 'Debug Information. Comment out as necessary<pre>';
-print_r($moduleInformation);
-echo '</pre>';
-
 ?>
 
 <h1 class='text-primary'>Module Name <?php echo $moduleName; ?></h1>
@@ -42,6 +36,20 @@ echo '</pre>';
     </div>
 </div>
 
+
+<?= outputFooter() ?>
+
+<?php
+echo '<h2 class="text-danger">Debug Information. Comment out as necessary</h2><pre>';
+print_r($moduleInformation);
+echo '</pre>';
+
+
+?>
+
+
+</html>
+</head>
 
 
 
