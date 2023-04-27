@@ -60,3 +60,6 @@ if (isset($_SESSION['access_level']) == 2) {
     echo "You do not have permission to use this";
 }
     ?>
+<br>
+    <?php echo outputFooter(); ?>
+</div>

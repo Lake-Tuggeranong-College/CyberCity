@@ -39,3 +39,4 @@ $scoreList = $conn->query("SELECT Username, Score FROM Users ORDER BY Score DESC
 
 ?>
 
+<?php echo outputFooter(); ?>
