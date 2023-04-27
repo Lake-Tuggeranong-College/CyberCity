@@ -17,17 +17,24 @@ $moduleList = $conn->query("SELECT Location, Module, ID FROM RegisteredModules")
         <div class="row">
 
             <div class="col-md-2">
-                <a href="moduleDisplay.php?ModuleID=<?=$moduleID ?>"><?php echo $moduleData[0]; ?></a>
+                <a href="moduleDisplay.php?ModuleID=<?= $moduleID ?>"><?php echo $moduleData[0]; ?></a>
             </div>
             <div class="col-md-2">
                 <?php echo $moduleData[1]; ?>
             </div>
-            <div class="col-md-2">
-                <a href="moduleInformation.php?ModuleID=<?=$moduleID ?>">Information</a>
-            </div>
-            <div class="col-md-2">
-                <a href="moduleEdit.php?ModuleID=<?=$moduleID ?>">Edit</a>
-            </div>
+            <?php
+            if ($_SESSION["access_level"] == 2) {
+                ?>
+
+                <div class="col-md-2">
+                    <a href="moduleInformation.php?ModuleID=<?= $moduleID ?>">Information</a>
+                </div>
+                <div class="col-md-2">
+                    <a href="moduleEdit.php?ModuleID=<?= $moduleID ?>">Edit</a>
+                </div>
+                <?php
+            }
+            ?>
 
         </div>
         <?php
