@@ -71,9 +71,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $sqlStmt = $conn->prepare($sql);
     $sqlStmt->execute([$newLocation, $newName, $newHashedAPIKey, $newOutput, $moduleID]);
 
+    $moduleToLoad = $_GET["ModuleID"];
+    header("location:moduleInformation.php?ModuleID=$moduleToLoad");
 
 }
-
 ?>
 
 
