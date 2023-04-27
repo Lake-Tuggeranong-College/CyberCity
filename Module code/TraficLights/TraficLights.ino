@@ -67,7 +67,7 @@ void loop() {
   // put your main code here, to run repeatedly:
   Serial.println(digitalRead(14));
   lights();
-  int sensorData = 1;
+  int sensorData = 97654;
   String dataToPost = String(sensorData);
   cyberCity.uploadData(dataToPost, apiKeyValue, sensorName, sensorLocation, 30000, serverName);
   // waits 180 seconds (3 minutes) as per guidelines from adafruit.
