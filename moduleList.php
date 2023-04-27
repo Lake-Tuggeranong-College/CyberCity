@@ -12,19 +12,21 @@ $moduleList = $conn->query("SELECT Location, Module, ID FROM RegisteredModules")
 <div class="container-fluid">
     <?php
     while ($moduleData = $moduleList->fetch()) {
+        $moduleID = $moduleData["ID"];
         ?>
         <div class="row">
 
             <div class="col-md-2">
-                <a href="moduleDisplay.php?ModuleID=<?php echo $moduleData[2]; ?>"><?php echo $moduleData[0]; ?></a>
+                <a href="moduleDisplay.php?ModuleID=<?=$moduleID ?>"><?php echo $moduleData[0]; ?></a>
             </div>
             <div class="col-md-2">
-                <!--            edit button-->
                 <?php echo $moduleData[1]; ?>
             </div>
             <div class="col-md-2">
-                <!--            edit button-->
-                <a href="moduleInformation.php?ModuleID=<?php echo $moduleData[2]; ?>">Module Information</a>
+                <a href="moduleInformation.php?ModuleID=<?=$moduleID ?>">Information</a>
+            </div>
+            <div class="col-md-2">
+                <a href="moduleEdit.php?ModuleID=<?=$moduleID ?>">Edit</a>
             </div>
 
         </div>
