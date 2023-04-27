@@ -21,4 +21,7 @@ echo "<table border='1' id= results>
 
 ?>
 
+<?php echo outputFooter(); ?>
+
+
 

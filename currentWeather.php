@@ -45,3 +45,4 @@ $sql = "SELECT EventID, ModuleID, DateTime, Data FROM ModuleData ORDER BY EventI
     ?>
 </div>
 
+<?php echo outputFooter(); ?>
