@@ -21,27 +21,40 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="index.php">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="contact.php">Contact Us</a>
-                </li>
-
+                <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="contact.php">Contact Us</a></li>
+                <li class="nav-item"><a class="nav-link" href="moduleInformation.php">Modules</a></li>
                 <?php
                 $accessLevel = 2;
                 if (isset($_SESSION["username"])) {
-                    echo '<li class="nav-item"><a class="nav-link" href="moduleList.php">Module Display</a> </li>';
 
                     if ($_SESSION["access_level"] == $accessLevel) {
 
-                        echo '<li class="nav-item"><a class="nav-link" href="registerESP32.php">ESP32 Registration</a> </li>';
+                        ?>
+                        <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            Administrator Functions
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="userSearch.php">User Search</a>
 
-                        echo '<li class="nav-item"><a class="nav-link" href="userSearch.php">User Search</a> </li>';
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="moduleRegister.php">Add Products</a>
+                        <?php
                     }
+                    ?>
+                    </ul>
+                    </li>
+
+                    <?php
                 } else {
-                    echo '<li class="nav-item"><a class="nav-link" href="register.php">Register</a> </li>';
-                    echo '<li class="nav-item"><a class="nav-link" href="login.php">Login</a> </li>';
+                    echo '
+                    <li class="nav-item"><a class="nav-link" href="register.php">Register</a></li>
+                    ';
+                    echo '
+                    <li class="nav-item"><a class="nav-link" href="login.php">Login</a></li>
+                    ';
 
 
                 }
