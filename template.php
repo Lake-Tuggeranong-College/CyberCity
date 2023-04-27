@@ -35,7 +35,7 @@
 
                     if ($_SESSION["access_level"] == $accessLevel) {
 
-                        echo '<li class="nav-item"><a class="nav-link" href="registerESP32.php">ESP32 Registration</a> </li>';
+                        echo '<li class="nav-item"><a class="nav-link" href="moduleRegister.php">ESP32 Registration</a> </li>';
 
                         echo '<li class="nav-item"><a class="nav-link" href="userSearch.php">User Search</a> </li>';
                     }

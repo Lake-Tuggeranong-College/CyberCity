@@ -10,8 +10,8 @@
             <!--Customer Details-->
 
             <div class="col-md-12">
-                <h2>ESP32 details</h2>
-                <p>Please enter the new ESP32 location, Module name and APIkey:</p>
+                <h2>Module details</h2>
+                <p>Please enter the new Module location, Module name and APIkey:</p>
                 <p>Location<input type="text" name="Location" class="form-control" required="required"></p>
                 <p>Module<input type="text" name="Module" class="form-control" required="required"></p>
                 <p>API key<input type="password" name="APIkey" class="form-control" required="required"></p>
