@@ -40,7 +40,7 @@
                         <a class="dropdown-item" href="userSearch.php">User Search</a>
 
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="moduleRegister.php">Add Products</a>
+                        <a class="dropdown-item" href="moduleRegister.php">Add New Module</a>
                         <?php
                     }
                     ?>
