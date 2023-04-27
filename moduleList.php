@@ -22,6 +22,10 @@ $moduleList = $conn->query("SELECT Location, Module, ID FROM RegisteredModules")
                 <!--            edit button-->
                 <?php echo $moduleData[1]; ?>
             </div>
+            <div class="col-md-2">
+                <!--            edit button-->
+                <a href="moduleInformation.php?ModuleID=<?php echo $moduleData[2]; ?>">Module Information</a>
+            </div>
 
         </div>
         <?php
