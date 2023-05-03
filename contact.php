@@ -1,6 +1,6 @@
 <?php include "template.php";
 /** @var $conn */ ?>
-
+<title>Contact Us</title>
     <h1>Contact Us</h1>
 
     <h1 class='text-primary'>Please fill out the form below, so we can get in contact with you.</h1>

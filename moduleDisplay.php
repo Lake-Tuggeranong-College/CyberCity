@@ -13,9 +13,9 @@
     <table class="table table-bordered">
         <thead>
         <tr>
-           // <th>Module</th>
+
             <th>Date & Time</th>
-            <th>Data</th>
+            <th>Data </th>
 
         </thead>
 </body>
@@ -37,11 +37,11 @@
                 $row_dateTime = $row["DateTime"];
                 $row_data = $row["Data"];
 
-
+   echo "<title> Module ID:" .$row_moduleID.  "</title>";
                 echo "<tr>";
 
                 echo "<td>" . $row_dateTime . "</td>";
-                echo "<td>" . $row_data . "</td>";
+                echo "<td>" . $row_data .  "  </td>";
                 echo "</tr>";
 
             }
