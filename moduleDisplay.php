@@ -37,11 +37,11 @@
                 $row_dateTime = $row["DateTime"];
                 $row_data = $row["Data"];
 
-
+   echo "<title> Module ID:" .$row_moduleID.  "</title>";
                 echo "<tr>";
 
                 echo "<td>" . $row_dateTime . "</td>";
-                echo "<td>" . $row_data .  " C </td>";
+                echo "<td>" . $row_data .  "  </td>";
                 echo "</tr>";
 
             }
