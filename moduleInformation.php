@@ -25,31 +25,31 @@ $moduleName = $moduleInformation["Module"];
 $moduleOutput = $moduleInformation["CurrentOutput"];
 ?>
 
-<h1 class='text-primary'>Module Name <?php echo $moduleName; ?></h1>
+<!--<h1 class='text-primary'>Module Name <?php /*echo $moduleName; */?></h1>
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-4">
-            <?= $moduleName ?>
+            <?php /*= $moduleName */?>
         </div>
         <div class="col-md-4">
-            <?= $moduleLocation ?>
+            <?php /*= $moduleLocation */?>
         </div>
         <div class="col-md-4">
-            <?= $moduleOutput ?>
+            <?php /*= $moduleOutput */?>
         </div>
     </div>
 </div>
-
+-->
 
 <?= outputFooter() ?>
 
 <?php
-echo '<h2 class="text-danger">Debug Information. Comment out as necessary</h2><pre>';
+/*echo '<h2 class="text-danger">Debug Information. Comment out as necessary</h2><pre>';
 print_r($moduleInformation);
 echo '</pre>';
 
 
-?>
+*/?>
 
 <div class="container-fluid">
     <div class="row">
