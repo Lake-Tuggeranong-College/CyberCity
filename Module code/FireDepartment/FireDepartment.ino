@@ -1,3 +1,5 @@
+
+
 /***************************************************
   Adafruit invests time and resources providing this open source code,
   please support Adafruit and open-source hardware by purchasing
@@ -10,18 +12,18 @@
 #include "sensitiveInformation.h"
 #include <CyberCityShareFuntionality.h>
 CyberCityShareFuntionality cyberCity;
-
-
 //Temperature Sensor
 #include <Wire.h>
+#include <WiFi.h>
+#include <RTClib.h>
 #include "Adafruit_ADT7410.h"
 // Create the ADT7410 temperature sensor object
 Adafruit_ADT7410 tempsensor = Adafruit_ADT7410();
-
-
+#define display
+RTC_DS3231 rtc;                  
 void setup() {
-  /*
-  */
+ 
+  
   Serial.begin(9600);
   while (!Serial) {
     delay(10);
@@ -49,7 +51,7 @@ void setup() {
   // The following line can be uncommented if the time needs to be reset.
   rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
 
-  rtc.start();
+  rtc.begin();
 
   //EINK
   display.begin();
