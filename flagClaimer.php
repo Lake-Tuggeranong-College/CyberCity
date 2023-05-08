@@ -35,9 +35,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $userData = $userInformation->fetch();
                 $addedScore = $userData[1] += $flagData[1];
                 $sql = "INSERT INTO Users (Score) VALUES (:newScore)";
+                // change to UPDATE
                 $stmt = $conn->prepare($sql);
                 $stmt->bindValue(':newScore', $addedScore);
                 $stmt->execute();
+                echo "added points";
 
 
             }
