@@ -10,8 +10,8 @@
 
 
 #include "sensitiveInformation.h"
-#include <CyberCityShareFuntionality.h>
-CyberCityShareFuntionality cyberCity;
+#include <CyberCitySharedFuntionality.h>
+CyberCitySharedFuntionality cyberCity;
 //Temperature Sensor
 #include <Wire.h>
 #include <WiFi.h>
@@ -19,11 +19,13 @@ CyberCityShareFuntionality cyberCity;
 #include "Adafruit_ADT7410.h"
 // Create the ADT7410 temperature sensor object
 Adafruit_ADT7410 tempsensor = Adafruit_ADT7410();
-#define display
-RTC_DS3231 rtc;                  
+//#define display
+//#define clear
+
+//RTC_DS3231 rtc;
 void setup() {
- 
-  
+
+
   Serial.begin(9600);
   while (!Serial) {
     delay(10);
@@ -61,8 +63,7 @@ void setup() {
 
   if (!tempsensor.begin()) {
     Serial.println("Couldn't find ADT7410!");
-    while (1)
-      ;
+    while (1);
   }
 }
 
