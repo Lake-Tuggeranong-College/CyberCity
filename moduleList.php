@@ -6,13 +6,15 @@
 <h1 class='text-primary'>Module List</h1>
 
 <?php
-$moduleList = $conn->query("SELECT Location, Module, ID FROM RegisteredModules");
+$moduleList = $conn->query("SELECT Location, Module, ID, Enabled FROM RegisteredModules");
 ?>
 
 <div class="container-fluid">
     <?php
-    while ($moduleData = $moduleList->fetch()) {
+    while ($moduleData = $moduleList->fetch() ) {
         $moduleID = $moduleData["ID"];
+        $EnabledModule = $moduleData["Enabled"];
+        if ($EnabledModule == 1){
         ?>
         <div class="row">
 
@@ -38,6 +40,7 @@ $moduleList = $conn->query("SELECT Location, Module, ID FROM RegisteredModules")
 
         </div>
         <?php
+        }
     }
     ?>
 
