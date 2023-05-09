@@ -14,6 +14,7 @@ if (isset($_GET["ModuleID"])) {
     $moduleName = $moduleInformation["Module"];
     $moduleAPIKey = $moduleInformation["HashedAPIKey"];
     $moduleCurrentOutput = $moduleInformation["CurrentOutput"];
+    $moduleEnabled =$moduleInformation["Enabled"];
 } else {
     header("location:moduleList.php");
 }
@@ -47,6 +48,11 @@ if (isset($_GET["ModuleID"])) {
                     <input type="text" name="currentOutput" class="form-control" required="required"
                            value="<?= $moduleCurrentOutput ?>"></p>
                 </p>
+                <p>Enabled
+                    <input type="text" name="0 or 1" class="form-control" required="required"
+                           value="<?= $moduleEnabled ?>"></p>
+
+                </p>
 
             </div>
         </div>
@@ -66,10 +72,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $newAPIKey = sanitise_data($_POST["apiKey"]);
 
     $newHashedAPIKey = password_hash($newAPIKey, PASSWORD_DEFAULT);
+    $newEnabled = ($_POST["Enabled"]);
 
-    $sql = "UPDATE RegisteredModules SET Location=?, Module=?, HashedAPIKey=?, CurrentOutput=? WHERE ID=?";
+    $sql = "UPDATE RegisteredModules SET Location=?, Module=?, HashedAPIKey=?, CurrentOutput=?, Enabled=?, WHERE ID=?";
     $sqlStmt = $conn->prepare($sql);
-    $sqlStmt->execute([$newLocation, $newName, $newHashedAPIKey, $newOutput, $moduleID]);
+    $sqlStmt->execute([$newLocation, $newName, $newHashedAPIKey, $newOutput, $moduleID,$newEnabled]);
 
     $moduleToLoad = $_GET["ModuleID"];
     header("location:moduleInformation.php?ModuleID=$moduleToLoad");
