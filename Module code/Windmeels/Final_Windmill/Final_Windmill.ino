@@ -2,16 +2,16 @@
 #include "sensitiveInformation.h"
 #include <CyberCitySharedFuntionality.h>
 CyberCitySharedFuntionality cyberCity;
- 
-#include <Servo.h> 
-// Declare the Servo pin 
-int servoPin = 13; 
-// Create a servo object 
-Servo Servo1; 
-void setup() { 
-   // We need to attach the servo to the used pin number 
-   Servo1.attach(servoPin); 
-    Serial.begin(9600);
+
+#include <Servo.h>
+// Declare the Servo pin
+int servoPin = 13;
+// Create a servo object
+Servo Servo1;
+void setup() {
+  // We need to attach the servo to the used pin number
+  Servo1.attach(servoPin);
+  Serial.begin(9600);
   while (!Serial) {
     delay(10);
   }
@@ -46,7 +46,10 @@ void setup() {
   cyberCity.logEvent("System Initialisation...");
 
 }
-void loop(){  
-   Servo1.write(0); 
-   delay(1000); 
+
+void loop() {
+  Servo1.write(0);
+  delay(10000);
+  Servo1.write(180);
+  delay(10000);
 }
