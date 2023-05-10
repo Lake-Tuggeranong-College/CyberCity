@@ -69,7 +69,13 @@
         ?>
     </div>
 </nav>
-
+<?php
+if(isset($_SESSION['flash_message'])) {
+$message = $_SESSION['flash_message'];
+unset($_SESSION['flash_message']);
+echo $message;
+}
+?>
 <script src="js/bootstrap.bundle.js"></script>
 <?php
 function sanitise_data($data)

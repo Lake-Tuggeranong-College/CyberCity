@@ -11,7 +11,7 @@ try {
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
     $errorCaught = true;
-    echo "Error: " . $e->getMessage();
+    $_SESSION['flash_message'] = $e->getMessage();
 }
 if (!$errorCaught) {
     //echo "Database connection configured correctly, and database connection good.";
