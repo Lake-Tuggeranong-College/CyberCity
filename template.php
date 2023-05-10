@@ -22,13 +22,16 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="contact.php">Contact Us</a></li>
                 <li class="nav-item"><a class="nav-link" href="moduleInformation.php">Modules</a></li>
                 <li class="nav-item"><a class="nav-link" href="leaderboard.php">Leaderboard</a></li>
+                <li class="nav-item"><a class="nav-link" href="contact.php">Contact Us</a></li>
+
                 <?php
                 $accessLevel = 2;
                 if (isset($_SESSION["username"])) {
-
+                    echo '
+                    <li class="nav-item"><a class="nav-link" href="flagClaimer.php">Flag Claimer</a></li>
+                    ';
                     if ($_SESSION["access_level"] == $accessLevel) {
 
                         ?>
@@ -42,6 +45,8 @@
 
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="moduleRegister.php">Add New Module</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="flagMaker.php">Add New Flag</a>
                         <?php
                     }
                     ?>
@@ -60,6 +65,7 @@
 
                 }
                 ?>
+
             </ul>
         </div>
         <?php
