@@ -28,18 +28,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $flagList = $conn->query("SELECT HashedFlag,PointsValue FROM Flags");
 
     while ($flagData = $flagList->fetch()) {
-        if (password_verify($flag, $flagData[0])) {
-            if (isset($_SESSION["username"])) {
-                $username = $_SESSION["username"];
-                $userInformation = $conn->query("SELECT Username, Score FROM Users WHERE Username='$username'");
-                $userData = $userInformation->fetch();
-                $addedScore = $userData[1] += $flagData[1];
-                $sql = "INSERT INTO Users (Score) VALUES (:newScore)";
-                // change to UPDATE
-                $stmt = $conn->prepare($sql);
-                $stmt->bindValue(':newScore', $addedScore);
-                $stmt->execute();
-                echo "added points";
+        if (isset($_SESSION["username"])) {
+            if (password_verify($flag, $flagData[0])) {
+                    $username = $_SESSION["username"];
+                    $userInformation = $conn->query("SELECT Username, Score FROM Users WHERE Username='$username'");
+                    $userData = $userInformation->fetch();
+                    $addedScore = $userData[1] += $flagData[1];
+                    $sql = "UPDATE Users SET Score=? WHERE Username=?";
+                    // change to UPDATE
+                    $stmt = $conn->prepare($sql);
+                    $stmt->execute([$addedScore,$username]);
+                    echo "added points";
 
 
             }
