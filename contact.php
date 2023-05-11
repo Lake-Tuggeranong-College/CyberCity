@@ -12,8 +12,12 @@
                 <div class="col-md-12">
                     <h2>Personal Details</h2>
 
-                    <p>Email<input type="text" name="email" class="form-control" required="required"></p>
-                    <p>Username<input type="text" name="username" class="form-control" required="required"></p>
+                    <p>Email<label>
+                            <input type="text" name="email" class="form-control" required="required">
+                        </label></p>
+                    <p>Username<label>
+                            <input type="text" name="username" class="form-control" required="required">
+                        </label></p>
                 </div>
             </div>
         </div>
