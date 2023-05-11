@@ -27,9 +27,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $module = ($_POST['Module']);
     $APIkey = ($_POST['APIkey']);
     $hashed_APIkey = password_hash($APIkey, PASSWORD_DEFAULT);
-    echo  $location;
-    echo  $module;
-    echo  $hashed_APIkey;
+    //echo  $location;
+    //echo  $module;
+    //echo  $hashed_APIkey;
 
 // check Module and location in database
     $query = $conn->query("SELECT COUNT(*) FROM `RegisteredModules` WHERE Location='$location'");
@@ -51,6 +51,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bindValue(':enabled', 1);
 
         $stmt->execute();
+        //$_SESSION["flash_message"] = "Module Created";
+        //header("Location:index.php");
     }
 
 }
