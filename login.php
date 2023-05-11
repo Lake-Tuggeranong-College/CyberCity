@@ -42,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION["user_id"] = $row[0];
                 $_SESSION["username"] = $row[1];
                 $_SESSION['access_level'] = $row[3];
-                $_SESSION["flash_message"] = "login successful";
+                $_SESSION["flash_message"] = "<div class='bg-success'>Login Successful</div>";
                 header("Location:index.php");
             } else {
                 // unsuccessful log on.
