@@ -8,7 +8,6 @@ long countdown_time = (minute * 60) + second;
 #include "sensitiveInformation.h"
 #include <CyberCitySharedFuntionality.h>
 CyberCitySharedFuntionality cyberCity;
-void(* resetFunc) (void) = 0;
 
 void setup() {
    Serial.begin(9600);
@@ -53,20 +52,23 @@ void setup() {
 }
 
 void loop() {
- long countdowntime_seconds = countdown_time - (millis() / 1000);
+  
+  String dataToPost = String(countdown_seconds); {
+  cyberCity.uploadData(dataToPost, apiKeyValue, sensorName, sensorLocation, 250, serverName); }
+ long countdowntime_seconds = countdown_time - (millis() / 1000); 
   if (countdowntime_seconds >= 0) {
     long countdown_minute = ((countdowntime_seconds / 60)%60);
-    long countdown_sec = countdowntime_seconds % 60;
+    long countdown_seconds = countdowntime_seconds % 60;
     lcd.setCursor(9, 1);
     if (countdown_minute < 10) {
       lcd.print("0");
     }
     lcd.print(countdown_minute);
     lcd.print(":");
-    if (countdown_sec < 10) {
+    if (countdown_seconds < 10) {
       lcd.print("0");
     }
-    lcd.print(countdown_sec);
+    lcd.print(countdown_seconds);
   }
   delay(500); 
-  }
+}
