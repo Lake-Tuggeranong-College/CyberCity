@@ -20,12 +20,11 @@ $moduleList = $conn->query("SELECT Location, Module, ID, Enabled, Image FROM Reg
         <div class='name'>" . $moduleData[0] . "</div>
         <div class='price'> $moduleData[1]</div>
         ";
-        if ($_SESSION["access_level"] == 2) {
-            echo "moduleInformation.php?ModuleID=" . $moduleID;
-            echo"
-                <button href='moduleInformation.php?ModuleID=<?= $moduleID ?>'>Information</button>
-                <button href='moduleEdit.php?ModuleID=<?= $moduleID ?>'>Edit</button>
-    ";
-    echo"</div>";
+if ($_SESSION["access_level"] == 2) {
+    echo"
+                <a class='moduleButton' href='moduleInformation.php?ModuleID=" . $moduleID . "'>Information</a>
+                <a class='moduleButton' href='moduleEdit.php?ModuleID=" . $moduleID . "'>Edit</a>
+ 
+    </div>";
         }
     }
