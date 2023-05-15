@@ -1,50 +1,32 @@
 <?php include "template.php";
 /** @var $conn */ ?>
 
+
 <title>Module List</title>
+    <link rel="stylesheet" href="css/moduleList.css">
 
 <h1 class='text-primary'>Module List</h1>
 
 <?php
-$moduleList = $conn->query("SELECT Location, Module, ID, Enabled, Image FROM RegisteredModules");
-?>
-
-<div class="container-fluid">
-    <?php
+$moduleList = $conn->query("SELECT Location, Module, ID, Enabled, Image FROM RegisteredModules WHERE Enabled=1");
     while ($moduleData = $moduleList->fetch() ) {
         $moduleID = $moduleData["ID"];
-        $EnabledModule = $moduleData["Enabled"];
-        if ($EnabledModule == 1){
-        ?>
-        <div class="row">
-
-            <div class="col-md-2">
-                <a href="moduleDisplay.php?ModuleID=<?= $moduleID ?>"><?php echo $moduleData[0]; ?></a>
-            </div>
-            <div class="col-md-2">
-                <?php echo $moduleData[1]; ?>
-            </div>
-            <div class="col-md-2">
-                <img src='images/modules/<?php echo $moduleData["Image"]?>' alt="" width="40%" onerror="this.onerror=null; this.src='/images/modules/blank.jpg'">
-            </div>
-            <?php
-            if ($_SESSION["access_level"] == 2) {
-                ?>
-
-                <div class="col-md-2">
-                    <a href="moduleInformation.php?ModuleID=<?= $moduleID ?>">Information</a>
-                </div>
-                <div class="col-md-2">
-                    <a href="moduleEdit.php?ModuleID=<?= $moduleID ?>">Edit</a>
-                </div>
-                <?php
+        echo "<div class='product_wrapper'>";
+            if ($moduleData['Image']) {
+                echo "<div class='image'><img src='images/modules/" . $moduleData['Image'] . "' width='100' height='100'/></div>";
             }
-            ?>
-
-        </div>
-        <?php
+    else {
+        echo "<div class='image'><img src='images/modules/blank.jpg'width='100' height='100'/></div>";
+    }
+ echo"
+        <div class='name'>" . $moduleData[0] . "</div>
+        <div class='price'> $moduleData[1]</div>
+        ";
+if ($_SESSION["access_level"] == 2) {
+    echo"
+                <a class='moduleButton' href='moduleInformation.php?ModuleID=" . $moduleID . "'>Information</a>
+                <a class='moduleButton' href='moduleEdit.php?ModuleID=" . $moduleID . "'>Edit</a>
+ 
+    </div>";
         }
     }
-    ?>
-
-    <?php echo outputFooter(); ?>
