@@ -1,17 +1,20 @@
 
 #include <LiquidCrystal_I2C.h>
 LiquidCrystal_I2C lcd(0x3F, 16, 2);
-long minute = 3, second = 00;
-long countdown_time = (minute * 60) + second;
-#include <Wire.h> 
+
+int startingTimer = 10;
+
+int countdownSeconds = startingTimer;
+
+
+#include <Wire.h>
 #include "WiFi.h"
 #include "sensitiveInformation.h"
 #include <CyberCitySharedFuntionality.h>
 CyberCitySharedFuntionality cyberCity;
-void(* resetFunc) (void) = 0;
 
 void setup() {
-   Serial.begin(9600);
+  Serial.begin(9600);
   while (!Serial) {
     delay(10);
   }
@@ -44,29 +47,45 @@ void setup() {
   display.clearBuffer();
 
   cyberCity.logEvent("System Initialisation...");
- lcd.init();
+  lcd.init();
   lcd.backlight();
   lcd.setCursor(1, 1);
   lcd.print("Arival:");
-  lcd.setCursor(0,0);
+  lcd.setCursor(0, 0);
   lcd.print(" Lego City Train ");
 }
 
 void loop() {
- long countdowntime_seconds = countdown_time - (millis() / 1000);
-  if (countdowntime_seconds >= 0) {
-    long countdown_minute = ((countdowntime_seconds / 60)%60);
-    long countdown_sec = countdowntime_seconds % 60;
+
+  //  int minutesLeft = countdownSeconds % 60;
+  //  int secondsLeft = countdownSeconds / 60;
+
+  countdownSeconds = countdownSeconds - 1;
+  delay(1000);
+
+//  long countdownSeconds = countdownSeconds - (millis() / 1000);
+  if (countdownSeconds >= 0) {
+    long countdown_minute = ((countdownSeconds / 60) % 60);
+    long countdown_seconds = countdownSeconds % 60;
     lcd.setCursor(9, 1);
     if (countdown_minute < 10) {
       lcd.print("0");
     }
     lcd.print(countdown_minute);
     lcd.print(":");
-    if (countdown_sec < 10) {
+    if (countdown_seconds < 10) {
       lcd.print("0");
     }
-    lcd.print(countdown_sec);
+    lcd.print(countdown_seconds);
   }
-  delay(500); 
+  else {
+   countdownSeconds = startingTimer;
   }
+
+
+  //float sensorData = (float)countdownSeconds;
+  String dataToPost = String(countdownSeconds);
+  cyberCity.uploadData(dataToPost, apiKeyValue, sensorName, sensorLocation, 250, serverName);
+
+  delay(500);
+}
