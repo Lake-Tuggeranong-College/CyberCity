@@ -25,7 +25,7 @@ $moduleList = $conn->query("SELECT Location, Module, ID, Enabled, Image FROM Reg
                 <?php echo $moduleData[1]; ?>
             </div>
             <div class="col-md-2">
-                <img src='images/modules/<?php echo $moduleData["Image"]?>' alt="" width="40%" >
+                <img src='images/modules/<?php echo $moduleData["Image"]?>' alt="" width="40%" onerror="this.onerror=null; this.src='/images/modules/blank.jpg'">
             </div>
             <?php
             if ($_SESSION["access_level"] == 2) {
