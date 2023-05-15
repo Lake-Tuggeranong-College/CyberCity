@@ -1,4 +1,4 @@
-<?php include "template.php";
+<?php //include "template.php";
 /** @var $conn */
 
 /*
@@ -19,7 +19,7 @@
 $api_key = $sensor = $location = $sensorValue = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    echo "read";
+//    echo "read";
     $api_key = sanitise_data($_POST["api_key"]);
     $location = sanitise_data($_POST["location"]);
     $query = $conn->query("SELECT COUNT(*) as count FROM `RegisteredModules` WHERE `Location` ='$location'");
