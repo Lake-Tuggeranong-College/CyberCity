@@ -29,6 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($count > 0) {
         $query = $conn->query("SELECT * FROM `RegisteredModules` WHERE `Location`='$location'");
         $row = $query->fetch();
+        $payload = $row[4];
         $api_key_value = $row[3];
         if (password_verify($api_key, $api_key_value)) {
             $sensorValue = sanitise_data($_POST["sensorValue"]);
@@ -36,9 +37,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $date = date("Y-m-d H:i:s");
             //DO NOT CHANGE THIS DATE CODE, MUST STAY SAME TO WORK WITH MYSQL
             $ModuleID = $row[0];
-            $query = $conn->query("SELECT CurrentOutput from RegisteredModules where Location=$location");
-            $row = $query->fetch();
-            echo $row['CurrentOutput'];
+//            $query = $conn->query("SELECT CurrentOutput from RegisteredModules where Location=$location");
+//            $row = $query->fetch();
+            echo $payload;
             $conn->close();
         } else {
 
