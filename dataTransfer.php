@@ -37,6 +37,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $date = date("Y-m-d H:i:s");
             //DO NOT CHANGE THIS DATE CODE, MUST STAY SAME TO WORK WITH MYSQL
             $ModuleID = $row[0];
+            $sql = "INSERT INTO ModuleData (ModuleID, DateTime, Data) VALUES (:ModuleID, :date, :sensorValue)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue(':ModuleID', $ModuleID);
+            $stmt->bindValue(':date', $date);
+            $stmt->bindValue(':sensorValue', $sensorValue);
+            $stmt->execute();
 //            $query = $conn->query("SELECT CurrentOutput from RegisteredModules where Location=$location");
 //            $row = $query->fetch();
             echo "Payload:" . $payload;
@@ -49,18 +55,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 } else {
 
-    $query = $conn->query("SELECT COUNT(*) as count FROM `RegisteredModules` WHERE `Location` ='$location'");
-    $row = $query->fetch();
-    $count = $row[0];
-    if ($count > 0) {
-        $query = $conn->query("SELECT * FROM `RegisteredModules` WHERE `Location`='$location'");
-        $row = $query->fetch();
-        $payload = $row[4];
-        $api_key_value = $row[3];
 
-        echo "Payload:" . $payload;
-        $conn->close();
-    } else {
-
-    }
 }
