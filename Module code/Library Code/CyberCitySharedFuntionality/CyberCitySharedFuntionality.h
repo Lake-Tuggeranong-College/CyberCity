@@ -1,5 +1,6 @@
 // version 1.0.0 28.03.2023 - JR
 // version 1.1.0 24.04.2023 - RC
+// v2.0.0 16.05.2023 - RC
 
 #ifndef CyberCitySharedFuntionality_H
 #define CyberCitySharedFuntionality_H
@@ -33,12 +34,10 @@ private:
 public:
     CyberCitySharedFuntionality();
     void commonSetup();
-    void updateEPD(String title, String dataTitle, float dataToDisplay);
+    void updateEPD(String title, String dataTitle, float dataToDisplay, String outputCommand);
     void drawText(String text, uint16_t color, int textSize, int x, int y);
 
     void logEvent(String dataToLog);
-    void uploadData(String dataToPost, String apiKeyValue, String sensorName, String sensorLocation, int delayBetweenPosts, String serverName);
-    String readData(String dataToPost, String apiKeyValue, String sensorName, String sensorLocation, int delayBetweenPosts, String serverName);
-
+    String dataTransfer(String dataToPost, String apiKeyValue, String sensorName, String sensorLocation, int delayBetweenPosts, String serverName, boolean postData, boolean readData);
 };
 #endif
