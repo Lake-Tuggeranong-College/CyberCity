@@ -1,13 +1,6 @@
 <?php include "template.php";
 /** @var $conn */ ?>
 
-<!DOCTYPE html>
-<html>
-<head>
-
-</head>
-<body>
-
 
 <div class="table-responsive">
     <table class="table table-bordered">
@@ -15,20 +8,18 @@
         <tr>
 
             <th>Date & Time</th>
-            <th>Data </th>
+            <th>Data</th>
 
         </thead>
-</body>
-</html>
 
         <?php
         if (isset($_GET["ModuleID"])) {
             $moduleToLoad = $_GET["ModuleID"];
         } else {
-    header("location:moduleList.php");
-}
+            header("location:moduleList.php");
+        }
 
-        $sql = "SELECT EventID, ModuleID, DateTime, Data FROM ModuleData WHERE ModuleID = ".$moduleToLoad." ORDER BY EventID DESC";
+        $sql = "SELECT EventID, ModuleID, DateTime, Data FROM ModuleData WHERE ModuleID = " . $moduleToLoad . " ORDER BY EventID DESC";
 
         if ($result = $conn->query($sql)) {
             while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
@@ -37,16 +28,20 @@
                 $row_dateTime = $row["DateTime"];
                 $row_data = $row["Data"];
 
-   echo "<title> Module ID:" .$row_moduleID.  "</title>";
+                echo "<title> Module ID:" . $row_moduleID . "</title>";
                 echo "<tr>";
 
                 echo "<td>" . $row_dateTime . "</td>";
-                echo "<td>" . $row_data .  "  </td>";
+                echo "<td>" . $row_data . "  </td>";
                 echo "</tr>";
 
             }
             $result = null;
         }
         ?>
+    </table>
+</div>
 
 <?php echo outputFooter(); ?>
+</body>
+</html>
