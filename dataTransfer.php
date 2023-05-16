@@ -43,8 +43,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->bindValue(':date', $date);
             $stmt->bindValue(':sensorValue', $sensorValue);
             $stmt->execute();
-//            $query = $conn->query("SELECT CurrentOutput from RegisteredModules where Location=$location");
-//            $row = $query->fetch();
             echo "Payload:" . $payload;
             $conn->close();
         } else {
