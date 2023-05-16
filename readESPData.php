@@ -1,4 +1,4 @@
-<?php //include "template.php";
+<?php include "template.php";
 /** @var $conn */
 
 /*
@@ -22,10 +22,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 //    echo "read";
     $api_key = sanitise_data($_POST["api_key"]);
     $location = sanitise_data($_POST["location"]);
+
     $query = $conn->query("SELECT COUNT(*) as count FROM `RegisteredModules` WHERE `Location` ='$location'");
     $row = $query->fetch();
     $count = $row[0];
-
     if ($count > 0) {
         $query = $conn->query("SELECT * FROM `RegisteredModules` WHERE `Location`='$location'");
         $row = $query->fetch();
@@ -39,7 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $ModuleID = $row[0];
 //            $query = $conn->query("SELECT CurrentOutput from RegisteredModules where Location=$location");
 //            $row = $query->fetch();
-            echo $payload;
+            echo "Payload:".$payload;
             $conn->close();
         } else {
 
