@@ -10,7 +10,7 @@ void CyberCitySharedFuntionality::commonSetup()
 {
 }
 
-void CyberCitySharedFuntionality::updateEPD(String title, String dataTitle, float dataToDisplay)
+void CyberCitySharedFuntionality::updateEPD(String title, String dataTitle, float dataToDisplay, String outputCommand)
 {
 
   // Indigenous Country Name
@@ -28,6 +28,7 @@ void CyberCitySharedFuntionality::updateEPD(String title, String dataTitle, floa
 
   drawText(dataTitle, EPD_BLACK, 2, 0, 80);
   drawText(String(dataToDisplay), EPD_BLACK, 4, 0, 95);
+  drawText(outputCommand, EPD_BLACK, 3, 0, 40);
 
   logEvent("Updating the EPD");
   display.display();
@@ -87,61 +88,7 @@ void CyberCitySharedFuntionality::logEvent(String dataToLog)
   Serial.println(logEntry);
 }
 
-void CyberCitySharedFuntionality::uploadData(String dataToPost, String apiKeyValue, String sensorName, String sensorLocation, int delayBetweenPosts, String serverName)
-{
-  if (WiFi.status() == WL_CONNECTED)
-  {
-    WiFiClient client;
-    HTTPClient http;
-
-    // Your Domain name with URL path or IP address with path
-    http.begin(client, serverName);
-
-    // Specify content-type header
-    http.addHeader("Content-Type", "application/x-www-form-urlencoded");
-
-    // Prepare your HTTP POST request data
-    String httpRequestData = "api_key=" + apiKeyValue + "&sensor=" + sensorName + "&location=" + sensorLocation + "&sensorValue=" + dataToPost;
-    Serial.print("httpRequestData: ");
-    Serial.println(httpRequestData);
-
-    // You can comment the httpRequestData variable above
-    // then, use the httpRequestData variable below (for testing purposes without the BME280 sensor)
-    // String httpRequestData = "api_key=tPmAT5Ab3j7F9&sensor=BME280&location=Office&value1=24.75&value2=49.54&value3=1005.14";
-
-    // Send HTTP POST request
-    int httpResponseCode = http.POST(httpRequestData);
-
-    // If you need an HTTP request with a content type: text/plain
-    // http.addHeader("Content-Type", "text/plain");
-    // int httpResponseCode = http.POST("Hello, World!");
-
-    // If you need an HTTP request with a content type: application/json, use the following:
-    // http.addHeader("Content-Type", "application/json");
-    // int httpResponseCode = http.POST("{\"value1\":\"19\",\"value2\":\"67\",\"value3\":\"78\"}");
-
-    if (httpResponseCode > 0)
-    {
-      Serial.print("HTTP Response code: ");
-      Serial.println(httpResponseCode);
-    }
-    else
-    {
-      Serial.print("Error code: ");
-      Serial.println(httpResponseCode);
-    }
-    // Free resources
-    http.end();
-  }
-  else
-  {
-    Serial.println("WiFi Disconnected");
-  }
-  // Send an HTTP POST request every 30 seconds
-  delay(delayBetweenPosts);
-}
-
-String CyberCitySharedFuntionality::readData(String dataToPost, String apiKeyValue, String sensorName, String sensorLocation, int delayBetweenPosts, String serverName)
+String CyberCitySharedFuntionality::dataTransfer(String dataToPost, String apiKeyValue, String sensorName, String sensorLocation, int delayBetweenPosts, String serverName, boolean postData, boolean readData)
 {
   String payload;
   if (WiFi.status() == WL_CONNECTED)
@@ -160,23 +107,12 @@ String CyberCitySharedFuntionality::readData(String dataToPost, String apiKeyVal
     Serial.print("httpRequestData: ");
     Serial.println(httpRequestData);
 
-    // You can comment the httpRequestData variable above
-    // then, use the httpRequestData variable below (for testing purposes without the BME280 sensor)
-    // String httpRequestData = "api_key=tPmAT5Ab3j7F9&sensor=BME280&location=Office&value1=24.75&value2=49.54&value3=1005.14";
-
-    // Send HTTP POST request
+    // Send HTTP POST request, and store response code
     int httpResponseCode = http.POST(httpRequestData);
 
-    // If you need an HTTP request with a content type: text/plain
-    // http.addHeader("Content-Type", "text/plain");
-    // int httpResponseCode = http.POST("Hello, World!");
-
-    // If you need an HTTP request with a content type: application/json, use the following:
-    // http.addHeader("Content-Type", "application/json");
-    // int httpResponseCode = http.POST("{\"value1\":\"19\",\"value2\":\"67\",\"value3\":\"78\"}");
+    // Get the HTML response from the server.
     payload = http.getString();
-    // Serial.print("Payload: ");
-    // Serial.println(payload);
+ 
     if (httpResponseCode > 0)
     {
       Serial.print("HTTP Response code: ");

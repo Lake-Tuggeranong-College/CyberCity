@@ -23,6 +23,8 @@ Adafruit_ADT7410 tempsensor = Adafruit_ADT7410();
 //#define clear
 
 //RTC_DS3231 rtc;
+
+String outputCommand = "NaN";
 void setup() {
 
 
@@ -63,15 +65,29 @@ void setup() {
 
   if (!tempsensor.begin()) {
     Serial.println("Couldn't find ADT7410!");
-    while (1);
+    while (1)
+      ;
   }
 }
 
 void loop() {
+  
   float sensorData = tempsensor.readTempC();
-  cyberCity.updateEPD("Fire Dept", "Temp \tC", sensorData);
+  cyberCity.updateEPD("Fire Dept", "Temp \tC", sensorData, outputCommand);
   String dataToPost = String(sensorData);
-  cyberCity.uploadData(dataToPost, apiKeyValue, sensorName, sensorLocation, 30000, serverName);
+  // cyberCity.uploadData(dataToPost, apiKeyValue, sensorName, sensorLocation, 30000, serverName);
+  String payload = cyberCity.dataTransfer(dataToPost, apiKeyValue, sensorName, sensorLocation, 30000, serverName, true, true);
+  int payloadLocation = payload.indexOf("Payload:");
+  char serverCommand = payload.charAt(payloadLocation + 8);
+  Serial.print("Command: ");
+  Serial.print(serverCommand);
+  if (serverCommand == '1') {
+    outputCommand = "LED On";
+    digitalWrite(LED_BUILTIN, HIGH);
+  } else {
+    outputCommand = "LED Off";
+    digitalWrite(LED_BUILTIN, LOW);
+  }
   // waits 180 seconds (3 minutes) as per guidelines from adafruit.
   display.clearBuffer();
 }
