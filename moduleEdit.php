@@ -55,7 +55,7 @@ if (isset($_GET["ModuleID"])) {
                     </label></p>
                 <p>Enabled
                     <label>
-                        <input type="text" name="0 or 1" class="form-control" required="required"
+                        <input type="text" name="Enabled" class="form-control" required="required"
                                value="<?= $moduleEnabled ?>">
                     </label></p>
 
@@ -71,7 +71,7 @@ if (isset($_GET["ModuleID"])) {
 <?php
 // Back End
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $newName = sanitise_data($_POST["moduleName"]);
+    $newModule = sanitise_data($_POST["moduleName"]);
     $newLocation = sanitise_data($_POST["moduleLocation"]);
     $newOutput = sanitise_data($_POST["currentOutput"]);
     $newAPIKey = sanitise_data($_POST["apiKey"]);
@@ -79,11 +79,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $newEnabled = ($_POST["Enabled"]);
     $moduleToLoad = $_GET["ModuleID"];
 
-    $sql = "UPDATE RegisteredModules SET Location= :newLocation, Module= :newModule, HashedAPIKey= :newHashedAPIkey, Enabled= :newEnabled, ID WHERE ID ='$moduleToLoad'";
+    $sql = "UPDATE RegisteredModules SET Location= :newLocation, Module= :newModule, HashedAPIKey= :newHashedAPIkey, Enabled= :newEnabled, CurrentOutput=:newOutput WHERE ID ='$moduleToLoad'";
     //$sql = "INSERT INTO `RegisteredModules` (Location, Module, HashedAPIKey, Enabled) VALUES (:newLocation, :newModule, :newHashedAPIkey, :enabled)";
 
     $stmt = $conn->prepare($sql);
-    $stmt->bindValue(":newName" , $newName );
+    $stmt->bindValue(":newModule" , $newModule );
     $stmt->bindValue(":newLocation" , $newLocation );
     $stmt->bindValue(":newOutput" , $newOutput );
     $stmt->bindValue(":newHashedAPIkey" , $newHashedAPIKey );
@@ -91,7 +91,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $stmt->execute();
 
-    header("location:moduleInformation.php?ModuleID=$moduleToLoad");
+//    header("location:moduleInformation.php?ModuleID=$moduleToLoad");
 
 }
 ?>
