@@ -38,5 +38,7 @@ public:
 
     void logEvent(String dataToLog);
     void uploadData(String dataToPost, String apiKeyValue, String sensorName, String sensorLocation, int delayBetweenPosts, String serverName);
+    String readData(String dataToPost, String apiKeyValue, String sensorName, String sensorLocation, int delayBetweenPosts, String serverName);
+
 };
 #endif

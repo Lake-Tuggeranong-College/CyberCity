@@ -1,6 +1,6 @@
 #include "CyberCitySharedFuntionality.h"
- ThinkInk_213_Mono_B72 display(EPD_DC, EPD_RESET, EPD_CS, SRAM_CS, EPD_BUSY);
- RTC_PCF8523 rtc;
+ThinkInk_213_Mono_B72 display(EPD_DC, EPD_RESET, EPD_CS, SRAM_CS, EPD_BUSY);
+RTC_PCF8523 rtc;
 
 CyberCitySharedFuntionality::CyberCitySharedFuntionality()
 {
@@ -139,4 +139,62 @@ void CyberCitySharedFuntionality::uploadData(String dataToPost, String apiKeyVal
   }
   // Send an HTTP POST request every 30 seconds
   delay(delayBetweenPosts);
+}
+
+String CyberCitySharedFuntionality::readData(String dataToPost, String apiKeyValue, String sensorName, String sensorLocation, int delayBetweenPosts, String serverName)
+{
+  String payload;
+  if (WiFi.status() == WL_CONNECTED)
+  {
+    WiFiClient client;
+    HTTPClient http;
+
+    // Your Domain name with URL path or IP address with path
+    http.begin(client, serverName);
+
+    // Specify content-type header
+    http.addHeader("Content-Type", "application/x-www-form-urlencoded");
+
+    // Prepare your HTTP POST request data
+    String httpRequestData = "api_key=" + apiKeyValue + "&sensor=" + sensorName + "&location=" + sensorLocation + "&sensorValue=" + dataToPost;
+    Serial.print("httpRequestData: ");
+    Serial.println(httpRequestData);
+
+    // You can comment the httpRequestData variable above
+    // then, use the httpRequestData variable below (for testing purposes without the BME280 sensor)
+    // String httpRequestData = "api_key=tPmAT5Ab3j7F9&sensor=BME280&location=Office&value1=24.75&value2=49.54&value3=1005.14";
+
+    // Send HTTP POST request
+    int httpResponseCode = http.POST(httpRequestData);
+
+    // If you need an HTTP request with a content type: text/plain
+    // http.addHeader("Content-Type", "text/plain");
+    // int httpResponseCode = http.POST("Hello, World!");
+
+    // If you need an HTTP request with a content type: application/json, use the following:
+    // http.addHeader("Content-Type", "application/json");
+    // int httpResponseCode = http.POST("{\"value1\":\"19\",\"value2\":\"67\",\"value3\":\"78\"}");
+    payload = http.getString();
+    // Serial.print("Payload: ");
+    // Serial.println(payload);
+    if (httpResponseCode > 0)
+    {
+      Serial.print("HTTP Response code: ");
+      Serial.println(httpResponseCode);
+    }
+    else
+    {
+      Serial.print("Error code: ");
+      Serial.println(httpResponseCode);
+    }
+    // Free resources
+    http.end();
+  }
+  else
+  {
+    Serial.println("WiFi Disconnected");
+  }
+  // Send an HTTP POST request every 30 seconds
+  delay(delayBetweenPosts);
+  return payload;
 }
