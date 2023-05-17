@@ -49,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         }
     } else {
-
+        echo "Module not found!!";
     }
 } else {
     header("Location:index.php");
