@@ -46,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "Payload:" . $payload;
             $conn->close();
         } else {
-
+            echo "API Key incorrect";
         }
     } else {
         echo "Module not found!!";
