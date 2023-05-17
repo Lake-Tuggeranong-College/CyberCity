@@ -52,6 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     }
 } else {
-
+    header("Location:index.php");
+    $_SESSION['flash_message'] = "<div class='bg-danger'>No post data sent</div>";
 
 }
