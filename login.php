@@ -25,34 +25,40 @@
 
 <?php
 //if (isset($_POST['login'])) {
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = sanitise_data($_POST['username']);
-    $password = sanitise_data($_POST['password']);
+if (isset($_SESSION["username"])) {
+    header("Location:index.php");
+    $_SESSION["flash_message"] = "<div class='bg-success'>Already logged in</div>";
 
-    $query = $conn->query("SELECT COUNT(*) as count FROM `Users` WHERE `Username` ='$username'");
-    $row = $query->fetch();
-    $count = $row[0];
+}else {
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $username = sanitise_data($_POST['username']);
+        $password = sanitise_data($_POST['password']);
 
-    if ($count > 0) {
-        $query = $conn->query("SELECT * FROM `Users` WHERE `Username`='$username'");
+        $query = $conn->query("SELECT COUNT(*) as count FROM `Users` WHERE `Username` ='$username'");
         $row = $query->fetch();
-        if ($row[4] == 1) {
-            if (password_verify($password, $row[2])) {
-                // successful log on.
-                $_SESSION["user_id"] = $row[0];
-                $_SESSION["username"] = $row[1];
-                $_SESSION['access_level'] = $row[3];
-                $_SESSION["flash_message"] = "<div class='bg-success'>Login Successful</div>";
-                header("Location:index.php");
+        $count = $row[0];
+
+        if ($count > 0) {
+            $query = $conn->query("SELECT * FROM `Users` WHERE `Username`='$username'");
+            $row = $query->fetch();
+            if ($row[4] == 1) {
+                if (password_verify($password, $row[2])) {
+                    // successful log on.
+                    $_SESSION["user_id"] = $row[0];
+                    $_SESSION["username"] = $row[1];
+                    $_SESSION['access_level'] = $row[3];
+                    $_SESSION["flash_message"] = "<div class='bg-success'>Login Successful</div>";
+                    header("Location:index.php");
+                } else {
+                    // unsuccessful log on.
+                    echo "<div class='alert alert-danger'>Invalid Username or Password. <a href='contact.php'>Contact Us</a></div>";
+                }
             } else {
-                // unsuccessful log on.
-                echo "<div class='alert alert-danger'>Invalid Username or Password. <a href='contact.php'>Contact Us</a></div>";
+                echo "<div class='alert alert-danger'>Account Disabled. <a href='contact.php'>Contact Us</a></div>";
             }
         } else {
-            echo "<div class='alert alert-danger'>Account Disabled. <a href='contact.php'>Contact Us</a></div>";
+            echo "<div class='alert alert-danger'>Invalid Username or Password. <a href='contact.php'>Contact Us</a></div>";
         }
-    } else {
-        echo "<div class='alert alert-danger'>Invalid Username or Password. <a href='contact.php'>Contact Us</a></div>";
     }
 }
 

@@ -1,5 +1,13 @@
 <?php include "template.php";
-/** @var $conn */ ?>
+/** @var $conn */
+
+if ($_SESSION["access_level"] != 2) {
+    header("Location:index.php");
+    $_SESSION['flash_message'] = "<div class='bg-danger'>Access Denied</div>";
+}
+
+
+?>
 
 <title>Module Edit page</title>
 
