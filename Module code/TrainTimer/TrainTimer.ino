@@ -1,12 +1,10 @@
 
-#include <LiquidCrystal_I2C.h>
-LiquidCrystal_I2C lcd(0x3F, 16, 2);
-
 int startingTimer = 10;
 
 int countdownSeconds = startingTimer;
+#include <LiquidCrystal_I2C.h>
 
-
+LiquidCrystal_I2C lcd(0x3F, 16, 2);
 #include <Wire.h>
 #include "WiFi.h"
 #include "sensitiveInformation.h"
@@ -63,7 +61,7 @@ void loop() {
   countdownSeconds = countdownSeconds - 1;
   delay(1000);
 
-//  long countdownSeconds = countdownSeconds - (millis() / 1000);
+  //  long countdownSeconds = countdownSeconds - (millis() / 1000);
   if (countdownSeconds >= 0) {
     long countdown_minute = ((countdownSeconds / 60) % 60);
     long countdown_seconds = countdownSeconds % 60;
@@ -79,13 +77,17 @@ void loop() {
     lcd.print(countdown_seconds);
   }
   else {
-   countdownSeconds = startingTimer;
+    countdownSeconds = startingTimer;
   }
 
 
   //float sensorData = (float)countdownSeconds;
   String dataToPost = String(countdownSeconds);
-  cyberCity.uploadData(dataToPost, apiKeyValue, sensorName, sensorLocation, 250, serverName);
-
+  //cyberCity.uploadData(dataToPost, apiKeyValue, sensorName, sensorLocation, 250, serverName);
+  String payload = cyberCity.dataTransfer(dataToPost, apiKeyValue, sensorName, sensorLocation, 250, serverName, true, true);
+  int payloadLocation = payload.indexOf("Payload:");
+  //char serverCommand = payload.charAt(payloadLocation + 8);
+  Serial.print("Command: ");
+  Serial.print(payload);
   delay(500);
 }
