@@ -1,3 +1,4 @@
+#define AOUT_PIN A2 // Arduino pin that connects to AOUT pin of moisture sensor
 
 #include "sensitiveInformation.h"
 #include <CyberCitySharedFuntionality.h>
@@ -8,10 +9,11 @@ CyberCitySharedFuntionality cyberCity;
 int servoPin = 13;
 // Create a servo object
 Servo Servo1;
+String outputCommand = "NaN";
 void setup() {
+  Serial.begin(9600);
   // We need to attach the servo to the used pin number
   Servo1.attach(servoPin);
-  Serial.begin(9600);
   while (!Serial) {
     delay(10);
   }
@@ -44,12 +46,29 @@ void setup() {
   display.clearBuffer();
 
   cyberCity.logEvent("System Initialisation...");
-
 }
 
 void loop() {
-  Servo1.write(0);
-  delay(10000);
-  Servo1.write(180);
-  delay(10000);
+  int value = analogRead(AOUT_PIN); // read the analog value from sensor
+
+  Serial.println(value);
+   float sensorData = value * 1.0;
+  cyberCity.updateEPD("Farm", "value", sensorData, outputCommand);
+  String dataToPost = String(sensorData);
+  // cyberCity.uploadData(dataToPost, apiKeyValue, sensorName, sensorLocation, 30000, serverName);
+  String payload = cyberCity.dataTransfer(dataToPost, apiKeyValue, sensorName, sensorLocation, 40000, serverName, true, true);
+  int payloadLocation = payload.indexOf("Payload:");
+  char serverCommand = payload.charAt(payloadLocation + 8);
+  Serial.print("Command: ");
+  Serial.print(serverCommand);
+  if (serverCommand == '1') {
+    outputCommand = "Fan On";
+    Servo1.write(0);
+  } else {
+    outputCommand = "Fan Off";
+    Servo1.write(90);
+  }
+   display.clearBuffer();
+
+  delay(500);
 }
