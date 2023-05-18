@@ -21,13 +21,14 @@ CyberCitySharedFuntionality cyberCity;
 Adafruit_ADT7410 tempsensor = Adafruit_ADT7410();
 //#define display
 //#define clear
+#define pizopin 14
 
 //RTC_DS3231 rtc;
 
 String outputCommand = "NaN";
 void setup() {
 
-
+pinMode(pizopin,OUTPUT);
   Serial.begin(9600);
   while (!Serial) {
     delay(10);
@@ -82,9 +83,11 @@ void loop() {
   Serial.print("Command: ");
   Serial.print(serverCommand);
   if (serverCommand == '1') {
+    tone(pizopin,500,1000);
     outputCommand = "LED On";
     digitalWrite(LED_BUILTIN, HIGH);
   } else {
+    noTone(pizopin);
     outputCommand = "LED Off";
     digitalWrite(LED_BUILTIN, LOW);
   }
