@@ -27,7 +27,6 @@ $enabled = "";
 
 
 <?php
-if (isset($_SESSION['access_level']) == 2) {
     $userCount = $conn->query("SELECT COUNT(*)  FROM `Users`");
     $row = $userCount->fetch();
     $userCountNumber = $row[0];
@@ -59,9 +58,6 @@ if (isset($_SESSION['access_level']) == 2) {
     }
 
     }
-} else {
-    echo "You do not have permission to use this";
-}
     ?>
 <br>
     <?php echo outputFooter(); ?>
