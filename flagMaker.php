@@ -24,26 +24,34 @@ $page = $_SERVER['PHP_SELF'];
 
 
 //if (isset($_POST['login'])) {
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $flag = sanitise_data($_POST['flag']);
-    $hashed_flag = password_hash($flag, PASSWORD_DEFAULT);
-    $points = sanitise_data($_POST['pointsValue']);
-    $isDupe = false;
-    $flagList = $conn->query("SELECT HashedFlag FROM Flags");
-    while ($flagData = $flagList->fetch()) {
-        if (password_verify($flag, $flagData[0])) {
-            echo "Flag Already exist";
-            $isDupe = true;
+$accessLevel == 2;
+if ($_SESSION["access_level"] == $accessLevel) {
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $flag = sanitise_data($_POST['flag']);
+        $hashed_flag = password_hash($flag, PASSWORD_DEFAULT);
+        $points = sanitise_data($_POST['pointsValue']);
+        $isDupe = false;
+        $flagList = $conn->query("SELECT HashedFlag FROM Flags");
+        while ($flagData = $flagList->fetch()) {
+            if (password_verify($flag, $flagData[0])) {
+                echo "Flag Already exist";
+                $isDupe = true;
+            }
+        }
+        if (!$isDupe) {
+            $sql = "INSERT INTO Flags (HashedFlag, PointsValue) VALUES (:newFlag, :newPoints)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue(':newFlag', $hashed_flag);
+            $stmt->bindValue(':newPoints', $points);
+            $stmt->execute();
+            echo "Flag Made";
         }
     }
-    if (! $isDupe) {
-        $sql = "INSERT INTO Flags (HashedFlag, PointsValue) VALUES (:newFlag, :newPoints)";
-        $stmt = $conn->prepare($sql);
-        $stmt->bindValue(':newFlag', $hashed_flag);
-        $stmt->bindValue(':newPoints', $points);
-        $stmt->execute();
-        echo "Flag Made";
-    }
+} else {
+    header("Location:index.php");
+    $_SESSION["flash_message"] = "<div class='bg-success'>Not authorised to access this page</div>";
 }
 
 
+
+?>
