@@ -108,4 +108,16 @@ function outputFooter()
     return $footer;
 }
 
+
+/*
+ * This function confirms if the user is authorised to access individual pages or not.
+ * @params
+ * @return  true if user is authorised to access page.
+ *          false if user is not authorised to access page.
+ */
+function authorisedAccess(){
+
+
+}
+
 ?>
