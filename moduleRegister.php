@@ -1,5 +1,11 @@
 <?php include "template.php";
-/** @var $conn */?>
+/** @var $conn */
+
+if (is_null($_SESSION["username"])) {
+    header("Location:index.php");
+    $_SESSION["flash_message"] = "<div class='bg-danger'>You need to log in to access this page</div>";
+}
+?>
 
 <title>Module Register page</title>
 
