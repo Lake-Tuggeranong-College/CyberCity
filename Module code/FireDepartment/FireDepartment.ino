@@ -80,7 +80,7 @@ void loop() {
   int payloadLocation = payload.indexOf("Payload:");
   char serverCommand = payload.charAt(payloadLocation + 8);
   Serial.print("Command: ");
-  Serial.print(serverCommand);
+  Serial.print(payload);
   if (serverCommand == '1') {
     outputCommand = "LED On";
     digitalWrite(LED_BUILTIN, HIGH);
