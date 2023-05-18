@@ -46,12 +46,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "Payload:" . $payload;
             $conn->close();
         } else {
-
+            echo "API Key incorrect";
         }
     } else {
-
+        echo "Module not found!!";
     }
 } else {
-
+    header("Location:index.php");
+    $_SESSION['flash_message'] = "<div class='bg-danger'>No post data sent</div>";
 
 }
