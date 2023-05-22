@@ -115,9 +115,17 @@ function outputFooter()
  * @return  true if user is authorised to access page.
  *          false if user is not authorised to access page.
  */
-function authorisedAccess(){
+function authorisedAccess($unauthorisedUsers, $users, $admin)
+{
+    if (!isset($_SESSION["username"])) { // user not logged in
+         if ($unauthorisedUsers == false) {
+             return false;
+         }
+    } else {
+        return true;
 
 
+    }
 }
 
 ?>

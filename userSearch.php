@@ -1,4 +1,6 @@
 <?php include "template.php";
+
+//authorisedAccess(false, false, true);
 /** @var $conn */
 if ($_SESSION["access_level"] != 2) {
     header("Location:index.php");
