@@ -69,7 +69,8 @@ void loop() {
   lights();
   int sensorData = 97654;
   String dataToPost = String(sensorData);
-  cyberCity.uploadData(dataToPost, apiKeyValue, sensorName, sensorLocation, 30000, serverName);
+  // cyberCity.uploadData(dataToPost, apiKeyValue, sensorName, sensorLocation, 30000, serverName);
+  String payload = cyberCity.dataTransfer(dataToPost, apiKeyValue, sensorName, sensorLocation, 30000, serverName, true, true);
   // waits 180 seconds (3 minutes) as per guidelines from adafruit.
   display.clearBuffer();
 }
