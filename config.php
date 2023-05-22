@@ -1,6 +1,6 @@
 <?php
 session_start();
-$servername = "10.177.206.229";
+$servername = "10.177.201.7";
 $username = "LTC";
 $password = "LTCpcgame5";
 $dbname = "CyberCity";
