@@ -117,15 +117,29 @@ function outputFooter()
  */
 function authorisedAccess($unauthorisedUsers, $users, $admin)
 {
+    // Unauthenticated User
     if (!isset($_SESSION["username"])) { // user not logged in
-         if ($unauthorisedUsers == false) {
-             return false;
-         }
-    } else {
-        return true;
-
-
+        if ($unauthorisedUsers == false) {
+            return false;
+        }
     }
+
+    // Regular User
+    if ($_SESSION["access_level"] == 1) {
+        if ($users == false) {
+            return false;
+        }
+    }
+
+    // Administrators
+    if ($_SESSION["access_level"] == 2) {
+        if ($admin == false) {
+            return false;
+        }
+    }
+
+    // otherwise, let them through
+    return true;
 }
 
 ?>
