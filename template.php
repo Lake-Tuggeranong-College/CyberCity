@@ -120,6 +120,7 @@ function authorisedAccess($unauthorisedUsers, $users, $admin)
     // Unauthenticated User
     if (!isset($_SESSION["username"])) { // user not logged in
         if ($unauthorisedUsers == false) {
+            $_SESSION['flash_message'] = "<div class='bg-danger'>Access Denied</div>";
             return false;
         }
     }
@@ -127,6 +128,7 @@ function authorisedAccess($unauthorisedUsers, $users, $admin)
     // Regular User
     if ($_SESSION["access_level"] == 1) {
         if ($users == false) {
+            $_SESSION['flash_message'] = "<div class='bg-danger'>Access Denied</div>";
             return false;
         }
     }
