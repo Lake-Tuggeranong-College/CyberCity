@@ -1,11 +1,9 @@
 <?php include "template.php";
 
-//authorisedAccess(false, false, true);
-/** @var $conn */
-if ($_SESSION["access_level"] != 2) {
+if (!authorisedAccess(false, false, true)) {
     header("Location:index.php");
-    $_SESSION['flash_message'] = "<div class='bg-danger'>Access Denied</div>";
 }
+/** @var $conn */
 $username = "";
 $accessLevel = "";
 $enabled = "";
