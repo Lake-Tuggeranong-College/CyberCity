@@ -1,10 +1,10 @@
 <?php include "template.php";
 /** @var $conn */
-$accessLevel = 2;
-if ($_SESSION["access_level"] != $accessLevel) {
+
+if (!authorisedAccess(false, false, true)) {
     header("Location:index.php");
-    $_SESSION["flash_message"] = "<div class='bg-danger'>Access Denied</div>";
 }
+
 ?>
 
 <title>Module Register page</title>

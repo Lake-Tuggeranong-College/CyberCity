@@ -1,71 +1,73 @@
 <?php include "template.php";
-/** @var $conn */ ?>
+/** @var $conn */
 
-<title>Cyber City - Login</title>
+if (!authorisedAccess(true, false, false)) {
+    header("Location:index.php");
+}
 
-<h1 class='text-primary'>Login</h1>
+?>
 
-<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" enctype="multipart/form-data">
-    <div class="container-fluid">
-        <div class="row">
-            <!--Customer Details-->
+    <title>Cyber City - Login</title>
 
-            <div class="col-md-12">
-                <h2>Account Details</h2>
-                <p>Please enter wanted username and password:</p>
-                <p>User Name<input type="text" name="username" class="form-control" required="required"></p>
-                <p>Password<input type="password" name="password" class="form-control" required="required"></p>
+    <h1 class='text-primary'>Login</h1>
 
+    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" enctype="multipart/form-data">
+        <div class="container-fluid">
+            <div class="row">
+                <!--Customer Details-->
+
+                <div class="col-md-12">
+                    <h2>Account Details</h2>
+                    <p>Please enter wanted username and password:</p>
+                    <p>User Name<input type="text" name="username" class="form-control" required="required"></p>
+                    <p>Password<input type="password" name="password" class="form-control" required="required"></p>
+
+                </div>
             </div>
         </div>
-    </div>
-    <input type="submit" name="formSubmit" value="Submit">
-</form >
+        <input type="submit" name="formSubmit" value="Submit">
+    </form>
 
 
 <?php
 //if (isset($_POST['login'])) {
-if (isset($_SESSION["username"])) {
-    header("Location:index.php");
-    $_SESSION["flash_message"] = "<div class='bg-success'>Already logged in</div>";
 
-}else {
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        $username = sanitise_data($_POST['username']);
-        $password = sanitise_data($_POST['password']);
 
-        $query = $conn->query("SELECT COUNT(*) as count FROM `Users` WHERE `Username` ='$username'");
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = sanitise_data($_POST['username']);
+    $password = sanitise_data($_POST['password']);
+
+    $query = $conn->query("SELECT COUNT(*) as count FROM `Users` WHERE `Username` ='$username'");
+    $row = $query->fetch();
+    $count = $row[0];
+
+    if ($count > 0) {
+        $query = $conn->query("SELECT * FROM `Users` WHERE `Username`='$username'");
         $row = $query->fetch();
-        $count = $row[0];
-
-        if ($count > 0) {
-            $query = $conn->query("SELECT * FROM `Users` WHERE `Username`='$username'");
-            $row = $query->fetch();
-            if ($row[4] == 1) {
-                if (password_verify($password, $row[2])) {
-                    // successful log on.
-                    $_SESSION["user_id"] = $row[0];
-                    $_SESSION["username"] = $row[1];
-                    $_SESSION['access_level'] = $row[3];
-                    $_SESSION["flash_message"] = "<div class='bg-success'>Login Successful</div>";
-                    header("Location:index.php");
-                } else {
-                    // unsuccessful log on.
-                    echo "<div class='alert alert-danger'>Invalid Username or Password. <a href='contact.php'>Contact Us</a></div>";
-                }
+        if ($row[4] == 1) {
+            if (password_verify($password, $row[2])) {
+                // successful log on.
+                $_SESSION["user_id"] = $row[0];
+                $_SESSION["username"] = $row[1];
+                $_SESSION['access_level'] = $row[3];
+                $_SESSION["flash_message"] = "<div class='bg-success'>Login Successful</div>";
+                header("Location:index.php");
             } else {
-                echo "<div class='alert alert-danger'>Account Disabled. <a href='contact.php'>Contact Us</a></div>";
+                // unsuccessful log on.
+                echo "<div class='alert alert-danger'>Invalid Username or Password. <a href='contact.php'>Contact Us</a></div>";
             }
         } else {
-            echo "<div class='alert alert-danger'>Invalid Username or Password. <a href='contact.php'>Contact Us</a></div>";
+            echo "<div class='alert alert-danger'>Account Disabled. <a href='contact.php'>Contact Us</a></div>";
         }
+    } else {
+        echo "<div class='alert alert-danger'>Invalid Username or Password. <a href='contact.php'>Contact Us</a></div>";
     }
 }
 
 ?>
 
-</body>
-</html>
+    </body>
+    </html>
 
 <?php echo outputFooter(); ?>
 

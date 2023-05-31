@@ -1,5 +1,11 @@
 <?php include "template.php";
-/** @var $conn */ ?>
+/** @var $conn */
+
+if (!authorisedAccess(true, true, true)) {
+    header("Location:index.php");
+}
+
+?>
 <title>Contact Us</title>
     <h1>Contact Us</h1>
 

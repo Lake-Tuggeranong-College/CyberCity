@@ -1,6 +1,11 @@
-<?php include "template.php"; /** @var $conn */
+<?php include "template.php";
+/** @var $conn */
 $sec = 5;
 $page = $_SERVER['PHP_SELF'];
+
+if (!authorisedAccess(true, true, true)) {
+    header("Location:index.php");
+}
 
 ?>
 <!DOCTYPE html>
