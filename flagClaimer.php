@@ -1,9 +1,10 @@
-<?php include "template.php"; /** @var $conn */
+<?php include "template.php";
+/** @var $conn */
 
-if (is_null($_SESSION["username"])) {
+if (!authorisedAccess(false, true, true)) {
     header("Location:index.php");
-    $_SESSION["flash_message"] = "<div class='bg-danger'>You need to log in to access this page</div>";
 }
+
 ?>
     <!DOCTYPE html>
     <html>

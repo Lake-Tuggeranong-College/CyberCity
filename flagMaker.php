@@ -1,5 +1,9 @@
-<?php include "template.php"; /** @var $conn */
-$page = $_SERVER['PHP_SELF'];
+<?php include "template.php";
+/** @var $conn */
+
+if (!authorisedAccess(false, false, true)) {
+    header("Location:index.php");
+}
 
 ?>
     <!DOCTYPE html>
@@ -21,11 +25,7 @@ $page = $_SERVER['PHP_SELF'];
     </html>
 
 <?php
-
-
 //if (isset($_POST['login'])) {
-$accessLevel == 2;
-if ($_SESSION["access_level"] == $accessLevel) {
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $flag = sanitise_data($_POST['flag']);
         $hashed_flag = password_hash($flag, PASSWORD_DEFAULT);
@@ -47,10 +47,6 @@ if ($_SESSION["access_level"] == $accessLevel) {
             echo "Flag Made";
         }
     }
-} else {
-    header("Location:index.php");
-    $_SESSION["flash_message"] = "<div class='bg-success'>Not authorised to access this page</div>";
-}
 
 
 
