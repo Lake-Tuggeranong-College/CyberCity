@@ -20,7 +20,7 @@ if (isset($_GET["ModuleID"])) {
     header("location:moduleList.php");
 }
 
-$sql= $conn->query("SELECT ID, Location, Module, CurrentOutput FROM RegisteredModules WHERE ID= '$moduleToLoad' ");
+$sql = $conn->query("SELECT ID, Location, Module, CurrentOutput FROM RegisteredModules WHERE ID= '$moduleToLoad' ");
 $moduleInformation = $sql->fetch();
 $moduleID = $moduleInformation["ID"];
 $moduleLocation = $moduleInformation["Location"];
@@ -28,21 +28,21 @@ $moduleName = $moduleInformation["Module"];
 $moduleOutput = $moduleInformation["CurrentOutput"];
 ?>
 
-<!--<h1 class='text-primary'>Module Name <?php /*echo $moduleName; */?></h1>
+<h1 class='text-primary'>Module Name <?php /*echo $moduleName; */ ?></h1>
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-4">
-            <?php /*= $moduleName */?>
+            <?= $moduleName ?>
         </div>
         <div class="col-md-4">
-            <?php /*= $moduleLocation */?>
+            <?= $moduleLocation ?>
         </div>
         <div class="col-md-4">
-            <?php /*= $moduleOutput */?>
+            <?= $moduleOutput ?>
         </div>
     </div>
 </div>
--->
+
 
 <?= outputFooter() ?>
 
@@ -52,29 +52,18 @@ print_r($moduleInformation);
 echo '</pre>';
 
 
-*/?>
-
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-6">
-            <h3>Module Name: <?php echo $moduleName; ?></h3>
-            <h3>Module Location: <?php echo $moduleLocation; ?></h3>
-            <h3>Module ID: <?php echo $moduleID; ?> </h3>
-            <h3>Current Output: <?php echo $moduleOutput; ?> </h3>
-        </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+*/ ?>
+<!---->
+<!--<div class="container-fluid">-->
+<!--    <div class="row">-->
+<!--        <div class="col-md-6">-->
+<!--            <h3>Module Name: --><?php //echo $moduleName; ?><!--</h3>-->
+<!--            <h3>Module Location: --><?php //echo $moduleLocation; ?><!--</h3>-->
+<!--            <h3>Module ID: --><?php //echo $moduleID; ?><!-- </h3>-->
+<!--            <h3>Current Output: --><?php //echo $moduleOutput; ?><!-- </h3>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<!---->
+<!---->
+<!---->
