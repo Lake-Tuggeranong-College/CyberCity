@@ -13,14 +13,14 @@ if (!authorisedAccess(false, false, true)) {
 <?php
 if (isset($_GET["ModuleID"])) {
     $moduleToLoad = $_GET["ModuleID"];
-    $sql = $conn->query("SELECT * FROM RegisteredModules WHERE ID= " . $moduleToLoad );
+    $sql = $conn->query("SELECT * FROM RegisteredModules WHERE ID= " . $moduleToLoad);
     $moduleInformation = $sql->fetch();
     $moduleID = $moduleInformation["ID"];
     $moduleLocation = $moduleInformation["Location"];
     $moduleName = $moduleInformation["Module"];
     $moduleAPIKey = $moduleInformation["HashedAPIKey"];
     $moduleCurrentOutput = $moduleInformation["CurrentOutput"];
-    $moduleEnabled =$moduleInformation["Enabled"];
+    $moduleEnabled = $moduleInformation["Enabled"];
 } else {
     header("location:moduleList.php");
 }
@@ -37,7 +37,7 @@ if (isset($_GET["ModuleID"])) {
                 <h2>Module Details</h2>
                 <p>Module Name<label>
                         <input type="text" name="moduleName" class="form-control" required="required"
-                                             value="<?= $moduleName ?>">
+                               value="<?= $moduleName ?>">
                     </label></p>
                 <p>Module Location
                     <label>
@@ -89,11 +89,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     //$sql = "INSERT INTO `RegisteredModules` (Location, Module, HashedAPIKey, Enabled) VALUES (:newLocation, :newModule, :newHashedAPIkey, :enabled)";
 
     $stmt = $conn->prepare($sql);
-    $stmt->bindValue(":newModule" , $newModule );
-    $stmt->bindValue(":newLocation" , $newLocation );
-    $stmt->bindValue(":newOutput" , $newOutput );
-    $stmt->bindValue(":newHashedAPIkey" , $newHashedAPIKey );
-    $stmt->bindValue(":newEnabled" , $newEnabled );
+    $stmt->bindValue(":newModule", $newModule);
+    $stmt->bindValue(":newLocation", $newLocation);
+    $stmt->bindValue(":newOutput", $newOutput);
+    $stmt->bindValue(":newHashedAPIkey", $newHashedAPIKey);
+    $stmt->bindValue(":newEnabled", $newEnabled);
 
     $stmt->execute();
 
@@ -111,6 +111,6 @@ print_r($moduleInformation);
 echo '</pre>';
 
 
-*/?>
+*/ ?>
 
 

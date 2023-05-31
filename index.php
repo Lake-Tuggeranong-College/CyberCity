@@ -1,5 +1,5 @@
 <?php include "template.php";
-/** @var $conn */?>
+/** @var $conn */ ?>
 
 
 <title>Cyber City</title>
