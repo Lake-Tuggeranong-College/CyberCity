@@ -123,20 +123,21 @@ function authorisedAccess($unauthorisedUsers, $users, $admin)
             $_SESSION['flash_message'] = "<div class='bg-danger'>Access Denied</div>";
             return false;
         }
-    }
+    } else {
 
-    // Regular User
-    if ($_SESSION["access_level"] == 1) {
-        if ($users == false) {
-            $_SESSION['flash_message'] = "<div class='bg-danger'>Access Denied</div>";
-            return false;
+        // Regular User
+        if ($_SESSION["access_level"] == 1) {
+            if ($users == false) {
+                $_SESSION['flash_message'] = "<div class='bg-danger'>Access Denied</div>";
+                return false;
+            }
         }
-    }
 
-    // Administrators
-    if ($_SESSION["access_level"] == 2) {
-        if ($admin == false) {
-            return false;
+        // Administrators
+        if ($_SESSION["access_level"] == 2) {
+            if ($admin == false) {
+                return false;
+            }
         }
     }
 
