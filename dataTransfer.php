@@ -19,10 +19,17 @@
 $api_key = $sensor = $location = $sensorValue = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-//    echo "read";
-    $api_key = sanitise_data($_POST["api_key"]);
-    $location = sanitise_data($_POST["location"]);
+    echo $_POST;
+    // Takes raw data from the request
+    $json = file_get_contents('php://input');
 
+// Converts it into a PHP object
+    $data = json_decode($json);
+    echo $data;
+//
+//    $api_key = sanitise_data($_POST["api_key"]);
+//    $location = sanitise_data($_POST["location"]);
+/*
     $query = $conn->query("SELECT COUNT(*) as count FROM `RegisteredModules` WHERE `Location` ='$location'");
     $row = $query->fetch();
     $count = $row[0];
@@ -54,5 +61,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 } else {
     header("Location:index.php");
     $_SESSION['flash_message'] = "<div class='bg-danger'>No post data sent</div>";
-
+*/
 }
+
