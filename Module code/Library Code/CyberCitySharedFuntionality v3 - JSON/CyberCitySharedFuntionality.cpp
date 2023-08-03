@@ -110,7 +110,7 @@ String CyberCitySharedFuntionality::dataTransfer(String dataToPost, String apiKe
     // Send HTTP POST request, and store response code
     //int httpResponseCode = http.POST(httpRequestData);
     http.addHeader("Content-Type", "application/json");
-    String postJSONString = "{\"api_key\":"+apiKeyValue+",\"sensor\":"+sensorName+",\"location\":"+sensorLocation+",\"sensorValue\":"+dataToPost+",\"}";
+    String postJSONString = "{\"api_key\":"+apiKeyValue+",\"sensor\":"+sensorName+",\"location\":"+sensorLocation+",\"sensorValue\":"+dataToPost+"\"}";
     Serial.print("Debug JSON String: ");
     Serial.println(postJSONString);
     int httpResponseCode = http.POST(postJSONString);
