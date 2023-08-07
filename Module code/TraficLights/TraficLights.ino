@@ -1,4 +1,4 @@
-#include <CyberCitySharedFuntionality.h>
+#include <CyberCitySharedFunctionality.h>
 
 /***************************************************
   Adafruit invests time and resources providing this open source code,
@@ -11,7 +11,7 @@
 
 #include "sensitiveInformation.h"
 
-CyberCitySharedFuntionality cyberCity;
+CyberCitySharedFunctionality cyberCity;
 
 
 
