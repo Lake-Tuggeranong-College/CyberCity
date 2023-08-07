@@ -8,8 +8,8 @@ LiquidCrystal_I2C lcd(0x3F, 16, 2);
 #include <Wire.h>
 #include "WiFi.h"
 #include "sensitiveInformation.h"
-#include <CyberCitySharedFuntionality.h>
-CyberCitySharedFuntionality cyberCity;
+#include <CyberCitySharedFunctionality.h>
+CyberCitySharedFunctionality cyberCity;
 
 void setup() {
   Serial.begin(9600);
