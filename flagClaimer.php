@@ -6,6 +6,17 @@ if (!authorisedAccess(false, true, true)) {
 }
 
 ?>
+
+
+<?php
+if (isset($_GET["ChallengeID"])) {
+    $challengeToLoad = $_GET["ChallengeID"];
+} else {
+    header("location:moduleList.php");
+}
+
+$sql = conn->query( "SELECT challengeTitle, challengeText FROM Challenges WHERE ID = " . $challengeToLoad );
+?>
     <!DOCTYPE html>
     <html>
     <head>
@@ -29,7 +40,7 @@ if (!authorisedAccess(false, true, true)) {
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $flag = sanitise_data($_POST['flag']);
 
-    $flagList = $conn->query("SELECT HashedFlag,PointsValue FROM Flags");
+    $flagList = $conn->query("SELECT HashedFlag,PointsValue FROM Challenges");
 
     while ($flagData = $flagList->fetch()) {
         if (password_verify($flag, $flagData[0])) {
