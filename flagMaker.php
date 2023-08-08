@@ -9,13 +9,15 @@ if (!authorisedAccess(false, false, true)) {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Cyber City - Flag Maker</title>
+    <title>Cyber City - Challenge Maker</title>
 </head>
 <body>
-<h1 class='text-primary'>Flag Maker</h1>
+<h1 class='text-primary'>Challenge Maker</h1>
 <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" enctype="multipart/form-data">
     <div class="col-md-12">
-        <p>Enter the flag below to make it</p>
+        <p>Enter the details below to make a challenge</p>
+        <p>Title<input type="text" name="title" class="form-control" required="required"></p>
+        <p>Description<input type="text" name="description" class="form-control" required="required"></p>
         <p>Flag<input type="text" name="flag" class="form-control" required="required"></p>
         <p>Points Given<input type="text" name="pointsValue" class="form-control" required="required"></p>
     </div>

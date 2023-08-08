@@ -22,7 +22,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="moduleList.php">Modules</a></li>
+                <li class="nav-item"><a class="nav-link" href="challengesList.php">Challenges</a></li>
                 <li class="nav-item"><a class="nav-link" href="leaderboard.php">Leaderboard</a></li>
                 <li class="nav-item"><a class="nav-link" href="contact.php">Contact Us</a></li>
 
@@ -46,7 +46,7 @@
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="moduleRegister.php">Add New Module</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="flagMaker.php">Add New Flag</a>
+                        <a class="dropdown-item" href="flagMaker.php">Add New Challenge</a>
                         <?php
                     }
                     ?>
