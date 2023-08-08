@@ -46,7 +46,7 @@
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="moduleRegister.php">Add New Module</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="flagMaker.php">Add New Flag</a>
+                        <a class="dropdown-item" href="flagMaker.php">Add New Challenge</a>
                         <?php
                     }
                     ?>
