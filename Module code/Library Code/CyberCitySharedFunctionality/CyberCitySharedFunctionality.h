@@ -3,8 +3,8 @@
 // v2.0.0 16.05.2023 - RC
 // v3.0.0 03.08.2023 - RC - JSON init
 
-#ifndef CyberCitySharedFuntionality_H
-#define CyberCitySharedFuntionality_H
+#ifndef CyberCitySharedFunctionality_H
+#define CyberCitySharedFunctionality_H
 #include <Arduino.h>
 
 #include "WiFi.h"
@@ -26,14 +26,14 @@ extern ThinkInk_213_Mono_B72 display;
 
 extern RTC_PCF8523 rtc;
 
-class CyberCitySharedFuntionality
+class CyberCitySharedFunctionality
 {
 private:
     String getDateAsString();
     String getTimeAsString();
 
 public:
-    CyberCitySharedFuntionality();
+    CyberCitySharedFunctionality();
     void commonSetup();
     void updateEPD(String title, String dataTitle, float dataToDisplay, String outputCommand);
     void drawText(String text, uint16_t color, int textSize, int x, int y);
