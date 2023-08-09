@@ -1,5 +1,4 @@
 
-
 /***************************************************
   Adafruit invests time and resources providing this open source code,
   please support Adafruit and open-source hardware by purchasing
@@ -74,14 +73,14 @@ pinMode(pizopin,OUTPUT);
 void loop() {
   
   float sensorData = tempsensor.readTempC();
-  // cyberCity.updateEPD("Fire Dept", "Temp \tC", sensorData, outputCommand);
+  cyberCity.updateEPD("Fire Dept", "Temp \tC", sensorData, outputCommand);
   String dataToPost = String(sensorData);
   // cyberCity.uploadData(dataToPost, apiKeyValue, sensorName, sensorLocation, 30000, serverName);
-  String payload = cyberCity.dataTransfer(dataToPost, apiKeyValue, sensorName, sensorLocation, 3000, serverName, true, true);
+  String payload = cyberCity.dataTransfer(dataToPost, apiKeyValue, sensorName, sensorLocation, 30000, serverName, true, true);
   int payloadLocation = payload.indexOf("Payload:");
   char serverCommand = payload.charAt(payloadLocation + 8);
   Serial.print("Command: ");
-  Serial.println(payload);
+  Serial.print(payload);
   if (serverCommand == '1') {
     tone(pizopin,500,1000);
     outputCommand = "LED On";
@@ -92,5 +91,5 @@ void loop() {
     digitalWrite(LED_BUILTIN, LOW);
   }
   // waits 180 seconds (3 minutes) as per guidelines from adafruit.
-  // display.clearBuffer();
+  display.clearBuffer();
 }
