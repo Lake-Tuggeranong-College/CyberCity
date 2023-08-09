@@ -1,16 +1,16 @@
-#include "CyberCitySharedFuntionality.h"
+#include "CyberCitySharedFunctionality.h"
 ThinkInk_213_Mono_B72 display(EPD_DC, EPD_RESET, EPD_CS, SRAM_CS, EPD_BUSY);
 RTC_PCF8523 rtc;
 
-CyberCitySharedFuntionality::CyberCitySharedFuntionality()
+CyberCitySharedFunctionality::CyberCitySharedFunctionality()
 {
 }
 
-void CyberCitySharedFuntionality::commonSetup()
+void CyberCitySharedFunctionality::commonSetup()
 {
 }
 
-void CyberCitySharedFuntionality::updateEPD(String title, String dataTitle, float dataToDisplay, String outputCommand)
+void CyberCitySharedFunctionality::updateEPD(String title, String dataTitle, float dataToDisplay, String outputCommand)
 {
 
   // Indigenous Country Name
@@ -34,7 +34,7 @@ void CyberCitySharedFuntionality::updateEPD(String title, String dataTitle, floa
   display.display();
 }
 
-void CyberCitySharedFuntionality::drawText(String text, uint16_t color, int textSize, int x, int y)
+void CyberCitySharedFunctionality::drawText(String text, uint16_t color, int textSize, int x, int y)
 {
   display.setCursor(x, y);
   display.setTextColor(color);
@@ -43,7 +43,7 @@ void CyberCitySharedFuntionality::drawText(String text, uint16_t color, int text
   display.print(text);
 }
 
-String CyberCitySharedFuntionality::getDateAsString()
+String CyberCitySharedFunctionality::getDateAsString()
 {
   DateTime now = rtc.now();
 
@@ -54,18 +54,18 @@ String CyberCitySharedFuntionality::getDateAsString()
   return humanReadableDate;
 }
 
-String CyberCitySharedFuntionality::getTimeAsString()
+String CyberCitySharedFunctionality::getTimeAsString()
 {
   DateTime now = rtc.now();
 
   // Converts the time into a human-readable format.
   char humanReadableTime[20];
   sprintf(humanReadableTime, "%02d:%02d:%02d", now.hour(), now.minute(), now.second());
-
+									
   return humanReadableTime;
 }
 
-void CyberCitySharedFuntionality::logEvent(String dataToLog)
+void CyberCitySharedFunctionality::logEvent(String dataToLog)
 {
   /*
      Log entries to a file stored in SPIFFS partition on the ESP32.
@@ -88,7 +88,7 @@ void CyberCitySharedFuntionality::logEvent(String dataToLog)
   Serial.println(logEntry);
 }
 
-String CyberCitySharedFuntionality::dataTransfer(String dataToPost, String apiKeyValue, String sensorName, String sensorLocation, int delayBetweenPosts, String serverName, boolean postData, boolean readData)
+String CyberCitySharedFunctionality::dataTransfer(String dataToPost, String apiKeyValue, String sensorName, String sensorLocation, int delayBetweenPosts, String serverName, boolean postData, boolean readData)
 {
   String payload;
   if (WiFi.status() == WL_CONNECTED)
@@ -110,7 +110,7 @@ String CyberCitySharedFuntionality::dataTransfer(String dataToPost, String apiKe
     // Send HTTP POST request, and store response code
     //int httpResponseCode = http.POST(httpRequestData);
     http.addHeader("Content-Type", "application/json");
-    String postJSONString = "{\"api_key\":"+apiKeyValue+",\"sensor\":"+sensorName+",\"location\":"+sensorLocation+",\"sensorValue\":"+dataToPost+"\"}";
+    String postJSONString = "{\"api_key\":\""+apiKeyValue+"\",\"sensor\":\""+sensorName+"\",\"location\":\""+sensorLocation+"\",\"sensorValue\":\""+dataToPost+"\"}";
     Serial.print("Debug JSON String: ");
     Serial.println(postJSONString);
     int httpResponseCode = http.POST(postJSONString);

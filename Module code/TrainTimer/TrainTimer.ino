@@ -1,5 +1,5 @@
 
-int startingTimer = 10;
+int startingTimer = 180;
 
 int countdownSeconds = startingTimer;
 #include <LiquidCrystal_I2C.h>
