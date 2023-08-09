@@ -38,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 //    $api_key = sanitise_data($api);
 //    $location = sanitise_data($loc);
-    echo "running query...";
+    echo "Location: ".$location;
     $query = $conn->query("SELECT COUNT(*) as count FROM `RegisteredModules` WHERE `Location` ='$location'");
     $row = $query->fetch();
     $count = $row[0];
