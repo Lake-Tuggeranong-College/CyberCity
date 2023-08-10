@@ -23,13 +23,13 @@
             <ul class="navbar-nav">
                 <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="challengesList.php">Challenges</a></li>
-                <li class="nav-item"><a class="nav-link" href="leaderboard.php">Leaderboard</a></li>
+                <!--<li class="nav-item"><a class="nav-link" href="leaderboard.php">Leaderboard</a></li>-->
                 <li class="nav-item"><a class="nav-link" href="contact.php">Contact Us</a></li>
                 <?php
                 $accessLevel = 2;
                 if (isset($_SESSION["username"])) {
                     echo '
-                    <li class="nav-item"><a class="nav-link" href="flagClaimer.php">Flag Claimer</a></li>
+                    <!--<li class="nav-item"><a class="nav-link" href="flagClaimer.php">Flag Claimer</a></li>-->
                     
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
