@@ -7,5 +7,5 @@ String serverName = "http://192.168.1.18/dataTransfer.php";
 
 String apiKeyValue = "lqJPAy";
 
-String sensorName = "Sevro";
+String sensorName = "Servo";
 String sensorLocation = "Windmill";
