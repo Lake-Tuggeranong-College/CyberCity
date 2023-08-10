@@ -4,6 +4,8 @@ int startingTimer = 180;
 int countdownSeconds = startingTimer;
 #include <LiquidCrystal_I2C.h>
 
+#include <ArduinoJson.h>
+
 LiquidCrystal_I2C lcd(0x3F, 16, 2);
 #include <Wire.h>
 #include "WiFi.h"
@@ -85,9 +87,16 @@ void loop() {
   String dataToPost = String(countdownSeconds);
   //cyberCity.uploadData(dataToPost, apiKeyValue, sensorName, sensorLocation, 250, serverName);
   String payload = cyberCity.dataTransfer(dataToPost, apiKeyValue, sensorName, sensorLocation, 250, serverName, true, true);
-  int payloadLocation = payload.indexOf("Payload:");
-  //char serverCommand = payload.charAt(payloadLocation + 8);
+  Serial.println(payload);
+   DynamicJsonDocument doc(1024);
+  DeserializationError error = deserializeJson(doc, payload);
+  if (error) {
+    Serial.print(F("deserializeJson() failed: "));
+    Serial.println(error.f_str());
+    return;
+  }
+  const char* command = doc["command"];
   Serial.print("Command: ");
-  Serial.print(payload);
+  Serial.print(command);
   delay(500);
 }

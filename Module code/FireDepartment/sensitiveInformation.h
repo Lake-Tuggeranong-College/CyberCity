@@ -10,17 +10,17 @@
  */
 
 const char* host = "RMS";
-// const char* ssid = "RoboRange";       // Wifi Network Name
-// const char* password = "Password01";  // Wifi Password
-const char* ssid = "gogogadgetnbn";       // Wifi Network Name
-const char* password = "st@rw@rs";  // Wifi Password
+const char* ssid = "RoboRange";       // Wifi Network Name
+const char* password = "Password01";  // Wifi Password
+//const char* ssid = "gogogadgetnbn";       // Wifi Network Name
+//const char* password = "st@rw@rs";  // Wifi Password
 
 //const char* serverName = "http://192.168.1.106/espPost/post-esp-data.php";
 // String serverName = "http://192.168.1.18/postESPData.php";
 // String serverName = "http://192.168.1.18/dataTransfer.php";
-String serverName = "http://192.168.1.109/CyberCity2023/dataTransfer.php";
+String serverName = "http://192.168.1.18/dataTransfer.php";
 
 String apiKeyValue = "111";
 
-String sensorName = "111";
-String sensorLocation = "111";
+String sensorName = "Temperature";
+String sensorLocation = "FireDept";
