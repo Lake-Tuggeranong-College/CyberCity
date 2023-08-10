@@ -20,7 +20,7 @@ const char* password = "Password01";  // Wifi Password
 // String serverName = "http://192.168.1.18/dataTransfer.php";
 String serverName = "http://192.168.1.18/dataTransfer.php";
 
-String apiKeyValue = "111";
+String apiKeyValue = "XjuTHh";
 
 String sensorName = "Temperature";
-String sensorLocation = "FireDept";
+String sensorLocation = "Fire Dept";
