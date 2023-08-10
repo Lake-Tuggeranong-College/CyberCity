@@ -24,10 +24,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $date = date("Y-m-d H:i:s");
 
     //DO NOT CHANGE THIS DATE CODE, MUST STAY SAME TO WORK WITH MYSQL
-    $sql = "INSERT INTO eventLog (userName, eventText, datePosted) VALUES (:userName, :eventData, :datePosted)";
+    $sql = "INSERT INTO moduleData (moduleName, moduleData, userName, datePosted) VALUES (:moduleName, :moduleData, :userName,:datePosted)";
     $stmt = $conn->prepare($sql);
     $stmt->bindValue(':userName', $userName);
-    $stmt->bindValue(':eventData', $eventData);
+    $stmt->bindValue(':moduleData', $moduleData);
+    $stmt->bindValue(':moduleName', $moduleName);
     $stmt->bindValue(':datePosted', $date);
     $stmt->execute();
     $conn->close();
