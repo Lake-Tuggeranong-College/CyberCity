@@ -89,7 +89,8 @@ void loop() {
   String payload = cyberCity.dataTransfer(dataToPost, apiKeyValue, sensorName, sensorLocation, 250, serverName, true, true);
   Serial.println(payload);
    DynamicJsonDocument doc(1024);
-  DeserializationError error = deserializeJson(doc, payload);
+   deserializeJson(doc, payload);
+  // DeserializationError error = deserializeJson(doc, payload);
   if (error) {
     Serial.print(F("deserializeJson() failed: "));
     Serial.println(error.f_str());
