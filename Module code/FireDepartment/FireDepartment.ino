@@ -15,6 +15,7 @@ CyberCitySharedFunctionality cyberCity;
 #include <Wire.h>
 #include <WiFi.h>
 #include <RTClib.h>
+#include <ArduinoJson.h>
 #include "Adafruit_ADT7410.h"
 // Create the ADT7410 temperature sensor object
 Adafruit_ADT7410 tempsensor = Adafruit_ADT7410();
@@ -44,7 +45,13 @@ pinMode(pizopin,OUTPUT);
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
   pinMode(LED_BUILTIN, OUTPUT);
-
+  
+  if (!tempsensor.begin()) {
+    Serial.println("Couldn't find ADT7410!");
+    while (1)
+      ;
+  }
+  
   // RTC
   if (!rtc.begin()) {
     Serial.println("Couldn't find RTC");
@@ -63,11 +70,7 @@ pinMode(pizopin,OUTPUT);
 
   cyberCity.logEvent("System Initialisation...");
 
-  if (!tempsensor.begin()) {
-    Serial.println("Couldn't find ADT7410!");
-    while (1)
-      ;
-  }
+
 }
 
 void loop() {
@@ -77,11 +80,19 @@ void loop() {
   String dataToPost = String(sensorData);
   // cyberCity.uploadData(dataToPost, apiKeyValue, sensorName, sensorLocation, 30000, serverName);
   String payload = cyberCity.dataTransfer(dataToPost, apiKeyValue, sensorName, sensorLocation, 60000, serverName, true, true);
-  int payloadLocation = payload.indexOf("Payload:");
-  char serverCommand = payload.charAt(payloadLocation + 8);
+   DynamicJsonDocument doc(1024);
+  //  Serial.println(deserializeJson(doc, payload));
+  DeserializationError error = deserializeJson(doc, payload);
+  if (error) {
+    Serial.print(F("deserializeJson() failed: "));
+    Serial.println(error.f_str());
+    return;
+  }
+  const char* command = doc["command"];
   Serial.print("Command: ");
-  Serial.print(payload);
-  if (serverCommand == '1') {
+  Serial.print(command);
+  // ISO C++ forbids comparison between pointer and integer [-fpermissive]
+  if (command == 'cheese') {
     tone(pizopin,500,1000);
     outputCommand = "LED On";
     digitalWrite(LED_BUILTIN, HIGH);
@@ -89,7 +100,8 @@ void loop() {
     noTone(pizopin);
     outputCommand = "LED Off";
     digitalWrite(LED_BUILTIN, LOW);
-  }
+  } 
+
   // waits 180 seconds (3 minutes) as per guidelines from adafruit.
   display.clearBuffer();
 }
