@@ -77,8 +77,7 @@ void loop() {
       lcd.print("0");
     }
     lcd.print(countdown_seconds);
-  }
-  else {
+  } else {
     countdownSeconds = startingTimer;
   }
 
@@ -87,10 +86,11 @@ void loop() {
   String dataToPost = String(countdownSeconds);
   //cyberCity.uploadData(dataToPost, apiKeyValue, sensorName, sensorLocation, 250, serverName);
   String payload = cyberCity.dataTransfer(dataToPost, apiKeyValue, sensorName, sensorLocation, 250, serverName, true, true);
+  Serial.print("Payload from server:");
   Serial.println(payload);
-   DynamicJsonDocument doc(1024);
-   deserializeJson(doc, payload);
-  // DeserializationError error = deserializeJson(doc, payload);
+  DynamicJsonDocument doc(1024);
+  //  Serial.println(deserializeJson(doc, payload));
+  DeserializationError error = deserializeJson(doc, payload);
   if (error) {
     Serial.print(F("deserializeJson() failed: "));
     Serial.println(error.f_str());
