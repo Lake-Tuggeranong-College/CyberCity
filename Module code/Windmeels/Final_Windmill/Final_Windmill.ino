@@ -63,8 +63,8 @@ void loop() {
   // cyberCity.uploadData(dataToPost, apiKeyValue, sensorName, sensorLocation, 30000, serverName);
   String payload = cyberCity.dataTransfer(dataToPost, apiKeyValue, sensorName, sensorLocation, 40000, serverName, true, true);
   //notes need to // the next to line 
-  //int payloadLocation = payload.indexOf("Payload:");
-// char serverCommand = payload.charAt(payloadLocation + 8);
+  int payloadLocation = payload.indexOf("Payload:");
+ char serverCommand = payload.charAt(payloadLocation + 8);
  
   Serial.print("Command: ");
   Serial.print(serverCommand);
