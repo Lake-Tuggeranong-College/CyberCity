@@ -62,6 +62,32 @@ if ($result = $conn->query($sql)) {
 }
 ?>
 
+<?php
+//if (isset($_POST['login'])) {
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $flag = sanitise_data($_POST['flag']);
+
+    $flagList = $conn->query("SELECT HashedFlag,PointsValue FROM Challenges");
+
+    while ($flagData = $flagList->fetch()) {
+        if (password_verify($flag, $flagData[0])) {
+            $username = $_SESSION["username"];
+            $userInformation = $conn->query("SELECT Username, Score FROM Users WHERE Username='$username'");
+            $userData = $userInformation->fetch();
+            $addedScore = $userData[1] += $flagData[1];
+            $sql = "UPDATE Users SET Score=? WHERE Username=?";
+            // change to UPDATE
+            $stmt = $conn->prepare($sql);
+            $stmt->execute([$addedScore, $username]);
+            echo "added points";
+        } else {
+            echo "Could not find flag :(";
+        }
+    }
+}
+
+?>
+
     </table>
 </div>
 

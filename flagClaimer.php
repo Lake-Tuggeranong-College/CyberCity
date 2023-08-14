@@ -9,13 +9,13 @@ if (!authorisedAccess(false, true, true)) {
 
 
 <?php
-if (isset($_GET["ChallengeID"])) {
-    $challengeToLoad = $_GET["ChallengeID"];
+if (isset($_GET["moduleID"])) {
+    $challengeToLoad = $_GET["moduleID"];
 } else {
-    header("location:moduleList.php");
+  //  header("location:moduleList.php");
 }
 
-$sql = conn->query( "SELECT challengeTitle, challengeText FROM Challenges WHERE ID = " . $challengeToLoad );
+$sql = conn->query( "SELECT moduleID, challengeTitle, challengeText, PointsValue FROM Challenges WHERE ID = " . $challengeToLoad );
 ?>
     <!DOCTYPE html>
     <html>
