@@ -1,5 +1,5 @@
 #define AOUT_PIN A2  // Arduino pin that connects to AOUT pin of moisture sensor
-
+#include <ArduinoJson.h>
 #include "sensitiveInformation.h"
 #include <CyberCitySharedFunctionality.h>
 CyberCitySharedFunctionality cyberCity;
@@ -57,25 +57,41 @@ void loop() {
   int value = analogRead(AOUT_PIN);  // read the analog value from sensor
 
   Serial.println(value);
-  float sensorData = value * 1.0;
+  int sensorData = value * 1.0;
   cyberCity.updateEPD("Farm", "value", sensorData, outputCommand);
-  String dataToPost = String(sensorData);
+  String dataToPost = String(value);
   // cyberCity.uploadData(dataToPost, apiKeyValue, sensorName, sensorLocation, 30000, serverName);
-  String payload = cyberCity.dataTransfer(dataToPost, apiKeyValue, sensorName, sensorLocation, 40000, serverName, true, true);
+  String payload = cyberCity.dataTransfer(dataToPost, apiKeyValue, sensorName, sensorLocation, 40, serverName, true, true);
   //notes need to // the next to line 
-  int payloadLocation = payload.indexOf("Payload:");
- char serverCommand = payload.charAt(payloadLocation + 8);
- 
-  Serial.print("Command: ");
-  Serial.print(serverCommand);
-  if (serverCommand == '1') {
-    outputCommand = "Fan On";
-    Servo1.write(0);
-  } else {
-    outputCommand = "Fan Off";
-    Servo1.write(90);
-  }
-  display.clearBuffer();
+//  int payloadLocation = payload.indexOf("Payload:");
+ //char serverCommand = payload.charAt(payloadLocation + 8);
 
+ Serial.print("Payload from server:");
+  Serial.println(payload);
+  DynamicJsonDocument doc(1024);
+//  Serial.println(deserializeJson(doc, payload));
+  DeserializationError error = deserializeJson(doc, payload);
+  if (error) {
+    Serial.print(F("deserializeJson() failed: "));
+    Serial.println(error.f_str());
+    return;
+  }
+  const char* command = doc["command"];
+  Serial.print("Command: ");
+  Serial.print(command);
   delay(500);
 }
+ 
+  //Serial.print("Command: ");
+ //Serial.print(serverCommand);
+ //if (serverCommand == '1') {
+   // outputCommand = "Fan On";
+    //Servo1.write(0);
+ // } else {
+   // outputCommand = "Fan Off";
+    //Servo1.write(90);
+  //}
+  //display.clearBuffer();
+
+  //delay(500);
+//}
