@@ -8,15 +8,15 @@ if (!authorisedAccess(false, true, true)) {
 ?>
 
 
-<?php
-if (isset($_GET["moduleID"])) {
-    $challengeToLoad = $_GET["moduleID"];
-} else {
-  //  header("location:moduleList.php");
-}
-
-$sql = conn->query( "SELECT moduleID, challengeTitle, challengeText, PointsValue FROM Challenges WHERE ID = " . $challengeToLoad );
-?>
+//<?php
+//if (isset($_GET["moduleID"])) {
+//    $challengeToLoad = $_GET["moduleID"];
+//} else {
+//  //  header("location:moduleList.php");
+//}
+//
+//$sql = conn->query( "SELECT moduleID, challengeTitle, challengeText, PointsValue FROM Challenges WHERE ID = " . $challengeToLoad );
+//?>
     <!DOCTYPE html>
     <html>
     <head>

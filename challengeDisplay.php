@@ -6,9 +6,12 @@ if (!authorisedAccess(false, true, true)) {
 }
 
 ?>
-<title>Challenge Information</title><br>
 
+<html>
 <head>
+    <title>Challenge Information</title><br>
+</head>
+<body>
 <div class="table-responsive">
     <table class="table table-bordered">
         <thead>
@@ -20,19 +23,10 @@ if (!authorisedAccess(false, true, true)) {
 
 
         </thead>
-</head>
-        <body>
-        <h1 class='text-primary'>Flag Claimer</h1>
-        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" enctype="multipart/form-data">
-            <div class="col-md-12">
-                <p>Enter the flag below to claim it and get points!</p>
-                <p>Flag<input type="text" name="flag" class="form-control" required="required"></p>
-            </div>
-            <input type="submit" name="formSubmit" value="Claim">
-        </form>
-        </body>
-
-
+</table>
+</div>
+</body>
+</html>
 <?php
 if (isset($_GET["moduleID"])) {
     $challengeToLoad = $_GET["moduleID"];
@@ -62,7 +56,26 @@ if ($result = $conn->query($sql)) {
 }
 ?>
 
+<html>
+<body>
+<h1 class='text-primary'>Flag Claimer</h1>
+<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" enctype="multipart/form-data">
+    <div class="col-md-12">
+        <p>Enter the flag below to claim it and get points!</p>
+        <p>Flag<input type="text" name="flag" class="form-control" required="required"></p>
+    </div>
+ <input type="submit" name="formSubmit" value="Claim">
+</form>
+</body>
+</html>
+
 <?php
+/*
+if (isset($_GET["moduleID"])) {
+    $challengeToLoad = $_GET["moduleID"];
+} else {
+    header("location:moduleList.php");
+}*/
 //if (isset($_POST['login'])) {
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $flag = sanitise_data($_POST['flag']);
@@ -88,9 +101,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 ?>
 
-    </table>
-</div>
+
 
 <?php echo outputFooter(); ?>
-</body>
-</html>
+
