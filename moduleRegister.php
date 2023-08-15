@@ -77,12 +77,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") { //Make Challange Entry
     $title = sanitise_data($_POST['challengeTitle']);
     $disc = sanitise_data($_POST['challengeDescription']);
     $flagList = $conn->query("SELECT HashedFlag FROM Challenges");
-    $sql = "INSERT INTO Challanges (HashedFlag, PointsValue,challangeTitle,challangeText,moduleID) VALUES (:newFlag, :newPoints,:newTitle,:newText)";
+    $sql = "INSERT INTO Challenges (HashedFlag, PointsValue,challengeTitle,challengeText,moduleID) VALUES (:newFlag, :newPoints,:newTitle,:newText, :moduleID)";
     $stmt = $conn->prepare($sql);
     $stmt->bindValue(':newFlag', $hashed_flag);
     $stmt->bindValue(':newPoints', $points);
     $stmt->bindValue(':newTitle', $title);
     $stmt->bindValue(':newText', $disc);
+    $stmt->bindValue(':moduleID', $disc);
     $stmt->execute();
     echo "Flag Made";
 

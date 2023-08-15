@@ -22,9 +22,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="challengesList.php">Challenges</a></li>
                 <!--<li class="nav-item"><a class="nav-link" href="leaderboard.php">Leaderboard</a></li>-->
-                <li class="nav-item"><a class="nav-link" href="contact.php">Contact Us</a></li>
                 <?php
                 $accessLevel = 2;
                 if (isset($_SESSION["username"])) {
@@ -37,9 +35,8 @@
                         CTF
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="flagClaimer.php">Flag Claimer</a>
                         <a class="dropdown-item" href="leaderboard.php">Leaderboard</a>
-                        <a class="dropdown-item" href="challenges.php">Challenges</a>
+                        <a class="dropdown-item" href="challengesList.php">Challenges</a>
                         <a class="dropdown-item" href="Tutorial.php">Tutorials</a>
                     </ul>
                 </li>                                                                                                                  
@@ -56,15 +53,13 @@
                         <a class="dropdown-item" href="userSearch.php">User Search</a>
 
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="moduleRegister.php">Add New Module</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="flagMaker.php">Add New Challenge</a>
+                        <a class="dropdown-item" href="moduleRegister.php">Add New Module & Challenge</a>
                         <?php
                     }
                     ?>
                     </ul>
                     </li>
-
+                    <li class="nav-item"><a class="nav-link" href="contact.php">Contact Us</a></li>
                     <?php
                 } else {
                     echo '
