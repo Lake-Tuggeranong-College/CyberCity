@@ -1,7 +1,5 @@
-#include <ArduinoJson.h>
-
 #include <CyberCitySharedFunctionality.h>
-
+#include <ArduinoJson.h>
 /***************************************************
   Adafruit invests time and resources providing this open source code,
   please support Adafruit and open-source hardware by purchasing
@@ -73,8 +71,20 @@ void loop() {
   String dataToPost = String(sensorData);
   // cyberCity.uploadData(dataToPost, apiKeyValue, sensorName, sensorLocation, 30000, serverName);
   String payload = cyberCity.dataTransfer(dataToPost, apiKeyValue, sensorName, sensorLocation, 30000, serverName, true, true);
-  // waits 180 seconds (3 minutes) as per guidelines from adafruit.
-  display.clearBuffer();
+ Serial.print("Payload from server:");
+  Serial.println(payload);
+  DynamicJsonDocument doc(1024);
+  //  Serial.println(deserializeJson(doc, payload));
+  DeserializationError error = deserializeJson(doc, payload);
+  if (error) {
+    Serial.print(F("deserializeJson() failed: "));
+    Serial.println(error.f_str());
+    return;
+  }
+  const char* command = doc["command"];
+  Serial.print("Command: ");
+  Serial.print(command);
+  delay(500);
 }
 
 void lights() {
