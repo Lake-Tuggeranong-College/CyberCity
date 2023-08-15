@@ -28,7 +28,7 @@ Adafruit_ADT7410 tempsensor = Adafruit_ADT7410();
 String outputCommand = "NaN";
 void setup() {
 
-pinMode(pizopin,OUTPUT);
+  pinMode(pizopin, OUTPUT);
   Serial.begin(9600);
   while (!Serial) {
     delay(10);
@@ -45,13 +45,13 @@ pinMode(pizopin,OUTPUT);
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
   pinMode(LED_BUILTIN, OUTPUT);
-  
+
   if (!tempsensor.begin()) {
     Serial.println("Couldn't find ADT7410!");
     while (1)
       ;
   }
-  
+
   // RTC
   if (!rtc.begin()) {
     Serial.println("Couldn't find RTC");
@@ -74,13 +74,16 @@ pinMode(pizopin,OUTPUT);
 }
 
 void loop() {
-  
+
   float sensorData = tempsensor.readTempC();
   cyberCity.updateEPD("Fire Dept", "Temp \tC", sensorData, outputCommand);
   String dataToPost = String(sensorData);
   // cyberCity.uploadData(dataToPost, apiKeyValue, sensorName, sensorLocation, 30000, serverName);
   String payload = cyberCity.dataTransfer(dataToPost, apiKeyValue, sensorName, sensorLocation, 60000, serverName, true, true);
-   DynamicJsonDocument doc(1024);
+  Serial.print("payload: ");
+  Serial.print(payload);
+  Serial.println(".");
+  DynamicJsonDocument doc(1024);
   //  Serial.println(deserializeJson(doc, payload));
   DeserializationError error = deserializeJson(doc, payload);
   if (error) {
@@ -92,15 +95,15 @@ void loop() {
   Serial.print("Command: ");
   Serial.print(command);
   // ISO C++ forbids comparison between pointer and integer [-fpermissive]
-  if (command == 'cheese') {
-    tone(pizopin,500,1000);
+  if (command == "cheese") {
+    //tone(pizopin,500,1000);
     outputCommand = "LED On";
     digitalWrite(LED_BUILTIN, HIGH);
   } else {
-    noTone(pizopin);
+    //noTone(pizopin);
     outputCommand = "LED Off";
     digitalWrite(LED_BUILTIN, LOW);
-  } 
+  }
 
   // waits 180 seconds (3 minutes) as per guidelines from adafruit.
   display.clearBuffer();
