@@ -40,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 //    $location = sanitise_data($loc);
 //   echo "Location: ".$location;
     $query = $conn->query("SELECT COUNT(*) as count FROM RegisteredModules WHERE Location ='$location'");
-   
+
     $row = $query->fetch();
     $count = $row[0];
     if ($count > 0) {
@@ -49,31 +49,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $payload = $row[4];
         $api_key_value = $row[3];
 //        echo "verifying...";
-        if (password_verify($api_key, $api_key_value)) {
+//        if (password_verify($api_key, $api_key_value)) {
 //            $sensorValue = sanitise_data($_POST["sensorValue"]);
-            $sensorValue = $data->sensorValue;
-            date_default_timezone_set('Australia/Canberra');
-            $date = date("Y-m-d H:i:s");
-            //DO NOT CHANGE THIS DATE CODE, MUST STAY SAME TO WORK WITH MYSQL
-            $ModuleID = $row[0];
+        $sensorValue = $data->sensorValue;
+        date_default_timezone_set('Australia/Canberra');
+        $date = date("Y-m-d H:i:s");
+        //DO NOT CHANGE THIS DATE CODE, MUST STAY SAME TO WORK WITH MYSQL
+        $ModuleID = $row[0];
 //            echo "inserting....";
-            $sql = "INSERT INTO ModuleData (ModuleID, DateTime, Data) VALUES (:ModuleID, :date, :sensorValue)";
-            $stmt = $conn->prepare($sql);
-            $stmt->bindValue(':ModuleID', $ModuleID);
-            $stmt->bindValue(':date', $date);
-            $stmt->bindValue(':sensorValue', $sensorValue);
-            $stmt->execute();
+        $sql = "INSERT INTO ModuleData (ModuleID, DateTime, Data) VALUES (:ModuleID, :date, :sensorValue)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue(':ModuleID', $ModuleID);
+        $stmt->bindValue(':date', $date);
+        $stmt->bindValue(':sensorValue', $sensorValue);
+        $stmt->execute();
 
-            //convert server command to JSON for return to ESP
-            $payloadJSON = ['command' => $payload];
-            header('Content-type: application/json');
-            echo json_encode($payloadJSON);
-            $conn->close();
-
-
-        } else {
-            echo "API Key incorrect";
-        }
+        //convert server command to JSON for return to ESP
+        $payloadJSON = ['command' => $payload];
+        header('Content-type: application/json');
+        echo json_encode($payloadJSON);
+        $conn->close();
+//        } else {
+//            echo "API Key incorrect";
+//        }
     } else {
         echo "Module not found!!";
     }
