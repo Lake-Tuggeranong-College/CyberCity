@@ -6,12 +6,9 @@ if (!authorisedAccess(false, false, true)) {
 }
 
 ?>
-
     <title>User List</title>
     <link rel="stylesheet" href="css/moduleList.css">
-
     <h1 class='text-primary'>User List</h1>
-
 <?php
 $userList = $conn->query("SELECT ID, Username, AccessLevel, Enabled FROM Users WHERE Enabled=1"); #Get all Enabled Modules
 while ($userData = $userList->fetch()) {
