@@ -17,11 +17,6 @@ $userList = $conn->query("SELECT ID, Username, AccessLevel, Enabled FROM Users W
 while ($userData = $userList->fetch()) {
     $userID = $userData["ID"];
     echo "<div class='product_wrapper'>";
-//    if ($userData['Image']) { #Does the Module have an Image?
-//        echo "<div class='image'><a href='moduleDisplay.php?ModuleID=" . $userID . "'><img src='images/modules/" . $userData['Image'] . "' width='100' height='100'/></a></div>"; #Display Module Image
-//    } else {
-//        echo "<div class='image'><a href='moduleDisplay.php?ModuleID=" . $userID . "'><img src='images/modules/blank.jpg'width='100' height='100'/></a></div>"; #Display Placeholder Image
-//    }
     echo "
         <div class='name'>" . $userData["Username"] . "</div>
         <div class='price'>". $userData["AccessLevel"]."</div>
@@ -40,11 +35,6 @@ $userList = $conn->query("SELECT ID, Username, AccessLevel, Enabled FROM Users W
 while ($userData = $userList->fetch()) {
     $userID = $userData["ID"];
     echo "<div class='product_wrapper'>";
-//    if ($userData['Image']) { #Does the Module have an Image?
-//        echo "<div class='image'><a href='moduleDisplay.php?ModuleID=" . $userID . "'><img src='images/modules/" . $userData['Image'] . "' width='100' height='100'/></a></div>"; #Display Module Image
-//    } else {
-//        echo "<div class='image'><a href='moduleDisplay.php?ModuleID=" . $userID . "'><img src='images/modules/blank.jpg'width='100' height='100'/></a></div>"; #Display Placeholder Image
-//    }
     echo "
         <div class='name'>" . $userData["Username"] . "</div>
         <div class='price'>". $userData["AccessLevel"]."</div>
