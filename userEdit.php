@@ -7,7 +7,7 @@ if (!authorisedAccess(false, false, true)) {
 
 ?>
 
-<title>User Edit page</title>
+<title>User Edit</title>
 
 
 <?php
@@ -16,12 +16,13 @@ if (isset($_GET["UserID"])) {
     $sql = $conn->query("SELECT * FROM Users WHERE ID= " . $userToLoad);
     $userInformation = $sql->fetch();
     $userID = $userInformation["ID"];
+    $userHashedPassword = $userInformation["HashedPassword"];
     $userName = $userInformation["Username"];
     $userAccessLevel = $userInformation["AccessLevel"];
     $userEnabled = $userInformation["Enabled"];
     $userScore = $userInformation["Score"];
 } else {
-    header("location:moduleList.php");
+    header("location:userList.php");
 }
 ?>
 
@@ -33,27 +34,27 @@ if (isset($_GET["UserID"])) {
         <div class="row">
             <!--Customer Details-->
             <div class="col-md-6">
-                <h2>Module Details</h2>
-                <p>Module Name<label>
+                <h2>User Details</h2>
+                <p>User Name<label>
                         <input type="text" name="userName" class="form-control" required="required"
                                value="<?= $userName ?>">
                     </label></p>
-                <p>Module Location
+                <p>Password
                     <label>
-                        <input type="password" name="password" class="form-control" required="required"
-                               value="<?= $userID ?>">
+                        <input type="text" name="password" class="form-control" required="required"
+                               value="<?= $userHashedPassword ?>">
                     </label></p>
             </div>
             <div class="col-md-6">
                 <h2>More Details</h2>
                 <!--Product List-->
-                <p>API Key
+                <p>Access Level
                     <label>
                         <input type="text" name="AccessLevel" class="form-control" required="required"
                                value="<?= $userAccessLevel ?>">
                     </label></p>
 
-                <p>Current Output
+                <p>Enabled/Disabled
                     <label>
                         <input type="text" name="Enabled" class="form-control" required="required"
                                value="<?= $userEnabled ?>">
@@ -77,21 +78,21 @@ if (isset($_GET["UserID"])) {
 // Back End
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $newModule = sanitise_data($_POST["userName"]);
-    $newLocation = sanitise_data($_POST["moduleLocation"]);
-    $newOutput = sanitise_data($_POST["currentOutput"]);
-    $newAPIKey = sanitise_data($_POST["apiKey"]);
-    $newHashedAPIKey = password_hash($newAPIKey, PASSWORD_DEFAULT);
-    $userToLoad = $_GET["ModuleID"];
+    $userPassword = sanitise_data($_POST["moduleLocation"]);
+    $userAccessLevel = sanitise_data($_POST["currentOutput"]);
+    $userEnabled = sanitise_data($_POST["apiKey"]);
+    $userHashedPassword = password_hash($userPassword, PASSWORD_DEFAULT);
+    $userToLoad = $_GET["UserID"];
 
     $sql = "UPDATE Users SET Username= :newusername, HashedPassword= :newpassword, AccessLevel= :newaccesslevel, Enabled= :newEnabled, Score=:newscore WHERE ID ='$userToLoad'";
     //$sql = "INSERT INTO `RegisteredModules` (Location, Module, HashedAPIKey, Enabled) VALUES (:newLocation, :newModule, :newHashedAPIkey, :enabled)";
 
     $stmt = $conn->prepare($sql);
-    $stmt->bindValue(":newModule", $newModule);
-    $stmt->bindValue(":newLocation", $newLocation);
-    $stmt->bindValue(":newOutput", $newOutput);
-    $stmt->bindValue(":newHashedAPIkey", $newHashedAPIKey);
-    $stmt->bindValue(":newEnabled", $newEnabled);
+    $stmt->bindValue(":newusername", $userName);
+    $stmt->bindValue(":newpassword", $userHashedPassword);
+    $stmt->bindValue(":newaccesslevel", $userAccessLevel);
+    $stmt->bindValue(":newEnabled", $userEnabled);
+    $stmt->bindValue(":newscore", $userScore);
 
     $stmt->execute();
 
