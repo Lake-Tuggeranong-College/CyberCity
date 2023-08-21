@@ -7,7 +7,7 @@ if (!authorisedAccess(false, false, true)) {
 
 ?>
 
-<title>User Edit page</title>
+<title>User Edit</title>
 
 
 <?php
@@ -33,8 +33,8 @@ if (isset($_GET["UserID"])) {
         <div class="row">
             <!--Customer Details-->
             <div class="col-md-6">
-                <h2>Module Details</h2>
-                <p>Module Name<label>
+                <h2>User Details</h2>
+                <p>User Name<label>
                         <input type="text" name="userName" class="form-control" required="required"
                                value="<?= $userName ?>">
                     </label></p>
