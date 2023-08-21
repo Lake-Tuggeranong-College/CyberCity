@@ -21,7 +21,7 @@ if (isset($_GET["UserID"])) {
     $userEnabled = $userInformation["Enabled"];
     $userScore = $userInformation["Score"];
 } else {
-    header("location:moduleList.php");
+    header("location:userList.php");
 }
 ?>
 
