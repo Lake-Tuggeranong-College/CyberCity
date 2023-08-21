@@ -13,7 +13,7 @@ if (!authorisedAccess(false, false, true)) {
     <h1 class='text-primary'>userList</h1>
 
 <?php
-$userList = $conn->query("SELECT Username, AccessLevel, Enabled FROM Users WHERE Enabled=1"); #Get all Enabled Modules
+$userList = $conn->query("SELECT ID, Username, AccessLevel, Enabled FROM Users WHERE Enabled=1"); #Get all Enabled Modules
 while ($userData = $userList->fetch()) {
     $userID = $userData["ID"];
     echo "<div class='product_wrapper'>";
@@ -36,7 +36,7 @@ while ($userData = $userList->fetch()) {
 }
 
 
-$userList = $conn->query("SELECT Username, AccessLevel, Enabled FROM Users WHERE Enabled=0"); #Get all Enabled Modules
+$userList = $conn->query("SELECT ID, Username, AccessLevel, Enabled FROM Users WHERE Enabled=0"); #Get all Enabled Modules
 while ($userData = $userList->fetch()) {
     $userID = $userData["ID"];
     echo "<div class='product_wrapper'>";
