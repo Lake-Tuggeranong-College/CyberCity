@@ -50,7 +50,7 @@
                             Administrator Functions
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="userSearch.php">User Search</a>
+                        <a class="dropdown-item" href="userList.php">User list</a>
 
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="moduleRegister.php">Add New Module & Challenge</a>
