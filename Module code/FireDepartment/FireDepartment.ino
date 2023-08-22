@@ -97,11 +97,12 @@ void loop() {
   Serial.print(command);
   // ISO C++ forbids comparison between pointer and integer [-fpermissive]
   if (String(command) == "cheese") {
-    //tone(pizopin,500,1000);
+    int randNoise = random(300, 900);
+    tone(pizopin,randNoise,1000);
     outputCommand = "LED On";
     digitalWrite(LED_BUILTIN, HIGH);
   } else {
-    //noTone(pizopin);
+    noTone(pizopin);
     outputCommand = "LED Off";
     digitalWrite(LED_BUILTIN, LOW);
   }
