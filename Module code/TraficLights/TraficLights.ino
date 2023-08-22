@@ -7,7 +7,9 @@
   Written by Limor Fried/Ladyada for Adafruit Industries.
   MIT license, all text above must be included in any redistribution
  ****************************************************/
-
+ int green = 15;
+ int red = 16;
+ int yellow = 17;
 
 #include "sensitiveInformation.h"
 
@@ -56,21 +58,21 @@ void setup() {
   // Module Specific Code
 
   // put your setup code here, to run once:
-  pinMode(14, INPUT);
-  pinMode(32, OUTPUT);
-  pinMode(33, OUTPUT);
+  pinMode(green, INPUT);
+  pinMode(red, OUTPUT);
+  pinMode(yellow, OUTPUT);
   Serial.begin(9600);
 }
 
 void loop() {
 
+
   // put your main code here, to run repeatedly:
-  Serial.println(digitalRead(14));
   lights();
-  int sensorData = 97654;
+  int sensorData = red, green, yellow;
   String dataToPost = String(sensorData);
   // cyberCity.uploadData(dataToPost, apiKeyValue, sensorName, sensorLocation, 30000, serverName);
-  String payload = cyberCity.dataTransfer(dataToPost, apiKeyValue, sensorName, sensorLocation, 30000, serverName, true, true);
+  String payload = cyberCity.dataTransfer(dataToPost, apiKeyValue, sensorName, sensorLocation, 30000, serverName, true, true);    
  Serial.print("Payload from server:");
   Serial.println(payload);
   DynamicJsonDocument doc(1024);
@@ -88,12 +90,70 @@ void loop() {
 }
 
 void lights() {
-  if (digitalRead(14)) {
-    digitalWrite(32, HIGH);
-    digitalWrite(33, LOW);
-  }
-  else {
-    digitalWrite(32, LOW);
-    digitalWrite(33, HIGH);
-  }
+ digitalWrite(red, HIGH);
+ delay(15000);
+digitalWrite(red,  LOW);
+  
+  digitalWrite(yellow, HIGH);
+delay(1000);
+  digitalWrite(yellow,  LOW);
+delay(500);
+
+  digitalWrite(yellow, HIGH);
+delay(1000);
+  digitalWrite(yellow,  LOW);
+delay(500);
+
+  digitalWrite(yellow, HIGH);
+delay(1000);
+  digitalWrite(yellow,  LOW);
+delay(500);
+  
+  digitalWrite(yellow, HIGH);
+delay(1000);
+  digitalWrite(yellow, LOW);
+delay(500);
+  
+  digitalWrite(yellow, HIGH);
+delay(1000);
+  digitalWrite(yellow, LOW);
+delay(500);
+  
+digitalWrite(green, HIGH);
+delay(20000);
+digitalWrite(green,  LOW);
+//  
+digitalWrite(yellow, HIGH);
+delay(1000);
+  digitalWrite(yellow,  LOW);
+delay(500);
+
+  digitalWrite(yellow, HIGH);
+delay(1000);
+  digitalWrite(yellow,  LOW);
+delay(500);
+
+  digitalWrite(yellow, HIGH);
+delay(1000);  
+  digitalWrite(yellow, LOW);
+delay(500);
+  
+  digitalWrite(yellow, HIGH);
+delay(1000);
+  digitalWrite(yellow, LOW);
+delay(500);
+  
+  digitalWrite(yellow, HIGH);
+delay(1000);
+  digitalWrite(yellow, LOW);
+delay(500);
 }
+  // if (digitalRead(14)) {
+    // digitalWrite(Red, HIGH);
+    // digitalWrite(Green, LOW);
+ // }
+  //else {
+   // digitalWrite(Red, LOW);
+    //digitalWrite(Green, HIGH);
+ // }
+// }
