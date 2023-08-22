@@ -44,9 +44,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         case JSON_ERROR_UTF8:
             echo ' - Malformed UTF-8 characters, possibly incorrectly encoded';
             break;
-        default:
-            echo ' - Unknown error';
-            break;
     }
 
     // example of extracting one element of json object
