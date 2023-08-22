@@ -84,6 +84,7 @@ void loop() {
   Serial.print(payload);
   Serial.println(".");
   DynamicJsonDocument doc(1024);
+ 
   //  Serial.println(deserializeJson(doc, payload));
   DeserializationError error = deserializeJson(doc, payload);
   if (error) {
@@ -95,7 +96,7 @@ void loop() {
   Serial.print("Command: ");
   Serial.print(command);
   // ISO C++ forbids comparison between pointer and integer [-fpermissive]
-  if (command == "cheese") {
+  if (String(command) == "cheese") {
     //tone(pizopin,500,1000);
     outputCommand = "LED On";
     digitalWrite(LED_BUILTIN, HIGH);
@@ -105,6 +106,6 @@ void loop() {
     digitalWrite(LED_BUILTIN, LOW);
   }
 
-  // waits 180 seconds (3 minutes) as per guidelines from adafruit.
+  // waits 180 seconds (3 minutes) as   per guidelines from adafruit.
   display.clearBuffer();
 }
