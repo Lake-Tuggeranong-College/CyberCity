@@ -54,6 +54,7 @@
 
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="moduleRegister.php">Add New Module & Challenge</a>
+                        <a class="dropdown-item" href="resetGame.php">Reset Game</a>
                         <?php
                     }
                     ?>
