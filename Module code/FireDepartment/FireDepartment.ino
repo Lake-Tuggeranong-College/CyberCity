@@ -81,7 +81,6 @@ void loop() {
   // cyberCity.uploadData(dataToPost, apiKeyValue, sensorName, sensorLocation, 30000, serverName);
   String payload = cyberCity.dataTransfer(dataToPost, apiKeyValue, sensorName, sensorLocation, 60000, serverName, true, true);
   Serial.print("payload: ");
-  payload.remove(0,12);
   Serial.print(payload);
   Serial.println(".");
   DynamicJsonDocument doc(1024);
