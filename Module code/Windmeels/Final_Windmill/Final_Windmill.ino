@@ -18,7 +18,7 @@ void setup() {
   ESP32PWM::allocateTimer(2);
   ESP32PWM::allocateTimer(3);
   Servo1.setPeriodHertz(50);  // standard 50 hz servo
-  Servo1.attach(servoPin, 1000, 2000);
+  Servo1.attach(21);
   while (!Serial) {
     delay(10);
   }
@@ -78,19 +78,30 @@ void loop() {
   }
   const char* command = doc["command"];
   Serial.print("Command: ");
-  Serial.print(command);
-  delay(500);
+  Serial.println(command);
+  
+  
+  if (String(command) == "On") {
+    Serial.println("spin:)");
+    Servo1.write(0);
+   outputCommand = "Fan On";
+    
+ } else {
+   outputCommand = "Fan Off";
+    Servo1.write(90);
+  }
 }
  
+ 
   //Serial.print("Command: ");
- //Serial.print(serverCommand);
- //if (serverCommand == '1') {
-   // outputCommand = "Fan On";
-    //Servo1.write(0);
- // } else {
-   // outputCommand = "Fan Off";
-    //Servo1.write(90);
-  //}
+ //Serial.print(Command);
+ //if (serverCommand == "on0") {
+   //outputCommand = "Fan On";
+   // Servo1.write(0);
+ //} else {
+  // /outputCommand = "Fan Off";
+   // Servo1.write(90);
+ // }
   //display.clearBuffer();
 
   //delay(500);
