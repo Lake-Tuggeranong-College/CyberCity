@@ -27,10 +27,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $json = file_get_contents('php://input');
     // Converts it into a PHP object
     $data = json_decode($json);
+
     switch (json_last_error()) {
-        case JSON_ERROR_NONE:
-            echo ' - No errors';
-            break;
         case JSON_ERROR_DEPTH:
             echo ' - Maximum stack depth exceeded';
             break;
