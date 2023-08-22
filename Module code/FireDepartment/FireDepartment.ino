@@ -81,9 +81,11 @@ void loop() {
   // cyberCity.uploadData(dataToPost, apiKeyValue, sensorName, sensorLocation, 30000, serverName);
   String payload = cyberCity.dataTransfer(dataToPost, apiKeyValue, sensorName, sensorLocation, 60000, serverName, true, true);
   Serial.print("payload: ");
+  payload.remove(0,12);
   Serial.print(payload);
   Serial.println(".");
   DynamicJsonDocument doc(1024);
+ 
   //  Serial.println(deserializeJson(doc, payload));
   DeserializationError error = deserializeJson(doc, payload);
   if (error) {
@@ -95,7 +97,7 @@ void loop() {
   Serial.print("Command: ");
   Serial.print(command);
   // ISO C++ forbids comparison between pointer and integer [-fpermissive]
-  if (command == "cheese") {
+  if (String(command) == "cheese") {
     //tone(pizopin,500,1000);
     outputCommand = "LED On";
     digitalWrite(LED_BUILTIN, HIGH);
@@ -105,6 +107,6 @@ void loop() {
     digitalWrite(LED_BUILTIN, LOW);
   }
 
-  // waits 180 seconds (3 minutes) as per guidelines from adafruit.
+  // waits 180 seconds (3 minutes) as   per guidelines from adafruit.
   display.clearBuffer();
 }
