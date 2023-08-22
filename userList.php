@@ -14,7 +14,9 @@ $userList = $conn->query("SELECT ID, Username, AccessLevel, Enabled FROM Users W
 while ($userData = $userList->fetch()) {
     $userID = $userData["ID"];
     echo "<div class='product_wrapper'>";
-    echo "<a class='moduleButton' href='userEdit.php?UserID=" . $userID . "'>Edit - " . $userData["Username"] . "</a>";
+    echo "<div class='name'>" . $userData["Username"] . "</div>";
+    echo "<a class='moduleButton' href='userEdit.php?UserID=" . $userID . "'>Edit</a>";
+    echo "<a class='moduleButton' href='userResetPassword.php?UserID=" . $userID . "'>Password</a>";
     echo "</div>";
 }
 
