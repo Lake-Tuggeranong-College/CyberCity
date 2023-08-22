@@ -39,11 +39,11 @@ if (isset($_GET["UserID"])) {
                         <input type="text" name="userName" class="form-control" required="required"
                                value="<?= $userName ?>">
                     </label></p>
-                <p>Password
-                    <label>
-                        <input type="text" name="password" class="form-control" required="required"
-                               value="<?= $userHashedPassword ?>">
-                    </label></p>
+<!--                <p>Password-->
+<!--                    <label>-->
+<!--                        <input type="text" name="password" class="form-control" required="required"-->
+<!--                               value="--><?php //= $userHashedPassword ?><!--">-->
+<!--                    </label></p>-->
             </div>
             <div class="col-md-6">
                 <h2>More Details</h2>
@@ -77,19 +77,20 @@ if (isset($_GET["UserID"])) {
 <?php
 // Back End
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $newModule = sanitise_data($_POST["userName"]);
-    $userPassword = sanitise_data($_POST["moduleLocation"]);
-    $userAccessLevel = sanitise_data($_POST["currentOutput"]);
-    $userEnabled = sanitise_data($_POST["apiKey"]);
-    $userHashedPassword = password_hash($userPassword, PASSWORD_DEFAULT);
+    $userName = sanitise_data($_POST["userName"]);
+//    $userPassword = sanitise_data($_POST["moduleLocation"]);
+    $userAccessLevel = sanitise_data($_POST["AccessLevel"]);
+    $userEnabled = sanitise_data($_POST["Enabled"]);
+    $userScore = sanitise_data($_POST["Score"]);
+//    $userHashedPassword = password_hash($userPassword, PASSWORD_DEFAULT);
     $userToLoad = $_GET["UserID"];
 
-    $sql = "UPDATE Users SET Username= :newusername, HashedPassword= :newpassword, AccessLevel= :newaccesslevel, Enabled= :newEnabled, Score=:newscore WHERE ID ='$userToLoad'";
+    $sql = "UPDATE Users SET Username= :newusername, AccessLevel= :newaccesslevel, Enabled= :newEnabled, Score=:newscore WHERE ID ='$userToLoad'";
     //$sql = "INSERT INTO `RegisteredModules` (Location, Module, HashedAPIKey, Enabled) VALUES (:newLocation, :newModule, :newHashedAPIkey, :enabled)";
 
     $stmt = $conn->prepare($sql);
     $stmt->bindValue(":newusername", $userName);
-    $stmt->bindValue(":newpassword", $userHashedPassword);
+//    $stmt->bindValue(":newpassword", $userHashedPassword);
     $stmt->bindValue(":newaccesslevel", $userAccessLevel);
     $stmt->bindValue(":newEnabled", $userEnabled);
     $stmt->bindValue(":newscore", $userScore);
