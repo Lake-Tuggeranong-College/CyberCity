@@ -81,7 +81,6 @@ void loop() {
   // cyberCity.uploadData(dataToPost, apiKeyValue, sensorName, sensorLocation, 30000, serverName);
   String payload = cyberCity.dataTransfer(dataToPost, apiKeyValue, sensorName, sensorLocation, 60000, serverName, true, true);
   Serial.print("payload: ");
-  payload.remove(0,12);
   Serial.print(payload);
   Serial.println(".");
   DynamicJsonDocument doc(1024);
@@ -98,11 +97,12 @@ void loop() {
   Serial.print(command);
   // ISO C++ forbids comparison between pointer and integer [-fpermissive]
   if (String(command) == "cheese") {
-    //tone(pizopin,500,1000);
+    int randNoise = random(300, 900);
+    tone(pizopin,randNoise,1000);
     outputCommand = "LED On";
     digitalWrite(LED_BUILTIN, HIGH);
   } else {
-    //noTone(pizopin);
+    noTone(pizopin);
     outputCommand = "LED Off";
     digitalWrite(LED_BUILTIN, LOW);
   }
