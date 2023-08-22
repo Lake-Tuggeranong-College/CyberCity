@@ -10,7 +10,7 @@ if (!authorisedAccess(false, false, true)) {
 
 <title>reset button</title>
 <h1> warning pressing this button will make all regular users access level 0 (disabled)</h1>
-    <form action="resetButton.php" method="post" enctype="multipart/form-data">
+    <form action="resetGame.php" method="post" enctype="multipart/form-data">
 
             <input type="submit" name="formSubmit" value="Update">
     </form>
