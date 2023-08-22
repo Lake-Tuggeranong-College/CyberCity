@@ -7,6 +7,5 @@
 <h2 class='text'> please proceed to login or register</h2>
 <img src="images/MainImage.jpg" alt="" width="50%" height="50%">
 <p></p>
-<?php echo outputFooter(); ?>
 </body>
 </html>
