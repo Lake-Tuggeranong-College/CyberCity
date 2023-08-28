@@ -20,46 +20,27 @@ $pointsValue = $result["PointsValue"];
 $hashedFlag = $result["HashedFlag"];
 
 ?>
-
-
 <title>Challenge Information</title>
 <h1>Challenge - <?= $title ?></h1>
-<div class="table-responsive">
-    <table class="table table-bordered">
-        <thead>
-        <tr>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-1">Challenge Number</div>
+        <div class="col-10">Challenge Description</div>
+        <div class="col-1">Challenge Points</div>
+    </div>
+    <div class="row">
+        <div class="col-1"><?=$title?></div>
+        <div class="col-10"><?=$challengeText?></div>
+        <div class="col-1"><?=$pointsValue?></div>
+    </div>
 
-            <th>Challenge Number</th>
-            <th>Challenge Description</th>
-            <th>Challenge Points</th>
-
-
-        </thead>
-    </table>
 </div>
+
+
 </body>
 </html>
+
 <?php
-
-$sql = "SELECT moduleID, challengeTitle, challengeText, PointsValue FROM Challenges WHERE moduleID = " . $challengeToLoad . " ORDER BY ID DESC";
-
-if ($result = $conn->query($sql)) {
-    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-        $row_id = $row["moduleID"];
-        $row_challengeTitle = $row["challengeTitle"];
-        $challengeText = $row["challengeText"];
-        $pointsValue = $row["PointsValue"];
-
-        echo "<title> ID:" . $row_id . "</title>";
-        echo "<tr>";
-        echo "<td>" . $row_challengeTitle . "</td>";
-        echo "<td>" . $challengeText . "  </td>";
-        echo "<td>" . $pointsValue . "  </td>";
-        echo "</tr>";
-
-    }
-    $result = null;
-}
 //if ($_SERVER["REQUEST_METHOD"] == "POST") {
 //    $flag = sanitise_data($_POST['flag']);
 //    $challengeToLoad = $_GET["moduleID"];
