@@ -8,7 +8,7 @@ if (!authorisedAccess(false, true, true)) {
 ?>
 
 
-//<?php
+<?php
 //if (isset($_GET["moduleID"])) {
 //    $challengeToLoad = $_GET["moduleID"];
 //} else {
