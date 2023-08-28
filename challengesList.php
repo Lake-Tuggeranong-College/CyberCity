@@ -1,21 +1,17 @@
 <?php include "template.php";
 /** @var $conn */
 ?>
-<!DOCTYPE html>
-<html>
-<head>
     <title>Cyber City - Challenges</title>
     <link rel="stylesheet" href="css/moduleList.css">
-</head>
-<body>
-<h1 class='text-primary'>Challenge List</h1>
+
+    <h1 class='text-primary'>Challenge List</h1>
 
 
 <?php
-$moduleList = $conn->query("SELECT challengeTitle,PointsValue,moduleID FROM Challenges"); #Get all Enabled Modules
-while ($challangeData = $moduleList->fetch()) {
-    $shallangeID = $challangeData["ID"];
-    $moduleID = $challangeData[2];
+$moduleList = $conn->query("SELECT ID, challengeTitle,PointsValue,moduleID FROM Challenges"); #Get all Enabled Modules
+while ($challengeData = $moduleList->fetch()) {
+    $challengeID = $challengeData["ID"];
+    $moduleID = $challengeData["moduleID"];
     $moduleQuery = $conn->query("SELECT Image from RegisteredModules WHERE ID = $moduleID");
     $moduleInformation = $moduleQuery->fetch();
     echo "<div class='product_wrapper'>";
@@ -25,8 +21,8 @@ while ($challangeData = $moduleList->fetch()) {
         echo "<div class='image'><a href='challengeDisplay.php?moduleID=" . $moduleID . "'><img src='images/modules/blank.jpg'width='100' height='100'/></a></div>"; #Display Placeholder Image
     }
     echo "
-        <div class='name'>" . $challangeData[0] . "</div>
-        <div class='price'>$challangeData[1] Points</div>
+        <div class='name'>" . $challengeData[0] . "</div>
+        <div class='price'>$challengeData[1] Points</div>
         ";
     echo "</div>";
 }
