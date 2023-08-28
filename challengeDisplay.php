@@ -89,7 +89,7 @@ if ($result = $conn->query($sql)) {
 <!--</form>-->
 </body>
 <div class="col-md-12">
-<a href="/flagClaimer.php">Click here to claim the flag</a>
+<a href="flagClaimer.php">Click here to claim the flag</a>
 </div>
 </html>
 
