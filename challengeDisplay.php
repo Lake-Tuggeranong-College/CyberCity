@@ -11,12 +11,14 @@ if (isset($_GET["moduleID"])) {
 } else {
     header("location:challengesList.php");
 }
-$sql = $conn->query("SELECT moduleID, challengeTitle, challengeText, PointsValue FROM Challenges WHERE moduleID = " . $challengeToLoad . " ORDER BY ID DESC");
+$sql = $conn->query("SELECT moduleID, challengeTitle, challengeText, PointsValue, HashedFlag FROM Challenges WHERE moduleID = " . $challengeToLoad . " ORDER BY ID DESC");
 $result = $sql->fetch();
 
 $title = $result["challengeTitle"];
-$row_challengeText = $result["challengeText"];
-        $row_PointsValue = $result["PointsValue"];
+$challengeText = $result["challengeText"];
+$pointsValue = $result["PointsValue"];
+$hashedFlag = $result["HashedFlag"];
+
 ?>
 
 
@@ -45,14 +47,14 @@ if ($result = $conn->query($sql)) {
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
         $row_id = $row["moduleID"];
         $row_challengeTitle = $row["challengeTitle"];
-        $row_challengeText = $row["challengeText"];
-        $row_PointsValue = $row["PointsValue"];
+        $challengeText = $row["challengeText"];
+        $pointsValue = $row["PointsValue"];
 
         echo "<title> ID:" . $row_id . "</title>";
         echo "<tr>";
         echo "<td>" . $row_challengeTitle . "</td>";
-        echo "<td>" . $row_challengeText . "  </td>";
-        echo "<td>" . $row_PointsValue . "  </td>";
+        echo "<td>" . $challengeText . "  </td>";
+        echo "<td>" . $pointsValue . "  </td>";
         echo "</tr>";
 
     }
