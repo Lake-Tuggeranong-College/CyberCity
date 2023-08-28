@@ -5,13 +5,23 @@ if (!authorisedAccess(false, true, true)) {
     header("Location:index.php");
 }
 
+if (isset($_GET["moduleID"])) {
+    $challengeToLoad = $_GET["moduleID"];
+
+} else {
+    header("location:challengesList.php");
+}
+$sql = $conn->query("SELECT moduleID, challengeTitle, challengeText, PointsValue FROM Challenges WHERE moduleID = " . $challengeToLoad . " ORDER BY ID DESC");
+$result = $sql->fetch();
+
+$title = $result["challengeTitle"];
+$row_challengeText = $result["challengeText"];
+        $row_PointsValue = $result["PointsValue"];
 ?>
 
-<html>
-<head>
-    <title>Challenge Information</title><br>
-</head>
-<body>
+
+<title>Challenge Information</title>
+<h1>Challenge - <?= $title ?></h1>
 <div class="table-responsive">
     <table class="table table-bordered">
         <thead>
@@ -23,16 +33,11 @@ if (!authorisedAccess(false, true, true)) {
 
 
         </thead>
-</table>
+    </table>
 </div>
 </body>
 </html>
 <?php
-if (isset($_GET["moduleID"])) {
-    $challengeToLoad = $_GET["moduleID"];
-} else {
-   header("location:challengesList.php");
-}
 
 $sql = "SELECT moduleID, challengeTitle, challengeText, PointsValue FROM Challenges WHERE moduleID = " . $challengeToLoad . " ORDER BY ID DESC";
 
@@ -80,7 +85,8 @@ if ($result = $conn->query($sql)) {
 <html>
 <body>
 <!--<h1 class='text-primary'>Flag Claimer</h1>-->
-<!--<form action="--><?php //echo htmlspecialchars($_SERVER["PHP_SELF"]); ?><!--" method="post" enctype="multipart/form-data">-->
+<!--<form action="-->
+<?php //echo htmlspecialchars($_SERVER["PHP_SELF"]); ?><!--" method="post" enctype="multipart/form-data">-->
 <!--    <div class="col-md-12">-->
 <!--        <p>Enter the flag below to claim it and get points!</p>-->
 <!--        <p>Flag<input type="text" name="flag" class="form-control" required="required"></p>-->
@@ -89,12 +95,9 @@ if ($result = $conn->query($sql)) {
 <!--</form>-->
 </body>
 <div class="col-md-12">
-<a href="flagClaimer.php">Click here to claim the flag</a>
+    <a href="flagClaimer.php">Click here to claim the flag</a>
 </div>
 </html>
-
-
-
 
 
 <?php echo outputFooter(); ?>
