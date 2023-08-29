@@ -1,5 +1,10 @@
 <?php include "template.php";
 /** @var $conn */
+
+if (!authorisedAccess(false, true, true)) {
+    header("Location:index.php");
+}
+
 ?>
     <title>Cyber City - Challenges</title>
     <link rel="stylesheet" href="css/moduleList.css">
