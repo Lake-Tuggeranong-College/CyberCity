@@ -89,4 +89,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") { //Make Module Entry
 }
 ?>
 
-<?php echo outputFooter(); ?>
+
