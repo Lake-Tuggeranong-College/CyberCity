@@ -8,7 +8,7 @@ if (!authorisedAccess(false, true, true)) {
 ?>
 
 
-<div class="table-responsive">
+<!--<div class="table-responsive">
     <table class="table table-bordered">
         <thead>
         <tr>
@@ -16,7 +16,18 @@ if (!authorisedAccess(false, true, true)) {
             <th>Date & Time</th>
             <th>Data</th>
 
-        </thead>
+        </thead>-->
+<title>moduleDisplay</title>
+<link rel="stylesheet" href="css/divContainer.css">
+<div class="container">
+    <div class="row">
+        <div class="cell">This is a table cell</div>
+    </div>
+</div>
+
+
+
+
 
         <?php
         if (isset($_GET["ModuleID"])) {
