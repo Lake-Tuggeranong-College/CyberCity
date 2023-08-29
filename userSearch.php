@@ -60,5 +60,5 @@ $enabled = "";
     }
     ?>
 <br>
-    <?php echo outputFooter(); ?>
+
 </div>

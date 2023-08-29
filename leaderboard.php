@@ -43,4 +43,4 @@ while ($scoreData = $scoreList->fetch()) {
 
 ?>
 
-<?php echo outputFooter(); ?>
+
