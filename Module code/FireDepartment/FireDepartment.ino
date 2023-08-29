@@ -96,7 +96,7 @@ void loop() {
   Serial.print("Command: ");
   Serial.print(command);
   // ISO C++ forbids comparison between pointer and integer [-fpermissive]
-  if (String(command) == "cheese") {
+  if (String(command) == "FireAlarmOn") {
     int randNoise = random(300, 900);
     tone(pizopin,randNoise,1000);
     outputCommand = "LED On";
