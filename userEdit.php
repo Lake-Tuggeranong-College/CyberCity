@@ -103,7 +103,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 ?>
 
 
-<?= outputFooter() ?>
+
 
 <?php
 /*echo '<h2 class="text-danger">Debug Information. Comment out as necessary</h2><pre>';
