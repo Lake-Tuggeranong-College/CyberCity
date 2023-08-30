@@ -28,7 +28,7 @@ if (!authorisedAccess(true, true, true)) {
 
 
 <?php
-$scoreList = $conn->query("SELECT Username, Score FROM Users ORDER BY Score DESC");
+$scoreList = $conn->query("SELECT Username, Score FROM Users WHERE AccessLevel=1 AND Enabled=1 ORDER BY Score DESC");
 
 while ($scoreData = $scoreList->fetch()) {
     if ($scoreData[1] != 0) {
