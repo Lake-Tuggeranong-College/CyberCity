@@ -1,6 +1,10 @@
 <?php include "template.php";
 /** @var $conn */
 
+if (!authorisedAccess(false, true, true)) {
+    header("Location:index.php");
+}
+
 if (isset($_GET["tutorialID"])) {
     $learnID = $_GET["tutorialID"];
 }
