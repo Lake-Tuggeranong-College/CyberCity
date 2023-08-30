@@ -99,7 +99,7 @@ void loop() {
   timedEPDUpdate();
   String dataToPost = String(sensorData);
   // cyberCity.uploadData(dataToPost, apiKeyValue, sensorName, sensorLocation, 30000, serverName);
-  String payload = cyberCity.dataTransfer(dataToPost, apiKeyValue, sensorName, sensorLocation, 500, serverName, true, true);
+  String payload = cyberCity.dataTransfer(dataToPost, apiKeyValue, sensorName, sensorLocation, 1500, serverName, true, true);
   Serial.print("payload: ");
   Serial.print(payload);
   Serial.println(".");
@@ -118,7 +118,7 @@ void loop() {
   // ISO C++ forbids comparison between pointer and integer [-fpermissive]
   if (String(command) == "On") {
     int randNoise = random(300, 900);
-    tone(pizopin,randNoise,1000);
+    tone(pizopin,randNoise,200);
     outputCommand = "LED On";
     digitalWrite(LED_BUILTIN, HIGH);
   } else {
