@@ -59,6 +59,6 @@ if (!authorisedAccess(false, true, true)) {
     </table>
 </div>
 
-<?php echo outputFooter(); ?>
+
 </body>
 </html>

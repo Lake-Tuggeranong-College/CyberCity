@@ -51,3 +51,5 @@ while ($scoreData = $scoreList->fetch()) {
 ?>
 </div>
 <?php echo outputFooter(); ?>
+
+

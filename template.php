@@ -37,7 +37,7 @@
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="leaderboard.php">Leaderboard</a>
                         <a class="dropdown-item" href="challengesList.php">Challenges</a>
-                        <a class="dropdown-item" href="Tutorial.php">Tutorials</a>
+                        <a class="dropdown-item" href="TutorialList.php">Tutorials</a>
                     </ul>
                 </li>                                                                                                                  
                     ';
