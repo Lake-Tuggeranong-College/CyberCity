@@ -26,6 +26,15 @@ Adafruit_ADT7410 tempsensor = Adafruit_ADT7410();
 //RTC_DS3231 rtc;
 
 String outputCommand = "NaN";
+float sensorData = 0.0;
+
+// Generally, you should use "unsigned long" for variables that hold time
+// The value will quickly become too large for an int to store
+unsigned long previousMillis = 0;  // will store last time LED was updated
+
+// constants won't change:
+const long interval = 180000;  // interval at which to blink (milliseconds)
+
 void setup() {
 
   pinMode(pizopin, OUTPUT);
@@ -73,13 +82,24 @@ void setup() {
 
 }
 
-void loop() {
+void timedEPDUpdate() {
+    unsigned long currentMillis = millis();
 
-  float sensorData = tempsensor.readTempC();
-  cyberCity.updateEPD("Fire Dept", "Temp \tC", sensorData, outputCommand);
+  if (currentMillis - previousMillis >= interval) {
+    // save the last time you blinked the LED
+    previousMillis = currentMillis;
+    
+    cyberCity.updateEPD("Fire Dept", "Temp \tC", sensorData, outputCommand);
+ 
+  }
+}
+
+void loop() {
+  sensorData = tempsensor.readTempC();
+  timedEPDUpdate();
   String dataToPost = String(sensorData);
   // cyberCity.uploadData(dataToPost, apiKeyValue, sensorName, sensorLocation, 30000, serverName);
-  String payload = cyberCity.dataTransfer(dataToPost, apiKeyValue, sensorName, sensorLocation, 60000, serverName, true, true);
+  String payload = cyberCity.dataTransfer(dataToPost, apiKeyValue, sensorName, sensorLocation, 500, serverName, true, true);
   Serial.print("payload: ");
   Serial.print(payload);
   Serial.println(".");
@@ -96,7 +116,7 @@ void loop() {
   Serial.print("Command: ");
   Serial.print(command);
   // ISO C++ forbids comparison between pointer and integer [-fpermissive]
-  if (String(command) == "cheese") {
+  if (String(command) == "On") {
     int randNoise = random(300, 900);
     tone(pizopin,randNoise,1000);
     outputCommand = "LED On";
