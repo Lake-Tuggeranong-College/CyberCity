@@ -104,56 +104,10 @@ delay(1000);
   digitalWrite(yellow,  LOW);
 delay(500);
 
-  digitalWrite(yellow, HIGH);
-delay(1000);
-  digitalWrite(yellow,  LOW);
-delay(500);
-  
-  digitalWrite(yellow, HIGH);
-delay(1000);
-  digitalWrite(yellow, LOW);
-delay(500);
-  
-  digitalWrite(yellow, HIGH);
-delay(1000);
-  digitalWrite(yellow, LOW);
-delay(500);
+
   
 digitalWrite(green, HIGH);
 delay(20000);
 digitalWrite(green,  LOW);
-//  
-digitalWrite(yellow, HIGH);
-delay(1000);
-  digitalWrite(yellow,  LOW);
-delay(500);
 
-  digitalWrite(yellow, HIGH);
-delay(1000);
-  digitalWrite(yellow,  LOW);
-delay(500);
-
-  digitalWrite(yellow, HIGH);
-delay(1000);  
-  digitalWrite(yellow, LOW);
-delay(500);
-  
-  digitalWrite(yellow, HIGH);
-delay(1000);
-  digitalWrite(yellow, LOW);
-delay(500);
-  
-  digitalWrite(yellow, HIGH);
-delay(1000);
-  digitalWrite(yellow, LOW);
-delay(500);
 }
-  // if (digitalRead(14)) {
-    // digitalWrite(Red, HIGH);
-    // digitalWrite(Green, LOW);
- // }
-  //else {
-   // digitalWrite(Red, LOW);
-    //digitalWrite(Green, HIGH);
- // }
-// }
