@@ -77,7 +77,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 //        $sql1 = "UPDATE Users SET Score=? WHERE Username=?";
 //        $stmt = $conn->prepare($sql1);
 //        $stmt->execute([$addedScore, $user]);
-
+        echo $moduleID;
+        $sql = "UPDATE RegisteredModules SET CurrentOutput = 'On' WHERE ID='$moduleID'";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
         $_SESSION["flash_message"] = "<div class='bg-success'>Success!</div>";
 
     } else {
