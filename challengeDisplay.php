@@ -40,7 +40,7 @@ $hashedFlag = $result["HashedFlag"];
     </div>
     <div class="row ">
         <div class="col-1 border border border-dark "><?= $title ?></div>
-        <div class="col-4 border border border-dark"><?= $challengeText ?></div>
+        <div class="col-10 border border border-dark"><?= $challengeText ?></div>
         <div class="col-1 border border border-dark"><?= $pointsValue ?></div>
     </div>
     <div class="row">
