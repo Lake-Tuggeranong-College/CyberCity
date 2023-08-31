@@ -17,12 +17,19 @@ if (!authorisedAccess(true, true, true)) {
 <body>
 <h1 class='text-primary'>Leaderboard</h1>
 <div class="table-responsive">
-    <table class="table table-bordered">
+    <!--<table class="table table-bordered">
         <thead>
         <tr>
             <th>Username</th>
             <th>Score</th>
-        </thead>
+        </thead>-->
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-6">Username</div>
+            <div class="col-6">Score</div>
+        </div>
+
 </body>
 </html>
 
@@ -32,15 +39,17 @@ $scoreList = $conn->query("SELECT Username, Score FROM Users WHERE AccessLevel=1
 
 while ($scoreData = $scoreList->fetch()) {
     if ($scoreData[1] != 0) {
-        echo "<tr>";
-        echo "<td>" . $scoreData[0] . "</td>";
-        echo "<td>" . $scoreData[1] . "</td>";
-        echo "</tr>";
+        echo "<div class='row'>";
+        echo "<div class='col-6''>" . $scoreData[0] . "</div>";
+        echo "<div class='col-6''>" . $scoreData[1] . "</div>";
+        echo "</div>";
 
 
     }
 }
 
 ?>
+</div>
+<?php echo outputFooter(); ?>
 
 
