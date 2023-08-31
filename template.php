@@ -37,7 +37,7 @@
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="leaderboard.php">Leaderboard</a>
                         <a class="dropdown-item" href="challengesList.php">Challenges</a>
-                        <a class="dropdown-item" href="TutorialList.php">Tutorials</a>
+                        <a class="dropdown-item" href="tutorialList.php">Tutorials</a>
                     </ul>
                 </li>                                                                                                                  
                     ';
@@ -78,7 +78,11 @@
         </div>
         <?php
         if (isset($_SESSION["username"])) {
-            echo "<div class='alert alert-success d-flex'><span>Welcome, " . $_SESSION["username"] . "<br><a href='logout.php'>Logout</a></span></div>";
+            $userToLoad = $_SESSION["user_id"];
+            $sql = $conn->query("SELECT Score FROM Users WHERE ID= " . $userToLoad);
+            $userInformation = $sql->fetch();
+            $userScore = $userInformation["Score"];
+            echo "<div class='alert alert-success d-flex'><span>Welcome, " . $_SESSION["username"] . "<br> score, ".$userScore."<br><a href='logout.php'>Logout</a></span> </div>";
         }
         ?>
     </div>
