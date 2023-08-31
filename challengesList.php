@@ -27,7 +27,7 @@ while ($challengeData = $moduleList->fetch()) {
     }
     echo "
         <div class='name'>" . $challengeData[0] . "</div>
-        <div class='price'>$challengeData[1] Points</div>
+        <div class='price'>$challengeData[1]</div>
         ";
     echo "</div>";
 }
