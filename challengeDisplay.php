@@ -32,10 +32,11 @@ $hashedFlag = $result["HashedFlag"];
 </head>
 <body>
 <div class="container-fluid">
-    <div class="row  ">
-        <div class="col-1 border border border-dark">Challenge Number</div>
-        <div class="col-4 border border border-dark">Challenge Description</div>
+    <div class="row">
+        <div class="col-1 border border border-dark">Challenge Name</div>
+        <div class="col-10 border border border-dark">Challenge Description</div>
         <div class="col-1 border border border-dark">Challenge Points</div>
+
     </div>
     <div class="row ">
         <div class="col-1 border border border-dark "><?= $title ?></div>

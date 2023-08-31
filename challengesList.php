@@ -26,7 +26,6 @@ while ($challengeData = $moduleList->fetch()) {
         echo "<div class='image'><a href='challengeDisplay.php?moduleID=" . $moduleID . "'><img src='images/modules/blank.jpg'width='100' height='100'/></a></div>"; #Display Placeholder Image
     }
     ?>
-<!--        <div class='name'>--><?php //= $challengeData['ID'] ?><!--</div>-->
         <div class='name'><?=$challengeData['challengeTitle']?> </div>
         <div class='price'> Points: <?=$challengeData['PointsValue']?> </div>
     </div>
