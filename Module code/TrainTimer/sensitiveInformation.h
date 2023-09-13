@@ -14,7 +14,7 @@ const char* password        = "Password01";       // Wifi Password
 
 //const char* serverName = "http://192.168.1.106/espPost/post-esp-data.php";
  //const char* serverName = "http://192.168.1.18/postESPData.php";
- String serverName = "http://192.168.1.18/CyberCity/dataTransfer.php";
+ String serverName = "http://192.168.1.10/CyberCity/dataTransfer.php";
 
 
 String apiKeyValue = "BBoyVb";
