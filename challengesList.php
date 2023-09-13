@@ -25,11 +25,11 @@ while ($challengeData = $moduleList->fetch()) {
     } else {
         echo "<div class='image'><a href='challengeDisplay.php?moduleID=" . $moduleID . "'><img src='images/modules/blank.jpg'width='100' height='100'/></a></div>"; #Display Placeholder Image
     }
-    echo "
-        <div class='name'>" . $challengeData[0] . "</div>
-        <div class='price'>$challengeData[1] Points</div>
-        ";
-    echo "</div>";
+    ?>
+        <div class='name'><?=$challengeData['challengeTitle']?> </div>
+        <div class='price'> Points: <?=$challengeData['PointsValue']?> </div>
+    </div>
+<?php
 }
-
+?>
 

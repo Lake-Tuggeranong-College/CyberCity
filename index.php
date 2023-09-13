@@ -3,9 +3,11 @@
 
 
 <title>Cyber City</title>
+<div style="text-align: center;">
 <h1 class='text-primary'>Welcome to our Cyber City</h1>
-<h2 class='text'> please proceed to login or register</h2>
+<h2 class='text'> Please login or register to participate in the CyberCity CTF Challenge</h2>
 <img src="images/MainImage.jpg" alt="" width="50%" height="50%">
+</div>
 <p></p>
 </body>
 </html>

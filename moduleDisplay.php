@@ -8,7 +8,7 @@ if (!authorisedAccess(false, true, true)) {
 ?>
 
 
-<div class="table-responsive">
+<!--<div class="table-responsive">
     <table class="table table-bordered">
         <thead>
         <tr>
@@ -16,7 +16,36 @@ if (!authorisedAccess(false, true, true)) {
             <th>Date & Time</th>
             <th>Data</th>
 
-        </thead>
+        </thead>-->
+
+<html>
+<head>
+    <style>
+        #myDiv {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+
+<h1>Module - <?= $row_moduleID ?></h1>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-1 border border border-dark">Module ID</div>
+        <div class="col-1 border border border-dark">Module data</div>
+        <div class="col-2 border border border-dark">Date & Time</div>
+        <div class="col-1 border border border-dark">Event ID</div>
+
+    </div>
+
+
+</div>
+
+
+</body>
+</html>
+
 
         <?php
         if (isset($_GET["ModuleID"])) {
@@ -34,20 +63,30 @@ if (!authorisedAccess(false, true, true)) {
                 $row_dateTime = $row["DateTime"];
                 $row_data = $row["Data"];
 
-                echo "<title> Module ID:" . $row_moduleID . "</title>";
+               /* echo "<title> Module ID:" . $row_moduleID . "</title>";
                 echo "<tr>";
 
                 echo "<td>" . $row_dateTime . "</td>";
                 echo "<td>" . $row_data . "  </td>";
-                echo "</tr>";
+                echo "</tr>";*/
+
+
+
+                echo "<div class='row'>";
+                echo "<div class='col-1 border border border-dark''>" . $row_moduleID . "</div>";
+                echo "<div class='col-1 border border border-dark''>" . $row_data . "</div>";
+                echo "<div class='col-2 border border border-dark''>" . $row_dateTime. "</div>";
+                echo "<div class='col-1 border border border-dark''>" . $row_id . "</div>";
+                echo "</div>";
+
+
 
             }
             $result = null;
         }
         ?>
-    </table>
-</div>
 
 
-</body>
-</html>
+
+
+

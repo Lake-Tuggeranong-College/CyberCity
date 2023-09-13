@@ -20,18 +20,28 @@ $pointsValue = $result["PointsValue"];
 $hashedFlag = $result["HashedFlag"];
 
 ?>
+<html>
+<head>
 <title>Challenge Information</title>
 <h1>Challenge - <?= $title ?></h1>
+    <style>
+        .dark-border {
+            border
+        }
+    </style>
+</head>
+<body>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-1">Challenge Number</div>
-        <div class="col-10">Challenge Description</div>
-        <div class="col-1">Challenge Points</div>
+        <div class="col-1 border border border-dark">Challenge Name</div>
+        <div class="col-10 border border border-dark">Challenge Description</div>
+        <div class="col-1 border border border-dark">Challenge Points</div>
+
     </div>
-    <div class="row">
-        <div class="col-1"><?= $title ?></div>
-        <div class="col-10"><?= $challengeText ?></div>
-        <div class="col-1"><?= $pointsValue ?></div>
+    <div class="row ">
+        <div class="col-1 border border border-dark "><?= $title ?></div>
+        <div class="col-10 border border border-dark"><?= $challengeText ?></div>
+        <div class="col-1 border border border-dark"><?= $pointsValue ?></div>
     </div>
     <div class="row">
         <div class="col-12">
@@ -77,7 +87,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 //        $sql1 = "UPDATE Users SET Score=? WHERE Username=?";
 //        $stmt = $conn->prepare($sql1);
 //        $stmt->execute([$addedScore, $user]);
-
+        echo $moduleID;
+        $sql = "UPDATE RegisteredModules SET CurrentOutput = 'On' WHERE ID='$moduleID'";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
         $_SESSION["flash_message"] = "<div class='bg-success'>Success!</div>";
 
     } else {
