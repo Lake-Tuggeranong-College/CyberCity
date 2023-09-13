@@ -9,7 +9,7 @@ if (!authorisedAccess(false, false, true)) {
 
 
 <title>reset button</title>
-<h1> warning pressing this button will make all regular users access level 0 (disabled)</h1>
+<h1 class='text-primary'> warning pressing this button will make all regular users access level 0 (disabled)</h1>
     <form action="resetGame.php" method="post" enctype="multipart/form-data">
 
             <input type="submit" name="formSubmit" value="Update">
@@ -21,3 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt = $conn->prepare($sql);
     $stmt->execute();
 }
+
+
+echo outputFooter();
+?>
