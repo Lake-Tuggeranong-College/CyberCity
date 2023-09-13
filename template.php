@@ -83,7 +83,7 @@
             $sql = $conn->query("SELECT Score FROM Users WHERE ID= " . $userToLoad);
             $userInformation = $sql->fetch();
             $userScore = $userInformation["Score"];
-            echo "<div class='alert alert-success d-flex'><span>Welcome, " . $_SESSION["username"] . "<br> score, ".$userScore."<br><a href='logout.php'>Logout</a></span> </div>";
+            echo "<div class='alert alert-success d-flex'><span>Welcome, " . $_SESSION["username"] . "<br> Score: ".$userScore."<br><a href='logout.php'>Logout</a></span> </div>";
         }
         ?>
     </div>

@@ -10,13 +10,14 @@ if (!authorisedAccess(false, false, true)) {
 <title>Module Register page</title>
 
 <h1 class='text-primary'>Please create your new Module & Challenge here</h1>
+<h5 class='text'>Please complete the form below to make your new challenge and module</h5>
 <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" enctype="multipart/form-data">
     <div class="container-fluid">
         <div class="row">
 
-            <div class="col-md-12">
+            <div class="col-12">
 
-                <p>Please complete the form below to make your new challenge and module</p>
+
                 <p>Module Location<input type="text" name="Location" class="form-control" required="required"></p>
                 <p>Module Type <input type="text" name="Module" class="form-control" required="required"></p>
                 <p>Module API key<input type="password" name="APIkey" class="form-control" required="required"></p>

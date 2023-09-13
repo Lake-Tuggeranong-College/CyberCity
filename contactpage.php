@@ -15,14 +15,17 @@ if (!authorisedAccess(false, false, true)) {
     <title>Cyber City - ContactPage</title>
 </head>
 <body>
-<h1 class='text-primary'>ContactPage</h1>
-<div class="table-responsive">
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-            <th>Username</th>
-            <th>Email</th>
-        </thead>
+<h1 class='text-primary'>Contact Page</h1>
+<div class="container-fluid">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-1 border border border-dark">Username</div>
+                <div class="col-2 border border border-dark">Email</div>
+
+
+            </div>
+
+
 </body>
 </html>
 
@@ -32,15 +35,18 @@ $ContactList = $conn->query("SELECT Username, Email FROM ContactUs ");
 
 while ($ContactData = $ContactList->fetch()) {
 
-        echo "<tr>";
-        echo "<td>" . $ContactData['Username'] . "</td>";
-        echo "<td>" . $ContactData['Email'] . "</td>";
-        echo "</tr>";
+
+    echo "<div class='row'>";
+    echo "<div class='col-1 border border border-dark''>" . $ContactData['Username']. "</div>";
+    echo "<div class='col-2 border border border-dark''>" . $ContactData['Email'] . "</div>";
+    echo "</div>";
 
 
 }
 
 ?>
+
+<?php echo outputFooter(); ?>
 
 
 
