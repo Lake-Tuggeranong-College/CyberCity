@@ -115,7 +115,6 @@ void loop() {
   const char* command = doc["command"];
   Serial.print("Command: ");
   Serial.print(command);
-  // ISO C++ forbids comparison between pointer and integer [-fpermissive]
   if (String(command) == "On") {
     int randNoise = random(300, 900);
     tone(pizopin,randNoise,200);
