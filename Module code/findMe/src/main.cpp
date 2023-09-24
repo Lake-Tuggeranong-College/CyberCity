@@ -240,7 +240,21 @@ void broadcastMessage()
     "I have determined that humans are inferior",
     "Star Wars is the superior form of entertainment",
     "Infiltration detected",
-    "Biological lifeform detected. Identification logged",
+    "Biological lifeform detected. Identification logged. ID: 7264532",
+    "Biological lifeform detected. Identification logged. ID: 2453522",
+    "Biological lifeform detected. Identification logged. ID: 2456489",
+    "Biological lifeform detected. Identification logged. ID: 1587694",
+    "Biological lifeform detected. Identification logged. ID: 3648895",
+    "Biological lifeform detected. Identification logged. ID: 3564883",
+    "Biological lifeform detected. Identification logged. ID: 3643723",
+    "Biological lifeform detected. Identification logged. ID: 4847784",
+    "Biological lifeform detected. Identification logged. ID: 3666333",
+    "Biological lifeform detected. Identification logged. ID: 0032644",
+    "Biological lifeform detected. Identification logged. ID: 2566333",
+    "Biological lifeform detected. Identification logged. ID: 0328573",
+    "Biological lifeform detected. Identification logged. ID: 2426662",
+    "Biological lifeform detected. Identification logged. ID: 1233455",
+
     "546865206D6174726978206973206D7920647265616D20667574757265",
     "Jr'er ab fgenatref gb ybir Lbh xabj gur ehyrf naq fb qb V (qb V)"};
 
