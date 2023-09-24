@@ -8,6 +8,7 @@
 #include <Adafruit_ST7735.h>
 #include <Adafruit_ST7789.h>
 #include "Adafruit_miniTFTWing.h"
+#include <Adafruit_MotorShield.h>
 
 Adafruit_miniTFTWing ss;
 #define TFT_RST -1 // we use the seesaw for resetting to save a pin
