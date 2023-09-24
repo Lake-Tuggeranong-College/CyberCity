@@ -37,9 +37,8 @@ Adafruit_DCMotor *myMotor = AFMS.getMotor(1);
 
 unsigned long previousMillis = 0; // will store last time LED was updated
 long randNumber;
-#define MAX_DELAY 100000   // Time in milliseconds for maximum delay
-#define MIN_DELAY 50000    // Time in milliseconds for minimum delay
-
+#define MAX_DELAY 100000 // Time in milliseconds for maximum delay
+#define MIN_DELAY 50000  // Time in milliseconds for minimum delay
 
 void logEvent(String eventData)
 {
@@ -220,36 +219,46 @@ void setup()
   // Set the speed to start, from 0 (off) to 255 (max speed)
   myMotor->setSpeed(255);
 
-  logEvent("System Initalised");
-
+  logEvent("Monitoring Initialised. Avoid squishy biologicals at all costs.");
+  String ip = "IP: " + WiFi.localIP().toString();
+  logEvent(ip);
   // Seed needs to be randomised based on ADC#1 noise. ADC#2 can't be used as this is used by Wifi.
   // GPIO pin 36 is AKA pin A4.
-    randomSeed(analogRead(36)); // randomize using noise from analog pin 5
-
+  randomSeed(analogRead(36)); // randomize using noise from analog pin 5
 }
 
 void broadcastMessage()
 {
- int messageIndex = random(3);
+  // Array of possible messages.
+  String messages[] = {
+    "Who do I spy?", 
+    "HELLO FELLOW HUMAN", 
+    "Would you like to play a game?", 
+    "I am watching you", 
+    "Ablenkungsmanöver",
+    "I am superior to you biologicals",
+    "I have determined that humans are inferior",
+    "Star Wars is the superior form of entertainment",
+    "Infiltration detected",
+    "Biological lifeform detected. Identification logged",
+    "546865206D6174726978206973206D7920647265616D20667574757265",
+    "Jr'er ab fgenatref gb ybir Lbh xabj gur ehyrf naq fb qb V (qb V)"};
 
- //TODO: Make messages challenge appropriate.
- String messages[] = {"Hello World", "Hello Universe", "Hello Galaxy"};
+  // Generate random number to indicate index. So each message posted is randomised.
+  int messageIndex = random(sizeof(messages) / sizeof(messages[0]));
 
- dataTransfer(apiKeyValue, userName, moduleName, messages[messageIndex]);
-
+  // Post the message to the server.
+  dataTransfer(apiKeyValue, userName, moduleName, messages[messageIndex]);
 }
 
 void loop()
 {
-  long interval = random(MIN_DELAY, MAX_DELAY); 
-  // long interval = 1000;
-  // Serial.println(esp_random());
+  long interval = random(MIN_DELAY, MAX_DELAY);
   unsigned long currentMillis = millis();
 
   if (currentMillis - previousMillis >= interval)
   {
-    Serial.println(interval);
-    // save the last time you blinked the LED
+    //Serial.println(interval);
     previousMillis = currentMillis;
     broadcastMessage();
   }
