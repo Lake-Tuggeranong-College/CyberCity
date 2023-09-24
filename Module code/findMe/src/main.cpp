@@ -35,6 +35,12 @@ Adafruit_DCMotor *myMotor = AFMS.getMotor(1);
 // You can also make another motor on port M2
 // Adafruit_DCMotor *myOtherMotor = AFMS.getMotor(2);
 
+unsigned long previousMillis = 0; // will store last time LED was updated
+long randNumber;
+#define MAX_DELAY 100000   // Time in milliseconds for maximum delay
+#define MIN_DELAY 50000    // Time in milliseconds for minimum delay
+
+
 void logEvent(String eventData)
 {
   if (WiFi.status() == WL_CONNECTED)
@@ -215,10 +221,37 @@ void setup()
   myMotor->setSpeed(255);
 
   logEvent("System Initalised");
+
+  // Seed needs to be randomised based on ADC#1 noise. ADC#2 can't be used as this is used by Wifi.
+  // GPIO pin 36 is AKA pin A4.
+    randomSeed(analogRead(36)); // randomize using noise from analog pin 5
+
+}
+
+void broadcastMessage()
+{
+ int messageIndex = random(3);
+
+ //TODO: Make messages challenge appropriate.
+ String messages[] = {"Hello World", "Hello Universe", "Hello Galaxy"};
+
+ dataTransfer(apiKeyValue, userName, moduleName, messages[messageIndex]);
+
 }
 
 void loop()
 {
+  long interval = random(MIN_DELAY, MAX_DELAY); 
+  // long interval = 1000;
+  // Serial.println(esp_random());
+  unsigned long currentMillis = millis();
 
+  if (currentMillis - previousMillis >= interval)
+  {
+    Serial.println(interval);
+    // save the last time you blinked the LED
+    previousMillis = currentMillis;
+    broadcastMessage();
+  }
   delay(250);
 }
