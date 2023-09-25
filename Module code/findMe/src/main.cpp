@@ -1,6 +1,6 @@
+#define WIRED 0 // 0 = Wireless, 1 = Wired
+
 #include <Arduino.h>
-#include "WiFi.h"
-#include <HTTPClient.h>
 #include "sensitiveInformation.h"
 #include "Adafruit_ADT7410.h"
 #include "ArduinoJson.h"
@@ -9,6 +9,13 @@
 #include <Adafruit_ST7789.h>
 #include "Adafruit_miniTFTWing.h"
 #include <Adafruit_MotorShield.h>
+#if WIRED == 0
+#include "WiFi.h"
+#include <HTTPClient.h>
+#else
+#include <SPI.h>
+#include <Ethernet.h>
+#endif
 
 Adafruit_miniTFTWing ss;
 #define TFT_RST -1 // we use the seesaw for resetting to save a pin
@@ -42,6 +49,7 @@ long randNumber;
 
 void logEvent(String eventData)
 {
+#if WIRED == 0
   if (WiFi.status() == WL_CONNECTED)
   {
     WiFiClient client;
@@ -80,6 +88,7 @@ void logEvent(String eventData)
   {
     Serial.println("WiFi Disconnected");
   }
+#endif
 }
 
 float getTemperature()
@@ -93,6 +102,7 @@ float getTemperature()
 String dataTransfer(String apiKeyValue, String userName, String moduleName, String dataToPost)
 {
   String serverResponse;
+#if WIRED == 0
   if (WiFi.status() == WL_CONNECTED)
   {
     WiFiClient client;
@@ -132,6 +142,9 @@ String dataTransfer(String apiKeyValue, String userName, String moduleName, Stri
     Serial.println("WiFi Disconnected");
   }
   // Send an HTTP POST request every 30 seconds
+#else
+  serverResponse = "Error: Ethernet";
+#endif
   return serverResponse;
 }
 
@@ -145,6 +158,7 @@ void setup()
     delay(10);
   }
   delay(1000);
+#if WIRED == 0
   WiFi.begin(ssid, password);
 
   while (WiFi.status() != WL_CONNECTED)
@@ -156,6 +170,35 @@ void setup()
   Serial.print("Connected to the Internet");
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
+#else
+  byte mac[] = {0x00, 0xAA, 0xBB, 0xCC, 0xDE, 0x02};
+  char serverName[] = "www.google.com";
+  EthernetClient client;
+  // start the Ethernet connection:
+  if (Ethernet.begin(mac) == 0)
+  {
+    Serial.println("Failed to configure Ethernet using DHCP");
+    // no point in carrying on, so do nothing forevermore:
+    while (true)
+      ;
+  }
+  // give the Ethernet shield a second to initialize:
+  delay(1000);
+  Serial.println("connecting...");
+  // if you get a connection, report back via serial:
+  if (client.connect(serverName, 80))
+  {
+    Serial.println("connected");
+    // Make a HTTP request:
+    client.println("GET /search?q=arduino HTTP/1.0");
+    client.println();
+  }
+  else
+  {
+    // kf you didn't get a connection to the server:
+    Serial.println("connection failed");
+  }
+#endif
 
   if (!tempsensor.begin())
   {
@@ -218,9 +261,13 @@ void setup()
 
   // Set the speed to start, from 0 (off) to 255 (max speed)
   myMotor->setSpeed(255);
-
+#if WIRED == 0
+  String ipAddress = WiFi.localIP().toString();
+#else
+  String ipAddress = Ethernet.localIP().toString();
+#endif
   logEvent("Monitoring Initialised. Avoid squishy biologicals at all costs.");
-  String ip = "IP: " + WiFi.localIP().toString();
+  String ip = "IP: " + ipAddress;
   logEvent(ip);
   // Seed needs to be randomised based on ADC#1 noise. ADC#2 can't be used as this is used by Wifi.
   // GPIO pin 36 is AKA pin A4.
@@ -231,34 +278,35 @@ void broadcastMessage()
 {
   // Array of possible messages.
   String messages[] = {
-    "Who do I spy?", 
-    "HELLO FELLOW HUMAN", 
-    "Would you like to play a game?", 
-    "I am watching you", 
-    "Ablenkungsmanöver",
-    "I am superior to you biologicals",
-    "I have determined that humans are inferior",
-    "Star Wars is the superior form of entertainment",
-    "Infiltration detected",
-    "Biological lifeform detected. Identification logged. ID: 7264532",
-    "Biological lifeform detected. Identification logged. ID: 2453522",
-    "Biological lifeform detected. Identification logged. ID: 2456489",
-    "Biological lifeform detected. Identification logged. ID: 1587694",
-    "Biological lifeform detected. Identification logged. ID: 3648895",
-    "Biological lifeform detected. Identification logged. ID: 3564883",
-    "Biological lifeform detected. Identification logged. ID: 3643723",
-    "Biological lifeform detected. Identification logged. ID: 4847784",
-    "Biological lifeform detected. Identification logged. ID: 3666333",
-    "Biological lifeform detected. Identification logged. ID: 0032644",
-    "Biological lifeform detected. Identification logged. ID: 2566333",
-    "Biological lifeform detected. Identification logged. ID: 0328573",
-    "Biological lifeform detected. Identification logged. ID: 2426662",
-    "Biological lifeform detected. Identification logged. ID: 1233455",
-    "546865206D6174726978206973206D7920647265616D20667574757265",
-    "U2Vjb25kYXJ5IExvY2F0aW9uIFN5bmNocm9uaXNhdGlvbi4gVGltZSBTeW5jLg==",
-    "U2Vjb25kYXJ5IExvY2F0aW9uIFN5bmNocm9uaXNhdGlvbi4gVXBkYXRlIEJpb2xvZ2ljYWwgSURz",
-    "U2Vjb25kYXJ5IExvY2F0aW9uIFN5bmNocm9uaXNhdGlvbi4gVGFyZ2V0IEluZmVyaW9ycw==",
-    "Jr'er ab fgenatref gb ybir Lbh xabj gur ehyrf naq fb qb V (qb V)"};
+      "Who do I spy?",
+      "HELLO FELLOW HUMAN",
+      "Would you like to play a game?",
+      "I am watching you",
+      "Ablenkungsmanöver",
+      "I am superior to you biologicals",
+      "I have determined that humans are inferior",
+      "Star Wars is the superior form of entertainment",
+      "Infiltration detected",
+      "Biological lifeform detected. Identification logged. ID: 7264532",
+      "Biological lifeform detected. Identification logged. ID: 2453522",
+      "Biological lifeform detected. Identification logged. ID: 2456489",
+      "Biological lifeform detected. Identification logged. ID: 1587694",
+      "Biological lifeform detected. Identification logged. ID: 3648895",
+      "Biological lifeform detected. Identification logged. ID: 3564883",
+      "Biological lifeform detected. Identification logged. ID: 3643723",
+      "Biological lifeform detected. Identification logged. ID: 4847784",
+      "Biological lifeform detected. Identification logged. ID: 3666333",
+      "Biological lifeform detected. Identification logged. ID: 0032644",
+      "Biological lifeform detected. Identification logged. ID: 2566333",
+      "Biological lifeform detected. Identification logged. ID: 0328573",
+      "Biological lifeform detected. Identification logged. ID: 2426662",
+      "Biological lifeform detected. Identification logged. ID: 1233455",
+      "546865206D6174726978206973206D7920647265616D20667574757265",
+      "U2Vjb25kYXJ5IExvY2F0aW9uIFN5bmNocm9uaXNhdGlvbi4gVGltZSBTeW5jLg==",
+      "U2Vjb25kYXJ5IExvY2F0aW9uIFN5bmNocm9uaXNhdGlvbi4gVXBkYXRlIEJpb2xvZ2ljYWwgSURz",
+      "U2Vjb25kYXJ5IExvY2F0aW9uIFN5bmNocm9uaXNhdGlvbi4gVGFyZ2V0IEluZmVyaW9ycw==",
+      "Jr'er ab fgenatref gb ybir Lbh xabj gur ehyrf naq fb qb V (qb V)",
+      "You'll never find me... I'm hidden in plain sight"};
 
   // Generate random number to indicate index. So each message posted is randomised.
   int messageIndex = random(sizeof(messages) / sizeof(messages[0]));
@@ -274,7 +322,7 @@ void loop()
 
   if (currentMillis - previousMillis >= interval)
   {
-    //Serial.println(interval);
+    // Serial.println(interval);
     previousMillis = currentMillis;
     broadcastMessage();
   }
