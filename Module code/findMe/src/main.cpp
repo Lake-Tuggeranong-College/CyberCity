@@ -254,8 +254,10 @@ void broadcastMessage()
     "Biological lifeform detected. Identification logged. ID: 0328573",
     "Biological lifeform detected. Identification logged. ID: 2426662",
     "Biological lifeform detected. Identification logged. ID: 1233455",
-
     "546865206D6174726978206973206D7920647265616D20667574757265",
+    "U2Vjb25kYXJ5IExvY2F0aW9uIFN5bmNocm9uaXNhdGlvbi4gVGltZSBTeW5jLg==",
+    "U2Vjb25kYXJ5IExvY2F0aW9uIFN5bmNocm9uaXNhdGlvbi4gVXBkYXRlIEJpb2xvZ2ljYWwgSURz",
+    "U2Vjb25kYXJ5IExvY2F0aW9uIFN5bmNocm9uaXNhdGlvbi4gVGFyZ2V0IEluZmVyaW9ycw==",
     "Jr'er ab fgenatref gb ybir Lbh xabj gur ehyrf naq fb qb V (qb V)"};
 
   // Generate random number to indicate index. So each message posted is randomised.
