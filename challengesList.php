@@ -6,6 +6,7 @@ if (!authorisedAccess(false, true, true)) {
 }
 
 ?>
+<html>
     <title>Cyber City - Challenges</title>
     <link rel="stylesheet" href="css/moduleList.css">
 
@@ -28,8 +29,12 @@ while ($challengeData = $moduleList->fetch()) {
     ?>
         <div class='name'><?=$challengeData['challengeTitle']?> </div>
         <div class='price'> Points: <?=$challengeData['PointsValue']?> </div>
+
     </div>
+
 <?php
 }
-?>
 
+?>
+</html>
+<br>

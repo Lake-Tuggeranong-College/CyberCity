@@ -26,8 +26,8 @@ if (!authorisedAccess(true, true, true)) {
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col-6">Username</div>
-            <div class="col-6">Score</div>
+            <div class="col-2 border border border-dark">Username</div>
+            <div class="col-1 border border border-dark">Score</div>
         </div>
 
 </body>
@@ -40,8 +40,8 @@ $scoreList = $conn->query("SELECT Username, Score FROM Users WHERE AccessLevel=1
 while ($scoreData = $scoreList->fetch()) {
     if ($scoreData[1] != 0) {
         echo "<div class='row'>";
-        echo "<div class='col-6''>" . $scoreData[0] . "</div>";
-        echo "<div class='col-6''>" . $scoreData[1] . "</div>";
+        echo "<div class='col-2 border border border-dark''>" . $scoreData[0] . "</div>";
+        echo "<div class='col-1 border border border-dark''>" . $scoreData[1] . "</div>";
         echo "</div>";
 
 
