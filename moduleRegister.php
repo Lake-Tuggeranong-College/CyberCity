@@ -57,13 +57,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") { //Make Module Entry
     if ($checkModule > 0 && $checkLocation > 0) {
         echo "This Module is already in use at this location";
     } else {
-        $sql = "INSERT INTO `RegisteredModules` (Location, Module, HashedAPIKey, Enabled) VALUES (:newLocation, :newModule, :newHashedAPIkey, :enabled)";
+        $sql = "INSERT INTO `RegisteredModules` (Location, Module, HashedAPIKey, Enabled, Registered_date) VALUES (:newLocation, :newModule, :newHashedAPIkey, :enabled, :current_date)";
 
         $stmt = $conn->prepare($sql);
         $stmt->bindValue(':newLocation', $location);
         $stmt->bindValue(':newModule', $module);
         $stmt->bindValue(':newHashedAPIkey', $hashed_APIkey);
         $stmt->bindValue(':enabled', 1);
+        $stmt->bindValue(':current_date', date("F d Y H:i:s."));
         $stmt->execute();
         //$_SESSION["flash_message"] = "Module Created";
         //header("Location:index.php");
