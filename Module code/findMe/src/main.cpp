@@ -2,45 +2,25 @@
 
 #include <Arduino.h>
 #include "sensitiveInformation.h"
-#include "Adafruit_ADT7410.h"
 #include "ArduinoJson.h"
-#include <Adafruit_GFX.h>
-#include <Adafruit_ST7735.h>
-#include <Adafruit_ST7789.h>
-#include "Adafruit_miniTFTWing.h"
-#include <Adafruit_MotorShield.h>
 #if WIRED == 0
 #include "WiFi.h"
 #include <HTTPClient.h>
 #else
 #include <SPI.h>
 #include <Ethernet.h>
+byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
+EthernetClient client;
+char server[] = "10.177.200.71"; // server IP Address
+IPAddress ip(192, 168, 0, 177);
+IPAddress myDns(192, 168, 0, 1);
 #endif
 
-Adafruit_miniTFTWing ss;
-#define TFT_RST -1 // we use the seesaw for resetting to save a pin
-#define TFT_CS 15
-#define TFT_DC 33
-
-Adafruit_ST7789 tft_7789 = Adafruit_ST7789(TFT_CS, TFT_DC, TFT_RST);
-Adafruit_ST7735 tft_7735 = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_RST);
-
-// we'll assign it later
-Adafruit_ST77xx *tft = NULL;
-uint32_t version;
-
-// Create the ADT7410 temperature sensor object
-Adafruit_ADT7410 tempsensor = Adafruit_ADT7410();
-
-// Create the motor shield object with the default I2C address
-Adafruit_MotorShield AFMS = Adafruit_MotorShield();
-// Or, create it with a different I2C address (say for stacking)
-// Adafruit_MotorShield AFMS = Adafruit_MotorShield(0x61);
-
-// Select which 'port' M1, M2, M3 or M4. In this case, M1
-Adafruit_DCMotor *myMotor = AFMS.getMotor(1);
-// You can also make another motor on port M2
-// Adafruit_DCMotor *myOtherMotor = AFMS.getMotor(2);
+// EPD
+#include "Adafruit_ThinkInk.h"
+#define SRAM_CS 32
+#define EPD_CS 15
+#define EPD_DC 33
 
 unsigned long previousMillis = 0; // will store last time LED was updated
 long randNumber;
@@ -89,14 +69,6 @@ void logEvent(String eventData)
     Serial.println("WiFi Disconnected");
   }
 #endif
-}
-
-float getTemperature()
-{
-  float temperatureValue;
-  temperatureValue = tempsensor.readTempC();
-
-  return temperatureValue;
 }
 
 String dataTransfer(String apiKeyValue, String userName, String moduleName, String dataToPost)
@@ -171,96 +143,33 @@ void setup()
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
 #else
-  byte mac[] = {0x00, 0xAA, 0xBB, 0xCC, 0xDE, 0x02};
-  char serverName[] = "www.google.com";
-  EthernetClient client;
-  // start the Ethernet connection:
+  Ethernet.init(33); // Most Arduino shields
   if (Ethernet.begin(mac) == 0)
   {
     Serial.println("Failed to configure Ethernet using DHCP");
-    // no point in carrying on, so do nothing forevermore:
-    while (true)
-      ;
-  }
-  // give the Ethernet shield a second to initialize:
-  delay(1000);
-  Serial.println("connecting...");
-  // if you get a connection, report back via serial:
-  if (client.connect(serverName, 80))
-  {
-    Serial.println("connected");
-    // Make a HTTP request:
-    client.println("GET /search?q=arduino HTTP/1.0");
-    client.println();
+    // Check for Ethernet hardware present
+    if (Ethernet.hardwareStatus() == EthernetNoHardware)
+    {
+      Serial.println("Ethernet shield was not found.  Sorry, can't run without hardware. :(");
+      while (true)
+      {
+        delay(1); // do nothing, no point running without Ethernet hardware
+      }
+    }
+    if (Ethernet.linkStatus() == LinkOFF)
+    {
+      Serial.println("Ethernet cable is not connected.");
+    }
+    // try to configure using IP address instead of DHCP:
+    Ethernet.begin(mac, ip, myDns);
   }
   else
   {
-    // kf you didn't get a connection to the server:
-    Serial.println("connection failed");
+    Serial.print("  DHCP assigned IP ");
+    Serial.println(Ethernet.localIP());
   }
 #endif
 
-  if (!tempsensor.begin())
-  {
-    Serial.println("Couldn't find ADT7410!");
-    while (1)
-      ;
-  }
-
-  if (!ss.begin())
-  {
-    Serial.println("MiniTFT couldn't be found!");
-    while (1)
-      ;
-  }
-
-  version = ((ss.getVersion() >> 16) & 0xFFFF);
-  Serial.print("Version: ");
-  Serial.println(version);
-  if (version == 3322)
-  {
-    Serial.println("Version 2 TFT FeatherWing found");
-  }
-  else
-  {
-    Serial.println("Version 1 TFT FeatherWing found");
-  }
-
-  ss.tftReset();                         // reset the display
-  ss.setBacklight(TFTWING_BACKLIGHT_ON); // turn off the backlight
-
-  if (version == 3322)
-  {
-    tft_7789.init(135, 240);
-    tft = &tft_7789;
-  }
-  else
-  {
-    tft_7735.initR(INITR_MINI160x80); // initialize a ST7735S chip, mini display
-    tft = &tft_7735;
-  }
-  tft->setRotation(1);
-  Serial.println("TFT initialized");
-
-  tft->fillScreen(ST77XX_RED);
-  delay(100);
-  tft->fillScreen(ST77XX_GREEN);
-  delay(100);
-  tft->fillScreen(ST77XX_BLUE);
-  delay(100);
-  tft->fillScreen(ST77XX_BLACK);
-
-  if (!AFMS.begin())
-  { // create with the default frequency 1.6KHz
-    // if (!AFMS.begin(1000)) {  // OR with a different frequency, say 1KHz
-    Serial.println("Could not find Motor Shield. Check wiring.");
-    while (1)
-      ;
-  }
-  Serial.println("Motor Shield found.");
-
-  // Set the speed to start, from 0 (off) to 255 (max speed)
-  myMotor->setSpeed(255);
 #if WIRED == 0
   String ipAddress = WiFi.localIP().toString();
 #else
