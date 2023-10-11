@@ -19,6 +19,7 @@ if (!authorisedAccess(false, false, true)) {
 <div class="container-fluid">
         <div class="container-fluid">
             <div class="row">
+                <div class="col-1 border border border-dark">Request</div>
                 <div class="col-1 border border border-dark">Username</div>
                 <div class="col-2 border border border-dark">Email</div>
 
@@ -31,12 +32,13 @@ if (!authorisedAccess(false, false, true)) {
 
 
 <?php
-$ContactList = $conn->query("SELECT Username, Email FROM ContactUs ");
+$ContactList = $conn->query("SELECT Username, Email, ID FROM ContactUs ");
 
 while ($ContactData = $ContactList->fetch()) {
 
 
     echo "<div class='row'>";
+    echo "<div class='col-1 border border border-dark''>" . $ContactData['ID']. "</div>";
     echo "<div class='col-1 border border border-dark''>" . $ContactData['Username']. "</div>";
     echo "<div class='col-2 border border border-dark''>" . $ContactData['Email'] . "</div>";
     echo "</div>";
