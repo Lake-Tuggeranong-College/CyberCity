@@ -9,18 +9,18 @@
  * 
  */
 
-const char* host = "RMS";
+const char* host = "findMe";
 const char* ssid = "RoboRange";       // Wifi Network Name
 const char* password = "Password01";  // Wifi Password
 // const char* ssid = "gogogadgetnbn";       // Wifi Network Name
 // const char* password = "st@rw@rs";  // Wifi Password
 
-String serverURL = "http://192.168.1.10/JEDI2023/dataTransfer.php";
-String eventLogURL = "http://192.168.1.10/JEDI2023/eventLog.php";
+String serverURL = "http://192.168.1.10/CyberCity/dataTransfer.php";
+String eventLogURL = "http://192.168.1.10/CyberCity/eventLog.php";
 
 
 String apiKeyValue = "password";
-String moduleName = "onboardLED";
-String userName = "Ryan Cather";
+String moduleName = "446F206F7220646F206E6F742E205468657265206973206E6F20747279";
+String userName = "Mpuk tl, pm fvb jhu...";
 
 
