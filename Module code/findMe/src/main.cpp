@@ -16,11 +16,16 @@ IPAddress ip(192, 168, 0, 177);
 IPAddress myDns(192, 168, 0, 1);
 #endif
 
-// EPD
+// EPD - 2.13" EPD with SSD1675
 #include "Adafruit_ThinkInk.h"
 #define SRAM_CS 32
 #define EPD_CS 15
 #define EPD_DC 33
+#define EPD_RESET -1 // can set to -1 and share with microcontroller Reset!
+#define EPD_BUSY -1  // can set to -1 to not use a pin (will wait a fixed delay)
+ThinkInk_213_Mono_B72 display(EPD_DC, EPD_RESET, EPD_CS, SRAM_CS, EPD_BUSY);
+#define COLOR1 EPD_BLACK
+#define COLOR2 EPD_RED
 
 unsigned long previousMillis = 0; // will store last time LED was updated
 long randNumber;
@@ -120,6 +125,62 @@ String dataTransfer(String apiKeyValue, String userName, String moduleName, Stri
   return serverResponse;
 }
 
+
+void updateDisplay(String messageToBroadcast, String ip)
+{
+  display.setRotation(2);
+  display.setTextColor(COLOR1);
+  display.setCursor(0, 0);
+  display.setTextSize(1);
+  display.print(ip);
+  display.display();
+  Serial.print("Displaying: ");
+  Serial.println(messageToBroadcast);
+}
+
+
+void broadcastMessage()
+{
+  // Array of possible messages.
+  String messages[] = {
+      "Who do I spy?",
+      "HELLO FELLOW HUMAN",
+      "Would you like to play a game?",
+      "I am watching you",
+      "Ablenkungsmanöver",
+      "I am superior to you biologicals",
+      "I have determined that humans are inferior",
+      "Star Wars is the superior form of entertainment",
+      "Infiltration detected",
+      "Biological lifeform detected. Identification logged. ID: 7264532",
+      "Biological lifeform detected. Identification logged. ID: 2453522",
+      "Biological lifeform detected. Identification logged. ID: 2456489",
+      "Biological lifeform detected. Identification logged. ID: 1587694",
+      "Biological lifeform detected. Identification logged. ID: 3648895",
+      "Biological lifeform detected. Identification logged. ID: 3564883",
+      "Biological lifeform detected. Identification logged. ID: 3643723",
+      "Biological lifeform detected. Identification logged. ID: 4847784",
+      "Biological lifeform detected. Identification logged. ID: 3666333",
+      "Biological lifeform detected. Identification logged. ID: 0032644",
+      "Biological lifeform detected. Identification logged. ID: 2566333",
+      "Biological lifeform detected. Identification logged. ID: 0328573",
+      "Biological lifeform detected. Identification logged. ID: 2426662",
+      "Biological lifeform detected. Identification logged. ID: 1233455",
+      "546865206D6174726978206973206D7920647265616D20667574757265",
+      "U2Vjb25kYXJ5IExvY2F0aW9uIFN5bmNocm9uaXNhdGlvbi4gVGltZSBTeW5jLg==",
+      "U2Vjb25kYXJ5IExvY2F0aW9uIFN5bmNocm9uaXNhdGlvbi4gVXBkYXRlIEJpb2xvZ2ljYWwgSURz",
+      "U2Vjb25kYXJ5IExvY2F0aW9uIFN5bmNocm9uaXNhdGlvbi4gVGFyZ2V0IEluZmVyaW9ycw==",
+      "Jr'er ab fgenatref gb ybir Lbh xabj gur ehyrf naq fb qb V (qb V)",
+      "You'll never find me... I'm hidden in plain sight"};
+
+  // Generate random number to indicate index. So each message posted is randomised.
+  int messageIndex = random(sizeof(messages) / sizeof(messages[0]));
+
+  // Post the message to the server.
+  dataTransfer(apiKeyValue, userName, moduleName, messages[messageIndex]);
+}
+
+
 void setup()
 {
   // put your setup code here, to run once:
@@ -175,53 +236,17 @@ void setup()
 #else
   String ipAddress = Ethernet.localIP().toString();
 #endif
-  logEvent("Monitoring Initialised. Avoid squishy biologicals at all costs.");
+  // logEvent("Monitoring Initialised. Avoid squishy biologicals at all costs.");
   String ip = "IP: " + ipAddress;
-  logEvent(ip);
+  // logEvent(ip);
   // Seed needs to be randomised based on ADC#1 noise. ADC#2 can't be used as this is used by Wifi.
   // GPIO pin 36 is AKA pin A4.
   randomSeed(analogRead(36)); // randomize using noise from analog pin 5
-}
 
-void broadcastMessage()
-{
-  // Array of possible messages.
-  String messages[] = {
-      "Who do I spy?",
-      "HELLO FELLOW HUMAN",
-      "Would you like to play a game?",
-      "I am watching you",
-      "Ablenkungsmanöver",
-      "I am superior to you biologicals",
-      "I have determined that humans are inferior",
-      "Star Wars is the superior form of entertainment",
-      "Infiltration detected",
-      "Biological lifeform detected. Identification logged. ID: 7264532",
-      "Biological lifeform detected. Identification logged. ID: 2453522",
-      "Biological lifeform detected. Identification logged. ID: 2456489",
-      "Biological lifeform detected. Identification logged. ID: 1587694",
-      "Biological lifeform detected. Identification logged. ID: 3648895",
-      "Biological lifeform detected. Identification logged. ID: 3564883",
-      "Biological lifeform detected. Identification logged. ID: 3643723",
-      "Biological lifeform detected. Identification logged. ID: 4847784",
-      "Biological lifeform detected. Identification logged. ID: 3666333",
-      "Biological lifeform detected. Identification logged. ID: 0032644",
-      "Biological lifeform detected. Identification logged. ID: 2566333",
-      "Biological lifeform detected. Identification logged. ID: 0328573",
-      "Biological lifeform detected. Identification logged. ID: 2426662",
-      "Biological lifeform detected. Identification logged. ID: 1233455",
-      "546865206D6174726978206973206D7920647265616D20667574757265",
-      "U2Vjb25kYXJ5IExvY2F0aW9uIFN5bmNocm9uaXNhdGlvbi4gVGltZSBTeW5jLg==",
-      "U2Vjb25kYXJ5IExvY2F0aW9uIFN5bmNocm9uaXNhdGlvbi4gVXBkYXRlIEJpb2xvZ2ljYWwgSURz",
-      "U2Vjb25kYXJ5IExvY2F0aW9uIFN5bmNocm9uaXNhdGlvbi4gVGFyZ2V0IEluZmVyaW9ycw==",
-      "Jr'er ab fgenatref gb ybir Lbh xabj gur ehyrf naq fb qb V (qb V)",
-      "You'll never find me... I'm hidden in plain sight"};
-
-  // Generate random number to indicate index. So each message posted is randomised.
-  int messageIndex = random(sizeof(messages) / sizeof(messages[0]));
-
-  // Post the message to the server.
-  dataTransfer(apiKeyValue, userName, moduleName, messages[messageIndex]);
+  // EPD
+  display.begin();
+  display.clearBuffer();
+  updateDisplay(ip);
 }
 
 void loop()
