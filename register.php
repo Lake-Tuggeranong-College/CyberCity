@@ -17,7 +17,7 @@ if (!authorisedAccess(true, true, true)) {
 
             <div class="col-md-12">
                 <h2>Account Details</h2>
-                <p>Please enter wanted username and password:</p>
+                <p>Please enter wanted Username and Password:</p>
                 <p>User Name<input type="text" name="username" class="form-control" required="required"></p>
                 <p>Password<input type="password" name="password" class="form-control" required="required"></p>
 
