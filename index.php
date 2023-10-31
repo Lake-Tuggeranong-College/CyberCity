@@ -14,11 +14,11 @@
               "<h2 class='text'> Your logged in, you now may play the CyberCity CTF game</h2>"
                     ;
 
-
             ?>
         <?php
     } else {
         echo
+
                     "<h2 class='text'> Please login or register to participate in the CyberCity CTF Challenge</h2>"
                     ;
     }
