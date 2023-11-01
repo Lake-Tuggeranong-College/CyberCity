@@ -24,3 +24,7 @@ Choose the user type for more information
         The intended audience for the players is students in Years 7 to 10 who want to learn cyber security skills.
     </tab>
 </tabs>
+
+## How to Start
+
+Follow the instructions [here](How-to-Play.md).
