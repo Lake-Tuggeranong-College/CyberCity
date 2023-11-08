@@ -4,7 +4,8 @@
 
 <instance-profile id="cm"
                  name="CyberCity Manual"
-                 start-page="starter-topic.md">
+                 start-page="welcome.md">
 
-    <toc-element topic="starter-topic.md"/>
+    <toc-element topic="welcome.md"/>
+    <toc-element topic="How-to-Play.md"/>
 </instance-profile>
