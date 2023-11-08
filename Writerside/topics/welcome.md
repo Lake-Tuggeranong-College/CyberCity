@@ -27,4 +27,4 @@ Choose the user type for more information
 
 ## How to Start
 
-Follow the instructions [here](How-to-Play.md).
+Follow the instructions [here](howToPlay.md).
