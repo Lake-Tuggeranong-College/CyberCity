@@ -66,8 +66,8 @@ $hashedFlag = $result["HashedFlag"];
 <div class="container-fluid">
     <h1 class='text-primary'>Recent Data</h1>
     <div class="row">
-        <div class="col-2 border border border-dark">Data</div>
-        <div class="col-10 border border border-dark">Date</div>
+        <div class="col-2 border border border-dark">Date & Time</div>
+        <div class="col-10 border border border-dark">Data</div>
 
     </div>
 
