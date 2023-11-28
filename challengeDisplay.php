@@ -72,12 +72,12 @@ $hashedFlag = $result["HashedFlag"];
     </div>
 
     <?php
-    $sql = $conn->query("SELECT * FROM ModuleData WHERE moduleID = " . $challengeToLoad . " ORDER BY ID DESC LIMIT 10");
-    while ($learnData = $sql->fetch()) {
+    $sql = $conn->query("SELECT * FROM ModuleData WHERE moduleID = " . $challengeToLoad . "  LIMIT 10");
+    while ($moduleIndividualData = $sql->fetch()) {
         echo "<div class='row'>";
-        $moduleInformation = $sql->fetch();
-        $moduleData = $moduleInformation["Data"];
-        $moduleDateTime = $moduleInformation["DateTime"];
+//        $moduleInformation = $sql->fetch();
+        $moduleData = $moduleIndividualData["Data"];
+        $moduleDateTime = $moduleIndividualData["DateTime"];
         echo "<div class='col-2 border border border-dark'>" . $moduleDateTime . "</div>";
         echo "<div class='col-10 border border border-dark'>" . $moduleData . "</div>";
         echo "</div>";
