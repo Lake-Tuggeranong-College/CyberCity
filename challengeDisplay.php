@@ -72,7 +72,7 @@ $hashedFlag = $result["HashedFlag"];
     </div>
 
     <?php
-    $sql = $conn->query("SELECT * FROM ModuleData WHERE moduleID = " . $challengeToLoad . "  LIMIT 10");
+    $sql = $conn->query("SELECT * FROM ModuleData WHERE moduleID = " . $challengeToLoad . " ORDER BY id DESC LIMIT 10");
     while ($moduleIndividualData = $sql->fetch()) {
         echo "<div class='row'>";
 //        $moduleInformation = $sql->fetch();
