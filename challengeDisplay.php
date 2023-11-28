@@ -66,13 +66,13 @@ $hashedFlag = $result["HashedFlag"];
 <div class="container-fluid">
     <h1 class='text-primary'>Recent Data</h1>
     <div class="row">
-        <div class="col-2 border border border-dark">Data</div>
-        <div class="col-10 border border border-dark">Date</div>
+        <div class="col-2 border border border-dark">Date & Time</div>
+        <div class="col-10 border border border-dark">Data</div>
 
     </div>
 
     <?php
-    $sql = $conn->query("SELECT * FROM ModuleData WHERE moduleID = " . $challengeToLoad . "  LIMIT 10");
+    $sql = $conn->query("SELECT * FROM ModuleData WHERE moduleID = " . $challengeToLoad . " ORDER BY id DESC LIMIT 10");
     while ($moduleIndividualData = $sql->fetch()) {
         echo "<div class='row'>";
 //        $moduleInformation = $sql->fetch();
