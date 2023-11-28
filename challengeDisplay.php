@@ -22,8 +22,8 @@ $hashedFlag = $result["HashedFlag"];
 ?>
 <html>
 <head>
-<title>Challenge Information</title>
-<h1 class='text-primary'>Challenge - <?= $title ?></h1>
+    <title>Challenge Information</title>
+    <h1 class='text-primary'>Challenge - <?= $title ?></h1>
     <style>
         .dark-border {
             border
@@ -61,6 +61,29 @@ $hashedFlag = $result["HashedFlag"];
             </form>
         </div>
     </div>
+</div>
+
+<div class="container-fluid">
+    <h1 class='text-primary'>Recent Data</h1>
+    <div class="row">
+        <div class="col-2 border border border-dark">Data</div>
+        <div class="col-10 border border border-dark">Date</div>
+
+    </div>
+
+    <?php
+    $sql = $conn->query("SELECT * FROM ModuleData WHERE moduleID = " . $challengeToLoad . " ORDER BY ID DESC LIMIT 10");
+    while ($learnData = $sql->fetch()) {
+        echo "<div class='row'>";
+        $moduleInformation = $sql->fetch();
+        $moduleData = $moduleInformation["Data"];
+        $moduleDateTime = $moduleInformation["DateTime"];
+        echo "<div class='col-2 border border border-dark'>" . $moduleDateTime . "</div>";
+        echo "<div class='col-10 border border border-dark'>" . $moduleData . "</div>";
+        echo "</div>";
+    }
+    ?>
+
 </div>
 
 

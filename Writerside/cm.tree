@@ -7,5 +7,6 @@
                  start-page="welcome.md">
 
     <toc-element topic="welcome.md"/>
-    <toc-element topic="How-to-Play.md"/>
+    <toc-element topic="howToPlay.md"/>
+    <toc-element topic="Administration.md"/>
 </instance-profile>
