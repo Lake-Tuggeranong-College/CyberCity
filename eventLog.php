@@ -32,5 +32,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $conn->close();
 } else {
     echo "This page is only accessible via POSTing from ESP32s..";
+    echo "Your attempt has been logged.";
+    $userName = "Unknown";
+    $eventData = "Attempted to access eventLog.php via GET request.";
+    date_default_timezone_set('Australia/Canberra');
+    $date = date("Y-m-d H:i:s");
+     $sql = "INSERT INTO eventLog (userName, eventText, datePosted) VALUES (:userName, :eventData, :datePosted)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindValue(':userName', $userName);
+    $stmt->bindValue(':eventData', $eventData);
+    $stmt->bindValue(':datePosted', $date);
+    $stmt->execute();
+    $conn->close();
 }
 
