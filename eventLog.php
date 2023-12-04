@@ -37,7 +37,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $eventData = $data->eventData;
     date_default_timezone_set('Australia/Canberra');
     $date = date("Y-m-d H:i:s");
-    echo $eventData;
 
     //DO NOT CHANGE THIS DATE CODE, MUST STAY SAME TO WORK WITH MYSQL
     $sql = "INSERT INTO eventLog (userName, eventText, datePosted) VALUES (:userName, :eventData, :datePosted)";
