@@ -10,10 +10,8 @@
  */
 
 const char* host = "findMe";
-const char* ssid = "RoboRange";       // Wifi Network Name
-const char* password = "Password01";  // Wifi Password
-// const char* ssid = "gogogadgetnbn";       // Wifi Network Name
-// const char* password = "st@rw@rs";  // Wifi Password
+const char* ssid = "CyberRange";       // Wifi Network Name
+const char* password = "CyberRange";  // Wifi Password
 
 String serverURL = "http://192.168.1.10/CyberCity/dataTransfer.php";
 String eventLogURL = "http://192.168.1.10/CyberCity/eventLog.php";
