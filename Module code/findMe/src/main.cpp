@@ -58,8 +58,8 @@ void logEvent(String eventData)
   {
     WiFiClient client;
     HTTPClient http;
-    // Serial.println("Before");
-    // Your Domain name with URL path or IP address with path
+    // Serial.println(eventLogURL);
+    //  Your Domain name with URL path or IP address with path
     http.begin(client, eventLogURL);
 
     // Specify content-type header
@@ -72,7 +72,8 @@ void logEvent(String eventData)
     Serial.print("Debug JSON String: ");
     Serial.println(postJSONString);
     int httpResponseCode = http.POST(postJSONString);
-
+    String serverResponse = http.getString();
+    Serial.println(serverResponse);
     if (httpResponseCode > 0)
     {
       Serial.print("HTTP Response code: ");
@@ -113,7 +114,7 @@ String dataTransfer(String apiKeyValue, String userName, String Location, String
     // Send HTTP POST request, and store response code
     http.addHeader("Content-Type", "application/json");
     String postJSONString = "{\"api_key\":\"" + apiKeyValue + "\",\"sensor\":\"" + userName + "\",\"location\":\"" + Location + "\",\"sensorValue\":\"" + dataToPost + "\"}";
-    //String postJSONString = "{\"api_key\":\"" + apiKeyValue + "\",\"sensor\":\"" + sensorName + "\",\"location\":\"" + sensorLocation + "\",\"sensorValue\":\"" + dataToPost + "\"}";
+    // String postJSONString = "{\"api_key\":\"" + apiKeyValue + "\",\"sensor\":\"" + sensorName + "\",\"location\":\"" + sensorLocation + "\",\"sensorValue\":\"" + dataToPost + "\"}";
 
     Serial.print("Debug JSON String: ");
     Serial.println(postJSONString);
@@ -227,11 +228,11 @@ void broadcastMessage()
       "Biological lifeform detected. Identification logged. ID: 0328573",
       "Biological lifeform detected. Identification logged. ID: 2426662",
       "Biological lifeform detected. Identification logged. ID: 1233455",
-      "546865206D6174726978206973206D7920647265616D20667574757265", //ASCII
-      "U2Vjb25kYXJ5IExvY2F0aW9uIFN5bmNocm9uaXNhdGlvbi4gVGltZSBTeW5jLg==", //Base64
-      "U2Vjb25kYXJ5IExvY2F0aW9uIFN5bmNocm9uaXNhdGlvbi4gVXBkYXRlIEJpb2xvZ2ljYWwgSURz", //Base64
-      "U2Vjb25kYXJ5IExvY2F0aW9uIFN5bmNocm9uaXNhdGlvbi4gVGFyZ2V0IEluZmVyaW9ycw==", //Base64
-      "Jr'er ab fgenatref gb ybir Lbh xabj gur ehyrf naq fb qb V (qb V)", //ROT13
+      "546865206D6174726978206973206D7920647265616D20667574757265",                   // ASCII
+      "U2Vjb25kYXJ5IExvY2F0aW9uIFN5bmNocm9uaXNhdGlvbi4gVGltZSBTeW5jLg==",             // Base64
+      "U2Vjb25kYXJ5IExvY2F0aW9uIFN5bmNocm9uaXNhdGlvbi4gVXBkYXRlIEJpb2xvZ2ljYWwgSURz", // Base64
+      "U2Vjb25kYXJ5IExvY2F0aW9uIFN5bmNocm9uaXNhdGlvbi4gVGFyZ2V0IEluZmVyaW9ycw==",     // Base64
+      "Jr'er ab fgenatref gb ybir Lbh xabj gur ehyrf naq fb qb V (qb V)",             // ROT13
       "You'll never find me... I'm hidden in plain sight"};
 
   // Generate random number to indicate index. So each message posted is randomised.
@@ -392,9 +393,9 @@ void setup()
 #else
   String ipAddress = Ethernet.localIP().toString();
 #endif
-  // logEvent("Monitoring Initialised. Avoid squishy biologicals at all costs.");
+  logEvent("Monitoring Initialised. Avoid squishy biologicals at all costs.");
   String ip = "IP: " + ipAddress;
-  // logEvent(ip);
+  logEvent(ip);
   // Seed needs to be randomised based on ADC#1 noise. ADC#2 can't be used as this is used by Wifi.
   // GPIO pin 36 is AKA pin A4.
   randomSeed(analogRead(36)); // randomize using noise from analog pin 5
@@ -405,7 +406,7 @@ void setup()
   // EPD
   display.begin();
   display.clearBuffer();
-  updateEPD("Welcome", ip);
+  // updateEPD("Welcome", ip);
 }
 
 void loop()
