@@ -1,5 +1,3 @@
-evenbeforephp
-
 <?php
 include "config.php";
 /** @var $conn */
@@ -10,7 +8,6 @@ $api_key = $userName = $eventData = "";
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-echo "start";
     // Takes raw data from the request
     $json = file_get_contents('php://input');
     // Converts it into a PHP object
@@ -39,7 +36,6 @@ echo "start";
     $eventData = $data->eventData;
     date_default_timezone_set('Australia/Canberra');
     $date = date("Y-m-d H:i:s");
-    echo "here";
 
     //DO NOT CHANGE THIS DATE CODE, MUST STAY SAME TO WORK WITH MYSQL
     $sql = "INSERT INTO eventLog (userName, eventText, datePosted) VALUES (:userName, :eventData, :datePosted)";
