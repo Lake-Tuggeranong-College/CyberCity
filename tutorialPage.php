@@ -12,7 +12,7 @@ if (isset($_GET["tutorialID"])) {
 
 $sql = $conn->query("SELECT Name,Text FROM Learn WHERE ID = " . $learnID);
 $result = $sql->fetch();
-$learnID = $result["ID"];
+//$learnID = $result["ID"];
 $title = $result[0];
 $learnText = $result[1];
 ?>

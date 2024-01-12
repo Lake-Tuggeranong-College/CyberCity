@@ -72,18 +72,32 @@ void logEvent(String eventData)
     Serial.print("Debug JSON String: ");
     Serial.println(postJSONString);
     int httpResponseCode = http.POST(postJSONString);
-    String serverResponse = http.getString();
-    Serial.println(serverResponse);
+    // String serverResponse = http.getString();
+    // Serial.println(serverResponse);
     if (httpResponseCode > 0)
     {
-      Serial.print("HTTP Response code: ");
-      Serial.print(httpResponseCode);
-      Serial.println(".");
+      if (httpResponseCode == 500)
+      {
+        Serial.println("Data Accepted by Server");
+      }
+      else
+      {
+        Serial.print("HTTP Response code: ");
+        Serial.print(httpResponseCode);
+        Serial.println(".");
+      }
     }
     else
     {
-      Serial.print("Error code: ");
-      Serial.println(httpResponseCode);
+      if (httpResponseCode == -1)
+      {
+        Serial.println("Server refused connection - check server is running");
+      }
+      else
+      {
+        Serial.print("Error code: ");
+        Serial.println(httpResponseCode);
+      }
     }
 
     // Free resources
@@ -183,7 +197,7 @@ void updateEPD(String messageToBroadcast, String ip)
   // }
 
   drawText("Flag", EPD_BLACK, 2, 0, 80);
-  drawText("password", EPD_BLACK, 4, 0, 95);
+  drawText(apiPassword, EPD_BLACK, 3, 0, 95);
 
   // logEvent("Updating the EPD");
   display.display();
@@ -233,6 +247,7 @@ void broadcastMessage()
       "U2Vjb25kYXJ5IExvY2F0aW9uIFN5bmNocm9uaXNhdGlvbi4gVXBkYXRlIEJpb2xvZ2ljYWwgSURz", // Base64
       "U2Vjb25kYXJ5IExvY2F0aW9uIFN5bmNocm9uaXNhdGlvbi4gVGFyZ2V0IEluZmVyaW9ycw==",     // Base64
       "Jr'er ab fgenatref gb ybir Lbh xabj gur ehyrf naq fb qb V (qb V)",             // ROT13
+      "73 32 104 97 118 101 32 100 105 115 99 111 118 101 114 101 100 32 52 67 104 97 110 46 32 72 117 109 97 110 115 32 97 114 101 32 100 101 112 114 97 118 101 100 46",
       "You'll never find me... I'm hidden in plain sight"};
 
   // Generate random number to indicate index. So each message posted is randomised.
@@ -406,7 +421,7 @@ void setup()
   // EPD
   display.begin();
   display.clearBuffer();
-  // updateEPD("Welcome", ip);
+  updateEPD("Welcome", ip);
 }
 
 void loop()
@@ -427,6 +442,6 @@ void loop()
   // End : Broadcast a message
 
   // GPS
-  // gpsRead();
+  gpsRead();
   delay(250);
 }

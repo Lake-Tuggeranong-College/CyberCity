@@ -23,7 +23,7 @@ $hashedFlag = $result["HashedFlag"];
 <html>
 <head>
     <title>Challenge Information</title>
-    <h1 class='text-primary'>Challenge - <?= $title ?></h1>
+
     <style>
         .dark-border {
             border
@@ -31,62 +31,69 @@ $hashedFlag = $result["HashedFlag"];
     </style>
 </head>
 <body>
+
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-1 border border border-dark">Challenge Name</div>
-        <div class="col-5 border border border-dark">Challenge Description</div>
-        <div class="col-1 border border border-dark">Challenge Points</div>
+    <div class="container-fluid">
+        <div class="row">
+            <h1 class='text-primary'>Challenge - <?= $title ?></h1>
+        </div>
+        <div class="row">
+            <div class="col-2 border border border-dark">Challenge Name</div>
+            <div class="col-5 border border border-dark">Challenge Description</div>
+            <div class="col-2 border border border-dark">Challenge Points</div>
+        </div>
+        <div class="row ">
+            <div class="col-2 border border border-dark "><?= $title ?></div>
+            <div class="col-5 border border border-dark"><?= $challengeText ?></div>
+            <div class="col-2 border border border-dark"><?= $pointsValue ?></div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <!--//<form action="moduleEdit.php?ModuleID=-->
+                <?php //= $moduleToLoad ?><!--" method="post" enctype="multipart/form-data">-->
 
-    </div>
-    <div class="row ">
-        <div class="col-1 border border border-dark "><?= $title ?></div>
-        <div class="col-5 border border border-dark"><?= $challengeText ?></div>
-        <div class="col-1 border border border-dark"><?= $pointsValue ?></div>
-    </div>
-    <div class="row">
-        <div class="col-12">
-            <!--//<form action="moduleEdit.php?ModuleID=-->
-            <?php //= $moduleToLoad ?><!--" method="post" enctype="multipart/form-data">-->
-
-            <form action="challengeDisplay.php?moduleID=<?= $moduleID ?>" method="post" enctype="multipart/form-data">
-
-
-                <p>Please enter the flag:</p>
-                <label>
-                    <input type="text" name="flag" class="form-control" required="required">
-                </label></p>
+                <form action="challengeDisplay.php?moduleID=<?= $moduleID ?>" method="post"
+                      enctype="multipart/form-data">
 
 
-                <input type="submit" name="formSubmit" value="Submit">
-            </form>
+                    <p>Please enter the flag:</p>
+                    <label>
+                        <input type="text" name="flag" class="form-control" required="required">
+                    </label></p>
+
+
+                    <input type="submit" name="formSubmit" value="Submit">
+                </form>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="container-fluid">
-    <h1 class='text-primary'>Recent Data</h1>
-    <div class="row">
-        <div class="col-2 border border border-dark">Date & Time</div>
-        <div class="col-10 border border border-dark">Data</div>
+    <div class="container-fluid">
+        <div class="row">
+            <h1 class='text-primary'>Recent Data</h1>
+        </div>
+        <div class="row">
+            <div class="col-2 border border border-dark">Date & Time</div>
+            <div class="col-10 border border border-dark">Data</div>
+
+        </div>
+
+        <?php
+        $sql = $conn->query("SELECT * FROM ModuleData WHERE moduleID = " . $challengeToLoad . " ORDER BY id DESC LIMIT 10");
+        while ($moduleIndividualData = $sql->fetch()) {
+            echo "<div class='row'>";
+//        $moduleInformation = $sql->fetch();
+            $moduleData = $moduleIndividualData["Data"];
+            $moduleDateTime = $moduleIndividualData["DateTime"];
+            echo "<div class='col-2 border border border-dark'>" . $moduleDateTime . "</div>";
+            echo "<div class='col-10 border border border-dark'>" . $moduleData . "</div>";
+            echo "</div>";
+        }
+        ?>
 
     </div>
 
-    <?php
-    $sql = $conn->query("SELECT * FROM ModuleData WHERE moduleID = " . $challengeToLoad . " ORDER BY id DESC LIMIT 10");
-    while ($moduleIndividualData = $sql->fetch()) {
-        echo "<div class='row'>";
-//        $moduleInformation = $sql->fetch();
-        $moduleData = $moduleIndividualData["Data"];
-        $moduleDateTime = $moduleIndividualData["DateTime"];
-        echo "<div class='col-2 border border border-dark'>" . $moduleDateTime . "</div>";
-        echo "<div class='col-10 border border border-dark'>" . $moduleData . "</div>";
-        echo "</div>";
-    }
-    ?>
-
 </div>
-
-
 </body>
 </html>
 

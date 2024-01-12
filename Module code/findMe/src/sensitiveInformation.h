@@ -17,7 +17,7 @@ String serverURL = "http://192.168.1.10/CyberCity/dataTransfer.php";
 String eventLogURL = "http://192.168.1.10/CyberCity/eventLog.php";
 
 
-String apiPassword = "password";
+String apiPassword = "FoundMeYouWin";
 String moduleName = "446F206F7220646F206E6F742E205468657265206973206E6F20747279";
 String userName = "Mpuk tl, pm fvb jhu...";
 
