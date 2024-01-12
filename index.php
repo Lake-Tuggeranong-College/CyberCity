@@ -18,7 +18,7 @@
     } else {
         echo
 
-        "<h2 class='text'> Please login or register to participate in the CyberCity CTF Challenge</h2>";
+        "<h2 class='text'> Please log in or register to participate in the CyberCity CTF Challenge</h2>";
     }
     ?>
     <img src="images/MainImage.jpg" alt="" width="50%" height="50%">
