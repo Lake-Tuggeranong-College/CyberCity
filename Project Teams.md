@@ -1,3 +1,2 @@
 # CyberRange Teams
 
-hc
