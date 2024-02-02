@@ -1,3 +1,3 @@
 # CyberRange Teams
 
-HC
+hc
