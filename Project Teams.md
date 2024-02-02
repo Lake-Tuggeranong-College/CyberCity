@@ -1,4 +1,3 @@
 # CyberRange Teams
 
-C.M
-RJC
+J.M
