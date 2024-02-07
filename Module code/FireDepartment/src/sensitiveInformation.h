@@ -10,8 +10,8 @@
  */
 
 const char* host = "RMS";
-const char* ssid = "RoboRange";       // Wifi Network Name
-const char* password = "Password01";  // Wifi Password
+const char* ssid = "CyberRange";       // Wifi Network Name
+const char* password = "CyberRange";  // Wifi Password
 
 String serverName = "http://192.168.1.10/CyberCity/dataTransfer.php";
 
