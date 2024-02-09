@@ -8,6 +8,7 @@
  ****************************************************/
 
 
+#include <Arduino.h>
 #include "sensitiveInformation.h"
 #include <CyberCitySharedFunctionality.h>
 CyberCitySharedFunctionality cyberCity;
@@ -34,6 +35,18 @@ unsigned long previousMillis = 0;  // will store last time LED was updated
 
 // constants won't change:
 const long interval = 180000;  // interval at which to blink (milliseconds)
+
+void timedEPDUpdate() {
+    unsigned long currentMillis = millis();
+
+  if (currentMillis - previousMillis >= interval) {
+    // save the last time you blinked the LED
+    previousMillis = currentMillis;
+    
+    cyberCity.updateEPD("Fire Dept", "Temp \tC", sensorData, outputCommand);
+ 
+  }
+}
 
 void setup() {
 
@@ -80,18 +93,6 @@ void setup() {
   cyberCity.logEvent("System Initialisation...");
 
 
-}
-
-void timedEPDUpdate() {
-    unsigned long currentMillis = millis();
-
-  if (currentMillis - previousMillis >= interval) {
-    // save the last time you blinked the LED
-    previousMillis = currentMillis;
-    
-    cyberCity.updateEPD("Fire Dept", "Temp \tC", sensorData, outputCommand);
- 
-  }
 }
 
 void loop() {
