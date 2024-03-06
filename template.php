@@ -7,10 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/Styles.css">
 </head>
 <body>
 <!-- Navigation Bar -->
-<nav class="navbar navbar-expand-sm navbar-light bg-light">
+<nav class="navbar navbar-expand-sm navbar-dark navbar_Dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="index.php">
             <img src="images/CCLogo.png" alt="" width="100" height="100">
