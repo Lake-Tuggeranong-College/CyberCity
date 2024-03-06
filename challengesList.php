@@ -20,17 +20,18 @@ while ($challengeData = $moduleList->fetch()) {
     $moduleID = $challengeData["moduleID"];
     $moduleQuery = $conn->query("SELECT Image from RegisteredModules WHERE ID = $moduleID");
     $moduleInformation = $moduleQuery->fetch();
-    echo "<div class='product_wrapper'>";
+    echo "<a href='challengeDisplay.php?moduleID=" . $moduleID . "'><div class='product_wrapper'>";
     if ($moduleInformation['Image']) { #Does the Module have an Image?
-        echo "<div class='image'><a href='challengeDisplay.php?moduleID=" . $moduleID . "'><img src='images/modules/" . $moduleInformation['Image'] . "' width='100' height='100'/></a></div>"; #Display Module Image
+        echo "<div class='image'><img src='images/modules/" . $moduleInformation['Image'] . "' width='100' height='100'/></div>"; #Display Module Image
     } else {
-        echo "<div class='image'><a href='challengeDisplay.php?moduleID=" . $moduleID . "'><img src='images/modules/blank.jpg'width='100' height='100'/></a></div>"; #Display Placeholder Image
+        echo "<div class='image'><img src='images/modules/blank.jpg'width='100' height='100'/></div>"; #Display Placeholder Image
     }
     ?>
         <div class='name'><?=$challengeData['challengeTitle']?> </div>
         <div class='price'> Points: <?=$challengeData['PointsValue']?> </div>
 
     </div>
+    </a>
 
 <?php
 }
