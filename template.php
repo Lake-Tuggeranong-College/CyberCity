@@ -46,23 +46,23 @@
 
                         ?>
                         <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle navbar_Dark" href="#" id="navbarDropdown"
-                           data-bs-toggle="dropdown" aria-expanded="false">
-                            Administrator Functions
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="userList.php">User list</a>
+                            <a class="nav-link dropdown-toggle navbar_Dark" href="#" id="navbarDropdown"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                Administrator Functions
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="userList.php">User list</a>
 
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="moduleRegister.php">Add New Module & Challenge</a>
-                        <a class="dropdown-item" href="resetGame.php">Reset Game</a>
-                        <a class="dropdown-item" href="contactpage.php">view contact requests</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="moduleRegister.php">Add New Module & Challenge</a>
+                                <a class="dropdown-item" href="resetGame.php">Reset Game</a>
+                                <a class="dropdown-item" href="contactpage.php">view contact requests</a>
+                            </ul>
+                        </li>
                         <?php
                     }
                     ?>
-                    </ul>
-                    </li>
-                    <a class="nav-link navbar_Dark" href="contact.php">Contact Us</a>
+                <li class="nav-item"><a class="nav-link navbar_Dark" href="contact.php">Contact Us</a>
                     <?php
                 } else {
                     echo '
@@ -84,7 +84,7 @@
             $sql = $conn->query("SELECT Score FROM Users WHERE ID= " . $userToLoad);
             $userInformation = $sql->fetch();
             $userScore = $userInformation["Score"];
-            echo "<div class='alert alert-success d-flex'><span>Welcome, " . $_SESSION["username"] . "<br> Score: ".$userScore."<br><a href='logout.php'>Logout</a></span> </div>";
+            echo "<div class='alert alert-success d-flex'><span>Welcome, " . $_SESSION["username"] . "<br> Score: " . $userScore . "<br><a href='logout.php'>Logout</a></span> </div>";
         }
         ?>
     </div>

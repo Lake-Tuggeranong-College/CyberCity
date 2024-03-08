@@ -6,4 +6,11 @@
 body{
     background: #464646;
     color: #F0F0F0;
+
+}
+h1{
+    padding: 10px;
+}
+input{
+    margin-left: 10px;
 }
