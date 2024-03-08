@@ -22,7 +22,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
-                <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
+                <li class="nav-item"><a class="nav-link navbar_Dark" href="index.php">Home</a></li>
                 <!--<li class="nav-item"><a class="nav-link" href="leaderboard.php">Leaderboard</a></li>-->
                 <?php
                 $accessLevel = 2;
@@ -30,8 +30,8 @@
                     echo '
                     <!--<li class="nav-item"><a class="nav-link" href="flagClaimer.php">Flag Claimer</a></li>-->
                     
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                <li class="nav-item dropdown ">
+                    <a class="nav-link dropdown-toggle navbar_Dark" href="#" id="navbarDropdown" 
                        data-bs-toggle="dropdown" aria-expanded="false">
                         CTF
                     </a>
@@ -46,30 +46,30 @@
 
                         ?>
                         <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                           data-bs-toggle="dropdown" aria-expanded="false">
-                            Administrator Functions
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="userList.php">User list</a>
+                            <a class="nav-link dropdown-toggle navbar_Dark" href="#" id="navbarDropdown"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                Administrator Functions
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="userList.php">User list</a>
 
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="moduleRegister.php">Add New Module & Challenge</a>
-                        <a class="dropdown-item" href="resetGame.php">Reset Game</a>
-                        <a class="dropdown-item" href="contactpage.php">view contact requests</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="moduleRegister.php">Add New Module & Challenge</a>
+                                <a class="dropdown-item" href="resetGame.php">Reset Game</a>
+                                <a class="dropdown-item" href="contactpage.php">view contact requests</a>
+                            </ul>
+                        </li>
                         <?php
                     }
                     ?>
-                    </ul>
-                    </li>
-                    <li class="nav-item"><a class="nav-link" href="contact.php">Contact Us</a></li>
+                <li class="nav-item"><a class="nav-link navbar_Dark" href="contact.php">Contact Us</a>
                     <?php
                 } else {
                     echo '
-                    <li class="nav-item"><a class="nav-link" href="register.php">Register</a></li>
+                    <li class="nav-item"><a class="nav-link navbar_Dark" href="register.php">Register</a></li>
                     ';
                     echo '
-                    <li class="nav-item"><a class="nav-link" href="login.php">Login</a></li>
+                    <li class="nav-item"><a class="nav-link navbar_Dark" href="login.php">Login</a></li>
                     ';
 
 
@@ -84,7 +84,7 @@
             $sql = $conn->query("SELECT Score FROM Users WHERE ID= " . $userToLoad);
             $userInformation = $sql->fetch();
             $userScore = $userInformation["Score"];
-            echo "<div class='alert alert-success d-flex'><span>Welcome, " . $_SESSION["username"] . "<br> Score: ".$userScore."<br><a href='logout.php'>Logout</a></span> </div>";
+            echo "<div class='alert alert-success d-flex'><span>Welcome, " . $_SESSION["username"] . "<br> Score: " . $userScore . "<br><a href='logout.php'>Logout</a></span> </div>";
         }
         ?>
     </div>

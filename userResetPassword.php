@@ -39,15 +39,14 @@ if (isset($_GET["UserID"])) {
 <!--                        <input type="text" name="userName" class="form-control" required="required"-->
 <!--                               value="--><?php //= $userName ?><!--">-->
 <!--                    </label></p>-->
-                <p>Password
+                <p>New Password
                     <label>
                         <input type="text" name="password" class="form-control" required="required"
-                               value="<?= $userHashedPassword ?>">
                     </label></p>
 <!--            </div>-->
 <!--            <div class="col-md-6">-->
 <!--                <h2>More Details</h2>-->
-<!--                <!--Product List-->-->
+<!--                <!--Product List-->
 <!--                <p>Access Level-->
 <!--                    <label>-->
 <!--                        <input type="text" name="AccessLevel" class="form-control" required="required"-->
