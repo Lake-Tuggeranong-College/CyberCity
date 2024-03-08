@@ -11,7 +11,7 @@
 
     if (isset($_SESSION["username"])) {
         echo
-        "<h2 class='text'> Your logged in, you now may play the CyberCity CTF game</h2>";
+        "<h2 class='text'> You're logged in, you may now play the CyberCity CTF game</h2>";
 
         ?>
         <?php
