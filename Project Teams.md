@@ -1,11 +1,8 @@
 # CyberRange Teams
 
-NF
 RJT
 J.M
-H.C
-J.M
-H.C 
+H.C J.M
 abc
 LD
 PAC
@@ -14,5 +11,3 @@ J.M
 K.E
 C.M
 RJC
-RJC
-O.C

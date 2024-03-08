@@ -22,7 +22,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
-                <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
+                <li class="nav-item"><a class="nav-link navbar_Dark" href="index.php">Home</a></li>
                 <!--<li class="nav-item"><a class="nav-link" href="leaderboard.php">Leaderboard</a></li>-->
                 <?php
                 $accessLevel = 2;
@@ -30,8 +30,8 @@
                     echo '
                     <!--<li class="nav-item"><a class="nav-link" href="flagClaimer.php">Flag Claimer</a></li>-->
                     
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                <li class="nav-item dropdown ">
+                    <a class="nav-link dropdown-toggle navbar_Dark" href="#" id="navbarDropdown" 
                        data-bs-toggle="dropdown" aria-expanded="false">
                         CTF
                     </a>
@@ -46,7 +46,7 @@
 
                         ?>
                         <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        <a class="nav-link dropdown-toggle navbar_Dark" href="#" id="navbarDropdown"
                            data-bs-toggle="dropdown" aria-expanded="false">
                             Administrator Functions
                         </a>
@@ -62,14 +62,14 @@
                     ?>
                     </ul>
                     </li>
-                    <li class="nav-item"><a class="nav-link" href="contact.php">Contact Us</a></li>
+                    <a class="nav-link navbar_Dark" href="contact.php">Contact Us</a>
                     <?php
                 } else {
                     echo '
-                    <li class="nav-item"><a class="nav-link" href="register.php">Register</a></li>
+                    <li class="nav-item"><a class="nav-link navbar_Dark" href="register.php">Register</a></li>
                     ';
                     echo '
-                    <li class="nav-item"><a class="nav-link" href="login.php">Login</a></li>
+                    <li class="nav-item"><a class="nav-link navbar_Dark" href="login.php">Login</a></li>
                     ';
 
 
