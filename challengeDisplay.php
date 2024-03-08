@@ -23,12 +23,6 @@ $hashedFlag = $result["HashedFlag"];
 <html>
 <head>
     <title>Challenge Information</title>
-
-    <style>
-        .dark-border {
-            border
-        }
-    </style>
 </head>
 <body>
 
@@ -132,15 +126,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 echo outputFooter();
 ?>
 </body>
+
 </html>
-
-
-
-
-
-
-
-
-
-
 
