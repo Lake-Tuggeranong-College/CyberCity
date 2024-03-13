@@ -21,17 +21,17 @@
     $hashedFlag = $result["HashedFlag"];
 ?>
 
-<!DOCTYPE html>
+<!--<!DOCTYPE html>-->
 <!-- Define what type of language is being used to function this page. -->
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <!-- Responsive mobile device compatible. -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--     Responsive mobile device compatible. -->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
     <title>Challenge Information</title>
 
     <!-- Boostrap CSS library in CSS folder. -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+<!--    <link href="css/bootstrap.min.css" rel="stylesheet">-->
 
     <!-- Boostrap JavaScript library in JS folder. -->
     <script src="js/bootstrap.bundle.min.js"></script>
@@ -40,7 +40,7 @@
     <body>
         <!-- Indicate heading secion of the whole page. -->
         <header class="container-fluid d-flex align-items-center justify-content-center">
-            <h1 class="text-uppercase text-primary">Challenge - <?= $title ?></h1>
+            <h1 class="text-uppercase">Challenge - <?= $title ?></h1>
         </header>
 
         <!-- Indicate section (middle part) section of the whole page. -->        
@@ -101,7 +101,7 @@
 
         <!-- Indicate footer (end part) section of the whole page. -->
         <footer>
-            <h2 class='text-primary ps-3'>Recent Data</h2>
+            <h2 class='ps-3'>Recent Data</h2>
 
             <!-- Boostrap Grid Table System. -->            
             <div class="container-fluid">
