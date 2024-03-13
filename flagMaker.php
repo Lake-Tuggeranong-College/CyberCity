@@ -12,7 +12,7 @@ if (!authorisedAccess(false, false, true)) {
     <title>Cyber City - Challenge Maker</title>
 </head>
 <body>
-<h1 class='text-primary'>Challenge Maker</h1>
+<h1>Challenge Maker</h1>
 <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" enctype="multipart/form-data">
     <div class="col-md-12">
         <p>Enter the details below to make a challenge</p>

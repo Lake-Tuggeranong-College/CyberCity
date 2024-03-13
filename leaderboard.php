@@ -15,7 +15,7 @@ if (!authorisedAccess(true, true, true)) {
     <title>Cyber City - Leaderboard</title>
 </head>
 <body>
-<h1 class='text-primary'>Leaderboard</h1>
+<h1>Leaderboard</h1>
 <div class="table-responsive">
     <!--<table class="table table-bordered">
         <thead>

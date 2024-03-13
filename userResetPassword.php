@@ -27,7 +27,7 @@ if (isset($_GET["UserID"])) {
 ?>
 
 
-<h1 class='text-primary'>Edit Module Information</h1>
+<h1>Edit Module Information</h1>
 
 <form action="userResetPassword.php?UserID=<?= $userToLoad ?>" method="post" enctype="multipart/form-data">
     <div class="container-fluid">

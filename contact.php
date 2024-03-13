@@ -9,7 +9,7 @@ if (!authorisedAccess(true, true, true)) {
 <title>Contact Us</title>
 
 
-<h1 class='text-primary'>Need assistance? Please fill out the form below, so we can get in contact with you.</h1>
+<h1>Need assistance? Please fill out the form below, so we can get in contact with you.</h1>
 <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" enctype="multipart/form-data">
     <div class="container-fluid">
         <div class="row">
