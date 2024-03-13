@@ -4,7 +4,7 @@
 
 <title>Cyber City</title>
 <div style="text-align: center;">
-    <h1 class='text-primary'>Welcome to our Cyber City</h1>
+    <h1>Welcome to our Cyber City</h1>
 
 
     <?php
