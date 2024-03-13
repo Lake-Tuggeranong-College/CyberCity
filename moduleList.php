@@ -10,7 +10,7 @@ if (!authorisedAccess(false, true, true)) {
     <title>Module List</title>
     <link rel="stylesheet" href="css/moduleList.css">
 
-    <h1 class='text-primary'>Module List</h1>
+    <h1>Module List</h1>
 
 <?php
 $moduleList = $conn->query("SELECT Location, Module, ID, Enabled, Image FROM RegisteredModules WHERE Enabled=1"); #Get all Enabled Modules

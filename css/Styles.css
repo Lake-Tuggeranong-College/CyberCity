@@ -10,7 +10,12 @@ body{
 }
 h1{
     padding: 10px;
+    color: #4794FF;
 }
 input{
     margin-left: 10px;
+}
+
+a{
+    color: #ff5b00;
 }

@@ -29,7 +29,7 @@ $hashedFlag = $result["HashedFlag"];
 <div class="container-fluid">
     <div class="container-fluid">
         <div class="row">
-            <h1 class='text-primary'>Challenge - <?= $title ?></h1>
+            <h1>Challenge - <?= $title ?></h1>
         </div>
         <div class="row">
             <div class="col-2 border border border-dark">Challenge Name</div>
