@@ -10,7 +10,7 @@ if (!authorisedAccess(false, true, true)) {
     <title>Cyber City - Challenges</title>
     <link rel="stylesheet" href="css/moduleList.css">
 
-    <h1 class='text-primary'>Challenge List</h1>
+    <h1 >Challenge List</h1>
 
 
 <?php

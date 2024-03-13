@@ -19,7 +19,7 @@ $learnText = $result[1];
 <title>CyberCity - Learn Page</title>
 <link rel="stylesheet" href="css/moduleList.css">
 
-<h1 class='text-primary'>Learn - <?= $title ?></h1>
+<h1>Learn - <?= $title ?></h1>
 <div class="container-fluid"></div>
 
 <div class="col-10"><?= $learnText ?></div>
