@@ -12,7 +12,7 @@ if (!authorisedAccess(false, true, true)) {
     <link rel="stylesheet" href="css/moduleList.css">
 </head>
 <body>
-<h1 class='text-primary'>Learn</h1>
+<h1>Learn</h1>
 
 <?php
 $learnList = $conn->query("SELECT ID,Name,Icon FROM Learn"); #Get all Enabled Modules

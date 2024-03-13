@@ -15,7 +15,7 @@ if (!authorisedAccess(false, false, true)) {
     <title>Cyber City - ContactPage</title>
 </head>
 <body>
-<h1 class='text-primary'>Contact Page</h1>
+<h1>Contact Page</h1>
 <div class="container-fluid">
         <div class="container-fluid">
             <div class="row">

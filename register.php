@@ -9,7 +9,7 @@ if (!authorisedAccess(true, true, true)) {
 
 <title>Register Page</title>
 
-<h1 class='text-primary'>Please register on our site</h1>
+<h1>Please register on our site</h1>
 <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" enctype="multipart/form-data">
     <div class="container-fluid">
         <div class="row">

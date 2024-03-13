@@ -9,7 +9,7 @@ if (!authorisedAccess(true, false, false)) {
 
 <title>Cyber City - Login</title>
 
-<h1 class='text-primary'>Login</h1>
+<h1>Login</h1>
 
 <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" enctype="multipart/form-data">
     <div class="container-fluid">
