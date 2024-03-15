@@ -34,7 +34,7 @@
 <!--    <link href="css/bootstrap.min.css" rel="stylesheet">-->
 
     <!-- Boostrap JavaScript library in JS folder. -->
-    <script src="js/bootstrap.bundle.min.js"></script>
+
 
 </head>
     <body>
