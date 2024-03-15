@@ -25,9 +25,9 @@ CyberCitySharedFunctionality cyberCity;
 
 String outputCommand = "nill";
 
-String Word_Selector_Array [1] = {"0"};
-int Word_Selector_Array_Size = sizeof(Word_Selector_Array);
-String  Word_Selector_data = Word_Selector_Array [0];
+String Word_Selector_Array [3] = {"0","1","2"};
+int Word_Selector_Array_Size = sizeof(Word_Selector_Array)/sizeof(Word_Selector_Array[0]);
+String  Word_Selector_data;
 
 // Generally, you should use "unsigned long" for variables that hold time
 // The value will quickly become too large for an int to store
@@ -45,6 +45,28 @@ void timedEPDUpdate() {
     
     //cyberCity.updateEPD("Fire Dept", "Temp \tC", Data, outputCommand);
  
+  }
+}
+
+void Send_The_word(String Selected_word) 
+{
+      
+  String dataToPost = String(Selected_word);
+  // cyberCity.uploadData(dataToPost, apiKeyValue, sensorName, sensorLocation, 30000, serverName);
+  String payload = cyberCity.dataTransfer(dataToPost, apiKeyValue, sensorName, sensorLocation, 1500, serverName, true, true);
+  Serial.print("payload: ");
+  Serial.print(payload);
+  Serial.println(".");
+  DynamicJsonDocument doc(1024);
+ 
+  //  Serial.println(deserializeJson(doc, payload));
+  DeserializationError error = deserializeJson(doc, payload);
+  if (error) {
+    Serial.print(F("deserializeJson() failed: "));
+    Serial.println(error.f_str());
+    Send_The_word(Selected_word);
+    return;
+    
   }
 }
 
@@ -88,28 +110,17 @@ void setup()
 
   Serial.print(Word_Selector_Array_Size);
 
-  randomSeed(analogRead(0));
+  randomSeed(analogRead(A4));
 
+  int RandNumberGen = random(3);
+  Word_Selector_data = Word_Selector_Array[RandNumberGen];
+  String Selected_word = Word_Selector_data;
+  timedEPDUpdate();
+  Send_The_word(Selected_word);
 }
 
 void loop() {
-  String Selected_word = Word_Selector_data;
-  timedEPDUpdate();
-  String dataToPost = String(Selected_word);
-  // cyberCity.uploadData(dataToPost, apiKeyValue, sensorName, sensorLocation, 30000, serverName);
-  String payload = cyberCity.dataTransfer(dataToPost, apiKeyValue, sensorName, sensorLocation, 1500, serverName, true, true);
-  Serial.print("payload: ");
-  Serial.print(payload);
-  Serial.println(".");
-  DynamicJsonDocument doc(1024);
- 
-  //  Serial.println(deserializeJson(doc, payload));
-  DeserializationError error = deserializeJson(doc, payload);
-  if (error) {
-    Serial.print(F("deserializeJson() failed: "));
-    Serial.println(error.f_str());
-    return;
-  }
+/*
   const char* command = doc["command"];
   Serial.print("Command: ");
   Serial.print(command);
@@ -125,5 +136,7 @@ void loop() {
   }
 
   // waits 180 seconds (3 minutes) as   per guidelines from adafruit.
+  */
   display.clearBuffer();
 }
+
