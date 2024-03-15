@@ -4,7 +4,7 @@
 
 <title>Cyber City</title>
 <div style="text-align: center;">
-    <h1 class='text-primary'>Welcome to our Cyber City</h1>
+    <h1>Welcome to our Cyber City</h1>
 
 
     <?php
@@ -21,7 +21,9 @@
         "<h2 class='text'> Please log in or register to participate in the CyberCity CTF Challenge</h2>";
     }
     ?>
-    <img src="images/MainImage.jpg" alt="" width="50%" height="50%">
+    <div class="pageImage>">
+    <img  src="images/MainImage.jpg" alt="" width="100%" height="100%">
+    </div>
 </div>
 <p></p>
 </body>

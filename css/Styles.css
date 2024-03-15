@@ -1,16 +1,29 @@
-.navbar_Dark{
+.navbar_Dark {
     background: #222222;
     color: #ff5b00;
 }
 
-body{
+body {
     background: #464646;
     color: #F0F0F0;
 
 }
+
 h1{
     padding: 10px;
+    color: #4794FF;
 }
-input{
+
+input {
     margin-left: 10px;
+}
+
+a {
+    color: #ff5b00;
+}
+
+.pageImage {
+    width: 50%;
+    height: 50%;
+
 }
