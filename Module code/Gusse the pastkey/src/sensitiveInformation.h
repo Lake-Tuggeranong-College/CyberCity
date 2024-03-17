@@ -15,7 +15,7 @@ const char* password = "CyberRange";  // Wifi Password
 
 String serverName = "http://192.168.1.10/CyberCity/dataTransfer.php";
 
-String apiKeyValue = "XjuTHh";
+String apiKeyValue = "Pass_The_Key";
 
-String sensorName = "Temperature";
-String sensorLocation = "Fire Dept";
+String sensorName = "Nuclear_Reactor";
+String sensorLocation = "Nuclear_Reactor";
