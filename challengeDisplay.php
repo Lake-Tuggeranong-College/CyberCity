@@ -21,20 +21,7 @@
     $hashedFlag = $result["HashedFlag"];
 ?>
 
-<!--<!DOCTYPE html>-->
-<!-- Define what type of language is being used to function this page. -->
-<!--<html lang="en">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--     Responsive mobile device compatible. -->
-<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
-    <title>Challenge Information</title>
-
-    <!-- Boostrap CSS library in CSS folder. -->
-<!--    <link href="css/bootstrap.min.css" rel="stylesheet">-->
-
-    <!-- Boostrap JavaScript library in JS folder. -->
-
+<title>Challenge Information</title>
 
 </head>
     <body>
@@ -54,8 +41,8 @@
                     <div class="col fw-bold border-start border-end border-dark-subtle border-2">
                         Challenge Description
                     </div>
-                    <div class="col fw-bold border-dark-subtle border-2"
-                    >Challenge Points
+                    <div class="col fw-bold border-dark-subtle border-2">
+                        Challenge Points
                     </div>
                 </div>
 
@@ -125,7 +112,7 @@
                         $moduleDateTime = $moduleIndividualData["DateTime"];
 
                         echo "<div class='col border-end text-center'>" . $moduleDateTime . "</div>";
-                        echo "<div class='col'>" . $moduleData . "</div>";
+                        echo "<div class='col text-center'>" . $moduleData . "</div>";
                         echo "</div>";
                     }
                 ?>
