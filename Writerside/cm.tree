@@ -9,4 +9,8 @@
     <toc-element topic="welcome.md"/>
     <toc-element topic="howToPlay.md"/>
     <toc-element topic="Administration.md"/>
+    <toc-element topic="windmill.md">
+        <toc-element topic="WindmillHints.md"/>
+        <toc-element topic="Windmill-Guide.md"/>
+    </toc-element>
 </instance-profile>
