@@ -15,6 +15,12 @@
     border-bottom-style: solid;
 }
 
+.leaderbord{
+    border: #ff5b00;
+    border-color: #ff5b00;
+    border-bottom-style: solid;
+}
+
 body {
     background: #464646;
     color: #F0F0F0;
