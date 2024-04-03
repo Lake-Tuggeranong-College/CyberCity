@@ -21,8 +21,8 @@
         "<h2 class='text'> Please log in or register to participate in the CyberCity CTF Challenge</h2>";
     }
     ?>
-    <div style="align">
-    <img  src="images/MainImage.jpg" alt="" class="center">
+    <div style="min-width: 50%; min-height: 50%">
+    <img  src="images/MainImage.jpg" alt="" class="center" height="50%" width="100%">
     </div>
 </div>
 <p></p>
