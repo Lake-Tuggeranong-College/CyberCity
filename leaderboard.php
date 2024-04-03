@@ -8,13 +8,13 @@ if (!authorisedAccess(true, true, true)) {
 }
 
 ?>
-<!DOCTYPE html>
-<html>
-<head>
-    <meta http-equiv="refresh" content="<?php echo $sec ?>;URL='<?php echo $page ?>'">
-    <title>Cyber City - Leaderboard</title>
-</head>
-<body>
+<!--<!DOCTYPE html>-->
+<!--<html>-->
+<!--<head>-->
+<!--    <meta http-equiv="refresh" content="--><?php //echo $sec ?><!--;URL='--><?php //echo $page ?><!--'">-->
+<!--    <title>Cyber City - Leaderboard</title>-->
+<!--</head>-->
+<!--<body>-->
 <h1>Leaderboard</h1>
 <div class="table-responsive">
     <!--<table class="table table-bordered">
