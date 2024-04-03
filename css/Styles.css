@@ -28,8 +28,3 @@ a {
     color: #ff5b00;
 }
 
-img{
-    max-width: 50%;
-    max-height: 50%;
-    display: block; /* remove extra space below image */
-}
