@@ -51,7 +51,9 @@
                                 Administrator Functions
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="userList.php">User list</a>
+                                <h3 style="padding-left: 15px">Edit Users</h3>
+                                <a class="dropdown-item" href="userList.php">Enabled User List</a>
+                                <a class="dropdown-item" href="disabledUsers.php">Disabled User List</a>
 
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="moduleRegister.php">Add New Module & Challenge</a>

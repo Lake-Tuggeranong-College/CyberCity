@@ -6,11 +6,12 @@ if (!authorisedAccess(false, false, true)) {
 }
 
 ?>
-    <title>User List</title>
-    <link rel="stylesheet" href="css/moduleList.css">
-    <h1>Enabled User List</h1>
+<title>Disabled User List</title>
+<link rel="stylesheet" href="css/moduleList.css">
+<h1>Disabled User List</h1>
 <?php
-$userList = $conn->query("SELECT ID, Username, AccessLevel, Enabled FROM Users WHERE Enabled=1"); #Get all Enabled Modules
+
+$userList = $conn->query("SELECT ID, Username, AccessLevel, Enabled FROM Users WHERE Enabled=0"); #Get all Enabled Modules
 while ($userData = $userList->fetch()) {
     $userID = $userData["ID"];
     echo "<div class='product_wrapper'>";
@@ -19,6 +20,3 @@ while ($userData = $userList->fetch()) {
     echo "<a class='moduleButton' href='userResetPassword.php?UserID=" . $userID . "'>Password</a>";
     echo "</div>";
 }
-
-?>
-
