@@ -1,6 +1,6 @@
 <?php include "template.php";
 /** @var $conn */
-$sec = 5;
+$sec = 60;
 $page = $_SERVER['PHP_SELF'];
 
 if (!authorisedAccess(true, true, true)) {
@@ -8,13 +8,13 @@ if (!authorisedAccess(true, true, true)) {
 }
 
 ?>
-<!DOCTYPE html>
-<html>
-<head>
-    <meta http-equiv="refresh" content="<?php echo $sec ?>;URL='<?php echo $page ?>'">
-    <title>Cyber City - Leaderboard</title>
-</head>
-<body>
+<!--<!DOCTYPE html>-->
+<!--<html>-->
+<!--<head>-->
+<!--    <meta http-equiv="refresh" content="--><?php //echo $sec ?><!--;URL='--><?php //echo $page ?><!--'">-->
+<!--    <title>Cyber City - Leaderboard</title>-->
+<!--</head>-->
+<!--<body>-->
 <h1>Leaderboard</h1>
 <div class="table-responsive">
     <!--<table class="table table-bordered">
@@ -26,8 +26,8 @@ if (!authorisedAccess(true, true, true)) {
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col-2 border border border-dark">Username</div>
-            <div class="col-1 border border border-dark">Score</div>
+            <div class="leaderbord" style="min-width: 300px; max-width: 50%"><strong>Username</strong></div>
+            <div class="leaderbord" style="min-width: 30px; max-width: 50%"><strong>Score</strong></div>
         </div>
 
 </body>
@@ -40,8 +40,8 @@ $scoreList = $conn->query("SELECT Username, Score FROM Users WHERE AccessLevel=1
 while ($scoreData = $scoreList->fetch()) {
     if ($scoreData[1] != 0) {
         echo "<div class='row'>";
-        echo "<div class='col-2 border border border-dark''>" . $scoreData[0] . "</div>";
-        echo "<div class='col-1 border border border-dark''>" . $scoreData[1] . "</div>";
+        echo "<div class='leaderbord' style='min-width: 300px; max-width: 50%'>" . $scoreData[0] . "</div>";
+        echo "<div class='leaderbord' style='min-width: 30px; max-width: 50%'>" . $scoreData[1] . "</div>";
         echo "</div>";
 
 
