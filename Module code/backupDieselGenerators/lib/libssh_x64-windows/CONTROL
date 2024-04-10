@@ -1,0 +1,8 @@
+Package: libssh
+Version: 0.10.5
+Port-Version: 1
+Depends: openssl, vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-windows
+Multi-Arch: same
+Abi: ce84c088da11445283798781b8f67b2d223cc4df7254f6eb07fc5cff0ed9cd7c
+Description: libssh is a multiplatform C library implementing the SSHv2 protocol on client and server side
