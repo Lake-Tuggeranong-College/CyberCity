@@ -33,7 +33,9 @@
         <!-- Indicate section (middle part) section of the whole page. -->        
         <section class="pt-4 pd-2">
             <!-- Boostrap Grid Table System. -->
+
             <div class="container-fluid text-center">
+
                 <div class="row border border-dark-subtle border-2">
                     <div class="col fw-bold border-dark-subtle border-2">
                         Challenge Name
@@ -127,7 +129,8 @@
             //    $flagList = $conn->query("SELECT HashedFlag, PointsValue, moduleID, challengeTitle, challengeText, PointsValue FROM Challenges WHERE moduleID = " . $challengeToLoad . "");
             //
             //    while ($flagData = $flagList->fetch()) {
-                if (password_verify($userEnteredFlag, $hashedFlag)) {
+//                if (password_verify($userEnteredFlag, $hashedFlag)) {
+if ($userEnteredFlag == $hashedFlag){
                     $user = $_SESSION["user_id"];
                     $sql = "UPDATE Users SET Score = SCORE + '$pointsValue' WHERE ID='$user'";
                     $stmt = $conn->prepare($sql);
