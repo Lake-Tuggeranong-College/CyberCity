@@ -125,7 +125,7 @@
         <!-- Check if we should display the ESP32 modules data and give the end-users' point if they got the flag right. -->
         <?php
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
-                $userEnteredFlag = sanitise_data($_POST['flag']);
+                $userEnteredFlag = sanitise_data($_POST['hiddenflag']);
                 print_r($userEnteredFlag);
             //    $challengeToLoad = $_GET["moduleID"];
             //    $flagList = $conn->query("SELECT HashedFlag, PointsValue, moduleID, challengeTitle, challengeText, PointsValue FROM Challenges WHERE moduleID = " . $challengeToLoad . "");
