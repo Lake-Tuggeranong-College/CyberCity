@@ -19,6 +19,7 @@
     $challengeText = $result["challengeText"];
     $pointsValue = $result["PointsValue"];
     $hashedFlag = $result["HashedFlag"];
+    print_r($hashedFlag);
 ?>
 
 <title>Challenge Information</title>
@@ -77,8 +78,8 @@
                 <!-- Directs to correspond page if the flag entered is eligible. -->
                 <form action="challengeDisplay.php?moduleID=<?= $moduleID ?>" method="post" enctype="multipart/form-data">
                     <div class="form-floating">
-                        <input type="text" class="form-control" id="hflag" name="hiddenflag" placeholder="Enter the flag here.">
-                        <label for="hflag">Please enter the flag: </label>
+                        <input type="text" class="form-control" id="flag" name="hiddenflag" placeholder="Enter the flag here.">
+                        <label for="flag">Please enter the flag: </label>
                         <p id="functionAssistant" class="form-text text-start font-size-sm">
                             You'll have to hit the "Enter" key when finish 
                             entering the hidden flag.
@@ -125,6 +126,7 @@
         <?php
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $userEnteredFlag = sanitise_data($_POST['flag']);
+                print_r($userEnteredFlag);
             //    $challengeToLoad = $_GET["moduleID"];
             //    $flagList = $conn->query("SELECT HashedFlag, PointsValue, moduleID, challengeTitle, challengeText, PointsValue FROM Challenges WHERE moduleID = " . $challengeToLoad . "");
             //
@@ -149,7 +151,7 @@ if ($userEnteredFlag == $hashedFlag){
                     $stmt -> execute();
                     $_SESSION["flash_message"] = "<div class='bg-success'>Success!</div>";
                 } else {
-                    $_SESSION["flash_message"] = "<div class='bg-danger'>Flag failed - Try again</div>";
+                    $_SESSION["flash_message"] = "<div class='bg-danger'>Flag failed - Try again5tg6tgf6ygtf <?echo $userEnteredFlag?></div>";
                 }
             }
             echo outputFooter();
