@@ -33,7 +33,9 @@
         <!-- Indicate section (middle part) section of the whole page. -->        
         <section class="pt-4 pd-2">
             <!-- Boostrap Grid Table System. -->
-            <div class="container-fluid text-center ">
+
+            <div class="container-fluid text-center">
+
                 <div class="row border border-dark-subtle border-2">
                     <div class="col fw-bold border-dark-subtle border-2">
                         Challenge Name
