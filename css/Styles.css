@@ -2,11 +2,24 @@
     background: #222222;
     color: #ff5b00;
 }
+
 .center {
     display: block;
     margin-left: auto;
     margin-right: auto;
     width: 50%;
+}
+
+.contactTable{
+    border: #ff5b00;
+    border-color: #ff5b00;
+    border-bottom-style: solid;
+}
+
+.leaderbord{
+    border: #ff5b00;
+    border-color: #ff5b00;
+    border-bottom-style: solid;
 }
 
 body {
@@ -28,8 +41,3 @@ a {
     color: #ff5b00;
 }
 
-img{
-    max-width: 50%;
-    max-height: 50%;
-    display: block; /* remove extra space below image */
-}

@@ -1,6 +1,6 @@
 <?php include "template.php";
 /** @var $conn */
-$sec = 5;
+$sec = 60;
 $page = $_SERVER['PHP_SELF'];
 
 if (!authorisedAccess(false, false, true)) {
@@ -19,9 +19,9 @@ if (!authorisedAccess(false, false, true)) {
 <div class="container-fluid">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-1 border border border-dark">Request</div>
-                <div class="col-1 border border border-dark">Username</div>
-                <div class="col-2 border border border-dark">Email</div>
+                <div class="contactTable" style="min-width: 30px; max-width: 30%"><strong>Request</strong></div>
+                <div class="contactTable" style="min-width: 30px; max-width: 30%"><strong>Username</strong></div>
+                <div class="contactTable" style="min-width: 300px; max-width: 30%"><strong>Email</strong></div>
 
 
             </div>
@@ -38,15 +38,19 @@ while ($ContactData = $ContactList->fetch()) {
 
 
     echo "<div class='row'>";
-    echo "<div class='col-1 border border border-dark''>" . $ContactData['ID']. "</div>";
-    echo "<div class='col-1 border border border-dark''>" . $ContactData['Username']. "</div>";
-    echo "<div class='col-2 border border border-dark''>" . $ContactData['Email'] . "</div>";
+    echo "<div class='contactTable' style='min-width: 30px; max-width: 30%'>" . $ContactData['ID']. "</div>";
+    echo "<div class='contactTable' style='min-width: 30px; max-width: 30%'>" . $ContactData['Username']. "</div>";
+    echo "<div class='contactTable' style='min-width: 300px; max-width: 30%'>" . $ContactData['Email'] . "</div>";
     echo "</div>";
 
 
 }
 
 ?>
+</div>
+</div>
+</div>
+
 
 <?php echo outputFooter(); ?>
 

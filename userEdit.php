@@ -1,5 +1,6 @@
 <?php include "template.php";
 /** @var $conn */
+/**@var enableUser() */
 
 if (!authorisedAccess(false, false, true)) {
     header("Location:index.php");
@@ -56,8 +57,27 @@ if (isset($_GET["UserID"])) {
 
                 <p>Enabled/Disabled
                     <label>
-                        <input type="text" name="Enabled" class="form-control" required="required"
-                               value="<?= $userEnabled ?>">
+<!--                        <input type="text" name="Enabled" class="form-control" required="required"-->
+<!--                               value="--><?php //= $userEnabled ?><!--">-->
+                        <?php
+                        if ($userEnabled == 0){
+                            ?>
+                        <input type="submit" name="Enabled" value="Enable" onclick="enableUser()" >
+
+                        <?php
+//                            function enableUser(){
+//                                $userEnable = 1;
+//                            }
+                        }
+
+
+                        else{
+                            ?>
+                            <input type="button" name="Disabled" onclick="DisabledUser()" value="Disable">
+                        <?php
+                        }
+
+                        ?>
                     </label></p>
                 <p>Current Score
                     <label>
