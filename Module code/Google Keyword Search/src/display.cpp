@@ -15,6 +15,11 @@
 #include <Adafruit_ST7735.h> // Hardware-specific library for ST7735
 #include "Adafruit_miniTFTWing.h"
 
+// Custom Libraries
+#include "sensitiveInformation.h"
+#include <CyberCitySharedFunctionality.h>
+CyberCitySharedFunctionality cyberCity;
+
 Adafruit_miniTFTWing ss;
 #define TFT_RST    -1    // we use the seesaw for resetting to save a pin
 
