@@ -1,4 +1,4 @@
-# Windmill Hints
+# Guess The Pass Key Hints
 
 
 [//]: # (Example of the tabs.)
