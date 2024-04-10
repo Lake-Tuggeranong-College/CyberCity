@@ -19,7 +19,7 @@ $title = $result["challengeTitle"];
 $challengeText = $result["challengeText"];
 $pointsValue = $result["PointsValue"];
 $hashedFlag = $result["HashedFlag"];
-print_r($hashedFlag);
+//print_r($hashedFlag);
 ?>
 
 <title>Challenge Information</title>
