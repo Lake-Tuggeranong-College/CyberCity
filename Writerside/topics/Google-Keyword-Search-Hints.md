@@ -1,4 +1,4 @@
-# Windmill Hints
+# Google Keyword Search Hints
 
 
 [//]: # (Example of the tabs.)
