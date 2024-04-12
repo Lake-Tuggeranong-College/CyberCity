@@ -58,7 +58,8 @@
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="moduleRegister.php">Add New Module & Challenge</a>
                                 <a class="dropdown-item" href="resetGame.php">Reset Game</a>
-                                <a class="dropdown-item" href="contactpage.php">view contact requests</a>
+                                <a class="dropdown-item" href="contactpage.php">View Contact requests</a>
+                                <a class="dropdown-item" href="readContactRequests.php">Read Contact Requests</a>
                             </ul>
                         </li>
                         <?php

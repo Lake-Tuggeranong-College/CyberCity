@@ -1,0 +1,9 @@
+C:/Users/Ajay/Documents/GitHub/Code/backupDieselGenerators/build/CMakeFiles/Experimental.dir
+C:/Users/Ajay/Documents/GitHub/Code/backupDieselGenerators/build/CMakeFiles/Nightly.dir
+C:/Users/Ajay/Documents/GitHub/Code/backupDieselGenerators/build/CMakeFiles/Continuous.dir
+C:/Users/Ajay/Documents/GitHub/Code/backupDieselGenerators/build/CMakeFiles/NightlyMemoryCheck.dir
+C:/Users/Ajay/Documents/GitHub/Code/backupDieselGenerators/build/CMakeFiles/sshscript.dir
+C:/Users/Ajay/Documents/GitHub/Code/backupDieselGenerators/build/CMakeFiles/PACKAGE.dir
+C:/Users/Ajay/Documents/GitHub/Code/backupDieselGenerators/build/CMakeFiles/RUN_TESTS.dir
+C:/Users/Ajay/Documents/GitHub/Code/backupDieselGenerators/build/CMakeFiles/ALL_BUILD.dir
+C:/Users/Ajay/Documents/GitHub/Code/backupDieselGenerators/build/CMakeFiles/ZERO_CHECK.dir

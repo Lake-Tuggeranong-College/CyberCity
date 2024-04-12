@@ -1,6 +1,6 @@
 <?php include "template.php";
 /** @var $conn */
-/**@var enableUser() */
+
 
 if (!authorisedAccess(false, false, true)) {
     header("Location:index.php");
@@ -25,6 +25,12 @@ if (isset($_GET["UserID"])) {
 } else {
     header("location:userList.php");
 }
+function enableUser(){
+    echo "123";
+    $userEnabled = 1;
+
+}
+
 ?>
 
 
@@ -57,23 +63,21 @@ if (isset($_GET["UserID"])) {
 
                 <p>Enabled/Disabled
                     <label>
-<!--                        <input type="text" name="Enabled" class="form-control" required="required"-->
-<!--                               value="--><?php //= $userEnabled ?><!--">-->
                         <?php
                         if ($userEnabled == 0){
                             ?>
-                        <input type="submit" name="Enabled" value="Enable" onclick="enableUser()" >
+                            <button name="Enabled" value="Enable" onclick="<?php enableUser() ?>" >Enable</button>
 
                         <?php
 //                            function enableUser(){
-//                                $userEnable = 1;
+//                                $userEnabled = 1;
 //                            }
                         }
 
 
                         else{
                             ?>
-                            <input type="button" name="Disabled" onclick="DisabledUser()" value="Disable">
+                            <button name="Disabled" onclick="<?php disabledUser() ?>" value="Disable">Disable</button>
                         <?php
                         }
 
@@ -100,7 +104,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $userName = sanitise_data($_POST["userName"]);
 //    $userPassword = sanitise_data($_POST["moduleLocation"]);
     $userAccessLevel = sanitise_data($_POST["AccessLevel"]);
-    $userEnabled = sanitise_data($_POST["Enabled"]);
+//    $userEnabled = sanitise_data($_POST["Enabled"]);
     $userScore = sanitise_data($_POST["Score"]);
 //    $userHashedPassword = password_hash($userPassword, PASSWORD_DEFAULT);
     $userToLoad = $_GET["UserID"];
