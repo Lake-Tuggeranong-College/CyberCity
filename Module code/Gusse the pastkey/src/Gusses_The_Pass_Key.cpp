@@ -14,45 +14,35 @@
 CyberCitySharedFunctionality cyberCity;
 #include <Wire.h>
 #include <WiFi.h>
-#include <RTClib.h>
 #include <ArduinoJson.h>
 #include "Adafruit_ADT7410.h"
 //#define display
 //#define clear
-#define pizopin 14
 
 //RTC_DS3231 rtc;
 
-String outputCommand = "nill";
+String outputCommand = "nill"; // beucase this Model Dose not uses Commands This is set to 
 
-String Word_Selector_Array [3] = {"0","1","2"};
-int Word_Selector_Array_Size = sizeof(Word_Selector_Array)/sizeof(Word_Selector_Array[0]);
-String  Word_Selector_data;
+String Email_Selector_Array [6] = 
+{
+  "Email_0: Xen.Cr: 'Hey John.R how many vowels did we want the Key to have?' John.R: they have said to have 2 vowels",
+  "Email_1: John.R: 'Don't Forget to have no repeatting charaters Xen'", 
+  "Email_2: Jay.P:  'I am Happy to report that the system is Very Strong and unlikely or anyone to Break in",
+  "Email_3: Xen.Cr: 'The Spelling dosn't look right... where is o meant to be? Jay.P: 5th from the right",
+  "Email_4: Ben.W:  'John Please Help. I can't remember What the 'thing' ended with. Was it Ending with Two ss or T.' John.R: I Don't think it was ss, Try T",
+  "Email_5: jay.P:  'I want the word to be the same amount of charaters and starts with the same charater as roband"
+};
 
-// Generally, you should use "unsigned long" for variables that hold time
-// The value will quickly become too large for an int to store
-unsigned long previousMillis = 0;  // will store last time LED was updated
 
-// constants won't change:
-const long interval = 180000;  // interval at which to blink (milliseconds)
 
-void timedEPDUpdate() {
-    unsigned long currentMillis = millis();
+int Email_Selector_Array_Size = sizeof(Email_Selector_Array)/sizeof(Email_Selector_Array[0]);
 
-  if (currentMillis - previousMillis >= interval) {
-    // save the last time you blinked the LED
-    previousMillis = currentMillis;
-    
-    //cyberCity.updateEPD("Fire Dept", "Temp \tC", Data, outputCommand);
- 
-  }
-}
+String  Email_Selector_data;
 
-void Send_The_word(String Selected_word) 
+void Send_The_Email(String Selected_Email) 
 {
       
-  String dataToPost = String(Selected_word);
-  // cyberCity.uploadData(dataToPost, apiKeyValue, sensorName, sensorLocation, 30000, serverName);
+  String dataToPost = String(Selected_Email);
   String payload = cyberCity.dataTransfer(dataToPost, apiKeyValue, sensorName, sensorLocation, 1500, serverName, true, true);
   Serial.print("payload: ");
   Serial.print(payload);
@@ -64,10 +54,15 @@ void Send_The_word(String Selected_word)
   if (error) {
     Serial.print(F("deserializeJson() failed: "));
     Serial.println(error.f_str());
-    Send_The_word(Selected_word);
+    Send_The_Email(Selected_Email);
+
+    if (WiFi.status() != WL_CONNECTED)
+    {
+      WiFi.begin(ssid, password);
+    }
     return;
     
-  }
+  } 
 }
 
 void setup() 
@@ -88,55 +83,25 @@ void setup()
   Serial.print("Connected to the Internet");
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
-  pinMode(LED_BUILTIN, OUTPUT);
-
-  // RTC
-  if (!rtc.begin()) {
-    Serial.println("Couldn't find RTC");
-    Serial.flush();
-    //    abort();
-  }
-
-  // The following line can be uncommented if the time needs to be reset.
-  rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
-
-  rtc.begin();
 
   //EINK
-  display.begin();
-  display.clearBuffer();
+  //display.begin();
+  //display.clearBuffer();
 
-  cyberCity.logEvent("System Initialisation...");
-
-  Serial.print(Word_Selector_Array_Size);
-
+  //cyberCity.logEvent("System Initialisation...");
   randomSeed(analogRead(A4));
-
-  int RandNumberGen = random(3);
-  Word_Selector_data = Word_Selector_Array[RandNumberGen];
-  String Selected_word = Word_Selector_data;
-  timedEPDUpdate();
-  Send_The_word(Selected_word);
 }
 
 void loop() {
-/*
-  const char* command = doc["command"];
-  Serial.print("Command: ");
-  Serial.print(command);
-  if (String(command) == "On") {
-    int randNoise = random(300, 900);
-    tone(pizopin,randNoise,200);
-    outputCommand = "LED On";
-    digitalWrite(LED_BUILTIN, HIGH);
-  } else {
-    noTone(pizopin);
-    outputCommand = "LED Off";
-    digitalWrite(LED_BUILTIN, LOW);
-  }
 
-  // waits 180 seconds (3 minutes) as   per guidelines from adafruit.
-  */
+  randomSeed(analogRead(A4));
+  int RandNumberGen = random(4);
+  Email_Selector_data = Email_Selector_Array[RandNumberGen];
+  String Selected_Email = Email_Selector_data;
+  Send_The_Email(Selected_Email);
+  
+
   display.clearBuffer();
+  delay(600000);
 }
 
