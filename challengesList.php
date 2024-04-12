@@ -6,7 +6,7 @@ if (!authorisedAccess(false, true, true)) {
 }
 
 ?>
-<html>
+<div>
     <title>Cyber City - Challenges</title>
     <link rel="stylesheet" href="css/moduleList.css">
 
@@ -36,7 +36,7 @@ if (!authorisedAccess(false, true, true)) {
 
     <div class='name'><?=$challengeData['challengeTitle']?> </div>
     <div class='price'> Points: <?=$challengeData['PointsValue']?> </div>
-
+    </div>
     <?php } ?>
 
 </html>
