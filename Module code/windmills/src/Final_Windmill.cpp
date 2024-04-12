@@ -1,4 +1,4 @@
-#define AOUT_PIN A2  // Arduino pin that connects to AOUT pin of moisture sensor
+#define AIN_PIN A2  // Arduino pin that connects to AOUT pin of moisture sensor
 #include <ArduinoJson.h>
 #include "sensitiveInformation.h"
 #include <CyberCitySharedFunctionality.h>
@@ -6,7 +6,7 @@ CyberCitySharedFunctionality cyberCity;
 
 #include <ESP32Servo.h>
 // Declare the Servo pin
-int servoPin = 13;
+int servoPin = 21;
 // Create a servo object
 Servo Servo1;
 String outputCommand = "NaN";
@@ -18,7 +18,7 @@ void setup() {
   ESP32PWM::allocateTimer(2);
   ESP32PWM::allocateTimer(3);
   Servo1.setPeriodHertz(50);  // standard 50 hz servo
-  Servo1.attach(21);
+  Servo1.attach(servoPin);
   while (!Serial) {
     delay(10);
   }
@@ -54,7 +54,7 @@ void setup() {
 }
 
 void loop() {
-  int value = analogRead(AOUT_PIN);  // read the analog value from sensor
+  int value = analogRead(AIN_PIN);  // read the analog value from sensor
 
   Serial.println(value);
   int sensorData = value * 1.0;
