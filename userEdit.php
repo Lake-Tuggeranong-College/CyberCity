@@ -25,11 +25,11 @@ if (isset($_GET["UserID"])) {
 } else {
     header("location:userList.php");
 }
-function enableUser(){
-    echo "123";
-    $userEnabled = 1;
-
-}
+//function enableUser(){
+//    echo "123";
+//    $userEnabled = 1;
+//
+//}
 
 ?>
 
@@ -57,30 +57,47 @@ function enableUser(){
                 <!--Product List-->
                 <p>Access Level
                     <label>
-                        <input type="text" name="AccessLevel" class="form-control" required="required"
-                               value="<?= $userAccessLevel ?>">
+<!--                        <input type="text" name="AccessLevel" class="form-control" required="required"-->
+<!--                               value="--><?php //= $userAccessLevel ?><!--">-->
+                        <?php
+                        if ($userAccessLevel == 1){
+                        ?>
+                        <select name="AccessLevel" size="1">
+                            <option value="1">User</option>
+                            <option value="2">Admin</option>
+                        </select>
+                        <?php
+                        }
+                        if ($userAccessLevel == 2){
+                        ?>
+                        <select name="AccessLevel" size="1">
+                            <option value="2">Admin</option>
+                            <option value="1">User</option>
+                        </select>
+                        <?php
+                        }
+                        ?>
                     </label></p>
 
                 <p>Enabled/Disabled
                     <label>
                         <?php
                         if ($userEnabled == 0){
-                            ?>
-                            <button name="Enabled" value="Enable" onclick="<?php enableUser() ?>" >Enable</button>
-
-                        <?php
-//                            function enableUser(){
-//                                $userEnabled = 1;
-//                            }
-                        }
-
-
-                        else{
-                            ?>
-                            <button name="Disabled" onclick="<?php disabledUser() ?>" value="Disable">Disable</button>
+                        ?>
+                        <select name="Enabled" size="1">
+                            <option value="0">Disable</option>
+                            <option value="1">Enable</option>
+                        </select>
                         <?php
                         }
-
+                        if ($userEnabled == 1){
+                        ?>
+                        <select name="Enabled" size="1">
+                            <option value="1">Enable</option>
+                            <option value="0">Disable</option>
+                        </select>
+                        <?php
+                        }
                         ?>
                     </label></p>
                 <p>Current Score
@@ -104,7 +121,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $userName = sanitise_data($_POST["userName"]);
 //    $userPassword = sanitise_data($_POST["moduleLocation"]);
     $userAccessLevel = sanitise_data($_POST["AccessLevel"]);
-//    $userEnabled = sanitise_data($_POST["Enabled"]);
+    $userEnabled = sanitise_data($_POST["Enabled"]);
     $userScore = sanitise_data($_POST["Score"]);
 //    $userHashedPassword = password_hash($userPassword, PASSWORD_DEFAULT);
     $userToLoad = $_GET["UserID"];

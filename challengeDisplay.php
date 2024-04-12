@@ -126,7 +126,6 @@ $hashedFlag = $result["HashedFlag"];
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $userEnteredFlag = sanitise_data($_POST['hiddenflag']);
-    print_r($userEnteredFlag);
     //    $challengeToLoad = $_GET["moduleID"];
     //    $flagList = $conn->query("SELECT HashedFlag, PointsValue, moduleID, challengeTitle, challengeText, PointsValue FROM Challenges WHERE moduleID = " . $challengeToLoad . "");
     //
@@ -144,14 +143,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         //        $sql1 = "UPDATE Users SET Score=? WHERE Username=?";
         //        $stmt = $conn->prepare($sql1);
         //        $stmt->execute([$addedScore, $user]);
-        echo $moduleID;
 
         $sql = "UPDATE RegisteredModules SET CurrentOutput = 'On' WHERE ID='$moduleID'";
         $stmt = $conn->prepare($sql);
         $stmt->execute();
         $_SESSION["flash_message"] = "<div class='bg-success'>Success!</div>";
     } else {
-        $_SESSION["flash_message"] = "<div class='bg-danger'>Flag failed - Try again5tg6tgf6ygtf <?echo $userEnteredFlag?></div>";
+        $_SESSION["flash_message"] = "<div class='bg-danger'>Flag failed - Try again</div>";
     }
 }
 echo outputFooter();
