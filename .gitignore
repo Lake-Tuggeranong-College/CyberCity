@@ -27,3 +27,6 @@ CrashCourse/RC/ESPPostData/sensitiveInformation.h
 /.idea/sqldialects.xml
 /.idea/
 Module code/findMe/src/sensitiveInformation.h
+**/.idea/
+
+**/.vscode/
