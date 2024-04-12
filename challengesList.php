@@ -12,30 +12,32 @@ if (!authorisedAccess(false, true, true)) {
 
     <h1 >Challenge List</h1>
 
+    <?php
+        // Get all Enabled Modules.
+        $moduleList = $conn->query("SELECT ID, challengeTitle,PointsValue,moduleID FROM Challenges");
 
-<?php
-$moduleList = $conn->query("SELECT ID, challengeTitle,PointsValue,moduleID FROM Challenges"); #Get all Enabled Modules
-while ($challengeData = $moduleList->fetch()) {
-    $challengeID = $challengeData["ID"];
-    $moduleID = $challengeData["moduleID"];
-    $moduleQuery = $conn->query("SELECT Image from RegisteredModules WHERE ID = $moduleID");
-    $moduleInformation = $moduleQuery->fetch();
-    echo "<a href='challengeDisplay.php?moduleID=" . $moduleID . "'><div class='product_wrapper'>";
-    if ($moduleInformation['Image']) { #Does the Module have an Image?
-        echo "<div class='image'><img src='images/modules/" . $moduleInformation['Image'] . "' width='100' height='100'/></div>"; #Display Module Image
-    } else {
-        echo "<div class='image'><img src='images/modules/blank.jpg'width='100' height='100'/></div>"; #Display Placeholder Image
-    }
+        while ($challengeData = $moduleList->fetch()) {
+
+            $challengeID = $challengeData["ID"];
+            $moduleID = $challengeData["moduleID"];
+            $moduleQuery = $conn->query("SELECT Image from RegisteredModules WHERE ID = $moduleID");
+            $moduleInformation = $moduleQuery->fetch();
+            echo "<a href='challengeDisplay.php?moduleID=" . $moduleID . "'><div class='product_wrapper'>";
+            
+            // Check if the "Modules" have an image attachs to it.
+            if ($moduleInformation['Image']) { 
+                // Display Module Image.
+                echo "<div class='image'><img src='images/modules/" . $moduleInformation['Image'] . " ' width='100' height='100'></div>";
+            } else {
+                // Display Placeholder Image
+                echo "<div class='image'><img src='images/modules/Image Not Found.jpg' width='100' height='100'></div>"; 
+            }
     ?>
-        <div class='name'><?=$challengeData['challengeTitle']?> </div>
-        <div class='price'> Points: <?=$challengeData['PointsValue']?> </div>
 
-    </div>
-    </a>
+    <div class='name'><?=$challengeData['challengeTitle']?> </div>
+    <div class='price'> Points: <?=$challengeData['PointsValue']?> </div>
 
-<?php
-}
+    <?php } ?>
 
-?>
 </html>
 <br>
