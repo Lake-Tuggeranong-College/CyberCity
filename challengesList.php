@@ -27,10 +27,10 @@ if (!authorisedAccess(false, true, true)) {
             // Check if the "Modules" have an image attachs to it.
             if ($moduleInformation['Image']) { 
                 // Display Module Image.
-                echo "<div class='image'><img src='images/modules/" . $moduleInformation['Image'] . " ' width='100' height='100'></div>";
+                echo "<div class='image'><img src='images/modules/" . $moduleInformation['Image'] . " ' width='100' height='100' /></div>";
             } else {
                 // Display Placeholder Image
-                echo "<div class='image'><img src='images/modules/Image Not Found.jpg' width='100' height='100'></div>"; 
+                echo "<div class='image'><img src='images/modules/Image Not Found.jpg' width='100' height='100' /></div>"; 
             }
     ?>
 
