@@ -1,0 +1,30 @@
+cmake_minimum_required(VERSION 3.5.0)
+project(sshscript VERSION 0.1.0 LANGUAGES C CXX)
+
+include(CTest)
+enable_testing()
+
+# Set the include directory for libssh
+include_directories("${CMAKE_SOURCE_DIR}/lib/libssh_x64-windows/include")
+
+# Add the library directory for libssh
+link_directories("${CMAKE_SOURCE_DIR}/lib/libssh_x64-windows/lib")
+
+# Add your source files
+add_executable(sshscript scp.cpp)
+
+# Link against the libssh and Winsock libraries
+target_link_libraries(sshscript ssh ws2_32)
+
+# Set the output directory for the executable
+set_target_properties(sshscript PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}")
+
+# Copy the necessary DLL files to the output directory
+add_custom_command(TARGET sshscript POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    "${CMAKE_SOURCE_DIR}/lib/libssh_x64-windows/bin"
+    $<TARGET_FILE_DIR:sshscript>)
+
+set(CPACK_PROJECT_NAME ${PROJECT_NAME})
+set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
+include(CPack)
