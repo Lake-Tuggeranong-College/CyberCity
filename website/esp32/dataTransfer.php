@@ -1,7 +1,7 @@
 <?php
 
 //include "template.php";
-include "config.php";
+include "../includes/config.php";
 /** @var $conn */
 
 /*

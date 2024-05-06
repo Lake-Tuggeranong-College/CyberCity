@@ -1,5 +1,5 @@
 <?php
-include "config.php";
+include "../includes/config.php";
 
 
 function uploadData()
