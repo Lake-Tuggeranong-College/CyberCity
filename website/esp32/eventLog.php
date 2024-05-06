@@ -1,5 +1,5 @@
 <?php
-include "config.php";
+include "../includes/config.php";
 /** @var $conn */
 
 // Keep this API Key value to be compatible with the ESP32 code provided in the project page.
