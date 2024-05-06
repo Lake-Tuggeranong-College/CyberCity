@@ -4,11 +4,12 @@
 #include <Adafruit_ST7735.h> // Hardware-specific library for ST7735
 #include <Adafruit_ST7789.h>
 #include "Adafruit_miniTFTWing.h"
+#include <ArduinoJson.h>
 
-// Custom Libraries
+// 2-way connection between modules and website libraries
+#include <WiFi.h>
+#include <HTTPClient.h>
 #include "sensitiveInformation.h"
-#include <CyberCitySharedFunctionality.h>
-CyberCitySharedFunctionality cyberCity;
 
 Adafruit_miniTFTWing ss;
 #define TFT_RST    -1    // we use the seesaw for resetting to save a pin
@@ -25,71 +26,10 @@ Adafruit_ST7735 tft_7735 = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_RST);
 Adafruit_ST77xx *tft = NULL;
 uint32_t version;
 
-void setup() {
-  Serial.begin(9600);
-  while (!Serial) {
-    delay(10); // Wait until serial console is opened.
-  }
-  
-  if (!ss.begin()) {
-    Serial.println("seesaw not found!");
-    while(1);
-  } else {
-    Serial.println("seesaw found!");
-  }
+String outputCommand = "NaN";
 
-  version = ((ss.getVersion() >> 16) & 0xFFFF);
-  Serial.print("Version: "); Serial.println(version);
-  if (version == 3322) {
-    Serial.println("Version 2 TFT FeatherWing found");  
-  } else {
-    Serial.println("Version 1 TFT FeatherWing found");
-  }
-
-  Serial.println("Reset module to the latest code...");
-  ss.tftReset();   // reset the display
-  Serial.println("Backlight is tunred off.");
-  ss.setBacklight(0x0000);  // turn off the backlight
-
-  if (version == 3322) {
-    tft_7789.init(135, 240);
-    tft = &tft_7789;
-  } else {
-    tft_7735.initR(INITR_MINI160x80);   // initialize a ST7735S chip, mini display
-    tft = &tft_7735;
-  }
-
-  tft->setRotation(1);
-  Serial.println("TFT initialized");
-
-  // tft->fillScreen(ST77XX_RED);
-  // delay(100);
-  // tft->fillScreen(ST77XX_GREEN);
-  // delay(100);
-  // tft->fillScreen(ST77XX_BLUE);
-  // delay(100);
-  // tft->fillScreen(ST77XX_BLACK);
-
-  Serial.println("Filling screen...");
-  tft->fillScreen(ST77XX_BLACK);
-  delay(1000);
-  Serial.println("Setting text color...");
-  tft->setTextColor(ST77XX_WHITE, ST77XX_BLACK);
-  delay(1000);
-  Serial.println("Setting text size...");
-  tft->setTextSize(1);
-  delay(1000);
-  Serial.println("Setting cursor position...");
-  tft->setCursor(0, 0);
-  delay(1000);
-  Serial.println("Printing to display...");
-  tft->print("Hello World");
-}
-
-void loop() {
-  delay(10);
-
-  uint32_t buttons = ss.readButtons();
+void textDisplay() {
+    uint32_t buttons = ss.readButtons();
   //Serial.println(buttons, BIN);
   
   uint16_t color;
@@ -177,4 +117,103 @@ void loop() {
   } else {
     tft->fillCircle(80, 40, 7, color);
   }
+}
+
+void setup() {
+  Serial.begin(9600);
+  while (!Serial) {
+    delay(10); // Wait until serial console is opened.
+  }
+
+  delay(1000);
+  // Connect to Wi-Fi
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(1000);
+    Serial.println("Connecting to WiFi...");
+  }
+  Serial.println("Connected to WiFi!");
+  Serial.print("IP address: ");
+  Serial.println(WiFi.localIP());
+
+  if (!ss.begin()) {
+    Serial.println("seesaw not found!");
+    while(1);
+  } else {
+    Serial.println("seesaw found!");
+  }
+
+  version = ((ss.getVersion() >> 16) & 0xFFFF);
+  Serial.print("Version: "); Serial.println(version);
+  if (version == 3322) {
+    Serial.println("Version 2 TFT FeatherWing found");  
+  } else {
+    Serial.println("Version 1 TFT FeatherWing found");
+  }
+
+  Serial.println("Reset module to the latest code...");
+  ss.tftReset();   // reset the display
+  Serial.println("Backlight is tunred off.");
+  ss.setBacklight(0x0000);  // turn off the backlight
+
+  if (version == 3322) {
+    tft_7789.init(135, 240);
+    tft = &tft_7789;
+  } else {
+    tft_7735.initR(INITR_MINI160x80);   // initialize a ST7735S chip, mini display
+    tft = &tft_7735;
+  }
+
+  tft->setRotation(1);
+  Serial.println("TFT initialized");
+
+  Serial.println("Filling the screen with red color...");
+  tft->fillScreen(ST77XX_RED);
+  delay(1000);
+  Serial.println("Filling the screen with green color...");
+  tft->fillScreen(ST77XX_GREEN);
+  delay(1000);
+  Serial.println("Filling the screen with blue color...");
+  tft->fillScreen(ST77XX_BLUE);
+  delay(1000);
+
+  Serial.println("Filling the screen with black color...");
+  tft->fillScreen(ST77XX_BLACK);
+  delay(1000);
+  Serial.println("Setting text color...");
+  tft->setTextColor(ST77XX_WHITE, ST77XX_BLACK);
+  delay(1000);
+  Serial.println("Setting text size...");
+  tft->setTextSize(1);
+  delay(1000);
+  Serial.println("Setting cursor position...");
+  tft->setCursor(0, 0);
+  delay(1000);
+  Serial.println("Printing to display...");
+  tft->print("Hello World");
+
+  // Send the text to the PHP server
+  if(WiFi.status() == WL_CONNECTED) {
+    HTTPClient http;
+    http.begin(serverName);
+    http.addHeader("Content-Type", "application/x-www-form-urlencoded");
+  
+    String httpRequestData = "text=" + String("Hello World") + "&apiKeyValue=" + apiKeyValue + "&sensorName=" + sensorName + "&sensorLocation=" + sensorLocation; // The text and additional data to be sent
+    int httpResponseCode = http.POST(httpRequestData);
+    
+    if (httpResponseCode > 0) {
+      Serial.print("HTTP Response code: ");
+      Serial.println(httpResponseCode);
+    }
+    else {
+      Serial.print("Error code: ");
+      Serial.println(httpResponseCode);
+    }
+    http.end();  
+  }
+}
+
+void loop() {
+  delay(10);
+  textDisplay();
 }
