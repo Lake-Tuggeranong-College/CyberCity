@@ -17,5 +17,5 @@ String serverName = "http://10.177.200.71/CyberCity/dataTransfer.php";
 
 String apiKeyValue = "CTF{fOuNdIt}";
 
-String sensorName = "Secret Keyword";
+String sensorName = "Google Keyword Search";
 String sensorLocation = "16x2 LCD Display";
