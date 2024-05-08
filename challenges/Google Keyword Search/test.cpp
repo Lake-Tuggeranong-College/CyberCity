@@ -252,3 +252,10 @@ void loop() {
 
   dataTransfer();
 }
+
+// When entered the flag, it's over. No more data sending.
+// Because of that, data has to be sent before entering the flag.
+// For test, sent ramdom text to anoy users.
+// For production, sent sth like teasing texts to abuse user.
+// Text display on module and website at the same time.
+// Need the data_and_time too. Probs copy the function from the shared one.
