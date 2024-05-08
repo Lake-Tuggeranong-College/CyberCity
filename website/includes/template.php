@@ -16,7 +16,7 @@
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav me-auto "> <!--Left side of navbar-->
             <li class="nav-item active">
-                <a class="nav-link text-white" href="<?php echo BASE_URL; ?>index.php">Home</a>
+                <a style = "padding-left: 2rem" class="nav-link text-white" href="<?php echo BASE_URL; ?>index.php">Home</a>
             </li>
             <?php
             $accessLevel = 2;
