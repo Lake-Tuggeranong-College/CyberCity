@@ -30,7 +30,7 @@ String Email_Selector_Array [6] =
   "Email_2: Jay.P:  'I am Happy to report that the system is Very Strong and unlikely or anyone to Break in",
   "Email_3: Xen.Cr: 'The Spelling dosn't look right... where is o meant to be? Jay.P: 5th from the right",
   "Email_4: Ben.W:  'John Please Help. I can't remember What the 'thing' ended with. Was it Ending with Two ss or T.' John.R: I Don't think it was ss, Try T",
-  "Email_5: jay.P:  'I want the word to be the same amount of charaters and starts with the same charater as roband"
+  "Email_5: jay.P:  'I want the word to be the same amount of charaters and starts with the same charater in Upper case as Roband"
 };
 
 
