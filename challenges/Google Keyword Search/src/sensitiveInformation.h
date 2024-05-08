@@ -17,5 +17,5 @@ String serverName = "http://192.168.1.10/CyberCity/website/esp32/dataTransfer.ph
 
 String apiKeyValue = "CTF{fOuNdIt}";
 
-String sensorName = "Secret Keyword";
+String sensorName = "Google Keyword Search";
 String sensorLocation = "16x2 LCD Display";
