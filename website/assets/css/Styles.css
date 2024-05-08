@@ -3,7 +3,8 @@
 
     background: rgba(35,37,38,0.5);
 
-    font-size: 110%;
+    font-size: 1vw;
+    text-overflow: ellipsis;
 
 
     color: white;
@@ -14,7 +15,7 @@
     padding: 0.5%;
 
 
-    -webkit-font-smoothing: antialiased;
+
 }
 
 
