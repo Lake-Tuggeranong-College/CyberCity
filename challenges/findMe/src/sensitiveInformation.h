@@ -13,8 +13,8 @@ const char* host = "findMe";
 const char* ssid = "CyberRange";       // Wifi Network Name
 const char* password = "CyberRange";  // Wifi Password
 
-String serverURL = "http://192.168.1.10/CyberCity/dataTransfer.php";
-String eventLogURL = "http://192.168.1.10/CyberCity/eventLog.php";
+String serverName = "http://192.168.1.10/CyberCity/website/esp32/dataTransfer.php";
+String eventLogURL = "http://192.168.1.10/CyberCity/website/esp32/eventLog.php";
 
 
 String apiPassword = "FoundMeYouWin";
