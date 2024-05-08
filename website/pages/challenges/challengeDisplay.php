@@ -106,7 +106,7 @@ $hashedFlag = $result["HashedFlag"];
          -->
         <!-- Automatically create new row to display ESP32 modules data & logged time on the specific challege webpage. -->
         <?php
-        $sql = $conn->query("SELECT * FROM ModuleData WHERE moduleID = " . $challengeToLoad . " ORDER BY id DESC LIMIT 10");
+        $sql = $conn->query("SELECT * FROM ModuleData WHERE moduleID = " . $challengeToLoad . " ORDER BY id DESC LIMIT 5");
         while ($moduleIndividualData = $sql->fetch()) {
             echo "<div class='row border border-top-0'>";
 
