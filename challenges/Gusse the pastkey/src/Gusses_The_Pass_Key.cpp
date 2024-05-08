@@ -21,7 +21,7 @@ CyberCitySharedFunctionality cyberCity;
 
 //RTC_DS3231 rtc;
 
-String outputCommand = "nill"; // beucase this Model Dose not uses Commands This is set to 
+String outputCommand = "null"; // becuase this Model Dose not uses Commands This is set to null
 
 String Email_Selector_Array [6] = 
 {
@@ -32,6 +32,8 @@ String Email_Selector_Array [6] =
   "Email_4: Ben.W:  'John Please Help. I can't remember What the 'thing' ended with. Was it Ending with Two ss or T.' John.R: I Don't think it was ss, Try T",
   "Email_5: jay.P:  'I want the word to be the same amount of charaters and starts with the same charater in Upper case as Roband"
 };
+int Last_Sent_email;
+bool Recently_Sented_Email = false;
 
 
 
@@ -65,6 +67,24 @@ void Send_The_Email(String Selected_Email)
   } 
 }
 
+int Pick_New_Email()
+{
+  randomSeed(analogRead(A4));
+  int RandNumberGen = random(4);
+  if (RandNumberGen != Last_Sent_email)
+  {
+    Last_Sent_email = RandNumberGen;
+    Email_Selector_data = Email_Selector_Array[RandNumberGen];
+    String Selected_Email = Email_Selector_data;
+    Send_The_Email(Selected_Email);
+    delay(60000);
+  }
+  else
+  {
+    Pick_New_Email();
+  }
+}
+
 void setup() 
 {
 
@@ -92,16 +112,12 @@ void setup()
   randomSeed(analogRead(A4));
 }
 
-void loop() {
-
-  randomSeed(analogRead(A4));
-  int RandNumberGen = random(4);
-  Email_Selector_data = Email_Selector_Array[RandNumberGen];
-  String Selected_Email = Email_Selector_data;
-  Send_The_Email(Selected_Email);
+void loop() 
+{
   
+  Pick_New_Email();
 
   display.clearBuffer();
-  delay(600000);
+
 }
 
