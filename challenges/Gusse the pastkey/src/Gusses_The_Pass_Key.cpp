@@ -25,12 +25,12 @@ String outputCommand = "null"; // becuase this Model Dose not uses Commands This
 
 String Email_Selector_Array [6] = 
 {
-  "Email_0: Xen.Cr: 'Hey John.R how many vowels did we want the Key to have?' John.R: they have said to have 2 vowels",
-  "Email_1: John.R: 'Don't Forget to have no repeatting charaters Xen'", 
-  "Email_2: Jay.P:  'I am Happy to report that the system is Very Strong and unlikely or anyone to Break in",
-  "Email_3: Xen.Cr: 'The Spelling dosn't look right... where is o meant to be? Jay.P: 5th from the right",
-  "Email_4: Ben.W:  'John Please Help. I can't remember What the 'thing' ended with. Was it Ending with Two ss or T.' John.R: I Don't think it was ss, Try T",
-  "Email_5: jay.P:  'I want the word to be the same amount of charaters and starts with the same charater in Upper case as Roband"
+  "Xen.Cr: 'Hey John.R how many vowels did we want the Key to have?' John.R: they have said to have 2 vowels", // Email 1
+  "John.R: 'Don't Forget to have no repeatting charaters Xen'", // Email 2
+  "Jay.P:  'I am Happy to report that the system is Very Strong and unlikely or anyone to Break in", // Email 3
+  "Xen.Cr: 'The Spelling dosn't look right... where is o meant to be? Jay.P: 5th from the right", // Email 4
+  "Ben.W:  'John Please Help. I can't remember What the 'thing' ended with. Was it Ending with Two ss or T.' John.R: I Don't think it was ss, Try T", // Email 5
+  "jay.P:  'I want the word to be the same amount of charaters and starts with the same charater in Upper case as Roband" // Email 6
 };
 int Last_Sent_email;
 bool Recently_Sented_Email = false;
