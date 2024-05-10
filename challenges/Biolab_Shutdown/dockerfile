@@ -11,5 +11,7 @@ RUN chpasswd w.rose:followthewhiterabbit
 RUN chpasswd root:B10L4BShutd0wn123!
 
 #Download script
-RUN wget http://10.177.200.71/CyberCity/Challenge_Files/biolabShutdown/shutdown.sh -o /biolab-rebootSequence.sh
+RUN wget http://10.177.200.71/CyberCity/challenges/Biolab_Shutdown/shutdown.sh -o /biolab-rebootSequence.sh
+RUN chown root:root /biolab-rebootSequence.sh
+RUN chmod 700 /biolan-rebootSequence.sh
 
