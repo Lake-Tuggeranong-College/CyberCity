@@ -1,13 +1,11 @@
 
-/***************************************************
-  Adafruit invests time and resources providing this open source code,
-  please support Adafruit and open-source hardware by purchasing
-  products from Adafruit!
-  Written by Limor Fried/Ladyada for Adafruit Industries.
-  MIT license, all text above must be included in any redistribution
- ****************************************************/
-
-
+/*************************************************** Guess the Pass Key ESP32 feather Model Code ****************************************************/
+/*
+ * This file is the code for Guess The Pass Key challenge Model
+ * that sends Emails to the Database Backend of the School based PHP web sever
+ * to provide hints to the user around which word is the pass key.
+ */
+/*************************************************** Guss the Pass Key ESP32 feather Model Code ****************************************************/
 #include <Arduino.h>
 #include "sensitiveInformation.h"
 #include <CyberCitySharedFunctionality.h>
@@ -16,12 +14,8 @@ CyberCitySharedFunctionality cyberCity;
 #include <WiFi.h>
 #include <ArduinoJson.h>
 #include "Adafruit_ADT7410.h"
-//#define display
-//#define clear
 
-//RTC_DS3231 rtc;
-
-String outputCommand = "null"; // becuase this Model Dose not uses Commands This is set to null
+String outputCommand = "null"; // because this Model Dose not uses Commands This is set to null
 
 String Email_Selector_Array [6] =  // This Array holds the Simulated Emails that will be sent to the Data base and be posted on the challenge website
 {
@@ -35,10 +29,8 @@ String Email_Selector_Array [6] =  // This Array holds the Simulated Emails that
 int Last_Sent_email; // This will hold the Most recently number picked To stop a repeated email being Sent
 bool Recently_Sented_Email = false; // This will aid in stopping a repeated Email with an if Statement
 
-
 int Email_Selector_Array_Size = sizeof(Email_Selector_Array)/sizeof(Email_Selector_Array[0]);
 // This Finds how big the Array is to Identify how many Emails are in the Array So it can latter Chooses a random Email to send
-
 
 void Send_The_Email(String Selected_Email) // This Function Grabs the Selected Email, turns it into A JSON Object to be Sent to the Back-end DataBase of the PHP webBase sever
 {
@@ -63,7 +55,6 @@ void Send_The_Email(String Selected_Email) // This Function Grabs the Selected E
       WiFi.begin(ssid, password);
     }
     return;
-    
   } 
 }
 
@@ -71,12 +62,12 @@ int Pick_New_Email()
 /*
 This Function Generates a Random int in the range of the size of the Email array,
 then Checks to See if that Email has been recently Selected, 
-if it was not recently Selected the it will Call the Send_The_Email() function,
+if not recently Selected the it will Call the Send_The_Email() function,
 else Restart this Function     
 */ 
 {
   randomSeed(analogRead(A4)); // Generate a random int
-  int RandNumberGen = random(Email_Selector_Array_Size); // Grab the Email within the array that compounds to the int number Generated
+  int RandNumberGen = random(Email_Selector_Array_Size); // Grab the Email within the array that corresponds to the int number Generated
 
   if (RandNumberGen != Last_Sent_email) // checks if the Email was sent recently
   {
@@ -101,8 +92,8 @@ void setup() // This begins Serial, Starts wi-fi Connections and Creates the ran
     delay(10);
   }
   delay(1000);
-  WiFi.begin(ssid, password);
 
+  WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
     delay(1000);
     Serial.println("Connecting to WiFi..");
@@ -111,8 +102,6 @@ void setup() // This begins Serial, Starts wi-fi Connections and Creates the ran
   Serial.print("Connected to the Internet");
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
-
-  //cyberCity.logEvent("System Initialisation...");
   randomSeed(analogRead(A4));
 }
 
@@ -122,4 +111,3 @@ void loop()
   Pick_New_Email(); // Starts The Email Selection Function
 
 }
-
