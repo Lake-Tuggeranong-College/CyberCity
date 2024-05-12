@@ -19,6 +19,7 @@ if (!authorisedAccess(false, true, true)) {
 
 
     <a href="backupDieselGenerators.php">custom challenge webpage test</a>
+             <a href="biolabShutdown.php">custom challenge webpage test2</a>
 
     <?php
         // Get all Enabled Modules.

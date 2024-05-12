@@ -11,6 +11,13 @@ Resetting the game makes the following changes:
   - This does not affect the admin account.
   - Disabled user accounts will not appear on the leaderboard.
 
+### Steps
+
+1. go to the reset game page from the admin dropdown in the nav bar
+![resetGameAdminNav.png](resetGameAdminNav.png)
+2. press the update button *waning* doing so will set all current users to 0
+
+
 ## User Account Management
 
 ### Resetting Passwords

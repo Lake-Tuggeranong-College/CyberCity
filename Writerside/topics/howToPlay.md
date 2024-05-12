@@ -8,8 +8,10 @@
 
 First you need to Register an account.
 
-![Register Link](registerAnAccount.png)
+Top right hand corner you can either register a new account or login with a pre-existing account.
 
-![Register Page](registerPage.png)
+![Register Link](registerAnAccount2.png)
+
+![Register Page](registerPage2.png)
 
 
