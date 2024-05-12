@@ -48,13 +48,9 @@
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="' . BASE_URL . 'pages/admin/userList.php">Enabled User List</a>
                         <a class="dropdown-item" href="' . BASE_URL . 'pages/admin/disabledUsers.php">Disabled User List</a>
-                    <div class="dropdown-divider"></div>
-                         
-                         <a class="dropdown-item" href="' . BASE_URL . 'pages/admin/contactpage.php">View Contact requests</a>
-                         <a class="dropdown-item" href="' . BASE_URL . 'pages/admin/readContactRequests.php">Read Contact Requests</a>
                     </ul>
                     </li>
-                    <li>
+                    <li class="nav-item dropdown">
                      <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown"
                             data-bs-toggle="dropdown" aria-expanded="false">
                             Modules
@@ -64,7 +60,7 @@
                          <a class="dropdown-item" href="' . BASE_URL . 'pages/admin/resetGame.php">Reset Game</a>
                          </ul>
                          </li>
-                         <li>
+                         <li class="nav-item dropdown">
                           <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown"
                             data-bs-toggle="dropdown" aria-expanded="false">
                            Contacts
