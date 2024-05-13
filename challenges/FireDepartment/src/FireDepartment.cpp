@@ -119,7 +119,7 @@ void loop() {
   if (String(command) == "On") {
     int randNoise = random(300, 900);
     tone(pizopin,randNoise,200);
-    outputCommand = "LED On";
+    outputCommand = "Alarm On";
     digitalWrite(LED_BUILTIN, HIGH);
   } else {
     noTone(pizopin);
