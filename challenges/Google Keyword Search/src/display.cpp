@@ -216,9 +216,9 @@ void loop() {
   serializeJson(document, DataJSON);
 
   // Send the JSON data to the server using an HTTP POST request
-  if (client.connect(host, 80)) {
-    client.println("POST http://192.168.1.10/CyberCity/website/esp32/dataTransfer.php HTTP/1.1");
-    client.println("Host: " + String(host));
+  if (client.connect("192.168.1.10", 80)) {
+    client.println("POST /CyberCity/website/esp32/dataTransfer.php HTTP/1.1");
+    client.println("Host: 192.168.1.10");
     client.println("Content-Type: application/json");
     client.print("Content-Length: ");
     client.println(DataJSON.length());
