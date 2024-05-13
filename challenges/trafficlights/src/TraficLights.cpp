@@ -7,28 +7,57 @@
   Written by Limor Fried/Ladyada for Adafruit Industries.
   MIT license, all text above must be included in any redistribution
  ****************************************************/
- int green = 15;
- int red = 16;
- int yellow = 17;
+int green = 15;
+int red = 16;
+int yellow = 17;
 
 #include "sensitiveInformation.h"
 
 CyberCitySharedFunctionality cyberCity;
 
 
+void lightsOn()
+{
+  digitalWrite(red, HIGH);
+  delay(15000);
+  digitalWrite(red, LOW);
 
+  digitalWrite(yellow, HIGH);
+  delay(1000);
+  digitalWrite(yellow, LOW);
+  delay(500);
 
-void setup() {
+  digitalWrite(yellow, HIGH);
+  delay(1000);
+  digitalWrite(yellow, LOW);
+  delay(500);
+
+  digitalWrite(green, HIGH);
+  delay(20000);
+  digitalWrite(green, LOW);
+}
+
+void lightsOff()
+{
+  digitalWrite(red, LOW);
+  digitalWrite(yellow, LOW);
+  digitalWrite(green, LOW);
+}
+
+void setup()
+{
   /*
-  */
+   */
   Serial.begin(9600);
-  while (!Serial) {
+  while (!Serial)
+  {
     delay(10);
   }
   delay(1000);
   WiFi.begin(ssid, password);
 
-  while (WiFi.status() != WL_CONNECTED) {
+  while (WiFi.status() != WL_CONNECTED)
+  {
     delay(1000);
     Serial.println("Connecting to WiFi..");
   }
@@ -39,7 +68,8 @@ void setup() {
   pinMode(LED_BUILTIN, OUTPUT);
 
   // RTC
-  if (!rtc.begin()) {
+  if (!rtc.begin())
+  {
     Serial.println("Couldn't find RTC");
     Serial.flush();
   }
@@ -49,7 +79,7 @@ void setup() {
 
   rtc.start();
 
-  //EINK
+  // EINK
   display.begin();
   display.clearBuffer();
 
@@ -58,56 +88,46 @@ void setup() {
   // Module Specific Code
 
   // put your setup code here, to run once:
-  pinMode(green, INPUT);
+  pinMode(green, OUTPUT);
   pinMode(red, OUTPUT);
   pinMode(yellow, OUTPUT);
+  lightsOff();
   Serial.begin(9600);
 }
 
-void loop() {
-
+void loop()
+{
 
   // put your main code here, to run repeatedly:
-  lights();
   int sensorData = red, green, yellow;
   String dataToPost = String(sensorData);
   // cyberCity.uploadData(dataToPost, apiKeyValue, sensorName, sensorLocation, 30000, serverName);
-  String payload = cyberCity.dataTransfer(dataToPost, apiKeyValue, sensorName, sensorLocation, 30000, serverName, true, true);    
- Serial.print("Payload from server:");
+  String payload = cyberCity.dataTransfer(dataToPost, apiKeyValue, sensorName, sensorLocation, 3000, serverName, true, true);
+  Serial.print("Payload from server:");
   Serial.println(payload);
   DynamicJsonDocument doc(1024);
   //  Serial.println(deserializeJson(doc, payload));
   DeserializationError error = deserializeJson(doc, payload);
-  if (error) {
+  if (error)
+  {
     Serial.print(F("deserializeJson() failed: "));
     Serial.println(error.f_str());
     return;
   }
-  const char* command = doc["command"];
+  const char *command = doc["command"];
   Serial.print("Command: ");
   Serial.print(command);
   delay(500);
+  if (String(command) == "On")
+  {
+    Serial.println("spin:)");
+    lightsOn();
+    // outputCommand = "Fan On";
+  }
+  else
+  {
+    // outputCommand = "Fan Off";
+    lightsOff();
+  }
 }
 
-void lights() {
- digitalWrite(red, HIGH);
- delay(15000);
-digitalWrite(red,  LOW);
-  
-  digitalWrite(yellow, HIGH);
-delay(1000);
-  digitalWrite(yellow,  LOW);
-delay(500);
-
-  digitalWrite(yellow, HIGH);
-delay(1000);
-  digitalWrite(yellow,  LOW);
-delay(500);
-
-
-  
-digitalWrite(green, HIGH);
-delay(20000);
-digitalWrite(green,  LOW);
-
-}
