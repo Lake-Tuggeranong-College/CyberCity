@@ -1,6 +1,7 @@
 FROM ubuntu:22.04
 
 #Install SSH
+RUN apt-get update
 RUN apt-get install openssh-server
 RUN systemctl enable sshd
 RUN systemctl start sshd
