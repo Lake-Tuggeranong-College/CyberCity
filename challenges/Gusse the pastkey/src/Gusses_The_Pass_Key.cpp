@@ -15,8 +15,6 @@ CyberCitySharedFunctionality cyberCity;
 #include <ArduinoJson.h>
 #include "Adafruit_ADT7410.h"
 
-String outputCommand = "null"; // because this Model Dose not uses Commands This is set to null
-
 String Email_Selector_Array [6] =  // This Array holds the Simulated Emails that will be sent to the Data base and be posted on the challenge website
 {
   "Xen.Cr: 'Hey John.R how many vowels did we want the Key to have?' John.R: they have said to have 2 vowels", // Email 1
