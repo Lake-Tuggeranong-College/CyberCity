@@ -1,13 +1,9 @@
 # Windmill Guide
 
-Cryptography is the art of encrypting data. Encryption is making data not readable unless if the recipient of the data knows hows to unencrypt the data.
-
-Ceaser Cipher is a type of encryption named after Julius Caesar, who used it for military messages.
-
-Try using the website below to encrypt and even decrypt messages. 
+The Caesar cipher is a substitution cipher where each letter in the plaintext is replaced by another letter a certain number of positions down the alphabet. This shift is known as the key. For example, if the key is 3, then the letter ‘A’ would be replaced by ‘D’, ‘B’ by ‘E’, and so on
 
 Use [cryptii.com/](https://cryptii.com/) 
 
 ## Step one
 
-### you win
+### Put in the Ceaser Cipher into a decryptor like Cryptii (make sure you select decode and caesar cipher)
