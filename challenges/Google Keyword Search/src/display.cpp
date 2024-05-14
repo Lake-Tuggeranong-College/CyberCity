@@ -5,7 +5,6 @@
 #include <Adafruit_ST7789.h>
 #include "Adafruit_miniTFTWing.h"
 #include <ArduinoJson.h>
-#include <WiFi.h>
 
 // Custom Libraries
 #include "sensitiveInformation.h"
@@ -207,7 +206,6 @@ void loop() {
   // Chooses a random text from the array.
   const char* dataToPost = TextData[random(0, 4)];
 
-
 // Uses library function to upload the data to the server (handles the JSON formatting and HTTP POST request)
  String payload = cyberCity.dataTransfer(dataToPost, apiKeyValue, sensorName, sensorLocation, 3000, serverName, true, true);
   
@@ -239,5 +237,4 @@ void loop() {
   {
     outputCommand = "Fan Off";
   }
-
 }
