@@ -29,6 +29,9 @@ Adafruit_ST7735 tft_7735 = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_RST);
 Adafruit_ST77xx *tft = NULL;
 uint32_t version;
 
+// Dummy variable, may not be needed.
+String outputCommand;
+
 void TextDisplay() {
     uint32_t buttons = ss.readButtons();
   //Serial.println(buttons, BIN);
@@ -201,43 +204,40 @@ void loop() {
     "RandomText4",
   };
 
-  // Create a JSON document
-  JsonDocument document;
+  // Chooses a random text from the array.
+  const char* dataToPost = TextData[random(0, 4)];
 
-  // Use the recommended way to create a nested array
-  JsonArray ServerRandomArrayText = document.to<JsonArray>();
 
-  // Add strings to the JSON array
-  for (const char* ServerTextDisplay : TextData) {
-    ServerRandomArrayText.add(ServerTextDisplay);
-  }
+// Uses library function to upload the data to the server (handles the JSON formatting and HTTP POST request)
+ String payload = cyberCity.dataTransfer(dataToPost, apiKeyValue, sensorName, sensorLocation, 3000, serverName, true, true);
   
-  String DataJSON;
-  serializeJson(document, DataJSON);
-
-  // Send the JSON data to the server using an HTTP POST request
-  if (client.connect(host, 80)) {
-    client.println("POST http://192.168.1.10/CyberCity/website/esp32/dataTransfer.php HTTP/1.1");
-    client.println("Host: " + String(host));
-    client.println("Content-Type: application/json");
-    client.print("Content-Length: ");
-    client.println(DataJSON.length());
-    client.println();
-    client.println(DataJSON);
-  } else {
-    Serial.println("Connection to server failed.");
+  // Response from server (the command field from the database for the module.)
+  Serial.print("Payload from server:");
+  Serial.println(payload);
+  DynamicJsonDocument doc(1024);
+  //  Serial.println(deserializeJson(doc, payload));
+  DeserializationError error = deserializeJson(doc, payload);
+  if (error)
+  {
+    Serial.print(F("deserializeJson() failed: "));
+    Serial.println(error.f_str());
+    return;
   }
 
-  // Read the server's response (optional)
-  while (client.connected() || client.available()) {
-    if (client.available()) {
-      String line = client.readStringUntil('\n');
-      Serial.println(line);
-    }
+  // Extracts the command field from the JSON response.
+  const char *command = doc["command"];
+  Serial.print("Command: ");
+  Serial.print(command);
+  delay(500);
+
+  // Do something with the command.
+  if (String(command) == "On")
+  {
+    outputCommand = "Fan On";
+  }
+  else
+  {
+    outputCommand = "Fan Off";
   }
 
-  client.stop();
-
-  // Delay before the next loop iteration
-  delay(10000); // Adjust as needed
 }
