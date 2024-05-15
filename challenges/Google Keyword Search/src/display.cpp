@@ -206,8 +206,8 @@ void loop() {
   // Chooses a random text from the array.
   const char* dataToPost = TextData[random(0, 4)];
 
-// Uses library function to upload the data to the server (handles the JSON formatting and HTTP POST request)
- String payload = cyberCity.dataTransfer(dataToPost, apiKeyValue, sensorName, sensorLocation, 3000, serverName, true, true);
+  // Uses library function to upload the data to the server (handles the JSON formatting and HTTP POST request)
+  String payload = cyberCity.dataTransfer(dataToPost, apiKeyValue, sensorName, sensorLocation, 3000, serverName, true, true);
   
   // Response from server (the command field from the database for the module.)
   Serial.print("Payload from server:");
