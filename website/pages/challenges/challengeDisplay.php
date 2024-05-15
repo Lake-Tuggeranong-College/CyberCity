@@ -20,6 +20,10 @@ $challengeText = $result["challengeText"];
 $pointsValue = $result["PointsValue"];
 $hashedFlag = $result["HashedFlag"];
 //print_r($hashedFlag);
+
+$moduleQuery = $conn->query("SELECT Image from RegisteredModules WHERE ID = $moduleID");
+$moduleInformation = $moduleQuery->fetch();
+
 ?>
 
 <title>Challenge Information</title>
@@ -38,25 +42,42 @@ $hashedFlag = $result["HashedFlag"];
     <div class="container-fluid text-center">
 
         <div class="row border border-dark-subtle border-2">
-            <div class="col fw-bold border-dark-subtle border-2">
+             <div class="col-2 border-start border-end border-dark-subtle border-2">
+                Challenge Image
+            </div>
+            <div class="col-2 border-start border-end border-dark-subtle border-2">
+
                 Challenge Name
             </div>
-            <div class="col fw-bold border-start border-end border-dark-subtle border-2">
+           <div class="col-7 border-start border-end border-dark-subtle border-2">
                 Challenge Description
             </div>
-            <div class="col fw-bold border-dark-subtle border-2">
+            <div class="col-1 border-start border-end border-dark-subtle border-2">
                 Challenge Points
             </div>
         </div>
 
         <div class="row border border-top-0 border-dark-subtle border-2">
-            <div class="col fw-bold d-flex align-items-center justify-content-center">
+            <div class="col-2 border-start border-end border-dark-subtle border-2">
+
+                <?php
+                if ($moduleInformation['Image']) {
+                    // Display Module Image.
+                    echo "<div class='image'><img src='" . BASE_URL . "assets/img/challengeImages/" . $moduleInformation['Image'] . " ' width='100' height='100'></div>";
+                } else {
+                    // Display Placeholder Image
+                    echo "<div class='image'><img src='" . BASE_URL . "assets/img/challengeImages/Image Not Found.jpg' width='100' height='100'></div>";
+                }
+                ?>
+            </div>
+            <div class="col-2 fw-bold d-flex align-items-center justify-content-center">
+
                 <?= $title ?>
             </div>
-            <div class="col border-start border-end border-dark-subtle border-2">
+            <div class="col-7 border-start border-end border-dark-subtle border-2">
                 <?= $challengeText ?>
             </div>
-            <div class="col d-flex align-items-center justify-content-center">
+            <div class="col-1 d-flex align-items-center justify-content-center">
                 <?= $pointsValue ?>
             </div>
         </div>
