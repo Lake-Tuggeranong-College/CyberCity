@@ -33,7 +33,7 @@ void lightsOn()
   delay(500);
 
   digitalWrite(green, HIGH);
-  delay(20000);
+  delay(2000);
   digitalWrite(green, LOW);
 }
 
@@ -102,7 +102,7 @@ void loop()
   int sensorData = red, green, yellow;
   String dataToPost = String(sensorData);
   // cyberCity.uploadData(dataToPost, apiKeyValue, sensorName, sensorLocation, 30000, serverName);
-  String payload = cyberCity.dataTransfer(dataToPost, apiKeyValue, sensorName, sensorLocation, 3000, serverName, true, true);
+  String payload = cyberCity.dataTransfer(dataToPost, apiKeyValue, sensorName, sensorLocation, 300, serverName, true, true);
   Serial.print("Payload from server:");
   Serial.println(payload);
   DynamicJsonDocument doc(1024);
