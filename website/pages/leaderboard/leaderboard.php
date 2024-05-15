@@ -24,7 +24,7 @@ if (!authorisedAccess(true, true, true)) {
                     <div class="leaderboard" style="min-width: 20rem; max-width: 20rem"><strong>Username</strong></div>
                     <div class="leaderboard" style="min-width: 20rem; max-width: 20rem"><strong>Score</strong></div>
                 </div>
-
+<!--Note that the leaderboard does not include Administrative users-->
 <?php
 $scoreList = $conn->query("SELECT Username, Score FROM Users WHERE AccessLevel=1 AND Enabled=1 ORDER BY Score DESC");
 
