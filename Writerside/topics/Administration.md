@@ -35,10 +35,25 @@ Editing users gives you these options
 ![userEditNav.png](userEditNav.png)
 2. select the edit button on the user you want to edit.
 ![editUserEditButton.png](editUserEditButton.png)
-3. (TODO: add info)
+3. edit the info you want and to implement the changers press the update button
 ![UpdateUserInfoButton.png](UpdateUserInfoButton.png)
 
 ### Resetting Passwords
+
+Resetting passwords allows you to override a password
+
+### Steps {id="steps_2"}
+
+1. go to the Edit User dropdown from the navbar and select either Enabled or Disabled User List.
+   ![userEditNav.png](userEditNav.png)
+2. select the Password button on the user you want to change the password for.
+![UserEditPassword.png](UserEditPassword.png)
+3. enter the new password then press the Update button
+![PasswordUpdateButton.png](PasswordUpdateButton.png)
+
+## Contacts
+
+
 
 
 
