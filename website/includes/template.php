@@ -34,7 +34,7 @@
                 <a class="nav-link text-white" href="' . BASE_URL .'pages/challenges/challengesList.php">Challenges</a>
             </li>
             <li class="nav-item active">
-                <a class="nav-link text-white" href="' . BASE_URL .'pages/tutorials/tutorialList.php">Tutorials</a></a>
+                <a class="nav-link text-white" target="_blank" href="http://10.177.200.71/CyberCityDocs/welcome.html">Tutorials</a></a>
             </li>
             ';
 
