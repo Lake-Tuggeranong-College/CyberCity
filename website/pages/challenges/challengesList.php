@@ -18,8 +18,8 @@ if (!authorisedAccess(false, true, true)) {
     <h1>Challenges</h1>
 
 
-    <a href="backupDieselGenerators.php">custom challenge webpage test</a>
-             <a href="biolabShutdown.php">custom challenge webpage test2</a>
+<!--    <a href="backupDieselGenerators.php">custom challenge webpage test</a>-->
+<!--             <a href="biolabShutdown.php">custom challenge webpage test2</a>-->
 
     <?php
         // Get all Enabled Modules.

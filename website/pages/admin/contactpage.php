@@ -32,7 +32,7 @@ if (!authorisedAccess(false, false, true)) {
 
 
 <?php
-$ContactList = $conn->query("SELECT Username, Email, ID FROM ContactUs ");
+$ContactList = $conn->query("SELECT Username, Email, ID FROM ContactUs WHERE IsRead=0 ");
 
 while ($ContactData = $ContactList->fetch()) {
 
