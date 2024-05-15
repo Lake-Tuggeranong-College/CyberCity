@@ -17,10 +17,6 @@ if (!authorisedAccess(false, true, true)) {
 
     <h1>Challenges</h1>
 
-
-<!--    <a href="backupDieselGenerators.php">custom challenge webpage test</a>-->
-<!--             <a href="biolabShutdown.php">custom challenge webpage test2</a>-->
-
     <?php
         // Get all Enabled Modules.
         $moduleList = $conn->query("SELECT ID, challengeTitle,PointsValue,moduleID FROM Challenges");
@@ -31,10 +27,8 @@ if (!authorisedAccess(false, true, true)) {
             $moduleID = $challengeData["moduleID"];
             $moduleQuery = $conn->query("SELECT Image from RegisteredModules WHERE ID = $moduleID");
             $moduleInformation = $moduleQuery->fetch();
-            echo "<a href='challengeDisplay.php?moduleID=" . $moduleID . "'><div class='product_wrapper'>";
 
-
-
+        echo "<div class='product_wrapper'><a href='challengeDisplay.php?moduleID=" . $moduleID . "'>";
 
 
             
@@ -54,5 +48,26 @@ if (!authorisedAccess(false, true, true)) {
 
     </div>
     <?php } ?>
+    <!-- CUSTOM WEBPAGES GO HERE -->
+    <div class='product_wrapper' style='text-align: center;'>
+        <!-- CUSTOM WEBPAGE CHALLENGE TEST -->
+        <div class='image'><img style= 'width: 100px; height: 100px' src='../../assets/img/challengeImages/toilet.jpg'</img></div>
+        <a href='backupDieselGenerators.php'>Custom Webpage Challenge Test</a>
+        <p>Points: 0</p>
+    </div>
+
+    <div class='product_wrapper' style='text-align: center;'>
+        <!-- BIOLAB SHUTDOWN TEST-->
+        <div class='image'><img style= 'width: 100px; height: 100px' src='../../assets/img/challengeImages/Biolab.png'</img></div>
+        <a href='biolabShutdown.php'>Biolab Shutdown</a>
+        <p>Points: 500</p>
+    </div>
+
+
+
+
+
+
+    </div>
 </div>
 <br>
