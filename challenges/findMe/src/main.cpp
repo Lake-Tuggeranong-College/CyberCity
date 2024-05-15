@@ -35,7 +35,21 @@ Adafruit_GPS GPS(&GPSSerial);
 #define GPSECHO false
 uint32_t timer = millis();
 
+// OLED Featherwing
+#include <SPI.h>
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+#define BUTTON_A 15
+#define BUTTON_B 32
+#define BUTTON_C 14
+#define WIRE Wire
+
+Adafruit_SSD1306 OLEDdisplay = Adafruit_SSD1306(128, 32, &WIRE);
+
+
 // EPD - 2.13" EPD with SSD1675
+/*
 #include "Adafruit_ThinkInk.h"
 #define SRAM_CS 32
 #define EPD_CS 15
@@ -45,11 +59,14 @@ uint32_t timer = millis();
 ThinkInk_213_Mono_B72 display(EPD_DC, EPD_RESET, EPD_CS, SRAM_CS, EPD_BUSY);
 #define COLOR1 EPD_BLACK
 #define COLOR2 EPD_RED
+*/
+
+
 
 unsigned long previousMillis = 0; // will store last time LED was updated
 long randNumber;
-#define MAX_DELAY 100000 // Time in milliseconds for maximum delay
-#define MIN_DELAY 50000  // Time in milliseconds for minimum delay
+#define MAX_DELAY 200000 // Time in milliseconds for maximum delay
+#define MIN_DELAY 5000  // Time in milliseconds for minimum delay
 
 void logEvent(String eventData)
 {
@@ -120,7 +137,7 @@ String dataTransfer(String apiKeyValue, String userName, String Location, String
     HTTPClient http;
 
     // Your Domain name with URL path or IP address with path
-    http.begin(client, serverURL);
+    http.begin(client, serverName);
 
     // Specify content-type header
     http.addHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -160,8 +177,8 @@ String dataTransfer(String apiKeyValue, String userName, String Location, String
 #endif
   return serverResponse;
 }
-
-void drawText(String text, uint16_t color, int textSize, int x, int y)
+/*
+void EPDDrawText(String text, uint16_t color, int textSize, int x, int y)
 {
   display.setCursor(x, y);
   display.setTextColor(color);
@@ -170,14 +187,14 @@ void drawText(String text, uint16_t color, int textSize, int x, int y)
   display.print(text);
 }
 
-void updateEPD(String messageToBroadcast, String ip)
+void EPDUpdate(String messageToBroadcast, String ip)
 {
 
   // Indigenous Country Name
-  drawText("Find Me", EPD_BLACK, 2, 0, 0);
+  EPDDrawText("Find Me", EPD_BLACK, 2, 0, 0);
 
   // Config
-  drawText(ip, EPD_BLACK, 1, 130, 0);
+  EPDDrawText(ip, EPD_BLACK, 1, 130, 0);
   // drawText(getTimeAsString(), EPD_BLACK, 1, 130, 100);
   // drawText(getDateAsString(), EPD_BLACK, 1, 130, 110);
 
@@ -187,7 +204,7 @@ void updateEPD(String messageToBroadcast, String ip)
   display.drawLine(0, 75, 250, 75, EPD_BLACK);
 
   // drawText("Moisture", EPD_BLACK, 2, 0, 25);
-  drawText(String(messageToBroadcast), EPD_BLACK, 4, 0, 45);
+  EPDDrawText(String(messageToBroadcast), EPD_BLACK, 4, 0, 45);
 
   // drawText("Pump", EPD_BLACK, 2, 130, 25);
   // if (pumpIsRunning) {
@@ -196,8 +213,8 @@ void updateEPD(String messageToBroadcast, String ip)
   //   drawText("OFF", EPD_BLACK, 4, 130, 45);
   // }
 
-  drawText("Flag", EPD_BLACK, 2, 0, 80);
-  drawText(apiPassword, EPD_BLACK, 3, 0, 95);
+  EPDDrawText("Flag", EPD_BLACK, 2, 0, 80);
+  EPDDrawText(apiPassword, EPD_BLACK, 3, 0, 95);
 
   // logEvent("Updating the EPD");
   display.display();
@@ -214,11 +231,16 @@ void updateDisplay(String messageToBroadcast, String ip)
   Serial.print("Displaying: ");
   Serial.println(messageToBroadcast);
 }
+*/
+
+
 
 void broadcastMessage()
 {
   // Array of possible messages.
   String messages[] = {
+      "The Operator knows all",
+      "The Operator may give you the information you seek",
       "Who do I spy?",
       "HELLO FELLOW HUMAN",
       "Would you like to play a game?",
@@ -349,9 +371,26 @@ void gpsRead()
       Serial.print(", ");
       Serial.print(GPS.longitude, 4);
       Serial.println(GPS.lon);
+      String loc = String(GPS.latitude) + ", " + String(GPS.longitude);
+      dataTransfer(apiPassword, userName, moduleName, "loc");
     }
+          
+
   }
 }
+
+void OLEDUpdate(String messageToBroadcast, String ip)
+{
+  // text display tests
+  OLEDdisplay.setTextSize(1);
+  OLEDdisplay.setTextColor(SSD1306_WHITE);
+  OLEDdisplay.setCursor(0,0);
+  OLEDdisplay.print("Connected to SSID\n'CyberRange':");
+  OLEDdisplay.println(ip);
+  OLEDdisplay.println(messageToBroadcast);
+  OLEDdisplay.setCursor(0,0);
+  OLEDdisplay.display(); // actually display all of the above
+  }
 
 void setup()
 {
@@ -418,10 +457,35 @@ void setup()
   // GPS
   gpsInitialise();
 
+  //OLED
+  OLEDdisplay.begin(SSD1306_SWITCHCAPVCC, 0x3C); // Address 0x3C for 128x32
+
+  Serial.println("OLED begun");
+
+  // Show image buffer on the display hardware.
+  // Since the buffer is intialized with an Adafruit splashscreen
+  // internally, this will display the splashscreen.
+  OLEDdisplay.display();
+  delay(1000);
+
+  // Clear the buffer.
+  OLEDdisplay.clearDisplay();
+  OLEDdisplay.display();
+
+  Serial.println("IO test");
+
+  pinMode(BUTTON_A, INPUT_PULLUP);
+  pinMode(BUTTON_B, INPUT_PULLUP);
+  pinMode(BUTTON_C, INPUT_PULLUP);
+
+  OLEDUpdate("CTF{FoundMe}", ip);
+
   // EPD
+  /*
   display.begin();
   display.clearBuffer();
-  updateEPD("Welcome", ip);
+  */
+  //EPDUpdate("Welcome", ip);
 }
 
 void loop()
@@ -442,6 +506,6 @@ void loop()
   // End : Broadcast a message
 
   // GPS
-  gpsRead();
+  //gpsRead();
   delay(250);
 }
