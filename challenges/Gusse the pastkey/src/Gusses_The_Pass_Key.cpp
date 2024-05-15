@@ -100,7 +100,6 @@ void setup() // This begins Serial, Starts wi-fi Connections and Creates the ran
   Serial.print("Connected to the Internet");
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
-  randomSeed(analogRead(A4));
 }
 
 void loop() 
