@@ -17,10 +17,6 @@ if (!authorisedAccess(false, true, true)) {
 
     <h1>Challenges</h1>
 
-
-<!--    <a href="backupDieselGenerators.php">custom challenge webpage test</a>-->
-<!--             <a href="biolabShutdown.php">custom challenge webpage test2</a>-->
-
     <?php
         // Get all Enabled Modules.
         $moduleList = $conn->query("SELECT ID, challengeTitle,PointsValue,moduleID FROM Challenges");
@@ -62,7 +58,7 @@ if (!authorisedAccess(false, true, true)) {
 
     <div class='product_wrapper' style='text-align: center;'>
         <!-- BIOLAB SHUTDOWN TEST-->
-        <div class='image'><img style= 'width: 100px; height: 100px' src='../../assets/img/challengeImages/backupDieselGenerators.jpg'</img></div>
+        <div class='image'><img style= 'width: 100px; height: 100px' src='../../assets/img/challengeImages/Biolab.png'</img></div>
         <a href='biolabShutdown.php'>Biolab Shutdown</a>
         <p>Points: 500</p>
     </div>
