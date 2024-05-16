@@ -19,7 +19,7 @@ if (!authorisedAccess(false, true, true)) {
 
     <?php
         // Get all Enabled Modules.
-        $moduleList = $conn->query("SELECT ID, challengeTitle,PointsValue,moduleID FROM Challenges");
+        $moduleList = $conn->query("SELECT ID, challengeTitle,PointsValue,moduleID FROM Challenges WHERE Enabled = 1");
 
         while ($challengeData = $moduleList->fetch()) {
 
