@@ -51,14 +51,13 @@ while ($ContactData = $ContactList->fetch()) {
 
     <?php
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        print_r( $ContactData["ID"]);
         if (isset($_GET["ContactID"])) {
             $postID = $_GET["ContactID"];
             $sql = "UPDATE ContactUs SET IsRead = 1 WHERE ID ='$postID'";
             $stmt = $conn->prepare($sql);
             $stmt->execute();
             $_SESSION["flash_message"] = "message read";
-            header("Location:" . BASE_URL . "/pages/admin/contactpage.php");
+//            header("Location:" . BASE_URL . "/pages/admin/contactpage.php");
             echo $ContactData["IsRead"];
         }
     }
