@@ -44,13 +44,12 @@ while ($ContactData = $ContactList->fetch()) {
     echo "<div class='contactTable' style='min-width: 300px; max-width: 24%'>" . $ContactData['Email'] . "</div>";
     echo "<div class='contactTable' style='min-width: 300px; max-width: 24%'>";
     ?>
-    <form action='contactpage.php?ContactID=" <?php echo $ContactData['ID'] ?> " method="post">
+    <form action="contactpage.php?ContactID= <?php echo $ContactData['ID'] ?> " method="post">
+
+        <button type='submit' class='btn btn-outline-danger'>  READ  </button>
+    </form>
+
     <?php
-    echo "<button type='submit' class='btn btn-outline-danger'>  READ  </button>";
-    echo "</form>";
-
-
-
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         print_r( $ContactData["ID"]);
         if (isset($_GET["ContactID"])) {
