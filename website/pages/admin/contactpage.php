@@ -43,21 +43,21 @@ while ($ContactData = $ContactList->fetch()) {
     echo "<div class='contactTable' style='min-width: 30px; max-width: 24%'>" . $ContactData['Username'] . "</div>";
     echo "<div class='contactTable' style='min-width: 300px; max-width: 24%'>" . $ContactData['Email'] . "</div>";
     echo "<div class='contactTable' style='min-width: 300px; max-width: 24%'>";
-    echo "<form method='post' action=' ". BASE_URL."/pages/admin/contactpage.php?ContactID=" . $ContactData['IsRead'] . ">";
-    echo "<button type='submit' class='btn btn-outline-danger'>READ</button>";
-    echo "</form>";
+    ?>
+    <form action="contactpage.php?ContactID= <?php echo $ContactData['ID'] ?> " method="post">
 
+        <button type='submit' class='btn btn-outline-danger'>  READ  </button>
+    </form>
 
-
+    <?php
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        echo $ContactData["IsRead"];
         if (isset($_GET["ContactID"])) {
             $postID = $_GET["ContactID"];
             $sql = "UPDATE ContactUs SET IsRead = 1 WHERE ID ='$postID'";
             $stmt = $conn->prepare($sql);
             $stmt->execute();
             $_SESSION["flash_message"] = "message read";
-            header("Location:" . BASE_URL . "/pages/admin/contactpage.php");
+//            header("Location:" . BASE_URL . "/pages/admin/contactpage.php");
             echo $ContactData["IsRead"];
         }
     }
