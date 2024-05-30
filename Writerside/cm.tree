@@ -14,8 +14,8 @@
         <toc-element topic="Fire-Department-Guide.md"/>
     </toc-element>
     <toc-element topic="FinancialTracing.md">
-        <toc-element topic="Financial-Tracing-Guide.md"/>
         <toc-element topic="Financial-Tracing-Hints.md"/>
+        <toc-element topic="Financial-Tracing-Guide.md"/>
     </toc-element>
     <toc-element topic="windmill.md">
         <toc-element topic="WindmillHints.md"/>
