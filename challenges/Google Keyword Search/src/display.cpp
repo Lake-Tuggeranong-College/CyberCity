@@ -4,11 +4,14 @@
 #include <Adafruit_ST7735.h> // Hardware-specific library for ST7735
 #include <Adafruit_ST7789.h>
 #include "Adafruit_miniTFTWing.h"
+#include <ArduinoJson.h>
 
 // Custom Libraries
 #include "sensitiveInformation.h"
 #include <CyberCitySharedFunctionality.h>
 CyberCitySharedFunctionality cyberCity;
+
+WiFiClient client;
 
 Adafruit_miniTFTWing ss;
 #define TFT_RST    -1    // we use the seesaw for resetting to save a pin
@@ -25,12 +28,112 @@ Adafruit_ST7735 tft_7735 = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_RST);
 Adafruit_ST77xx *tft = NULL;
 uint32_t version;
 
+// Dummy variable, may not be needed.
+String outputCommand;
+
+void TextDisplay() {
+    uint32_t buttons = ss.readButtons();
+  //Serial.println(buttons, BIN);
+  
+  uint16_t color;
+
+  color = ST77XX_BLACK;
+  if (! (buttons & TFTWING_BUTTON_LEFT)) {
+    Serial.println("LEFT");
+    color = ST77XX_WHITE;
+  }
+  if (version == 3322) {
+    delay(500);
+    tft->fillTriangle(200, 45, 200, 85, 220, 65, color);
+  } else {
+    delay(500);
+    tft->fillTriangle(150, 30, 150, 50, 160, 40, color);
+  } 
+
+  color = ST77XX_BLACK;
+  if (! (buttons & TFTWING_BUTTON_RIGHT)) {
+    Serial.println("RIGHT");
+    color = ST77XX_WHITE;
+  }
+  if (version == 3322) {
+    tft->fillTriangle(120, 45, 120, 85, 100, 65, color);
+  } else {
+    tft->fillTriangle(120, 30, 120, 50, 110, 40, color);
+  } 
+
+  color = ST77XX_BLACK;
+  if (! (buttons & TFTWING_BUTTON_DOWN)) {
+    Serial.println("DOWN");
+    color = ST77XX_WHITE;
+  }
+  if (version == 3322) {
+    tft->fillTriangle(140, 25, 180, 25, 160, 10, color);
+  } else {
+    tft->fillTriangle(125, 26, 145, 26, 135, 16, color);
+  }
+  
+  color = ST77XX_BLACK;
+  if (! (buttons & TFTWING_BUTTON_UP)) {
+    Serial.println("UP");
+    color = ST77XX_WHITE;
+  }
+  if (version == 3322) {
+    tft->fillTriangle(140, 100, 180, 100, 160, 120, color);
+  } else {
+    tft->fillTriangle(125, 53, 145, 53, 135, 63, color);
+  }
+  
+  color = ST77XX_BLACK;
+  if (! (buttons & TFTWING_BUTTON_A)) {
+    Serial.println("A");
+    color = ST7735_GREEN;
+  }
+  if (version == 3322) {
+    tft->fillCircle(40, 100, 20, color);
+  } else {
+    tft->fillCircle(30, 57, 10, color);
+  }
+
+  color = ST77XX_BLACK;
+  if (! (buttons & TFTWING_BUTTON_B)) {
+    Serial.println("B");
+    color = ST77XX_YELLOW;
+  }
+  if (version == 3322) {
+    tft->fillCircle(40, 30, 20, color);
+  } else {
+    tft->fillCircle(30, 18, 10, color);
+  }
+  
+  color = ST77XX_BLACK;
+  if (! (buttons & TFTWING_BUTTON_SELECT)) {
+    Serial.println("SELECT");
+    color = ST77XX_RED;
+  }
+  if (version == 3322) {
+    tft->fillCircle(160, 65, 20, color);
+  } else {
+    tft->fillCircle(80, 40, 7, color);
+  }
+}
+
 void setup() {
   Serial.begin(9600);
   while (!Serial) {
     delay(10); // Wait until serial console is opened.
   }
   
+  delay(1000);
+  // Connect to Wi-Fi
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(1000);
+    Serial.println("Connecting to WiFi...");
+  }
+  Serial.println("Connected to WiFi!");
+  Serial.print("IP address: ");
+  Serial.println(WiFi.localIP());
+
   if (!ss.begin()) {
     Serial.println("seesaw not found!");
     while(1);
@@ -39,7 +142,8 @@ void setup() {
   }
 
   version = ((ss.getVersion() >> 16) & 0xFFFF);
-  Serial.print("Version: "); Serial.println(version);
+  Serial.print("Seesaw Version: "); 
+  Serial.println(version);
   if (version == 3322) {
     Serial.println("Version 2 TFT FeatherWing found");  
   } else {
@@ -62,15 +166,17 @@ void setup() {
   tft->setRotation(1);
   Serial.println("TFT initialized");
 
-  // tft->fillScreen(ST77XX_RED);
-  // delay(100);
-  // tft->fillScreen(ST77XX_GREEN);
-  // delay(100);
-  // tft->fillScreen(ST77XX_BLUE);
-  // delay(100);
-  // tft->fillScreen(ST77XX_BLACK);
+  Serial.println("Filling the screen with red color...");
+  tft->fillScreen(ST77XX_RED);
+  delay(1000);
+  Serial.println("Filling the screen with green color...");
+  tft->fillScreen(ST77XX_GREEN);
+  delay(1000);
+  Serial.println("Filling the screen with blue color...");
+  tft->fillScreen(ST77XX_BLUE);
+  delay(1000);
 
-  Serial.println("Filling screen...");
+  Serial.println("Filling the screen with black color...");
   tft->fillScreen(ST77XX_BLACK);
   delay(1000);
   Serial.println("Setting text color...");
@@ -87,94 +193,48 @@ void setup() {
 }
 
 void loop() {
-  delay(10);
+  TextDisplay();
+  delay(100);
 
-  uint32_t buttons = ss.readButtons();
-  //Serial.println(buttons, BIN);
+  const char* TextData[] = {
+    "RandomText1",
+    "RandomText2",
+    "RandomText3",
+    "RandomText4",
+  };
+
+  // Chooses a random text from the array.
+  const char* dataToPost = TextData[random(0, 4)];
+
+  // Uses library function to upload the data to the server (handles the JSON formatting and HTTP POST request)
+  String payload = cyberCity.dataTransfer(dataToPost, apiKeyValue, sensorName, sensorLocation, 3000, serverName, true, true);
   
-  uint16_t color;
-
-  color = ST77XX_BLACK;
-  if (! (buttons & TFTWING_BUTTON_LEFT)) {
-    delay(1000);
-    Serial.println("LEFT");
-    color = ST77XX_WHITE;
-  }
-  if (version == 3322) {
-    tft->fillTriangle(200, 45, 200, 85, 220, 65, color);
-  } else {
-    tft->fillTriangle(150, 30, 150, 50, 160, 40, color);
-  } 
-
-  color = ST77XX_BLACK;
-  if (! (buttons & TFTWING_BUTTON_RIGHT)) {
-    delay(1000);
-    Serial.println("RIGHT");
-    color = ST77XX_WHITE;
-  }
-  if (version == 3322) {
-    tft->fillTriangle(120, 45, 120, 85, 100, 65, color);
-  } else {
-    tft->fillTriangle(120, 30, 120, 50, 110, 40, color);
-  } 
-
-  color = ST77XX_BLACK;
-  if (! (buttons & TFTWING_BUTTON_DOWN)) {
-    delay(1000);
-    Serial.println("DOWN");
-    color = ST77XX_WHITE;
-  }
-  if (version == 3322) {
-    tft->fillTriangle(140, 25, 180, 25, 160, 10, color);
-  } else {
-    tft->fillTriangle(125, 26, 145, 26, 135, 16, color);
-  }
-  
-  color = ST77XX_BLACK;
-  if (! (buttons & TFTWING_BUTTON_UP)) {
-    delay(1000);
-    Serial.println("UP");
-    color = ST77XX_WHITE;
-  }
-  if (version == 3322) {
-    tft->fillTriangle(140, 100, 180, 100, 160, 120, color);
-  } else {
-    tft->fillTriangle(125, 53, 145, 53, 135, 63, color);
-  }
-  
-  color = ST77XX_BLACK;
-  if (! (buttons & TFTWING_BUTTON_A)) {
-    delay(1000);
-    Serial.println("A");
-    color = ST7735_GREEN;
-  }
-  if (version == 3322) {
-    tft->fillCircle(40, 100, 20, color);
-  } else {
-    tft->fillCircle(30, 57, 10, color);
+  // Response from server (the command field from the database for the module.)
+  Serial.print("Payload from server:");
+  Serial.println(payload);
+  DynamicJsonDocument doc(1024);
+  //  Serial.println(deserializeJson(doc, payload));
+  DeserializationError error = deserializeJson(doc, payload);
+  if (error)
+  {
+    Serial.print(F("deserializeJson() failed: "));
+    Serial.println(error.f_str());
+    return;
   }
 
-  color = ST77XX_BLACK;
-  if (! (buttons & TFTWING_BUTTON_B)) {
-    delay(1000);
-    Serial.println("B");
-    color = ST77XX_YELLOW;
+  // Extracts the command field from the JSON response.
+  const char *command = doc["command"];
+  Serial.print("Command: ");
+  Serial.print(command);
+  delay(500);
+
+  // Do something with the command.
+  if (String(command) == "On")
+  {
+    outputCommand = "Fan On";
   }
-  if (version == 3322) {
-    tft->fillCircle(40, 30, 20, color);
-  } else {
-    tft->fillCircle(30, 18, 10, color);
-  }
-  
-  color = ST77XX_BLACK;
-  if (! (buttons & TFTWING_BUTTON_SELECT)) {
-    delay(1000);
-    Serial.println("SELECT");
-    color = ST77XX_RED;
-  }
-  if (version == 3322) {
-    tft->fillCircle(160, 65, 20, color);
-  } else {
-    tft->fillCircle(80, 40, 7, color);
+  else
+  {
+    outputCommand = "Fan Off";
   }
 }

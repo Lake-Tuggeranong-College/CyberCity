@@ -1,2 +1,28 @@
-FROM alpine:3.14
+FROM ubuntu:22.04
 
+#Install SSH
+RUN apt-get update
+RUN apt-get -y install openssh-server
+RUN apt-get -y install bash
+EXPOSE 22
+#RUN systemctl enable sshd
+#RUN systemctl start sshd
+RUN mkdir /var/run/sshd
+
+#Install debug utils
+RUN apt-get -y install net-tools
+RUN apt-get -y install inetutils-ping
+
+#Add user
+RUN useradd -m w.rose 
+RUN echo 'w.rose:followthewhiterabbit' | chpasswd
+RUN echo 'root:B10L4BShutd0wn123!' | chpasswd
+
+#Download script
+COPY shutdown.sh /biolab-rebootSequence.sh
+RUN chown root:root /biolab-rebootSequence.sh
+RUN chmod 700 /biolab-rebootSequence.sh
+
+
+
+CMD ["/usr/sbin/sshd", "-D"]

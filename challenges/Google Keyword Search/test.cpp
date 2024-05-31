@@ -4,11 +4,11 @@
 #include <Adafruit_ST7735.h> // Hardware-specific library for ST7735
 #include <Adafruit_ST7789.h>
 #include "Adafruit_miniTFTWing.h"
-#include <ArduinoJson.h>
 
-// 2-way connection between modules and website libraries
+// 2-way connection between modules and website libraries.
 #include <WiFi.h>
 #include <HTTPClient.h>
+#include <ArduinoJson.h>
 #include "sensitiveInformation.h"
 
 Adafruit_miniTFTWing ss;
@@ -36,13 +36,14 @@ void textDisplay() {
 
   color = ST77XX_BLACK;
   if (! (buttons & TFTWING_BUTTON_LEFT)) {
-    delay(1000);
     Serial.println("LEFT");
     color = ST77XX_WHITE;
   }
   if (version == 3322) {
+    delay(500);
     tft->fillTriangle(200, 45, 200, 85, 220, 65, color);
   } else {
+    delay(500);
     tft->fillTriangle(150, 30, 150, 50, 160, 40, color);
   } 
 
@@ -119,6 +120,57 @@ void textDisplay() {
   }
 }
 
+String websiteTextDisplay = "Hello World";
+
+// Check if it's time to send the data
+unsigned long currentMillis = millis();
+unsigned long previousMillis = 0;
+const long interval = 180000;
+
+void dataTransfer() {
+  // Check if it's time to send the data.
+  if (currentMillis - previousMillis >= interval) {
+    previousMillis = currentMillis;
+  }
+
+  // Create a JSON object
+  JsonDocument doc;
+  Serial.print("Debug JSON String: ");  
+  doc["module_value"] = websiteTextDisplay;
+  doc["module_name"] = sensorName;
+  doc["module_locate"] = sensorLocation;
+
+  // Create an HTTP client and send the JSON string to the server.
+  HTTPClient http;
+  http.begin(serverName);
+  http.addHeader("Content-Type", "application/json");
+
+  // Serialize JSON to send as a string.
+  String serverOutputJSON;
+  serializeJson(doc, serverOutputJSON);
+
+  // Send the JSON string as the payload
+  int httpResponseCode = http.POST(serverOutputJSON);
+  Serial.println(serverOutputJSON);
+
+  // HTTP response code type (200 == OK, >400 or >500 == something related to website/server).
+  if (httpResponseCode > 0)
+  {
+    Serial.print("HTTP Response code: ");
+    Serial.println(httpResponseCode);
+  }
+  else
+  {
+    Serial.print("Error code: ");
+    Serial.println(httpResponseCode);
+  }
+  // Free resources.
+  http.end();
+
+  // Add a delay to prevent flooding the server with requests.
+  delay(1000);
+}
+
 void setup() {
   Serial.begin(9600);
   while (!Serial) {
@@ -144,7 +196,8 @@ void setup() {
   }
 
   version = ((ss.getVersion() >> 16) & 0xFFFF);
-  Serial.print("Version: "); Serial.println(version);
+  Serial.print("Seesaw Version: "); 
+  Serial.println(version);
   if (version == 3322) {
     Serial.println("Version 2 TFT FeatherWing found");  
   } else {
@@ -190,30 +243,19 @@ void setup() {
   tft->setCursor(0, 0);
   delay(1000);
   Serial.println("Printing to display...");
-  tft->print("Hello World");
-
-  // Send the text to the PHP server
-  if(WiFi.status() == WL_CONNECTED) {
-    HTTPClient http;
-    http.begin(serverName);
-    http.addHeader("Content-Type", "application/x-www-form-urlencoded");
-  
-    String httpRequestData = "text=" + String("Hello World") + "&apiKeyValue=" + apiKeyValue + "&sensorName=" + sensorName + "&sensorLocation=" + sensorLocation; // The text and additional data to be sent
-    int httpResponseCode = http.POST(httpRequestData);
-    
-    if (httpResponseCode > 0) {
-      Serial.print("HTTP Response code: ");
-      Serial.println(httpResponseCode);
-    }
-    else {
-      Serial.print("Error code: ");
-      Serial.println(httpResponseCode);
-    }
-    http.end();  
-  }
+  tft->print(websiteTextDisplay);
 }
 
 void loop() {
-  delay(10);
   textDisplay();
+  delay(10);
+
+  dataTransfer();
 }
+
+// When entered the flag, it's over. No more data sending.
+// Because of that, data has to be sent before entering the flag.
+// For test, sent ramdom text to anoy users.
+// For production, sent sth like teasing texts to abuse user.
+// Text display on module and website at the same time.
+// Need the data_and_time too. Probs copy the function from the shared one.

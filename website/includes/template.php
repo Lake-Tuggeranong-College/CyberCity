@@ -12,11 +12,11 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark navbarCustom navbar-bg-dark">
     <a class="navbar-brand" href="<?php echo BASE_URL; ?>index.php"></a>
-        <img src="<?php echo BASE_URL; ?>assets/img/CCLogo.png" alt="" width="100" height="100">
-    <div class="collapse navbar-collapse" id="navbarNav">
+        <img src="<?php echo BASE_URL; ?>assets/img/CCLogo.png" alt="" width="5%" height="5%">
+    <div class="navbar-collapse" id="navbarNav">
         <ul class="navbar-nav me-auto "> <!--Left side of navbar-->
             <li class="nav-item active">
-                <a class="nav-link text-white" href="<?php echo BASE_URL; ?>index.php">Home</a>
+                <a style = "padding-left: 2rem" class="nav-link text-white" href="<?php echo BASE_URL; ?>index.php">Home</a>
             </li>
             <?php
             $accessLevel = 2;
@@ -34,7 +34,7 @@
                 <a class="nav-link text-white" href="' . BASE_URL .'pages/challenges/challengesList.php">Challenges</a>
             </li>
             <li class="nav-item active">
-                <a class="nav-link text-white" href="' . BASE_URL .'pages/tutorials/tutorialList.php">Tutorials</a></a>
+                <a class="nav-link text-white" target="_blank" href="http://10.177.200.71/CyberCityDocs/welcome.html">Tutorials</a></a>
             </li>
             ';
 
@@ -43,20 +43,36 @@
                 <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown"
                             data-bs-toggle="dropdown" aria-expanded="false">
-                            Administrator Functions
+                            Edit Users
                         </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <h3 style="padding-left: 15px">Edit Users</h3>
                         <a class="dropdown-item" href="' . BASE_URL . 'pages/admin/userList.php">Enabled User List</a>
                         <a class="dropdown-item" href="' . BASE_URL . 'pages/admin/disabledUsers.php">Disabled User List</a>
-                    <div class="dropdown-divider"></div>
-                         <a class="dropdown-item" href="' . BASE_URL . 'pages/admin/moduleRegister.php">Add New Module & Challenge</a>
+                    </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                     <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Modules
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="' . BASE_URL . 'pages/admin/moduleRegister.php">Add New Module & Challenge</a>
                          <a class="dropdown-item" href="' . BASE_URL . 'pages/admin/resetGame.php">Reset Game</a>
+                         </ul>
+                         </li>
+                         <li class="nav-item dropdown">
+                          <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                           Contacts
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                          <a class="dropdown-item" href="' . BASE_URL . 'pages/admin/contactpage.php">View Contact requests</a>
                          <a class="dropdown-item" href="' . BASE_URL . 'pages/admin/readContactRequests.php">Read Contact Requests</a>
-                    </ul>
+                         </ul>
                 </li>
+               
         </ul>'; }
+
 
 
         echo '</ul>

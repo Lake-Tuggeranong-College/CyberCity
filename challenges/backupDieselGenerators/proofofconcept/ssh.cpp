@@ -77,8 +77,10 @@ int openShellSession(ssh_session session) {
 
     // Define a list of commands to execute
     std::vector<std::string> commands = {
-        "ls",
-        "ifconfig"
+        "echo 'executing scripted commands'",
+        "cd /var/www/CyberCity",
+        "git pull"
+
     };
 
     // Execute each command in the list

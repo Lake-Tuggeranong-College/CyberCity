@@ -17,14 +17,15 @@ if (!authorisedAccess(false, false, true)) {
 <body>
 <h1>Contact Page</h1>
 <div class="container-fluid">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="contactTable" style="min-width: 30px; max-width: 30%"><strong>Request</strong></div>
-                <div class="contactTable" style="min-width: 30px; max-width: 30%"><strong>Username</strong></div>
-                <div class="contactTable" style="min-width: 300px; max-width: 30%"><strong>Email</strong></div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="contactTable" style="min-width: 30px; max-width: 24%"><strong>Request</strong></div>
+            <div class="contactTable" style="min-width: 30px; max-width: 24%"><strong>Username</strong></div>
+            <div class="contactTable" style="min-width: 300px; max-width: 24%"><strong>Email</strong></div>
+            <div class="contactTable" style="min-width: 300px; max-width: 24%"></div>
 
 
-            </div>
+        </div>
 
 
 </body>
@@ -32,15 +33,37 @@ if (!authorisedAccess(false, false, true)) {
 
 
 <?php
-$ContactList = $conn->query("SELECT Username, Email, ID FROM ContactUs ");
+$ContactList = $conn->query("SELECT Username, Email, ID, IsRead FROM ContactUs WHERE IsRead=0 ");
 
 while ($ContactData = $ContactList->fetch()) {
 
 
     echo "<div class='row'>";
-    echo "<div class='contactTable' style='min-width: 30px; max-width: 30%'>" . $ContactData['ID']. "</div>";
-    echo "<div class='contactTable' style='min-width: 30px; max-width: 30%'>" . $ContactData['Username']. "</div>";
-    echo "<div class='contactTable' style='min-width: 300px; max-width: 30%'>" . $ContactData['Email'] . "</div>";
+    echo "<div class='contactTable' style='min-width: 30px; max-width: 24%'>" . $ContactData['ID'] . "</div>";
+    echo "<div class='contactTable' style='min-width: 30px; max-width: 24%'>" . $ContactData['Username'] . "</div>";
+    echo "<div class='contactTable' style='min-width: 300px; max-width: 24%'>" . $ContactData['Email'] . "</div>";
+    echo "<div class='contactTable' style='min-width: 300px; max-width: 24%'>";
+    ?>
+    <form action="contactpage.php?ContactID= <?php echo $ContactData['ID'] ?> " method="post">
+
+        <button type='submit' class='btn btn-outline-danger'>  READ  </button>
+    </form>
+
+    <?php
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        if (isset($_GET["ContactID"])) {
+            $postID = $_GET["ContactID"];
+            $sql = "UPDATE ContactUs SET IsRead = 1 WHERE ID ='$postID'";
+            $stmt = $conn->prepare($sql);
+            $stmt->execute();
+            $_SESSION["flash_message"] = "message read";
+//            header("Location:" . BASE_URL . "/pages/admin/contactpage.php");
+            echo $ContactData["IsRead"];
+        }
+    }
+    ?>
+    </div>
+    <?php
     echo "</div>";
 
 
