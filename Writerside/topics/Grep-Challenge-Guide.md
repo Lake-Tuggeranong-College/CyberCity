@@ -1,10 +1,9 @@
-# Guess The Pass Key Guide
+## Grep challenge Guide
 
 ## Overview
-The Grep challenge involves the use of the terminal command "grep". This command is vry similar to CTRL + F but it has its own unique syntax in order to run in the command line.
+The Grep challenge involves the use of the terminal command "grep". This command is very similar to CTRL + F but it has its own unique syntax in order to run in the command line.
  
 ## Hints
->! Spoiler text
 
 <style>
 .container {
@@ -48,7 +47,7 @@ summary {
   </details>
 
   <details>
-    <summary>Hint 3</summary>
+    <summary>Hint 4</summary>
     <div>
       grep "CTF" [Insert filename]
     </div>
