@@ -83,9 +83,9 @@ int main() {
 
     int addressStatus = getAddressStatus(address);
     if (addressStatus == 1) {
-        remoteFilePath = "/var/www/CyberCity/Challenge_Files/backupDieselGenerators/BlueWhaleShipping.pdf";
+        remoteFilePath = "/var/www/CyberCity/serverFiles/backupDieselGenerators/BlueWhaleShipping.pdf";
     } else {
-        remoteFilePath = "/var/www/CyberCity/Challenge_Files/backupDieselGenerators/BlueWhaleShippingCTF.pdf";
+        remoteFilePath = "/var/www/CyberCity/serverFiles/backupDieselGenerators/BlueWhaleShippingCTF.pdf";
     }
 
     // Start SCP session for downloading
