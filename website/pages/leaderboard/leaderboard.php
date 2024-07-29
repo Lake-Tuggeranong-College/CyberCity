@@ -17,7 +17,7 @@ if (!authorisedAccess(true, true, true)) {
 <!--<body>-->
 <div class = "wideBox">
     <div class = "title" >
-        <h1>Leaderboard</h1>
+        <h2 style="font-size: 45px">Leaderboard</h2>
         <div class="table-responsive">
             <div class="container-fluid">
                 <div class="row">
