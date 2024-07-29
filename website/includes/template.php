@@ -99,7 +99,7 @@
         </ul>
         <ul class="navbar-nav ms-auto"> <!--Right side of navbar-->
             <!-- #Register button (when NOT logged in)"><a class="nav-link navbar_Dark" href="' . BASE_URL . 'pages/use -->
-            <li class="nav-item active"><a class="nav-link text-white" href="' . BASE_URL . 'pages/user/register.php">Register</a></li>
+            <li class="nav-item active"><a class="nav-link" style = "color: indianred" href="' . BASE_URL . 'pages/user/register.php">Register</a></li>
       
             <!-- Login button (when NOT logged in) -->
             <li class="nav-item active"><a class="nav-link text-white" href="' . BASE_URL . 'pages/user/login.php">Login</a></li>
