@@ -51,7 +51,6 @@ while ($ContactData = $ContactList->fetch()) {
 
     <?php
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        if (isset($_GET["ContactID"])) {
             $postID = $_GET["ContactID"];
             $sql = "UPDATE ContactUs SET IsRead = 1 WHERE ID ='$postID'";
             $stmt = $conn->prepare($sql);
