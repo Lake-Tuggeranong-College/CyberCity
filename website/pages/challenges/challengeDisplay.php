@@ -29,6 +29,41 @@ $moduleInformation = $moduleQuery->fetch();
 <title>Challenge Information</title>
 
 </head>
+
+<?php
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $userEnteredFlag = sanitise_data($_POST['hiddenflag']);
+    //    $challengeToLoad = $_GET["moduleID"];
+    //    $flagList = $conn->query("SELECT HashedFlag, PointsValue, moduleID, challengeTitle, challengeText, PointsValue FROM Challenges WHERE moduleID = " . $challengeToLoad . "");
+    //
+    //    while ($flagData = $flagList->fetch()) {
+//                if (password_verify($userEnteredFlag, $hashedFlag)) {
+    if ($userEnteredFlag == $hashedFlag) {
+        $user = $_SESSION["user_id"];
+        $sql = "UPDATE Users SET Score = SCORE + '$pointsValue' WHERE ID='$user'";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+
+        //        $userInformation = $conn->query("SELECT Score FROM Users WHERE ID='$user'");
+        //        $userData = $userInformation->fetch();
+        //        $addedScore = $userData["Score"] += $pointsValue;
+        //        $sql1 = "UPDATE Users SET Score=? WHERE Username=?";
+        //        $stmt = $conn->prepare($sql1);
+        //        $stmt->execute([$addedScore, $user]);
+
+        $sql = "UPDATE RegisteredModules SET CurrentOutput = 'On' WHERE ID='$moduleID'";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+        $_SESSION["flash_message"] = "<div class='bg-success'>Success!</div>";
+        header("Location:../../index.php");
+    } else {
+        $_SESSION["flash_message"] = "<div class='bg-danger'>Flag failed - Try again</div>";
+        header('Location: '. $_SERVER['REQUEST_URI']);
+        die;
+    }
+}
+?>
+
 <body>
 <!-- Indicate heading secion of the whole page. -->
 <header class="container-fluid d-flex align-items-center justify-content-center">
@@ -149,40 +184,5 @@ $moduleInformation = $moduleQuery->fetch();
     </div>
 </footer>
 
-<!-- Check if we should display the ESP32 modules data and give the end-users' point if they got the flag right. -->
-<?php
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $userEnteredFlag = sanitise_data($_POST['hiddenflag']);
-    //    $challengeToLoad = $_GET["moduleID"];
-    //    $flagList = $conn->query("SELECT HashedFlag, PointsValue, moduleID, challengeTitle, challengeText, PointsValue FROM Challenges WHERE moduleID = " . $challengeToLoad . "");
-    //
-    //    while ($flagData = $flagList->fetch()) {
-//                if (password_verify($userEnteredFlag, $hashedFlag)) {
-    if ($userEnteredFlag == $hashedFlag) {
-        $user = $_SESSION["user_id"];
-        $sql = "UPDATE Users SET Score = SCORE + '$pointsValue' WHERE ID='$user'";
-        $stmt = $conn->prepare($sql);
-        $stmt->execute();
-
-        //        $userInformation = $conn->query("SELECT Score FROM Users WHERE ID='$user'");
-        //        $userData = $userInformation->fetch();
-        //        $addedScore = $userData["Score"] += $pointsValue;
-        //        $sql1 = "UPDATE Users SET Score=? WHERE Username=?";
-        //        $stmt = $conn->prepare($sql1);
-        //        $stmt->execute([$addedScore, $user]);
-
-        $sql = "UPDATE RegisteredModules SET CurrentOutput = 'On' WHERE ID='$moduleID'";
-        $stmt = $conn->prepare($sql);
-        $stmt->execute();
-        $_SESSION["flash_message"] = "<div class='bg-success'>Success!</div>";
-        header("Location:../../index.php");
-    } else {
-        $_SESSION["flash_message"] = "<div class='bg-danger'>Flag failed - Try again</div>";
-        header('Location: '. $_SERVER['REQUEST_URI']);
-        die;
-    }
-}
-echo outputFooter();
-?>
 </body>
 </html>
