@@ -4,4 +4,4 @@ Websites are built using HTML (Hypertext Markup Language), which serves as the f
 
 _(CTRL + SHIFT + I) or Right Click and select (Inspect)_
 
-![](Screenshot_from_2024-07-31_14-43-02.png)
+<img height="420" src="Screenshot_from_2024-07-31_14-43-02.png" width="738"/>
