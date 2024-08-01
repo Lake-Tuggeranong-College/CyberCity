@@ -66,15 +66,13 @@ while ($ContactData = $ContactList->fetch()) {
     echo "</div>";
 
 
-}
+
 
 ?>
 </div>
 </div>
 </div>
 
-
-<?php echo outputFooter(); ?>
 
 
 
