@@ -1,7 +1,7 @@
 <?php 
     session_start();
 
-    require 'config.php';
+    require_once('config.php');
 
     // Define registered account's access levels
     define('USER_ACCESS_LEVEL', 1);
@@ -45,7 +45,7 @@
                             // Fetch user information from the database
                             $userToLoad = $_SESSION['user_id'];
                             $query = "SELECT Score FROM Users WHERE ID = ?";
-                            $stmt = $pdo -> prepare($query);
+                            $stmt = $conn -> prepare($query);
                             $stmt -> execute([$userToLoad]);
                             $userInformation = $stmt -> fetch();
                             
