@@ -24,13 +24,16 @@ String Email_Selector_Array [6] =  // This Array holds the Simulated Emails that
   "Ben.W:  'John Please Help. I can't remember What the 'thing' ended with. Was it Ending with Two ss or T.' John.R: I Don't think it was ss, Try T", // Email 5
   "jay.P:  'I want the word to be the same amount of charters and starts with the same charter in Upper case as Roband" // Email 6
 };
+
 int Last_Sent_email; // This will hold the Most recently number picked To stop a repeated email being Sent
 bool Recently_Sented_Email = false; // This will aid in stopping a repeated Email with an if Statement
 
 int Email_Selector_Array_Size = sizeof(Email_Selector_Array)/sizeof(Email_Selector_Array[0]);
 // This Finds how big the Array is to Identify how many Emails are in the Array So it can latter Chooses a random Email to send
 
-void Send_The_Email(String Selected_Email) // This Function Grabs the Selected Email, turns it into A JSON Object to be Sent to the Back-end DataBase of the PHP webBase sever
+void Send_The_Email(String Selected_Email) 
+// This Function Grabs the Selected Email, turns it into A JSON Object to be Sent to the Back-end DataBase of the PHP webBase sever
+ 
 {
       // Turns the Selected Email into the JOSN Object to send  
   String dataToPost = String(Selected_Email);
