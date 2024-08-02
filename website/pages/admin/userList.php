@@ -19,6 +19,5 @@ while ($userData = $userList->fetch()) {
     echo "<a class='moduleButton' href='userResetPassword.php?UserID=" . $userID . "'>Password</a>";
     echo "</div>";
 }
-
 ?>
 

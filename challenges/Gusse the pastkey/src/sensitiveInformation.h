@@ -17,5 +17,5 @@ String serverName = "http://192.168.1.10/CyberCity/website/esp32/dataTransfer.ph
 
 String apiKeyValue = "Pass_The_Key";
 
-String sensorName = "Nuclear_Reactor";
+String sensorName = "Guess_The_Passkey";
 String sensorLocation = "Nuclear_Reactor";
