@@ -21,9 +21,9 @@ define('ADMIN_ACCESS_LEVEL', 2);
     <!-- Bootstrap CSS & Custom CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="<?= BASE_URL; ?>assets/css/styles.css">
-    <link rel="stylesheet" href="<?= BASE_URL; ?>assets/css/divContainer.css">
-    <link rel="stylesheet" href="<?= BASE_URL; ?>assets/moduleList.css">
+    <link rel="stylesheet" type="text/css" href="<?= BASE_URL; ?>assets/css/styles.css">
+    <link rel="stylesheet" type="text/css" href="<?= BASE_URL; ?>assets/css/divContainer.css">
+    <link rel="stylesheet" type="text/css" href="<?= BASE_URL; ?>assets/moduleList.css">
 </head>
 <body>
 <!-- Navigation Bar section -->
@@ -54,12 +54,12 @@ define('ADMIN_ACCESS_LEVEL', 2);
 
                 <!-- Direct link to 'Leaderboard' page -->
                 <li class="nav-link active">
-                    <a href="<?= BASE_URL; ?>pages/leaderboard.php" class="nav-link text-white">Leaderboard</a>
+                    <a href="<?= BASE_URL; ?>pages/leaderboard/leaderboard.php" class="nav-link text-white">Leaderboard</a>
                 </li>
 
                 <!-- Direct link to 'Challenges' page -->
                 <li class="nav-link active">
-                    <a href="<?= BASE_URL; ?>pages/challengeList.php" class="nav-link text-white">Challenges</a>
+                    <a href="<?= BASE_URL; ?>pages/challenges/challengesList.php" class="nav-link text-white">Challenges</a>
                 </li>
 
                 <!-- Direct link to 'Tutorials' page -->
@@ -89,7 +89,7 @@ define('ADMIN_ACCESS_LEVEL', 2);
 
                             <!-- Direct link to 'Disabled User List' page on admin-level of access -->
                             <li>
-                                <a href="<?= BASE_URL; ?>pages/admin/disableUsers.php" class="dropdown-item">Disabled
+                                <a href="<?= BASE_URL; ?>pages/admin/disabledUsers.php" class="dropdown-item">Disabled
                                     User List</a>
                             </li>
                         </ul>
@@ -128,13 +128,13 @@ define('ADMIN_ACCESS_LEVEL', 2);
 
                             <!-- Direct link to 'View Contact Requests' page on admin-level of access -->
                             <li>
-                                <a href="<?= BASE_URL; ?>pages/admin/moduleRegister.php" class="dropdown-item">View
+                                <a href="<?= BASE_URL; ?>pages/admin/contactpage.php" class="dropdown-item">View
                                     Contact Requests</a>
                             </li>
 
                             <!-- Direct link to 'Read Contact Requests' page on admin-level of access -->
                             <li>
-                                <a href="<?= BASE_URL; ?>pages/admin/resetGame.php" class="dropdown-item">Read Contact
+                                <a href="<?= BASE_URL; ?>pages/admin/readContactRequests.php" class="dropdown-item">Read Contact
                                     Requests</a>
                             </li>
                         </ul>
