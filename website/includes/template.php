@@ -29,9 +29,8 @@ define('ADMIN_ACCESS_LEVEL', 2);
 <!-- Navigation Bar section -->
 <nav class="navbar navbar-expand-lg navbar-dark navbarCustom navbar-bg-dark">
     <!-- Logo -->
-    <a class="navbar-brand" href="<?= BASE_URL; ?>index.php">
-        <img src="<?= BASE_URL; ?>assets/img/CCLogo.png" alt="Cyber City Logo" width="5%" height="5%">
-    </a>
+    <a class="navbar-brand" href="<?= BASE_URL; ?>index.php"></a>
+    <img src="<?= BASE_URL; ?>assets/img/CCLogo.png" alt="Cyber City Logo" width="5%" height="5%">
 
     <div class="navbar-collapse" id="navbarNav">
         <!-- Navigation bar (left side) -->
@@ -140,6 +139,7 @@ define('ADMIN_ACCESS_LEVEL', 2);
                             </li>
                         </ul>
                     </li>
+        </ul>
                     <!-- Navigation Bar (right side) -->
                     <ul class="navbar-nav ms-auto">
                         <!-- Greeting text for account logged in successfully (both admin & non-admin account) -->
@@ -161,7 +161,7 @@ define('ADMIN_ACCESS_LEVEL', 2);
 
                     <!-- Non-admin account access -->
                 <?php elseif ($_SESSION['access_level'] == USER_ACCESS_LEVEL): ?>
-
+    </ul>
                     <!-- Navigation Bar (right side) -->
                     <ul class="navbar-nav ms-auto">
 
@@ -192,7 +192,7 @@ define('ADMIN_ACCESS_LEVEL', 2);
 
                 <!-- Neither non-admin access level nor admin access level -->
             <?php else: ?>
-
+    </ul>
                 <!-- Register new account / Logged back in current or old account -->
                 <ul class="navbar-nav ms-auto">
 
