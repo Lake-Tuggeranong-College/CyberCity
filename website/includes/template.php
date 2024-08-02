@@ -23,7 +23,7 @@ define('ADMIN_ACCESS_LEVEL', 2);
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="<?= BASE_URL; ?>assets/css/styles.css">
     <link rel="stylesheet" type="text/css" href="<?= BASE_URL; ?>assets/css/divContainer.css">
-    <link rel="stylesheet" type="text/css" href="<?= BASE_URL; ?>assets/moduleList.css">
+    <link rel="stylesheet" type="text/css" href="<?= BASE_URL; ?>assets/css/moduleList.css">
 </head>
 <body>
 <!-- Navigation Bar section -->
@@ -35,7 +35,7 @@ define('ADMIN_ACCESS_LEVEL', 2);
     <div class="navbar-collapse" id="navbarNav">
         <!-- Navigation bar (left side) -->
         <ul class="navbar-nav me-auto">
-            <li class="nav-item active">
+            <li class="nav-link active">
                 <a href="<?= BASE_URL; ?>index.php" class="nav-link text-white" style="padding-left: 2rem;">Home</a>
             </li>
 
@@ -73,7 +73,7 @@ define('ADMIN_ACCESS_LEVEL', 2);
                 <?php if ($_SESSION['access_level'] == ADMIN_ACCESS_LEVEL): ?>
 
                     <!-- Direct link to 'Edit Users' page on admin-level of access -->
-                    <li class="nav-item dropdown">
+                    <li class="nav-link dropdown">
                         <a href="#" class="nav-link dropdown-toggle text-white" id="navbarDropdown"
                            data-bs-toggle="dropdown" aria-expanded="false">Edit Users</a>
 
@@ -96,7 +96,7 @@ define('ADMIN_ACCESS_LEVEL', 2);
                     </li>
 
                     <!-- Direct link to 'Modules' page on admin-level of access -->
-                    <li class="nav-item dropdown">
+                    <li class="nav-link dropdown">
                         <a href="#" class="nav-link dropdown-toggle text-white" id="navbarDropdown"
                            data-bs-toggle="dropdown" aria-expanded="false">Modules</a>
 
@@ -118,7 +118,7 @@ define('ADMIN_ACCESS_LEVEL', 2);
                     </li>
 
                     <!-- Direct link to 'Contacts' page on admin-level of access -->
-                    <li class="nav-item dropdown">
+                    <li class="nav-link dropdown">
                         <a href="#" class="nav-link dropdown-toggle text-white" id="navbarDropdown"
                            data-bs-toggle="dropdown" aria-expanded="false">Contacts</a>
 
@@ -143,18 +143,18 @@ define('ADMIN_ACCESS_LEVEL', 2);
                     <!-- Navigation Bar (right side) -->
                     <ul class="navbar-nav ms-auto">
                         <!-- Greeting text for account logged in successfully (both admin & non-admin account) -->
-                        <li class="nav-item active">
+                        <li class="nav-link active">
                             <a href="" class="nav-link text-white">Logged in
                                 as <?= htmlspecialchars($_SESSION['username']); ?></a>
                         </li>
 
                         <!-- Logged-in acconut's current score text (both admin & non-admin account) -->
-                        <li class="nav-item active">
+                        <li class="nav-link active">
                             <a href="" class="nav-link text-white">Score: <?= htmlspecialchars($userScore); ?></a>
                         </li>
 
                         <!-- Logged-out the current logged-in account -->
-                        <li class="nav-item active">
+                        <li class="nav-link active">
                             <a href="<?= BASE_URL; ?>pages/user/logout.php" class="nav-link" style="color: indianred;">Logout</a>
                         </li>
                     </ul>
@@ -166,24 +166,24 @@ define('ADMIN_ACCESS_LEVEL', 2);
                     <ul class="navbar-nav ms-auto">
 
                         <!-- Direct link to 'Contact Us' page on non-admin account -->
-                        <li class="nav-item active">
+                        <li class="nav-link active">
                             <a href="<?= BASE_URL; ?>pages/contactUs/contact.php" class="nav-link text-white">Contact
                                 Us</a>
                         </li>
 
                         <!-- Greeting text for account logged in successfully (both admin & non-admin account) -->
-                        <li class="nav-item active">
+                        <li class="nav-link active">
                             <a href="" class="nav-link text-white">Logged in
                                 as <?= htmlspecialchars($_SESSION['username']); ?></a>
                         </li>
 
                         <!-- Logged-in acconut's current score text (both admin & non-admin account) -->
-                        <li class="nav-item active">
+                        <li class="nav-link active">
                             <a href="" class="nav-link text-white">Score: <?= htmlspecialchars($userScore); ?></a>
                         </li>
 
                         <!-- Logged-out the current logged-in account -->
-                        <li class="nav-item active">
+                        <li class="nav-link active">
                             <a href="<?= BASE_URL; ?>pages/user/logout.php" class="nav-link" style="color: indianred;">Logout</a>
                         </li>
                     </ul>
@@ -197,12 +197,12 @@ define('ADMIN_ACCESS_LEVEL', 2);
                 <ul class="navbar-nav ms-auto">
 
                     <!-- Direct link to 'Register' page if users are currently just view through the website -->
-                    <li class="nav-item active">
+                    <li class="nav-link active">
                         <a href="<?= BASE_URL; ?>pages/user/register.php" class="nav-link" style="color: indianred;">Register</a>
                     </li>
 
                     <!-- Direct link to 'Login' page if users are currently just view through the website -->
-                    <li class="nav-item active">
+                    <li class="nav-link active">
                         <a href="<?= BASE_URL; ?>pages/user/login.php" class="nav-link text-white">Login</a>
                     </li>
                 </ul>
