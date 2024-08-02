@@ -1,11 +1,11 @@
-<?php 
-    session_start();
+<?php
+session_start();
 
-    require_once('config.php');
+require_once('config.php');
 
-    // Define registered account's access levels
-    define('USER_ACCESS_LEVEL', 1);
-    define('ADMIN_ACCESS_LEVEL', 2);
+// Define registered account's access levels
+define('USER_ACCESS_LEVEL', 1);
+define('ADMIN_ACCESS_LEVEL', 2);
 ?>
 
 <!DOCTYPE html>
@@ -19,220 +19,254 @@
     <title>Cyber City</title>
 
     <!-- Bootstrap CSS & Custom CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="<?= BASE_URL; ?>assets/css/styles.css">
     <link rel="stylesheet" href="<?= BASE_URL; ?>assets/css/divContainer.css">
     <link rel="stylesheet" href="<?= BASE_URL; ?>assets/moduleList.css">
 </head>
-    <body>
-        <!-- Navigation Bar section -->
-        <nav class="navbar navbar-exland-lg navbar-dark navbarCustom navbar-bg-dark">
-            <!-- Logo -->
-            <a class="navbar-brand" href="<?= BASE_URL; ?>index.php">
-                <img src="<?= BASE_URL; ?>assets/img/CCLogo.png" alt="Cyber City Logo" width="5%" height="5%">
-            </a>
+<body>
+<!-- Navigation Bar section -->
+<nav class="navbar navbar-exland-lg navbar-dark navbarCustom navbar-bg-dark">
+    <!-- Logo -->
+    <a class="navbar-brand" href="<?= BASE_URL; ?>index.php">
+        <img src="<?= BASE_URL; ?>assets/img/CCLogo.png" alt="Cyber City Logo" width="5%" height="5%">
+    </a>
 
-            <div class="navbar-collapse" id="navbarNav">
-                <!-- Navigation bar (left side) -->
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item active">
-                        <a href="<?= BASE_URL; ?>index.php" class="nav-link text-white" style="padding-left: 2rem;">Home</a>
-                    </li>
+    <div class="navbar-collapse" id="navbarNav">
+        <!-- Navigation bar (left side) -->
+        <ul class="navbar-nav me-auto">
+            <li class="nav-item active">
+                <a href="<?= BASE_URL; ?>index.php" class="nav-link text-white" style="padding-left: 2rem;">Home</a>
+            </li>
 
-                    <!-- Looking for registered account's name -->
-                    <?php if(isset($_SESSION['username'])): ?>
-                        <?php
-                            // Fetch user information from the database
-                            $userToLoad = $_SESSION['user_id'];
-                            $query = "SELECT Score FROM Users WHERE ID = ?";
-                            $stmt = $conn -> prepare($query);
-                            $stmt -> execute([$userToLoad]);
-                            $userInformation = $stmt -> fetch();
-                            
-                            $userScore = $userInformation['Score'];
-                        ?>
+            <!-- Looking for registered account's name -->
+            <?php if (isset($_SESSION['username'])): ?>
+                <?php
+                // Fetch user information from the database
+                $userToLoad = $_SESSION['user_id'];
+                $query = "SELECT Score FROM Users WHERE ID = ?";
+                $stmt = $conn->prepare($query);
+                $stmt->execute([$userToLoad]);
+                $userInformation = $stmt->fetch();
 
-                        <!-- Direct link to 'Leaderboard' page -->
-                        <li class="nav-link active">
-                            <a href="<?= BASE_URL; ?>pages/leaderboard.php" class="nav-link text-white">Leaderboard</a>
-                        </li>
+                $userScore = $userInformation['Score'];
+                ?>
 
-                        <!-- Direct link to 'Challenges' page -->
-                        <li class="nav-link active">
-                            <a href="<?= BASE_URL; ?>pages/challengeList.php" class="nav-link text-white">Challenges</a>
-                        </li>
+                <!-- Direct link to 'Leaderboard' page -->
+                <li class="nav-link active">
+                    <a href="<?= BASE_URL; ?>pages/leaderboard.php" class="nav-link text-white">Leaderboard</a>
+                </li>
 
-                        <!-- Direct link to 'Tutorials' page -->
-                        <!-- TODO: Don't do local direct link like this. Make a proper page or so please! -->
-                        <li class="nav-link active">
-                            <a href="https://10.177.200.71/CyberCityDocs/welcome.html" class="nav-link text-white" target="_blank">Tutorials</a>
-                        </li>
+                <!-- Direct link to 'Challenges' page -->
+                <li class="nav-link active">
+                    <a href="<?= BASE_URL; ?>pages/challengeList.php" class="nav-link text-white">Challenges</a>
+                </li>
 
-                        <!-- Check for account logged in that have admin-level of access -->
-                        <?php if($_SESSION['access_level'] == ADMIN_ACCESS_LEVEL): ?>
+                <!-- Direct link to 'Tutorials' page -->
+                <!-- TODO: Don't do local direct link like this. Make a proper page or so please! -->
+                <li class="nav-link active">
+                    <a href="https://10.177.200.71/CyberCityDocs/welcome.html" class="nav-link text-white"
+                       target="_blank">Tutorials</a>
+                </li>
 
-                            <!-- Direct link to 'Edit Users' page on admin-level of access -->
-                            <li class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle text-white" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">Edit Users</a>
+                <!-- Check for account logged in that have admin-level of access -->
+                <?php if ($_SESSION['access_level'] == ADMIN_ACCESS_LEVEL): ?>
 
-                                <!-- Controlling different user account's accessibility on the website section -->
-                                <!-- TODO: What in the bottle flip is this?!? <ul> inside <li>?? -->
-                                <ul class="dropdown-menu" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <!-- Direct link to 'Edit Users' page on admin-level of access -->
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle text-white" id="navbarDropdown"
+                           data-bs-toggle="dropdown" aria-expanded="false">Edit Users</a>
 
-                                    <!-- Direct link to 'Enabled User List' page on admin-level of access -->
-                                    <li>
-                                        <a href="<?= BASE_URL; ?>pages/admin/userList.php" class="dropdown-item">Enabled User List</a>
-                                    </li>
+                        <!-- Controlling different user account's accessibility on the website section -->
+                        <!-- TODO: What in the bottle flip is this?!? <ul> inside <li>?? -->
+                        <ul class="dropdown-menu" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
 
-                                    <!-- Direct link to 'Disabled User List' page on admin-level of access -->
-                                    <li>
-                                        <a href="<?= BASE_URL; ?>pages/admin/disableUsers.php" class="dropdown-item">Disabled User List</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            
-                            <!-- Direct link to 'Modules' page on admin-level of access -->
-                            <li class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle text-white" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">Modules</a>
-
-                                <!-- Control different module registered for the CTF challenge on the website section -->
-                                <!-- TODO: Again ?!? -->
-                                <ul class="dropdown-menu" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                    
-                                    <!-- Direct link to 'Add New Module & Challenge' page on admin-level of access -->
-                                    <li>
-                                        <a href="<?= BASE_URL; ?>pages/admin/moduleRegister.php" class="dropdown-item">Add New Module & Challenge</a>
-                                    </li>
-
-                                    <!-- Direct link to 'Reset Game' page on admin-level of access -->
-                                    <li>
-                                        <a href="<?= BASE_URL; ?>pages/admin/resetGame.php" class="dropdown-item">Reset Game</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            
-                            <!-- Direct link to 'Contacts' page on admin-level of access -->
-                            <li class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle text-white" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">Contacts</a>
-
-                                <!-- Control the amount of support requests sent to the admin on the website section -->
-                                <!-- TODO: Seriously ?!? -->
-                                <ul class="dropdown-menu" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                    
-                                    <!-- Direct link to 'View Contact Requests' page on admin-level of access -->
-                                    <li>
-                                        <a href="<?= BASE_URL; ?>pages/admin/moduleRegister.php" class="dropdown-item">View Contact Requests</a>
-                                    </li>
-
-                                    <!-- Direct link to 'Read Contact Requests' page on admin-level of access -->
-                                    <li>
-                                        <a href="<?= BASE_URL; ?>pages/admin/resetGame.php" class="dropdown-item">Read Contact Requests</a>
-                                    </li>
-                                </ul>
-                            </li>
-                        <!-- Non-admin account access -->
-                        <?php elseif($_SESSION['access_level'] == USER_ACCESS_LEVEL): ?>
-                        
-                            <!-- Navigation Bar (right side) -->
-                            <ul class="navbar-nav ms-auto">
-
-                                <!-- Direct link to 'Contact Us' page on non-admin account -->
-                                <li class="nav-item active">
-                                    <a href="<?= BASE_URL; ?>pages/contactUs/contact.php" class="nav-link text-white">Contact Us</a>
-                                </li>
-
-                                <!-- Greeting text for account logged in successfully (both admin & non-admin account) -->
-                                <li class="nav-item active">
-                                    <a href="" class="nav-link text-white">Logged in as <?= htmlspecialchars($_SESSION['username']); ?></a>
-                                </li>
-
-                                <!-- Logged-in acconut's current score text (both admin & non-admin account) -->
-                                <li class="nav-item active">
-                                    <a href="" class="nav-link text-white">Score: <?= htmlspecialchars($userScore); ?></a>
-                                </li>
-
-                                <!-- Logged-out the current logged-in account -->
-                                <li class="nav-item active">
-                                    <a href="<?= BASE_URL; ?>pages/user/logout.php" class="nav-link" style="color: indianred;">Logout</a>
-                                </li>
-                            </ul>
-                        <!-- TODO: Can do a null case here if anyone willing to -->
-                        <?php endif; ?>
-                    
-                    <!-- Neither non-admin access level nor admin access level -->
-                    <?php else: ?>
-
-                        <!-- Register new account / Logged back in current or old account -->
-                        <ul class="navbar-nav ms-auto">
-                            
-                            <!-- Direct link to 'Register' page if users are currently just view through the website -->
-                            <li class="nav-item active">
-                                <a href="<?= BASE_URL; ?>pages/user/register.php" class="nav-link" style="color: indianred;">Register</a>
+                            <!-- Direct link to 'Enabled User List' page on admin-level of access -->
+                            <li>
+                                <a href="<?= BASE_URL; ?>pages/admin/userList.php" class="dropdown-item">Enabled User
+                                    List</a>
                             </li>
 
-                            <!-- Direct link to 'Login' page if users are currently just view through the website -->
-                            <li class="nav-item active">
-                                <a href="<?= BASE_URL; ?>pages/user/login.php" class="nav-link text-white">Login</a>
+                            <!-- Direct link to 'Disabled User List' page on admin-level of access -->
+                            <li>
+                                <a href="<?= BASE_URL; ?>pages/admin/disableUsers.php" class="dropdown-item">Disabled
+                                    User List</a>
                             </li>
                         </ul>
-                    <?php endif; ?>
+                    </li>
+
+                    <!-- Direct link to 'Modules' page on admin-level of access -->
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle text-white" id="navbarDropdown"
+                           data-bs-toggle="dropdown" aria-expanded="false">Modules</a>
+
+                        <!-- Control different module registered for the CTF challenge on the website section -->
+                        <!-- TODO: Again ?!? -->
+                        <ul class="dropdown-menu" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+
+                            <!-- Direct link to 'Add New Module & Challenge' page on admin-level of access -->
+                            <li>
+                                <a href="<?= BASE_URL; ?>pages/admin/moduleRegister.php" class="dropdown-item">Add New
+                                    Module & Challenge</a>
+                            </li>
+
+                            <!-- Direct link to 'Reset Game' page on admin-level of access -->
+                            <li>
+                                <a href="<?= BASE_URL; ?>pages/admin/resetGame.php" class="dropdown-item">Reset Game</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <!-- Direct link to 'Contacts' page on admin-level of access -->
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle text-white" id="navbarDropdown"
+                           data-bs-toggle="dropdown" aria-expanded="false">Contacts</a>
+
+                        <!-- Control the amount of support requests sent to the admin on the website section -->
+                        <!-- TODO: Seriously ?!? -->
+                        <ul class="dropdown-menu" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+
+                            <!-- Direct link to 'View Contact Requests' page on admin-level of access -->
+                            <li>
+                                <a href="<?= BASE_URL; ?>pages/admin/moduleRegister.php" class="dropdown-item">View
+                                    Contact Requests</a>
+                            </li>
+
+                            <!-- Direct link to 'Read Contact Requests' page on admin-level of access -->
+                            <li>
+                                <a href="<?= BASE_URL; ?>pages/admin/resetGame.php" class="dropdown-item">Read Contact
+                                    Requests</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- Navigation Bar (right side) -->
+                    <ul class="navbar-nav ms-auto">
+                        <!-- Greeting text for account logged in successfully (both admin & non-admin account) -->
+                        <li class="nav-item active">
+                            <a href="" class="nav-link text-white">Logged in
+                                as <?= htmlspecialchars($_SESSION['username']); ?></a>
+                        </li>
+
+                        <!-- Logged-in acconut's current score text (both admin & non-admin account) -->
+                        <li class="nav-item active">
+                            <a href="" class="nav-link text-white">Score: <?= htmlspecialchars($userScore); ?></a>
+                        </li>
+
+                        <!-- Logged-out the current logged-in account -->
+                        <li class="nav-item active">
+                            <a href="<?= BASE_URL; ?>pages/user/logout.php" class="nav-link" style="color: indianred;">Logout</a>
+                        </li>
+                    </ul>
+
+                    <!-- Non-admin account access -->
+                <?php elseif ($_SESSION['access_level'] == USER_ACCESS_LEVEL): ?>
+
+                    <!-- Navigation Bar (right side) -->
+                    <ul class="navbar-nav ms-auto">
+
+                        <!-- Direct link to 'Contact Us' page on non-admin account -->
+                        <li class="nav-item active">
+                            <a href="<?= BASE_URL; ?>pages/contactUs/contact.php" class="nav-link text-white">Contact
+                                Us</a>
+                        </li>
+
+                        <!-- Greeting text for account logged in successfully (both admin & non-admin account) -->
+                        <li class="nav-item active">
+                            <a href="" class="nav-link text-white">Logged in
+                                as <?= htmlspecialchars($_SESSION['username']); ?></a>
+                        </li>
+
+                        <!-- Logged-in acconut's current score text (both admin & non-admin account) -->
+                        <li class="nav-item active">
+                            <a href="" class="nav-link text-white">Score: <?= htmlspecialchars($userScore); ?></a>
+                        </li>
+
+                        <!-- Logged-out the current logged-in account -->
+                        <li class="nav-item active">
+                            <a href="<?= BASE_URL; ?>pages/user/logout.php" class="nav-link" style="color: indianred;">Logout</a>
+                        </li>
+                    </ul>
+                    <!-- TODO: Can do a null case here if anyone willing to -->
+                <?php endif; ?>
+
+                <!-- Neither non-admin access level nor admin access level -->
+            <?php else: ?>
+
+                <!-- Register new account / Logged back in current or old account -->
+                <ul class="navbar-nav ms-auto">
+
+                    <!-- Direct link to 'Register' page if users are currently just view through the website -->
+                    <li class="nav-item active">
+                        <a href="<?= BASE_URL; ?>pages/user/register.php" class="nav-link" style="color: indianred;">Register</a>
+                    </li>
+
+                    <!-- Direct link to 'Login' page if users are currently just view through the website -->
+                    <li class="nav-item active">
+                        <a href="<?= BASE_URL; ?>pages/user/login.php" class="nav-link text-white">Login</a>
+                    </li>
                 </ul>
-            </div>
-        </nav>
+            <?php endif; ?>
+        </ul>
+    </div>
+</nav>
 
-        <!-- Flash confirm message to indicating users successfully logged-in/registered into the website -->
-        <?php if(isset($_SESSION['flash_message'])): ?>
-            <div class="position-absolute bottom-0 end-0"><?= htmlspecialchars($_SESSION['flash_message']); ?></div>
-            <?php unset($_SESSION['flash_message']); ?>
-        <?php endif; ?>
+<!-- Flash confirm message to indicating users successfully logged-in/registered into the website -->
+<?php if (isset($_SESSION['flash_message'])): ?>
+    <div class="position-absolute bottom-0 end-0"><?= htmlspecialchars($_SESSION['flash_message']); ?></div>
+    <?php unset($_SESSION['flash_message']); ?>
+<?php endif; ?>
 
-        <!-- Boostrap JS -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-        
-        <?php 
-            /**
-             * sanitise input data to prevent XSS and other attacks
-             *
-             * @param string $data The data to sanitise
-             * @return string The sanitised data
-             */
-            function sanitise_data($data)
-            {
-                return htmlspecialchars(stripslashes(trim($data)));
-            }
+<!-- Boostrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
 
-            /**
-             * Confirm if the user is authorised to access individual pages
-             *
-             * @param bool $unauthorisedUsers Allow unauthorised users
-             * @param bool $users Allow regular users
-             * @param bool $admin Allow administrators
-             * @return bool True if user is authorised, false otherwise
-             */
-            function authorisedAccess($unauthorisedUsers, $users, $admin)
-            {
-                // Unauthenticated User
-                if (!isset($_SESSION["username"])) {
-                    if (!$unauthorisedUsers) {
-                        $_SESSION['flash_message'] = "<div class='bg-danger'>Access Denied</div>";
-                        return false;
-                    }
-                } else {
-                    // Regular User
-                    if ($_SESSION["access_level"] == USER_ACCESS_LEVEL && !$users) {
-                        $_SESSION['flash_message'] = "<div class='bg-danger'>Access Denied</div>";
-                        return false;
-                    }
+<?php
+/**
+ * sanitise input data to prevent XSS and other attacks
+ *
+ * @param string $data The data to sanitise
+ * @return string The sanitised data
+ */
+function sanitise_data($data)
+{
+    return htmlspecialchars(stripslashes(trim($data)));
+}
 
-                    // Administrators
-                    if ($_SESSION["access_level"] == ADMIN_ACCESS_LEVEL && !$admin) {
-                        return false;
-                    }
-                }
+/**
+ * Confirm if the user is authorised to access individual pages
+ *
+ * @param bool $unauthorisedUsers Allow unauthorised users
+ * @param bool $users Allow regular users
+ * @param bool $admin Allow administrators
+ * @return bool True if user is authorised, false otherwise
+ */
+function authorisedAccess($unauthorisedUsers, $users, $admin)
+{
+    // Unauthenticated User
+    if (!isset($_SESSION["username"])) {
+        if (!$unauthorisedUsers) {
+            $_SESSION['flash_message'] = "<div class='bg-danger'>Access Denied</div>";
+            return false;
+        }
+    } else {
+        // Regular User
+        if ($_SESSION["access_level"] == USER_ACCESS_LEVEL && !$users) {
+            $_SESSION['flash_message'] = "<div class='bg-danger'>Access Denied</div>";
+            return false;
+        }
 
-                // Otherwise, let them through
-                return true;
-            }
-        ?>
-    </body>
+        // Administrators
+        if ($_SESSION["access_level"] == ADMIN_ACCESS_LEVEL && !$admin) {
+            return false;
+        }
+    }
+
+    // Otherwise, let them through
+    return true;
+}
+
+?>
+</body>
 </html>
