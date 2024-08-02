@@ -27,7 +27,7 @@ define('ADMIN_ACCESS_LEVEL', 2);
 </head>
 <body>
 <!-- Navigation Bar section -->
-<nav class="navbar navbar-exland-lg navbar-dark navbarCustom navbar-bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark navbarCustom navbar-bg-dark">
     <!-- Logo -->
     <a class="navbar-brand" href="<?= BASE_URL; ?>index.php">
         <img src="<?= BASE_URL; ?>assets/img/CCLogo.png" alt="Cyber City Logo" width="5%" height="5%">
