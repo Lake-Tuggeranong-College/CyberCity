@@ -3,7 +3,24 @@
 #include <atomic>
 #include <libssh/libssh.h>
 #include <stdio.h>
+#include <string>
 
+/*
+You can attempt to compile this for windows if you wish. I know i'm never going to attempt that again. I hate this challenge. To complete it open it in a
+hex editor, the online one avaliable here: https://hexed.it/ is perfectly capable. Use the search feature and search for something like "mog" in order to 
+find the default address, (123 Mogworth St, Cybercity). Replace each character accordingly (rewrite the address) to "456 Grimace Shake Rd, Ohio". This will
+cause the address comparison function to work correctly and the program will download the correct PDF accordingly. Note that is named the same as the defualt
+address one that does not contain the CTF{} flag. 
+
+If you're dense enough that you can't live without changing the address, note that the two addresses should (haven't tested if it's true) have the same
+number of characters. Something something memory addresses byte bit addresses something something.
+
+- Ajay Sayer.
+*/
+
+// Check address and set remote file path accordingly
+std::string address = "123 Mogworth St, CyberCity"; //Address
+std::string address2 = "456 Grimace Shake Rd, Ohio"; //This is how i got it to work on linux. Live with it bruh.
 
 std::atomic<bool> stopLoadingAnimation(false);
 
@@ -17,13 +34,7 @@ void printLoadingAnimation() {
     }
 }
 
-int getAddressStatus(const std::string& address) {
-    if (address == "123 Mogworth St, CyberCity") {
-        return 1;
-    } else {
-        return 0;
-    }
-}
+
 
 int main() {
     // Display a message indicating that the terminal is open
@@ -75,19 +86,27 @@ int main() {
 
     std::cout << "\r" << "Authenticated successfully! Downloading file..." << std::endl;
 
+    /* these can be uncommented for debugging
+    std::cout << address << std::endl;
+    std::cout << address2 << std::endl;
+    */
 
-
-    // Check address and set remote file path accordingly
-    std::string address = "123 Mogworth St, CyberCity"; // Example address
-
-
-    int addressStatus = getAddressStatus(address);
-    if (addressStatus == 1) {
-        remoteFilePath = "/var/www/CyberCity/serverFiles/backupDieselGenerators/BlueWhaleShipping.pdf";
-    } else {
+    if (address == "456 Grimace Shake Rd, Ohio") {
         remoteFilePath = "/var/www/CyberCity/serverFiles/backupDieselGenerators/BlueWhaleShippingCTF.pdf";
+    } else {
+        remoteFilePath = "/var/www/CyberCity/serverFiles/backupDieselGenerators/BlueWhaleShipping.pdf";
     }
 
+    /* these can be uncommented for debugging
+    if (address == address2) {
+        std::cout << "it works" << std::endl;
+    } else {
+        std::cout << "it doesn't works" << std::endl;;
+    }
+
+    std::cout << address << std::endl; these can be uncommented for debugging
+    std::cout << address2 << std::endl;
+    */
     // Start SCP session for downloading
     scpSession = ssh_scp_new(sshSession, SSH_SCP_READ, remoteFilePath);
     if (scpSession == nullptr) {
@@ -136,10 +155,10 @@ int main() {
     size_t bytesRead;
     for (int i = 0; i < 50; ++i) {
          bytesRead = ssh_scp_read(scpSession, buffer, sizeof(buffer));
-         std::cout << "Read Data" << std::endl;  
+         //std::cout << "Read Data" << std::endl;  this can be uncommented for debugging
          if (bytesRead > 0) {
             fwrite(buffer, 1, bytesRead, localFile);
-            std::cout << "Write Data" << std::endl;  
+            //std::cout << "Write Data" << std::endl;  this can be uncommented for debugging
     } else {
         break; // Exit the loop if no more data to read
         }
