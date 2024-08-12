@@ -134,7 +134,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <!-- Directs to correspond page if the flag entered is eligible. -->
         <form action="challengeDisplay.php?moduleID=<?= $moduleID ?>" method="post" enctype="multipart/form-data">
             <div class="form-floating">
-                <input type="text" class="form-control" id="flag" name="hiddenflag" placeholder="Enter the flag here.">
+                <input type="text" class="form-control" id="flag" name="hiddenflag" value="CTF{Flag_Here}">
                 <label for="flag">Please enter the flag: </label>
                 <p id="functionAssistant" class="form-text text-start font-size-sm">
                     You'll have to hit the "Enter" key when finish
