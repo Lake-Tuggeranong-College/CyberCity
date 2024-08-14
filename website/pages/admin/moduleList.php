@@ -9,6 +9,7 @@ if (!authorisedAccess(false, true, true)) {
 
     <title>Module List</title>
     <link rel="stylesheet" href="../../assets/css/moduleList.css">
+</head>
 
     <h1>Module List</h1>
 
