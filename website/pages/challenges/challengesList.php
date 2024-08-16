@@ -47,19 +47,19 @@ if (!authorisedAccess(false, true, true)) {
 
     ?>
              <!-- CUSTOM WEBPAGES GO HERE -->
-             <div class='product_wrapper' style='text-align: center;'><a href='backupDieselGenerators.php'>
-                 <!-- CUSTOM WEBPAGE CHALLENGE TEST -->
-                 <div class='image'><img style= 'width: 100px; height: 100px' src='../../assets/img/challengeImages/toilet.jpg'</img></div>
-                 <a>Custom Webpage Challenge Test</a>
-                 <p>Points: 0</p>
-             </a></div>
-
-             <div class='product_wrapper' style='text-align: center;'><a href='biolabShutdown.php'>
-                 <!-- BIOLAB SHUTDOWN TEST-->
-                 <div class='image'><img style= 'width: 100px; height: 100px' src='../../assets/img/challengeImages/Biolab.png'</img></div>
-                 <a>Biolab Shutdown</a>
-                 <p>Points: 500</p>
-             </a></div>
+<!--            <!-- <div class='product_wrapper' style='text-align: center;'><a href='backupDieselGenerators.php'>-->
+<!--                 <!-- CUSTOM WEBPAGE CHALLENGE TEST -->
+<!--                 <div class='image'><img style= 'width: 100px; height: 100px' src='../../assets/img/challengeImages/toilet.jpg'</img></div>-->
+<!--                 <a>Custom Webpage Challenge Test</a>-->
+<!--                 <p>Points: 0</p>-->
+<!--             </a></div>-->
+<!---->
+<!--             <div class='product_wrapper' style='text-align: center;'><a href='biolabShutdown.php'>-->
+<!--                 <!-- BIOLAB SHUTDOWN TEST-->
+<!--                 <div class='image'><img style= 'width: 100px; height: 100px' src='../../assets/img/challengeImages/Biolab.png'</img></div>-->
+<!--                 <a>Biolab Shutdown</a>-->
+<!--                 <p>Points: 500</p>-->
+<!--             </a></div>-->
 
          </div>
 
