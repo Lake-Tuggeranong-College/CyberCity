@@ -23,4 +23,8 @@ For instance, ‘Q’ in the ciphertext corresponds to ‘T’ in the plaintext.
 
 [Cryptii](https://cryptii.com)
 
-While using Cryptii, put the Ceaser Cipher into the decryptor (select decode and caesar cipher)
+While using Cryptii, select decode in the options and input your cipher.
+
+(You may need to adjust the shift of letters to make the output coherent)
+
+![cryptiiexample.png](cryptiiexample.png)

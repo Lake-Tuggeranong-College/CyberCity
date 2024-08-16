@@ -1,23 +1,29 @@
 <?php
-const BASE_URL = '/CyberCity/website/';
-//<!-- had to be done because PHPStorm wouldn't play ball-->
-session_start();
-$servername = "10.177.200.71";
-$username = "CyberCity";
-$password = "CyberCity";
-$dbname = "CyberCity";
-$errorCaught = false;
+    // Base-line redirect URL so the SSH doesn't get flipping confused af
+    const BASE_URL = '/CyberCity/website/';
 
-try {
-    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    $errorCaught = true;
-    $_SESSION['flash_message'] = "<div class='bg-danger'>The Database cannot be found: " . $servername . ". ".$e."</div>";
-}
-if (!$errorCaught) {
-    //echo "Database connection configured correctly, and database connection good.";
-}
+    // Had to be done because PHPStorm wouldn't play ball
+    $serverHost = "10.177.200.71";
+    $dbUsr = "CyberCity";
+    $dbPwd = "CyberCity";
+    $dbName = "CyberCity";
 
-//$conn = null;
+
+    // PDO options for maximum error handling
+    $pdoFullOpt = [
+        PDO::ATTR_ERRMODE               => PDO::ERRMODE_EXCEPTION,  // Set error mode to exceptions
+        PDO::ATTR_DEFAULT_FETCH_MODE    => PDO::FETCH_BOTH,        // Set default fetch mode to associative array
+        PDO::ATTR_EMULATE_PREPARES      => false,                   // Use native prepared statements
+        PDO::ATTR_PERSISTENT            => true,                    // Keeps database connection alive across scripts
+    ];
+
+    // Create PDO instance
+    try {
+        $conn = new PDO("mysql:host=$serverHost;dbname=$dbName", $dbUsr, $dbPwd, $pdoFullOpt);
+        // echo "Connected successfully";
+
+    } catch (PDOException $e) {
+        // Failed to connect the database
+        die("Connection failed: " . $e -> getMessage());
+    }
 ?>
