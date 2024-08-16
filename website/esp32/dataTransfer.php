@@ -86,7 +86,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $payloadJSON = ['command' => $payload];
         header('Content-type: application/json');
         echo json_encode($payloadJSON);
-        $conn->close();
+        $conn = null;
 //        } else {
 //            echo "API Key incorrect";
 //        }

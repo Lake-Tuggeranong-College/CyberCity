@@ -12,6 +12,7 @@ Servo Servo1;
 String outputCommand = "NaN";
 void setup() {
   Serial.begin(9600);
+  setCpuFrequencyMhz(240);
   // We need to attach the servo to the used pin number
   ESP32PWM::allocateTimer(0);
   ESP32PWM::allocateTimer(1);
