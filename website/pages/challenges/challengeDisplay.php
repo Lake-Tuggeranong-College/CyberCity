@@ -1,5 +1,5 @@
 <?php
-include "../../includes/template.php";
+    include "../../includes/template.php";
 /** @var $conn */
 
 if (!authorisedAccess(false, true, true)) {

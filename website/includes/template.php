@@ -7,7 +7,12 @@ require('config.php');
 // Define registered account's access levels
 define('USER_ACCESS_LEVEL', 1);
 define('ADMIN_ACCESS_LEVEL', 2);
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    return;
+}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
