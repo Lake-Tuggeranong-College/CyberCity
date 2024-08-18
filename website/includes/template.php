@@ -237,10 +237,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </nav>
 
     <!-- Flash confirm message to indicating users successfully logged-in/registered into the website -->
-    <?php if (isset($_SESSION['flash_message'])): ?>
-        <div class="position-absolute bottom-0 end-0"><?= htmlspecialchars($_SESSION['flash_message']); ?></div>
-        <?php unset($_SESSION['flash_message']); ?>
-    <?php endif; ?>
+<!--    --><?php //if (isset($_SESSION['flash_message'])): ?>
+<!--        <div class="position-absolute top-15 end-0">--><?php //= htmlspecialchars($_SESSION['flash_message']); ?><!--</div>-->
+<!--        --><?php //unset($_SESSION['flash_message']); ?>
+<!--    --><?php //endif; ?>
+    <?php
+    if (isset($_SESSION['flash_message'])) {
+    $message = $_SESSION['flash_message'];
+    unset($_SESSION['flash_message']);
+    //    echo $message;
+    ?>
+    <div class="position-static">
+        <?= $message ?>
+    </div>
+    <?php
+}
+?>
 
     <!-- Boostrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"

@@ -1,4 +1,4 @@
-## Grep challenge guide
+# Grep challenge guide
 
 The first step to this challenge is to download the file on the challenge webpage as shown below
 
