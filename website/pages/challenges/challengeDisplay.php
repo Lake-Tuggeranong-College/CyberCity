@@ -135,7 +135,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <form action="challengeDisplay.php?moduleID=<?= $moduleID ?>" method="post" enctype="multipart/form-data">
             <div class="form-floating">
                 <input type="text" class="form-control" id="flag" name="hiddenflag" value="CTF{Flag_Here}">
-                <label for="flag">Please enter the flag: </label>
+<!--                <label for="flag">Please enter the flag: </label>-->
                 <p id="functionAssistant" class="form-text text-start font-size-sm">
                     You'll have to hit the "Enter" key when finish
                     entering the hidden flag.
