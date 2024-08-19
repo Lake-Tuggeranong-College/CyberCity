@@ -2,33 +2,32 @@
 
 ## Overview
 
-Guess the Pass key is the challenge where you skim through 
-the Information within the Emails.
+Guess the pass key is a challenge where the user has to decipher through information
+given within emails find a secret six letter password.
 
-![Guess The Pass kay Page.png](Guess The Pass kay Page.png)
+![Guessthepasskey.png](Guessthepasskey.png)
 
 ## Skill Learned 
 
 In today’s digital age, cybersecurity plays a crucial role in safeguarding organizations from malicious actors. 
-As cyber-attacks become more sophisticated and frequent, 
-highly skilled professionals are needed to protect sensitive information. 
-However, technical expertise alone is not sufficient; effective communication is equally critical. 
+Due cyber-attacks becoming increasingly sophisticated and frequent, 
+highly skilled professionals are required to safeguard sensitive information. 
+However, technical expertise alone isn't sufficient; effective communication is equally critical. 
 Cybersecurity analysts must be able to convey their findings and recommendations clearly and concisely to various audiences,
 including technical experts and executives.
 
 ## User Experiences
 
 As the user loads the Guess the pass key website, They will have displayed in front of them A table informing them 
-the requirements to past this challenge and the "Reward" For doing So. there is a white Box
-that will take String input from the User. 
+the requirements to pass this challenge. There is a white Box that will take String input from the User. 
 
 Below is a table of Recently received Data From the ESP32 feather wing Data that is sending simulated emails.
-These emails simulate effective communication on what pass key they Should be without directly using it within the emails  
+These emails simulate effective communication on what pass key they Should use without directly referencing it within the emails .
 
-![Image of email data.png](Image of email data.png)
+![Guessthepasskeydata.png](Guessthepasskeydata.png)
 
-However, When you gather enough information/emails, The pass key can be Exposed 
-from all the indirect clues with in each email. Therefor The user Must use the simulate emails to correctly Identify the Pass key   
+However, When you gather enough information/emails, using the indirect clues in the emails, the key can be deciphered. 
+Therefor The user must use the simulate emails to correctly Identify the Pass key   
 
 ## Developer Experiences
 
