@@ -55,7 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt = $conn->prepare($sql);
         $stmt->execute();
         $_SESSION["flash_message"] = "<div class='bg-success'>Success!</div>";
-        header("Location:../../index.php");
+        header("Location:./challengesList.php");
     } else {
         $_SESSION["flash_message"] = "<div class='bg-danger'>Flag failed - Try again</div>";
         header('Location: '. $_SERVER['REQUEST_URI']);

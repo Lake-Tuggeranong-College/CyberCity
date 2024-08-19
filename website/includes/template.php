@@ -173,7 +173,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     <!-- Direct link to 'Tutorials' page -->
                     <li class="nav-link active">
-                        <a href="https://10.177.200.71/CyberCityDocs/welcome.html" class="nav-link text-white"
+                        <a href="http://10.177.200.71/CyberCityDocs/welcome.html" class="nav-link text-white"
                             target="_blank">Tutorials</a>
                     </li>
 
