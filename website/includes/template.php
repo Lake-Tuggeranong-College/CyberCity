@@ -7,7 +7,12 @@ require('config.php');
 // Define registered account's access levels
 define('USER_ACCESS_LEVEL', 1);
 define('ADMIN_ACCESS_LEVEL', 2);
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    return;
+}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -168,7 +173,7 @@ define('ADMIN_ACCESS_LEVEL', 2);
 
                     <!-- Direct link to 'Tutorials' page -->
                     <li class="nav-link active">
-                        <a href="https://10.177.200.71/CyberCityDocs/welcome.html" class="nav-link text-white"
+                        <a href="http://10.177.200.71/CyberCityDocs/welcome.html" class="nav-link text-white"
                             target="_blank">Tutorials</a>
                     </li>
 
