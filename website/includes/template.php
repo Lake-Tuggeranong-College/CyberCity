@@ -254,7 +254,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         ?>
 
         <!-- Flash message positoned on the top (?) when confirming the needed condition -->
-        <div class="position-static"><?= $message ?></div>
+        <div class="position-static"><?= $message; ?></div>
 
     <?php endif; ?>
 
