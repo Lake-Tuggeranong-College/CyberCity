@@ -38,4 +38,9 @@
         <toc-element topic="Google-Keyword-Search-Guide.md"/>
     </toc-element>
 
+    <toc-element topic="Criminal-Records.md">
+        <toc-element topic="Criminal-Records-Hints.md"/>
+        <toc-element topic="Criminal-Records-Guide.md"/>
+    </toc-element>
+
 </instance-profile>
