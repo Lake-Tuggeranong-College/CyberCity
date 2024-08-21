@@ -9,18 +9,27 @@ if (!authorisedAccess(false, false, true)) {
     exit();
 }
 
+// Set to true as default for requested contacts from user
+$isRead = 1;
+
 // Fetch contact list from database
-$ContactList = $conn->query("SELECT Username, Email, ID FROM ContactUs WHERE IsRead=1");
+$query = "SELECT Username, Email, ID 
+          FROM ContactUs 
+          WHERE IsRead = :IsRead";
+
+$stmt = $conn->prepare($query);
+$stmt->bindParam(':IsRead', $isRead, PDO::PARAM_INT);
+$stmt->execute();
 
 // Check if query was successful
-if (!$ContactList) {
-    die("Error fetching contact list: " . $conn->error);
+if (!$stmt) {
+    die("Error fetching contact list: " . $conn->errorInfo());
 }
 ?>
 
 <head>
     <meta http-equiv="refresh" content="<?= $sec ?>;URL='<?= htmlspecialchars($page) ?>'">
-    <title>Cyber City - Contact Page</title>
+    <title>Cyber City - Contact Page</title> <!-- Probably not needed but well, I'll just keep it here in case -->
 </head>
 
 <body>
@@ -34,11 +43,11 @@ if (!$ContactList) {
         </div>
 
         <!-- Get stored requests from users in database data -->
-        <?php while ($ContactData = $ContactList->fetch_assoc()): ?>
+        <?php while ($contactData = $stmt->fetch(PDO::FETCH_ASSOC)): ?>
             <div class='row contact-row'>
-                <div class='contactTable' style='min-width: 30px; max-width: 30%'><?= htmlspecialchars($ContactData['ID']) ?></div>
-                <div class='contactTable' style='min-width: 30px; max-width: 30%'><?= htmlspecialchars($ContactData['Username']) ?></div>
-                <div class='contactTable' style='min-width: 300px; max-width: 30%'><?= htmlspecialchars($ContactData['Email']) ?></div>
+                <div class='contactTable' style='min-width: 30px; max-width: 30%'><?= htmlspecialchars($contactData['ID']) ?></div>
+                <div class='contactTable' style='min-width: 30px; max-width: 30%'><?= htmlspecialchars($contactData['Username']) ?></div>
+                <div class='contactTable' style='min-width: 300px; max-width: 30%'><?= htmlspecialchars($contactData['Email']) ?></div>
             </div>
         <?php endwhile; ?>
     </div>
@@ -46,7 +55,7 @@ if (!$ContactList) {
 
 <?php
 
-// Close tge database connection to clear cache (good PHP practice)
-$conn->close();
+// Close the database connection to clear cache (good PHP practice)
+$conn = null;
 
 ?>
