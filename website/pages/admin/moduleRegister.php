@@ -118,6 +118,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") { //Make Module Entry
     $stmt->bindValue(':moduleID', $moduleID);
     $stmt->execute();
     echo "Flag Made";
+
+    header('Location: '. $_SERVER['REQUEST_URI']);
+
 }
 ?>
 

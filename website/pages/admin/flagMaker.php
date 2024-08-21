@@ -48,6 +48,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->execute();
         echo "Flag Made";
     }
+    header('Location: '. $_SERVER['REQUEST_URI']);
+
 }
 
 
