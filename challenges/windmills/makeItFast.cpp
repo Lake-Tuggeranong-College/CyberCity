@@ -7,7 +7,7 @@ CyberCitySharedFunctionality cyberCity;
 
 #include <ESP32Servo.h>
 
-const char* server = "192.168.1.10";
+const char* server = "http://192.168.1.10";
 
 
 #define servoPin 21 // Declare the Servo pin
@@ -22,8 +22,10 @@ String readFromDatabase(const char* server, const char* table, const char* colum
     if(WiFi.status() == WL_CONNECTED) {
     HTTPClient http;
 
-    String url = String(server) + "/Cybercity/website/esp32Test/esp32Read.php?table=" + table + "&column=" + column + "&where=" + where;
-    http.begin(url.c_str());
+    String url = String(server) + "/CyberCity/website/esp32Test/esp32Read.php?table=" + table + "&column=" + column + "&where=" + where;
+    Serial.println("Constructed URL for database read: ");
+    Serial.println(url);
+    http.begin(url);
 
     int httpResponseCode = http.GET();
     String payload = "";
@@ -48,12 +50,18 @@ bool writeToDatabase(const char* server, const char* table, const char* column, 
     if(WiFi.status() == WL_CONNECTED) {
     HTTPClient http;
 
-    String url = String(server) + "/Cybercity/website/esp32Test/esp32Write.php";
+    String url = String(server) + "/CyberCity/website/esp32Test/esp32Write.php";
 
-    http.begin(url.c_str());
+    Serial.println("Constructed URL for database write: ");
+    Serial.println(url);
+
+    http.begin(url);
     http.addHeader("Content-Type", "application/x-www-form-urlencoded");
 
-    String postData = "table=" + String(table) + "&column" + String(column) + "&value=" + String(value) + "&where=" + String(where);
+    String postData = "table=" + String(table) + "&column=" + String(column) + "&value=" + String(value) + "&where=" + String(where);
+
+    Serial.println("Constructed POST data: ");
+    Serial.println(postData);
 
     int httpResponseCode = http.POST(postData);
     http.end();
@@ -94,7 +102,7 @@ void setup() {
 
   Serial.println("Read data: " + data);
 
-  bool success = writeToDatabase(server, "RegisteredModules", "CurrentOutput", "Off", "ud=46");
+  bool success = writeToDatabase(server, "RegisteredModules", "CurrentOutput", "Off", "id=46");
   if(success) {
     Serial.println("Write sucessful");
 
@@ -123,7 +131,18 @@ void setup() {
 
 
 void loop() {
-  
+  Serial.println("Server connection test: ");
+  String data = readFromDatabase(server, "RegisteredModules", "CurrentOutput", "id=46");
+
+  Serial.println("Read data: " + data);
+
+  bool success = writeToDatabase(server, "RegisteredModules", "CurrentOutput", "Off", "id=46");
+  if(success) {
+    Serial.println("Write sucessful");
+
+  } else {
+    Serial.println("Write failed");
+  }
   }
   
 

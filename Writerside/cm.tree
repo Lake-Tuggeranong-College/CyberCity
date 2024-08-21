@@ -21,6 +21,10 @@
         <toc-element topic="Grep-Challenge-Hints.md"/>
         <toc-element topic="Grep-Challenge-Guide.md"/>
     </toc-element>
+    <toc-element topic="Backup-Diesel-Generators.md">
+        <toc-element topic="Backup-Diesel-Generators-Hints.md"/>
+        <toc-element topic="Backup-Diesel-Generators-Guide.md"/>
+    </toc-element>
     <toc-element topic="windmill.md">
         <toc-element topic="WindmillHints.md"/>
         <toc-element topic="Windmill-Guide.md"/>
@@ -33,4 +37,5 @@
         <toc-element topic="Google-Keyword-Search-Hints.md"/>
         <toc-element topic="Google-Keyword-Search-Guide.md"/>
     </toc-element>
+
 </instance-profile>
