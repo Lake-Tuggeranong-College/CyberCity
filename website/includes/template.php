@@ -29,7 +29,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="<?= BASE_URL; ?>assets/css/styles.css">
-<!--    <link rel="stylesheet" href="--><?php //= BASE_URL; ?><!--assets/css/divContainer.css">-->
     <link rel="stylesheet" href="<?= BASE_URL; ?>assets/css/moduleList.css">
 </head>
 
@@ -39,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <nav class="navbar navbar-expand-lg navbar-dark navbarCustom navbar-bg-dark">
 
         <!-- Logo -->
-        <img src="<?= BASE_URL; ?>assets/img/CCLogo.png" alt="Cyber City Logo" width="5%" height="5%"</img>
+        <img src="<?= BASE_URL; ?>assets/img/CCLogo.png" alt="Cyber City Logo" width="5%" height="5%" </img>
 
         <!-- Navigation Bar class -->
         <div class="navbar-collapse" id="navbarNav">
@@ -76,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <!-- Direct link to 'Tutorials' page -->
                     <!-- TODO: Don't do local direct link like this. Make a proper page or so please! -->
                     <li class="nav-link active">
-                        <a href="https://10.177.200.71/CyberCityDocs/welcome.html" class="nav-link text-white"
+                        <a href="http://10.177.200.71/CyberCityDocs/welcome.html" class="nav-link text-white"
                             target="_blank">Tutorials</a>
                     </li>
 
@@ -236,23 +235,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <!-- End Navigation Bar -->
     </nav>
 
-    <!-- Flash confirm message to indicating users successfully logged-in/registered into the website -->
-<!--    --><?php //if (isset($_SESSION['flash_message'])): ?>
-<!--        <div class="position-absolute top-15 end-0">--><?php //= htmlspecialchars($_SESSION['flash_message']); ?><!--</div>-->
-<!--        --><?php //unset($_SESSION['flash_message']); ?>
-<!--    --><?php //endif; ?>
-    <?php
-    if (isset($_SESSION['flash_message'])) {
-    $message = $_SESSION['flash_message'];
-    unset($_SESSION['flash_message']);
-    //    echo $message;
-    ?>
-    <div class="position-static">
-        <?= $message ?>
-    </div>
-    <?php
-}
-?>
+    <!-- Best approach to comment out PHP mixed with HTML code that also have comment with it -->
+    <?php /* ?>
+
+    Flash confirm message to indicating users successfully logged-in/registered into the website
+    <?php if (isset($_SESSION['flash_message'])): ?>
+        <div class="position-absolute top-15 end-0"><?= htmlspecialchars($_SESSION['flash_message']); ?></div>
+        <?php unset($_SESSION['flash_message']); ?>
+    <?php endif; ?>
+
+    <?php // */ ?>
+
+    <?php if (isset($_SESSION['flash_message'])): ?>
+        <?php
+        $message = $_SESSION['flash_message'];
+        unset($_SESSION['flash_message']);
+        //echo $message;
+        ?>
+
+        <!-- Flash message positoned on the top (?) when confirming the needed condition -->
+        <div class="position-static"><?= $message; ?></div>
+
+    <?php endif; ?>
 
     <!-- Boostrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"

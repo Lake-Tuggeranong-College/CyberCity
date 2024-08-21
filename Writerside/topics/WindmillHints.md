@@ -1,4 +1,4 @@
-# Windmill Hints
+# Ventilation System Hints
 
 
 [//]: # (Example of the tabs.)

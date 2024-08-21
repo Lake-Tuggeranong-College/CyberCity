@@ -1,4 +1,4 @@
-# Google Keyword Search Hints
+# Biolab Security Key Hints
 
 Sometimes, even the best cryptographers need a nudge in the right direction. If you find yourself stuck, check out these hints to help you crack the code.
 
