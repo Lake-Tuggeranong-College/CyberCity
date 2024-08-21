@@ -19,5 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $query = "UPDATE Users SET Enabled = 0 WHERE AccessLevel ='1'";
     $stmt = $conn->prepare($query);
     $stmt->execute();
+    header('Location: '. $_SERVER['REQUEST_URI']);
+
 }
 ?>

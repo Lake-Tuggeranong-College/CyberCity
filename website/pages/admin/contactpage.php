@@ -59,7 +59,9 @@ while ($ContactData = $ContactList->fetch()) {
 //            header("Location:" . BASE_URL . "/pages/admin/contactpage.php");
             echo $ContactData["IsRead"];
         }
-    }
+    header('Location: '. $_SERVER['REQUEST_URI']);
+
+}
     ?>
     </div>
     <?php
