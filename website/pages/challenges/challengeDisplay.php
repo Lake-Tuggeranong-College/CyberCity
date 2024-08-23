@@ -12,8 +12,9 @@ if (isset($_GET["moduleID"])) {
     header("location:challengesList.php");
 }
 
-$sql = $conn->query("SELECT moduleID, challengeTitle, challengeText, PointsValue, HashedFlag FROM Challenges WHERE moduleID = " . $challengeToLoad . " ORDER BY ID DESC");
+$sql = $conn->query("SELECT ID, moduleID, challengeTitle, challengeText, PointsValue, HashedFlag FROM Challenges WHERE moduleID = " . $challengeToLoad . " ORDER BY ID DESC");
 $result = $sql->fetch();
+$challengeID = $result["ID"];
 $moduleID = $result["moduleID"];
 $title = $result["challengeTitle"];
 $challengeText = $result["challengeText"];
@@ -40,10 +41,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 //                if (password_verify($userEnteredFlag, $hashedFlag)) {
     if ($userEnteredFlag == $hashedFlag) {
         $user = $_SESSION["user_id"];
+        $query = $conn->query("SELECT * FROM `UserChallenges` WHERE `challengeID` ='$moduleID' AND `userID` = '$user'");
+        $row = $query->fetch();
+        echo($query->rowCount());
+
         $sql = "UPDATE Users SET Score = SCORE + '$pointsValue' WHERE ID='$user'";
         $stmt = $conn->prepare($sql);
         $stmt->execute();
-
+        $_SESSION["flash_message"] = $query->rowCount();
         //        $userInformation = $conn->query("SELECT Score FROM Users WHERE ID='$user'");
         //        $userData = $userInformation->fetch();
         //        $addedScore = $userData["Score"] += $pointsValue;
@@ -51,11 +56,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         //        $stmt = $conn->prepare($sql1);
         //        $stmt->execute([$addedScore, $user]);
 
-        $sql = "UPDATE RegisteredModules SET CurrentOutput = 'On' WHERE ID='$moduleID'";
-        $stmt = $conn->prepare($sql);
-        $stmt->execute();
-        $_SESSION["flash_message"] = "<div class='bg-success'>Success!</div>";
-        header("Location:./challengesList.php");
+       // $sql = "UPDATE RegisteredModules SET CurrentOutput = 'On' WHERE ID='$moduleID'";
+       // $stmt = $conn->prepare($sql);
+       // $stmt->execute();
+        //$_SESSION["flash_message"] = "<div class='bg-success'>Success!</div>";
+       // header("Location:./challengesList.php");
     } else {
         $_SESSION["flash_message"] = "<div class='bg-danger'>Flag failed - Try again</div>";
         header('Location: '. $_SERVER['REQUEST_URI']);
