@@ -35,7 +35,7 @@ void Send_The_Email(String Selected_Email)
 // This Function Grabs the Selected Email, turns it into A JSON Object to be Sent to the Back-end DataBase of the PHP webBase sever
  
 {
-      // Turns the Selected Email into the JOSN Object to send  
+      // Turns the Selected Email into the JSON Object to send  
   String dataToPost = String(Selected_Email);
   String payload = cyberCity.dataTransfer(dataToPost, apiKeyValue, sensorName, sensorLocation, 1500, serverName, true, true);
   Serial.print("payload: ");
@@ -76,7 +76,7 @@ else Restart this Function
     Last_Sent_email = RandNumberGen;
     String Selected_Email = Email_Selector_Array[RandNumberGen];
     Send_The_Email(Selected_Email);
-    delay(60000);
+    delay(30000);
   }
   else
   {
