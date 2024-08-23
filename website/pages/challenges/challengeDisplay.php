@@ -71,7 +71,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </header>
 
 <!-- Indicate section (middle part) section of the whole page. -->
-<section class="pt-4 pd-2">
+<section class="pt-4 pd-2" style="padding: 10px;">
     <!-- Boostrap Grid Table System. -->
 
     <div class="container-fluid text-center">
@@ -146,11 +146,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </section>
 
 <!-- Indicate footer (end part) section of the whole page. -->
-<footer>
+<footer style="padding: 10px;">
     <h2 class='ps-3'>Recent Data</h2>
 
     <!-- Boostrap Grid Table System. -->
-    <div class="container-fluid">
+    <div class="container-fluid" >
         <div class="row border text-center">
             <div class="col border-end">Data & Time</div>
             <div class="col">Data</div>
