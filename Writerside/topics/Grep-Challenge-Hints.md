@@ -1,4 +1,4 @@
-# Grep Challenge Hints
+# Intercepted Communication Hints
 
 
 [//]: # (Example of the tabs.)
