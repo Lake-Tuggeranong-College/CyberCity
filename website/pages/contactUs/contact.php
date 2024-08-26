@@ -36,6 +36,8 @@ if (!authorisedAccess(true, true, true)) {
 </form>
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    header("Location:../../index.php");
+
     //takes username and email from form above.
     $username = sanitise_data($_POST['username']);
     $email = sanitise_data($_POST['email']);

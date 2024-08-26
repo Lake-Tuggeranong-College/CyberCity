@@ -1,16 +1,20 @@
 <?php include "../../includes/template.php";
 /** @var $conn */
 
+
 if (!authorisedAccess(false, true, true)) {
     header("Location:../../index.php");
 }
 
 ?>
+ <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/moduleList.css">
+
+
 <div class = 'wideBox'>
          <div class = 'title'>
     <title>Cyber City - Challenges</title>
 
-    <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/moduleList.css">
+<!--    <link rel="stylesheet" href="--><?php //echo BASE_URL; ?><!--assets/css/moduleList.css">-->
 
 
 
@@ -28,22 +32,22 @@ if (!authorisedAccess(false, true, true)) {
             $moduleQuery = $conn->query("SELECT Image from RegisteredModules WHERE ID = $moduleID");
             $moduleInformation = $moduleQuery->fetch();
 
-        echo "<div class='product_wrapper'><a href='challengeDisplay.php?moduleID=" . $moduleID . "'>";
+        echo "<a href='challengeDisplay.php?moduleID=" . $moduleID . "'><div class='product_wrapper'>";
 
             // Check if the "Modules" have an image attached to it.
             if ($moduleInformation['Image']) {
                 // Display Module Image.
-                echo "<div class='image'><img src='" . BASE_URL ."assets/img/challengeImages/" . $moduleInformation['Image'] . " ' width='100' height='100'></div></a>";
+                echo "<div class='image'><img src='" . BASE_URL ."assets/img/challengeImages/" . $moduleInformation['Image'] . " ' width='100' height='100'></div>";
             } else {
                 // Display Placeholder Image
-                echo "<div class='image'><img src='" . BASE_URL ."assets/img/challengeImages/Image Not Found.jpg' width='100' height='100'></div></a>";
+                echo "<div class='image'><img src='" . BASE_URL ."assets/img/challengeImages/Image Not Found.jpg' width='100' height='100'></div>";
             }
 
 
             echo"<div class='name'> ".$challengeData["challengeTitle"] ." </div>";
             echo"<div class='price'> Points: ". $challengeData["PointsValue"] ." </div>";
 
-            echo "</div>";}
+            echo "</div></a>";}
 
     ?>
              <!-- CUSTOM WEBPAGES GO HERE -->
@@ -64,6 +68,7 @@ if (!authorisedAccess(false, true, true)) {
          </div>
 
 </div>
+</body>
 
 
 
