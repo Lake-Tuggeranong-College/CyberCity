@@ -41,26 +41,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 //                if (password_verify($userEnteredFlag, $hashedFlag)) {
     if ($userEnteredFlag == $hashedFlag) {
         $user = $_SESSION["user_id"];
-        $query = $conn->query("SELECT * FROM `UserChallenges` WHERE `challengeID` ='$moduleID' AND `userID` = '$user'");
+        $query = $conn->query("SELECT * FROM `UserChallenges` WHERE `challengeID` ='$challengeID' AND `userID` = '$user'");
         $row = $query->fetch();
-        echo($query->rowCount());
+        if ($query->rowCount() > 0) {
+            $_SESSION["flash_message"] = "<div class='bg-warning'>Flag Success! Challenge already completed, no points awarded</div>";
+            header("Location:./challengesList.php");
+        } else {
+            $insert = "INSERT INTO `UserChallenges` VALUES ('$user', '$challengeID')";
+            $insert = $conn->prepare($insert);
+            $insert->execute();
 
-        $sql = "UPDATE Users SET Score = SCORE + '$pointsValue' WHERE ID='$user'";
-        $stmt = $conn->prepare($sql);
-        $stmt->execute();
-        $_SESSION["flash_message"] = $query->rowCount();
-        //        $userInformation = $conn->query("SELECT Score FROM Users WHERE ID='$user'");
-        //        $userData = $userInformation->fetch();
-        //        $addedScore = $userData["Score"] += $pointsValue;
-        //        $sql1 = "UPDATE Users SET Score=? WHERE Username=?";
-        //        $stmt = $conn->prepare($sql1);
-        //        $stmt->execute([$addedScore, $user]);
+            $sql = "UPDATE Users SET Score = SCORE + '$pointsValue' WHERE ID='$user'";
+            $stmt = $conn->prepare($sql);
+            $stmt->execute();
+            $_SESSION["flash_message"] = $query->rowCount();
+            $userInformation = $conn->query("SELECT Score FROM Users WHERE ID='$user'");
+            $userData = $userInformation->fetch();
+            $addedScore = $userData["Score"] += $pointsValue;
+            $sql1 = "UPDATE Users SET Score=? WHERE Username=?";
+            $stmt = $conn->prepare($sql1);
+            $stmt->execute([$addedScore, $user]);
 
-       // $sql = "UPDATE RegisteredModules SET CurrentOutput = 'On' WHERE ID='$moduleID'";
-       // $stmt = $conn->prepare($sql);
-       // $stmt->execute();
-        //$_SESSION["flash_message"] = "<div class='bg-success'>Success!</div>";
-       // header("Location:./challengesList.php");
+            $sql = "UPDATE RegisteredModules SET CurrentOutput = 'On' WHERE ID='$moduleID'";
+            $stmt = $conn->prepare($sql);
+            $stmt->execute();
+            $_SESSION["flash_message"] = "<div class='bg-success'>Success!</div>";
+            header("Location:./challengesList.php");
+        }
     } else {
         $_SESSION["flash_message"] = "<div class='bg-danger'>Flag failed - Try again</div>";
         header('Location: '. $_SERVER['REQUEST_URI']);
