@@ -47,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION["flash_message"] = "<div class='bg-warning'>Flag Success! Challenge already completed, no points awarded</div>";
             header("Location:./challengesList.php");
         } else {
-            $insert = "INSERT INTO `UserChallenges` VALUES ('$user', '$challengeID')";
+            $insert = "INSERT INTO `UserChallenges` (userID, challengeID) VALUES ('$user', '$challengeID')";
             $insert = $conn->prepare($insert);
             $insert->execute();
 
