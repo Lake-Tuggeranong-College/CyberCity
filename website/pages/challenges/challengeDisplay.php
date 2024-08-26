@@ -83,7 +83,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </header>
 
 <!-- Indicate section (middle part) section of the whole page. -->
-<section class="pt-4 pd-2">
+<section class="pt-4 pd-2" style="padding: 10px;">
     <!-- Boostrap Grid Table System. -->
 
     <div class="container-fluid text-center">
@@ -146,7 +146,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <!-- Directs to correspond page if the flag entered is eligible. -->
         <form action="challengeDisplay.php?moduleID=<?= $moduleID ?>" method="post" enctype="multipart/form-data">
             <div class="form-floating">
-                <input type="text" class="form-control" id="flag" name="hiddenflag" value="CTF{Flag_Here}">
+                <input type="text" class="flag-input" id="flag" name="hiddenflag" placeholder="CTF{Flag_Here}">
 <!--                <label for="flag">Please enter the flag: </label>-->
                 <p id="functionAssistant" class="form-text text-start font-size-sm">
                     You'll have to hit the "Enter" key when finish
@@ -158,11 +158,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </section>
 
 <!-- Indicate footer (end part) section of the whole page. -->
-<footer>
+<footer style="padding: 10px;">
     <h2 class='ps-3'>Recent Data</h2>
 
     <!-- Boostrap Grid Table System. -->
-    <div class="container-fluid">
+    <div class="container-fluid" >
         <div class="row border text-center">
             <div class="col border-end">Data & Time</div>
             <div class="col">Data</div>

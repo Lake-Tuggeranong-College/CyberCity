@@ -247,15 +247,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <?php // */ ?>
 
     <?php if (isset($_SESSION['flash_message'])): ?>
-        <?php
-        $message = $_SESSION['flash_message'];
-        unset($_SESSION['flash_message']);
-        //echo $message;
-        ?>
+        <?php $message = $_SESSION['flash_message']; ?>
 
         <!-- Flash message positoned on the top (?) when confirming the needed condition -->
         <div class="position-static"><?= $message; ?></div>
 
+        <?php unset($_SESSION['flash_message']); ?>
     <?php endif; ?>
 
     <!-- Boostrap JS -->

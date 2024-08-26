@@ -1,7 +1,5 @@
 #  Financial Tracing Guide
 
-![](image2.png)
-
 First for this challenge you must download the Wireshark scenario
 
 ![](image3.png)
@@ -12,7 +10,15 @@ Once you have downloaded the Wireshark Scenario open it and then there is going 
 
 ![](image5.png)
 
-Most of the frames have a bunch of nonsense in them, so don't get distracted by it, a simple way to find it is to select a filter on icmp but if you don't know to sort by that you will be in a world of pain
+Most of the frames have a bunch of nonsense in them, so don't get distracted by it, a simple way to find it is to select a filter on icmp.
+Here’s a quick guide:
+
+Capture ICMP Packets: Start capturing packets by clicking the shark fin icon. Use a capture filter like icmp to capture only ICMP packets.
+
+Display Filter: Apply a display filter by typing icmp in the filter bar and pressing Enter. This will show only ICMP packets in the capture.
+
+Sorting: Click on the column headers (e.g., Time, Source, Destination) to sort the displayed ICMP packets based on that column.
+
 
 ![](image7.png)
 
@@ -27,5 +33,3 @@ But if you don’t know how/or don’t think of searching for icmp then it will 
 ![](image5.png)
 
 The select frame is #212/1953, just hope you don’t scroll over it.
-
-![](image1.png)

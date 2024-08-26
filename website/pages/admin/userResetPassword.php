@@ -96,6 +96,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $stmt->execute();
 
+    header('Location: '. $_SERVER['REQUEST_URI']);
+
 //    header("location:moduleInformation.php?ModuleID=$moduleToLoad");
 
 }

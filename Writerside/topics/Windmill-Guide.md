@@ -1,4 +1,4 @@
-# Windmill Guide
+# Ventilation System Guide
 
 A Caesar cipher is a straightforward method of encoding messages. It falls under the category of substitution ciphers, where each letter in the plaintext is replaced by another letter a fixed number of positions down the alphabet.
 

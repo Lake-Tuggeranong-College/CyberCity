@@ -52,14 +52,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 header("Location:../../index.php");
             } else {
                 // unsuccessful log on.
-                echo "<div class='alert alert-danger'>Invalid Username or Password. <a href='../contactUs/contact.php'>Contact Us</a></div>";
+                $_SESSION["flash_message"] = "<div class='bg-warning'>Invalid Username or Password. <a href='../contactUs/contact.php'>Contact Us</a></div>";
                 header('Location: '. $_SERVER['REQUEST_URI']);
             }
         } else {
-            echo "<div class='alert alert-danger'>Account Disabled. <a href='../contactUs/contact.php'>Contact Us</a></div>";
+            $_SESSION["flash_message"] = "<div class='bg-danger'>Account Disabled. <a href='../contactUs/contact.php'>Contact Us</a></div>";
+            header('Location: '. $_SERVER['REQUEST_URI']);
         }
     } else {
-        echo "<div class='alert alert-danger'>Invalid Username or Password. <a href='../contactUs/contact.php'>Contact Us</a></div>";
+        $_SESSION["flash_message"] = "<div class='bg-warning'>Invalid Username or Password. <a href='../contactUs/contact.php'>Contact Us</a></div>";
+        header('Location: '. $_SERVER['REQUEST_URI']);
     }
 }
 

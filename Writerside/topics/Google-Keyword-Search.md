@@ -1,5 +1,17 @@
-# Google Keyword Search
+# Biolab Security Key
 
-‘Google Keyword Search’ is a Capture The Flag (CTF) challenge designed to test participants’ skills in web exploration and cryptography. Participants are required to navigate through an HTML website, identify abnormal text patterns, and decrypt the hidden message inside using decryption tools/websites.
+‘Biolab Security Key’ is a Capture The Flag (CTF) challenge designed to test participants’ skills in web exploration and cryptography. Participants are required to navigate through an HTML website, identify abnormal text patterns, and decrypt the hidden message inside using decryption tools/websites.
 
-![Google Keyword Search's page](<../images/Google Keyword Searchs page.jpg> "Google Keyword Search's page when hover")
+## Skill Learned
+
+- Web navigation and content analysis.
+- Cryptographic concepts and decryption techniques.
+- Pattern recognition and problem-solving.
+
+## User Experiences
+
+- Engaging with an interactive and realistic web environment.
+- Experiencing the thrill of uncovering hidden messages.
+- Learning cryptographic skills in a fun and challenging setting.
+
+![BiolabSecurityKey.png](BiolabSecurityKey_1.png)
