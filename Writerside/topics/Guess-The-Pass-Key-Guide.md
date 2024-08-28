@@ -1,36 +1,18 @@
 # Guess The Pass Key Guide
 
-## Overview
+When reading this data we can write down some key hints that can help lockdown possible answers.
 
-Guess the pass key is a challenge where the user has to decipher through information
-given within emails find a secret six letter password.
+## Clues
 
-![Guessthepasskey.png](Guessthepasskey.png)
+1. The key should have 2 vowels.
 
-## Skill Learned 
+2. It doesn’t end with “ss,” but it might end with “T.”
 
-In today’s digital age, cybersecurity plays a crucial role in safeguarding organizations from malicious actors. 
-Due cyber-attacks becoming increasingly sophisticated and frequent, 
-highly skilled professionals are required to safeguard sensitive information. 
-However, technical expertise alone isn't sufficient; effective communication is equally critical. 
-Cybersecurity analysts must be able to convey their findings and recommendations clearly and concisely to various audiences,
-including technical experts and executives.
+3. It should have the same number of characters as “Roband” and start with the same uppercase letter.
 
-## User Experiences
+There are many different words that could be the answer but the one we want is "Robust"
 
-As the user loads the Guess the pass key website, They will have displayed in front of them A table informing them 
-the requirements to pass this challenge. There is a white Box that will take String input from the User. 
-
-Below is a table of Recently received Data From the ESP32 feather wing Data that is sending simulated emails.
-These emails simulate effective communication on what pass key they Should use without directly referencing it within the emails .
+Make sure to include CTF{*Answer*} when putting in the flag.
 
 ![Guessthepasskeydata.png](Guessthepasskeydata.png)
 
-However, When you gather enough information/emails, using the indirect clues in the emails, the key can be deciphered. 
-Therefor The user must use the simulate emails to correctly Identify the Pass key   
-
-## Developer Experiences
-
-### How it works
-
-TODO: Add a flow chart of functionally of guess the pass key and explain said functionally.
