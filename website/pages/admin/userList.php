@@ -10,7 +10,7 @@ if (!authorisedAccess(false, false, true)) {
     <link rel="stylesheet" href="../../assets/css/moduleList.css">
     <h1>Enabled User List</h1>
 <?php
-$userList = $conn->query("SELECT ID, Username, AccessLevel, Enabled FROM Users WHERE Enabled=1"); #Get all Enabled Modules
+$userList = $conn->query("SELECT ID, Username, AccessLevel, Enabled FROM Users WHERE Enabled=1 ORDER BY ID DESC"); #Get all Enabled Modules
 while ($userData = $userList->fetch()) {
     $userID = $userData["ID"];
     echo "<div class='product_wrapper'>";
