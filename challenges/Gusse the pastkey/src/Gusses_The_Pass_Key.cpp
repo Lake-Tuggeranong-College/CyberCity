@@ -17,12 +17,12 @@ CyberCitySharedFunctionality cyberCity;
 
 String Email_Selector_Array [6] =  // This Array holds the Simulated Emails that will be sent to the Data base and be posted on the challenge website
 {
-  "Xen.Cr: 'Hey John.R how many vowels did we want the Key to have?' John.R: they have said to have 2 vowels", // Email 1
-  "John.R: 'Don't Forget to have no repeating charters Xen'", // Email 2
-  "Jay.P:  'I am Happy to report that the system is Very Strong and unlikely or anyone to Break in", // Email 3
-  "Xen.Cr: 'The Spelling doesn't look right... where is o meant to be? Jay.P: 5th from the right", // Email 4
-  "Ben.W:  'John Please Help. I can't remember What the 'thing' ended with. Was it Ending with Two ss or T.' John.R: I Don't think it was ss, Try T", // Email 5
-  "jay.P:  'I want the word to be the same amount of charters and starts with the same charter in Upper case as Roband" // Email 6
+  "Xen.Cr: 'Hey John.R how many vowels did we want the Key to have?' John.R: They wanted 2 vowels", // Email 1
+  "John.R: 'Don't forget, no repeating charters Xen'", // Email 2
+  "Jay.P:  'I am happy to report that the system is very strong", // Email 3
+  "Xen.Cr: 'The spelling doesn't look right... where is o meant to be? Jay.P: 5th from the right", // Email 4
+  "Ben.W:  'John please help. I can't remember what the 'Key' ended with, was it ending with two ss or t.' John.R: I don't think it was ss, try t", // Email 5
+  "Jay.P:  'I want the word to be the same amount of characters and starts with the same character in upper case as Roband" // Email 6
 };
 
 int Last_Sent_email; // This will hold the Most recently number picked To stop a repeated email being Sent
