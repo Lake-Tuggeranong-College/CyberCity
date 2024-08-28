@@ -17,7 +17,7 @@ CyberCitySharedFunctionality cyberCity;
 
 String Email_Selector_Array [6] =  // This Array holds the Simulated Emails that will be sent to the Data base and be posted on the challenge website
 {
-  "Xen.Cr: 'Hey John.R how many vowels did we want the Key to have?' John.R: They wanted 2 vowels", // Email 1
+  "Xen.Cr: 'Hey John.R how many vowels did we want the 'Key' to have?' John.R: They wanted 2 vowels", // Email 1
   "John.R: 'Don't forget, no repeating charters Xen'", // Email 2
   "Jay.P:  'I am happy to report that the system is very strong", // Email 3
   "Xen.Cr: 'The spelling doesn't look right... where is o meant to be? Jay.P: 5th from the right", // Email 4
