@@ -11,7 +11,7 @@ if (!authorisedAccess(false, false, true)) {
 <h1>Disabled User List</h1>
 <?php
 
-$userList = $conn->query("SELECT ID, Username, AccessLevel, Enabled FROM Users WHERE Enabled=0"); #Get all Enabled Modules
+$userList = $conn->query("SELECT ID, Username, AccessLevel, Enabled FROM Users WHERE Enabled=0 ORDER BY ID DESC"); #Get all Enabled Modules
 while ($userData = $userList->fetch()) {
     $userID = $userData["ID"];
     echo "<div class='product_wrapper'>";
