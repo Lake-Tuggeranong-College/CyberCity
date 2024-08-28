@@ -1,47 +1,55 @@
-<?php include "../../includes/template.php";
-/** @var $conn */
+<?php
+include_once "../../includes/template.php";
+
 $sec = 60;
 $page = $_SERVER['PHP_SELF'];
 
 if (!authorisedAccess(true, true, true)) {
     header("Location:../../index.php");
+    exit;
 }
 
+// TODO: create a new value in the database that store user's avatar
+$query = "SELECT ID, Username, Score FROM Users WHERE AccessLevel=1 AND Enabled=1 ORDER BY Score DESC";
+$stmt = $conn->prepare($query);
+$stmt->execute();
+$userScore = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
-<!--<!DOCTYPE html>-->
-<!--<html>-->
-<!--<head>-->
-<!--    <meta http-equiv="refresh" content="--><?php //echo $sec ?><!--;URL='--><?php //echo $page ?><!--'">-->
-<!--    <title>Cyber City - Leaderboard</title>-->
-<!--</head>-->
-<!--<body>-->
-<div class = "wideBox">
-    <div class = "title" >
-        <h2 style="font-size: 45px">Leaderboard</h2>
-        <div class="table-responsive">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="leaderboard" style="min-width: 20rem; max-width: 20rem"><strong>Username</strong></div>
-                    <div class="leaderboard" style="min-width: 20rem; max-width: 20rem"><strong>Score</strong></div>
-                </div>
-<!--Note that the leaderboard does not include Administrative users-->
-<?php
-$scoreList = $conn->query("SELECT Username, Score FROM Users WHERE AccessLevel=1 AND Enabled=1 ORDER BY Score DESC");
 
-while ($scoreData = $scoreList->fetch()) {
-    if ($scoreData[1] != 0) {
-        echo "<div class='row'>";
-        echo "<div class='leaderboard' style='min-width: 300px; max-width: 50%'>" . $scoreData[0] . "</div>";
-        echo "<div class='leaderboard' style='min-width: 30px; max-width: 50%'>" . $scoreData[1] . "</div>";
-        echo "</div>";
+<div class="leaderboard-container">
+    <div class="d-flex justify-content-center align-items-end top-three-ranking">
+        <?php
+            // Top 3 users will be display a bit more special than the others
+            $topThreeUserRankingScore = array_slice($userScore, 0, 3);
+            $topThreeUserPosition = ['second-place', 'first-place', 'third-place'];
+        ?>
 
-
-    }
-}
-
-?>
+        <!-- Dynamic display the top 3 users on leaderboard -->
+        <?php foreach ($topThreeUserRankingScore as $arrayIndex => $userData): ?>
+            <div class="leaderboard-item <?= $topThreeUserPosition[$arrayIndex] ?>">
+                <div class="user-position"><?= $arrayIndex + 1 ?></div>
+                <div class="user-profile" style="background-image: url();"></div> <!-- TODO: add this when done the first TODO: <?= // htmlspecialchars($userData['<avatar variable name in database>']) ?> -->
+                <div class="user-name"><?= htmlspecialchars($userData['Username']) ?></div>
+                <div class="user-score"><?= htmlspecialchars($userData['Score']) ?></div>
             </div>
-        </div>
+        <?php endforeach; ?>
+    </div>
+
+    <div class="leaderboard-list">
+        <?php
+            // Max 10 users can be display on the leaderboard. 3 have been displayed in the above code so this one will display the rest 7
+            $userRankingScore = array_slice($userScore, 3);
+        ?>
+
+        <!-- Dynamic display the rest 7 on leaderboard -->
+        <?php foreach ($userRankingScore as $arrayIndex => $userData): ?>
+            <div class="leaderboard-item">
+                <div class="user-position"><?= $arrayIndex + 4 ?></div>
+                <div class="user-profile" style="background-image: url();"></div> <!-- TODO: add this when done the first TODO: <?= // htmlspecialchars($userData['<avatar variable name in database>']) ?> -->
+                <div class="user-name"><?= htmlspecialchars($userData['Username']) ?></div>
+                <div class="user-score"><?= htmlspecialchars($userData['Score']) ?></div>
+            </div>
+        <?php endforeach; ?>
     </div>
 </div>
 
