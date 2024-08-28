@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bindValue(':newPassword', $hashed_password);
         $stmt->bindValue(':newAccessLevel', $accessLevel);
         $stmt->execute();
-        $_SESSION["flash_message"] = "Account Created!";
+        $_SESSION["flash_message"] = "<div class='bg-success'>Account Created!</div>";
         header("Location:../../index.php");
 
     }
