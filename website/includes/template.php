@@ -177,6 +177,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             target="_blank">Tutorials</a>
                     </li>
 
+                        <li class="nav-link active">
+                            <a href="https://forms.gle/jgYrmMZesgtVhBZ39" class="nav-link text-white"
+                               target="_blank">Feedback</a>
+                        </li>
+
+
                 <?php endif; ?>
 
                 <!-- End of Navigation Bar (left side) -->
