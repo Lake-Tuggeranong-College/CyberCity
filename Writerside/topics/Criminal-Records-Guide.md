@@ -2,5 +2,5 @@
 
 <tabs>
 <tab title="Hidden">Click "Answer" for the answer</tab>
-<tab title="Answer">Underneath the police station</tab>
+<tab title="Answer">Look underneath the police station</tab>
 </tabs>

@@ -6,6 +6,6 @@ Sometimes, even the best cryptographers need a nudge in the right direction. If 
 
 <tabs>
 <tab title="Hint 1">Step 1 is in the description</tab>
-<tab title="Hint 2">Find something incoherent and decifer it.</tab>
-<tab title="Hint 3">Once you notice the correct answer, you will be dealing with another layer of encryption.</tab>
+<tab title="Hint 2">Try using an editor that has a synonym to curse in its name.</tab>
+<tab title="Hint 3">Once you decrypt the hex, you might be dealing with another layer of encryption related to Julius Ceaser.</tab>
 </tabs>

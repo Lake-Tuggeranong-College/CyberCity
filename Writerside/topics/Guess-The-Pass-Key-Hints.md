@@ -4,7 +4,7 @@
 [//]: # (Example of the tabs.)
 
 <tabs>
-<tab title="Hint 1">There are emails between John.R and Xen.Cr about the pass key</tab>
-<tab title="Hint 2">the word refers to something being strong</tab>
-<tab title="Hint 3">The answer is contained inside the CTF{} brackets</tab>
+<tab title="Hint 1">Write down your finding with a text editor</tab>
+<tab title="Hint 2">The word refers to something being strong</tab>
+<tab title="Hint 3">The key is a synonym to a word in one of the emails</tab>
 </tabs>

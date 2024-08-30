@@ -8,50 +8,54 @@
   MIT license, all text above must be included in any redistribution
  ****************************************************/
 
-#define TRIG_PIN 	13
+#define TRIG_PIN 13
 #define ECHO_PIN 12
 
-int green = 15;
-int red = 16;
-int yellow = 17;
+int tl1Green = 15;
+int tl1Red = 16;
+int tl1Yellow = 17;
+int tl2Green = 23;  // Fix
+int tl2Red = 14;    // Fix
+int tl2Yellow = 22; // Fix
 
 #include "sensitiveInformation.h"
 
 CyberCitySharedFunctionality cyberCity;
 
-
 void lightsOn()
 {
-  digitalWrite(red, HIGH);
-  delay(15000);
-  digitalWrite(red, LOW);
-
-  digitalWrite(yellow, HIGH);
+  digitalWrite(tl1Yellow, LOW);
+  digitalWrite(tl1Red, HIGH);
+  digitalWrite(tl2Green, HIGH);
+  delay(5000);
+  digitalWrite(tl2Green, LOW);
+  digitalWrite(tl2Yellow, HIGH);
   delay(1000);
-  digitalWrite(yellow, LOW);
-  delay(500);
+  digitalWrite(tl2Yellow, LOW);
 
-  digitalWrite(yellow, HIGH);
-  delay(1000);
-  digitalWrite(yellow, LOW);
-  delay(500);
+  digitalWrite(tl2Red, HIGH);
+  digitalWrite(tl1Red, LOW);
+  digitalWrite(tl1Green, HIGH);
+  delay(5000);
+  digitalWrite(tl1Green, LOW);
+  digitalWrite(tl1Yellow, HIGH);
+    digitalWrite(tl2Red, LOW);
 
-  digitalWrite(green, HIGH);
-  delay(2000);
-  digitalWrite(green, LOW);
+  delay(500);
+  
 }
 
 void lightsOff()
 {
-  digitalWrite(red, LOW);
-  digitalWrite(yellow, LOW);
-  digitalWrite(green, LOW);
+  digitalWrite(tl1Red, LOW);
+  digitalWrite(tl1Yellow, LOW);
+  digitalWrite(tl1Green, LOW);
 }
 
 void sonarSensorData()
 {
-  
- float duration, distance;
+
+  float duration, distance;
   digitalWrite(TRIG_PIN, LOW);
   delayMicroseconds(2);
   digitalWrite(TRIG_PIN, HIGH);
@@ -59,11 +63,11 @@ void sonarSensorData()
   digitalWrite(TRIG_PIN, LOW);
 
   duration = pulseIn(ECHO_PIN, HIGH);
-  distance = (duration*.0343)/2;
+  distance = (duration * .0343) / 2;
   Serial.print("Distance: ");
   Serial.println(distance);
   delay(100);
-  
+
   Serial.print("Distance: ");
   Serial.print(distance);
   Serial.println(" cm");
@@ -87,13 +91,14 @@ void sonarSensorData()
   delay(500);
   if (String(command) == "On")
   {
-    Serial.println("spin:)");
+    Serial.println("normal operation:)");
     lightsOn();
     // outputCommand = "Fan On";
   }
   else
   {
     // outputCommand = "Fan Off";
+    Serial.println("Traffic light chaos");
     lightsOff();
   }
 }
@@ -146,9 +151,12 @@ void setup()
   // Module Specific Code
 
   // put your setup code here, to run once:
-  pinMode(green, OUTPUT);
-  pinMode(red, OUTPUT);
-  pinMode(yellow, OUTPUT);
+  pinMode(tl1Green, OUTPUT);
+  pinMode(tl1Red, OUTPUT);
+  pinMode(tl1Yellow, OUTPUT);
+  pinMode(tl2Green, OUTPUT);
+  pinMode(tl2Red, OUTPUT);
+  pinMode(tl2Yellow, OUTPUT);
   lightsOff();
   Serial.begin(9600);
 }
@@ -160,4 +168,3 @@ void loop()
   // int sensorData = red, green, yellow;
   sonarSensorData(); // this function runs both sonarSensorData and Lights on and Off
 }
-

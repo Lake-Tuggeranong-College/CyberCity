@@ -1,10 +1,9 @@
 .leaderboard-container {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    position: relative;
+    margin-left: 3rem;
+    margin-right: 3rem;
     z-index: 10;
-    background-color: #212529;
+    /*background-color: #212529;*/
     color: #f8f9fa;
 }
 
@@ -12,7 +11,7 @@
     position: relative;
     background-color: #343a40;
     width: 9rem;
-    height: 10rem;
+    height: 11.5rem;
     text-align: center;
     padding: 2.8rem 0 0;
     margin: 1rem 1rem 2rem;
@@ -39,7 +38,7 @@
 .top-three-ranking .leaderboard-item .user-position {
     font-weight: 900;
     font-size: 1.5rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.25rem;
 }
 
 .top-three-ranking .leaderboard-item .user-name {
@@ -127,7 +126,7 @@
 }
 
 .leaderboard-list .leaderboard-item:hover {
-    transform: scale(1.05);
+    transform: scale(1.02);
     background-color: #495057;
 }
 
