@@ -1,10 +1,12 @@
 <?php
-include_once "../../includes/template.php";
 
-$sec = 60;
+$sec = 30;
 $page = $_SERVER['PHP_SELF'];
 
 header("Refresh:$sec; url=$page");
+include_once "../../includes/template.php";
+
+
 
 if (!authorisedAccess(true, true, true)) {
     header("Location:../../index.php");
