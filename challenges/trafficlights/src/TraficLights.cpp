@@ -14,9 +14,9 @@
 int tl1Green = 15;
 int tl1Red = 16;
 int tl1Yellow = 17;
-int tl2Green = 27;  // Fix
-int tl2Red = 13;    // Fix
-int tl2Yellow = 12; // Fix
+int tl2Green = 23;  // Fix
+int tl2Red = 14;    // Fix
+int tl2Yellow = 22; // Fix
 
 #include "sensitiveInformation.h"
 
@@ -24,6 +24,7 @@ CyberCitySharedFunctionality cyberCity;
 
 void lightsOn()
 {
+  digitalWrite(tl1Yellow, LOW);
   digitalWrite(tl1Red, HIGH);
   digitalWrite(tl2Green, HIGH);
   delay(5000);
@@ -33,12 +34,15 @@ void lightsOn()
   digitalWrite(tl2Yellow, LOW);
 
   digitalWrite(tl2Red, HIGH);
+  digitalWrite(tl1Red, LOW);
   digitalWrite(tl1Green, HIGH);
   delay(5000);
   digitalWrite(tl1Green, LOW);
   digitalWrite(tl1Yellow, HIGH);
-  delay(1000);
-  digitalWrite(tl1Yellow, LOW);
+    digitalWrite(tl2Red, LOW);
+
+  delay(500);
+  
 }
 
 void lightsOff()
