@@ -25,13 +25,6 @@ $hashedFlag = $result["HashedFlag"];
 $moduleQuery = $conn->query("SELECT Image from RegisteredModules WHERE ID = $moduleID");
 $moduleInformation = $moduleQuery->fetch();
 
-?>
-
-<title>Challenge Information</title>
-
-</head>
-
-<?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $userEnteredFlag = sanitise_data($_POST['hiddenflag']);
     //    $challengeToLoad = $_GET["moduleID"];
@@ -74,7 +67,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         die;
     }
 }
+
 ?>
+
+<title>Challenge Information</title>
+
+</head>
 
 <body>
 <!-- Indicate heading secion of the whole page. -->

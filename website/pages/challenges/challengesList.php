@@ -11,75 +11,85 @@ if (!authorisedAccess(false, true, true)) {
 
 
 <h1>Challenges</h1>
+<?php
 
+function createChallengeCard($conn, $completionStatus, $challengeData) {
+    //Extract each field from the data array
+    $challengeID = $challengeData['ID'];
+    $challengeTitle = $challengeData['challengeTitle'];
+    $pointsValue = $challengeData['PointsValue'];
+    $moduleID = $challengeData['moduleID'];
 
+    // Check whether the challenge has an image
+    $imageQuery = $conn->query("SELECT Image from RegisteredModules WHERE ID = $moduleID");
+    $imageData = $imageQuery->fetch();
 
-    <?php
-    // Get all Enabled Modules.
-    $moduleList = $conn->query("SELECT ID, challengeTitle,PointsValue,moduleID FROM Challenges WHERE Enabled = 1");
-
-    while ($challengeData = $moduleList->fetch()) {
-
-        $challengeID = $challengeData["ID"];
-        $moduleID = $challengeData["moduleID"];
-        $moduleQuery = $conn->query("SELECT Image from RegisteredModules WHERE ID = $moduleID");
-        $moduleInformation = $moduleQuery->fetch();
-
-
-        // Check if the "Modules" have an image attached to it.
-        if ($moduleInformation['Image']) {
-            // Display Module Image.
-            ?>
-            <div class="product_wrapper">
-                <div class="card text-bg-secondary" style="width: 18rem;">
-                    <img src="<?= BASE_URL ?>assets/img/challengeImages/<?= $moduleInformation['Image'] ?>"
-                         class="card-img-top" alt="..." width="100" height="200">
-                    <div class="card-body">
-                        <h5 class="card-title"><?= $challengeData["challengeTitle"] ?></h5>
-                        <p class="card-text"><?= $challengeData["PointsValue"] ?></p>
-                        <a href="challengeDisplay.php?moduleID=<?= $moduleID ?>" class="btn btn-warning">Start
-                            Challenge</a>
-                    </div>
+    if ($imageData['Image']) {
+        // Display Module Image.
+        ?>
+        <div class="product_wrapper">
+            <div class="card <?php if ($completionStatus == TRUE) {?> text-bg-success <?php } else if ($completionStatus == FALSE) {?> text-bg-secondary <?php } else {throw new Error("Something has gone SERIOUSLY wrong!");} ?>" style="width: 18rem;">
+                <img src="<?= BASE_URL ?>assets/img/challengeImages/<?= $imageData['Image'] ?>"
+                     class="card-img-top" alt="..." width="100" height="200">
+                <div class="card-body">
+                    <h5 class="card-title"><?= $challengeData["challengeTitle"] ?></h5>
+                    <p class="card-text"><?= $challengeData["PointsValue"] ?></p>
+                    <a href="challengeDisplay.php?moduleID=<?= $moduleID ?>" class="btn btn-warning">Start
+                        Challenge</a>
                 </div>
             </div>
+        </div>
 
-            <?php
+        <?php
 
-        } else {
+    } else {
+        // Display Placeholder Image
+        ?>
+        <div class='image'><img
+                    src="<?= BASE_URL ?>assets/img/challengeImages/Image Not Found.jpg"
+                    width='100' height='100'>
+        </div>
 
-            ?>
-            // Display Placeholder Image
-
-            <div class='image'><img
-                        src="<?= BASE_URL ?>assets/img/challengeImages/Image Not Found.jpg"
-                        width='100' height='100'>
-            </div>
-
-            <?php
-        }
-
-//
-//            echo "<div class='name'> " . $challengeData["challengeTitle"] . " </div>";
-//            echo "<div class='price'> Points: " . $challengeData["PointsValue"] . " </div>";
-//
-//            echo "</div></a>";
+        <?php
     }
+}
 
-    ?>
-    <!-- CUSTOM WEBPAGES GO HERE -->
-    <!--            <!-- <div class='product_wrapper' style='text-align: center;'><a href='backupDieselGenerators.php'>-->
-    <!--                 <!-- CUSTOM WEBPAGE CHALLENGE TEST -->
-    <!--                 <div class='image'><img style= 'width: 100px; height: 100px' src='../../assets/img/challengeImages/toilet.jpg'</img></div>-->
-    <!--                 <a>Custom Webpage Challenge Test</a>-->
-    <!--                 <p>Points: 0</p>-->
-    <!--             </a></div>-->
-    <!---->
-    <!--             <div class='product_wrapper' style='text-align: center;'><a href='biolabShutdown.php'>-->
-    <!--                 <!-- BIOLAB SHUTDOWN TEST-->
-    <!--                 <div class='image'><img style= 'width: 100px; height: 100px' src='../../assets/img/challengeImages/Biolab.png'</img></div>-->
-    <!--                 <a>Biolab Shutdown</a>-->
-    <!--                 <p>Points: 500</p>-->
-    <!--             </a></div>-->
+$userID = $_SESSION['user_id'];
+$challengeListQuery = $conn->query("SELECT ID, challengeTitle, PointsValue, moduleID FROM Challenges WHERE Enabled = 1");
+$challengeList = $challengeListQuery->fetchAll(PDO::FETCH_ASSOC);
+for ($counter = 0; $counter < sizeof($challengeList); $counter++) {
+    // Get the challenge data for the current iteration.
+    // $counter is the index of the current challenge in the $challengeList array.
+    // $challengeList is an array that contains the array of data for each challenge.
+    // $challengeData is an associative array containing the challenge's ID, title, points value, and module ID.
+
+    $challengeData = $challengeList[$counter];
+    $challengeID = $challengeData['ID'];
+
+    //Get completion status of the challenge
+    $completionQuery = $conn->query("SELECT * FROM UserChallenges WHERE userID = '$userID' AND challengeID = '$challengeID'");
+    if ($completionQuery->rowCount()>0) {
+        createChallengeCard($conn,TRUE, $challengeData);
+    } else {
+        createChallengeCard($conn, FALSE, $challengeData);
+    }
+}
+?>
+
+<!-- CUSTOM WEBPAGES GO HERE -->
+<!--            <!-- <div class='product_wrapper' style='text-align: center;'><a href='backupDieselGenerators.php'>-->
+<!--                 <!-- CUSTOM WEBPAGE CHALLENGE TEST -->
+<!--                 <div class='image'><img style= 'width: 100px; height: 100px' src='../../assets/img/challengeImages/toilet.jpg'</img></div>-->
+<!--                 <a>Custom Webpage Challenge Test</a>-->
+<!--                 <p>Points: 0</p>-->
+<!--             </a></div>-->
+<!---->
+<!--             <div class='product_wrapper' style='text-align: center;'><a href='biolabShutdown.php'>-->
+<!--                 <!-- BIOLAB SHUTDOWN TEST-->
+<!--                 <div class='image'><img style= 'width: 100px; height: 100px' src='../../assets/img/challengeImages/Biolab.png'</img></div>-->
+<!--                 <a>Biolab Shutdown</a>-->
+<!--                 <p>Points: 500</p>-->
+<!--             </a></div>-->
 
 
 </div>
