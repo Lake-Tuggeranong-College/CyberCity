@@ -11,7 +11,16 @@ if (!authorisedAccess(false, true, true)) {
 
 
 <h1>Challenges</h1>
+<?php
+// New logic testing!
 
+$challengeListQuery = $conn->query("SELECT ID, challengeTitle, PointsValue, moduleID FROM Challenges WHERE Enabled = 1");
+$challengeList = $challengeListQuery->fetchAll(PDO::FETCH_ASSOC);
+//$completionQuery = $conn->query()
+//for ($counter = 0; $counter < $challengeList.sizeof(); $counter++) {
+echo("PAUSE");
+//}
+?>
 
 
     <?php
