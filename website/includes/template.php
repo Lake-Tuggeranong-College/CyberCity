@@ -31,6 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="<?= BASE_URL; ?>assets/css/styles.css">
     <link rel="stylesheet" href="<?= BASE_URL; ?>assets/css/moduleList.css">
     <link rel="stylesheet" href="<?= BASE_URL; ?>assets/css/leaderboard.css">
+    <link rel="icon" type="image/png" href="<?= BASE_URL; ?>assets/img/CCLogo.png">
 </head>
 
 <body>
