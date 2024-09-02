@@ -26,11 +26,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Cyber City</title>
 
     <!-- Bootstrap CSS & Custom CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="<?= BASE_URL; ?>assets/css/styles.css">
-    <link rel="stylesheet" href="<?= BASE_URL; ?>assets/css/moduleList.css">
-    <link rel="stylesheet" href="<?= BASE_URL; ?>assets/css/leaderboard.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="<?= BASE_URL; ?>assets/css/styles.css">
+    <link rel="stylesheet" type="text/css" href="<?= BASE_URL; ?>assets/css/moduleList.css">
+    <link rel="stylesheet" type="text/css" href="<?= BASE_URL; ?>assets/css/leaderboard.css">
     <link rel="icon" type="image/png" href="<?= BASE_URL; ?>assets/img/CCLogo.png">
 </head>
 
@@ -92,14 +91,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                             <!-- Direct link to 'Enabled User List' page on admin-level of access -->
                             <li>
-                                <a href="<?= BASE_URL; ?>pages/admin/userList.php" class="dropdown-item">Enabled User
-                                    List</a>
+                                <a href="<?= BASE_URL; ?>pages/admin/userList.php" class="dropdown-item">Enabled User List</a>
                             </li>
 
                             <!-- Direct link to 'Disabled User List' page on admin-level of access -->
                             <li>
-                                <a href="<?= BASE_URL; ?>pages/admin/disabledUsers.php" class="dropdown-item">Disabled
-                                    User List</a>
+                                <a href="<?= BASE_URL; ?>pages/admin/disabledUsers.php" class="dropdown-item">Disabled User List</a>
                             </li>
                         </ul>
                     </li>
@@ -115,8 +112,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                             <!-- Direct link to 'Add New Module & Challenge' page on admin-level of access -->
                             <li>
-                                <a href="<?= BASE_URL; ?>pages/admin/moduleRegister.php" class="dropdown-item">Add New
-                                    Module & Challenge</a>
+                                <a href="<?= BASE_URL; ?>pages/admin/moduleRegister.php" class="dropdown-item">Add New Module & Challenge</a>
                             </li>
 
                             <!-- Direct link to 'Reset Game' page on admin-level of access -->
@@ -137,14 +133,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                             <!-- Direct link to 'View Contact Requests' page on admin-level of access -->
                             <li>
-                                <a href="<?= BASE_URL; ?>pages/admin/contactpage.php" class="dropdown-item">View
-                                    Contact Requests</a>
+                                <a href="<?= BASE_URL; ?>pages/admin/contactpage.php" class="dropdown-item">View Contact Requests</a>
                             </li>
 
                             <!-- Direct link to 'Read Contact Requests' page on admin-level of access -->
                             <li>
-                                <a href="<?= BASE_URL; ?>pages/admin/readContactRequests.php" class="dropdown-item">Read Contact
-                                    Requests</a>
+                                <a href="<?= BASE_URL; ?>pages/admin/readContactRequests.php" class="dropdown-item">Read Contact Requests</a>
                             </li>
                         </ul>
                     </li>
@@ -192,11 +186,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <!-- Navigation Bar (right side) -->
             <ul class="navbar-nav ms-auto">
                 <?php if (isset($_SESSION['username'])): ?>
-                    <!-- Greeting text for account logged in successfully (both admin & non-admin account) -->
-<!--                    <li class="nav-link active">-->
-<!--                        <a href="" class="nav-link text-white">--><?php //= htmlspecialchars($_SESSION['username']); ?><!--</a>-->
-<!--                    </li>-->
-
                     <li class="nav-link dropdown">
                         <a href="#" class="nav-link dropdown-toggle text-white" id="navbarDropdown"
                            data-bs-toggle="dropdown" aria-expanded="false"><?= htmlspecialchars($_SESSION['username']); ?></a>
@@ -204,19 +193,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <!-- Control the amount of support requests sent to the admin on the website section -->
                         <!-- TODO: Seriously ?!? -->
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-
-                            <!-- Direct link to 'View Contact Requests' page on admin-level of access -->
-                            <li>
+                            <!-- Direct link to 'Edit Account' page on user-level of access -->
+                            <li class="nav-link active">
                                 <a href="<?= BASE_URL; ?>pages/user/editAccount.php" class="dropdown-item">Edit Account</a>
                             </li>
 
-
+                            <!-- Logged-in account's current score text (both admin & non-admin account) -->
+                            <li class="nav-link active">
+                                <a class="dropdown-item">Score: <?= htmlspecialchars($userScore); ?></a>
+                            </li>
                         </ul>
-                    </li>
-
-                    <!-- Logged-in acconut's current score text (both admin & non-admin account) -->
-                    <li class="nav-link active">
-                        <a href="" class="nav-link text-white">Score: <?= htmlspecialchars($userScore); ?></a>
                     </li>
 
                     <!-- Logged-out the current logged-in account -->
@@ -224,12 +210,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <a href="<?= BASE_URL; ?>pages/user/logout.php" class="nav-link" style="color: indianred;">Logout</a>
                     </li>
 
-                    <!-- Non-admin account specific naivgation bar elements -->
+                    <!-- Non-admin account specific navigation bar elements -->
                     <?php if ($_SESSION['access_level'] == USER_ACCESS_LEVEL): ?>
                         <!-- Direct link to 'Contact Us' page on non-admin account -->
                         <li class="nav-link active">
-                            <a href="<?= BASE_URL; ?>pages/contactUs/contact.php" class="nav-link text-white">Contact
-                                Us</a>
+                            <a href="<?= BASE_URL; ?>pages/contactUs/contact.php" class="nav-link text-white">Contact Us</a>
                         </li>
                     <?php endif; ?>
 
