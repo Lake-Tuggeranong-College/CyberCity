@@ -193,9 +193,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <ul class="navbar-nav ms-auto">
                 <?php if (isset($_SESSION['username'])): ?>
                     <!-- Greeting text for account logged in successfully (both admin & non-admin account) -->
-                    <li class="nav-link active">
-                        <a href="" class="nav-link text-white">Logged in
-                            as <?= htmlspecialchars($_SESSION['username']); ?></a>
+<!--                    <li class="nav-link active">-->
+<!--                        <a href="" class="nav-link text-white">--><?php //= htmlspecialchars($_SESSION['username']); ?><!--</a>-->
+<!--                    </li>-->
+
+                    <li class="nav-link dropdown">
+                        <a href="#" class="nav-link dropdown-toggle text-white" id="navbarDropdown"
+                           data-bs-toggle="dropdown" aria-expanded="false"><?= htmlspecialchars($_SESSION['username']); ?></a>
+
+                        <!-- Control the amount of support requests sent to the admin on the website section -->
+                        <!-- TODO: Seriously ?!? -->
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                            <!-- Direct link to 'View Contact Requests' page on admin-level of access -->
+                            <li>
+                                <a href="<?= BASE_URL; ?>pages/user/editAccount.php" class="dropdown-item">Edit Account</a>
+                            </li>
+
+
+                        </ul>
                     </li>
 
                     <!-- Logged-in acconut's current score text (both admin & non-admin account) -->
