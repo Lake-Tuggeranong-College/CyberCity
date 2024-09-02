@@ -22,8 +22,10 @@ int tl2Yellow = 22; // Fix
 
 CyberCitySharedFunctionality cyberCity;
 
-void lightsOn()
+void lightsNormal()
 {
+  digitalWrite(tl1Green, LOW);
+  digitalWrite(tl1Green, LOW);
   digitalWrite(tl1Yellow, LOW);
   digitalWrite(tl1Red, HIGH);
   digitalWrite(tl2Green, HIGH);
@@ -39,17 +41,20 @@ void lightsOn()
   delay(5000);
   digitalWrite(tl1Green, LOW);
   digitalWrite(tl1Yellow, HIGH);
-    digitalWrite(tl2Red, LOW);
+  digitalWrite(tl2Red, LOW);
 
   delay(500);
   
 }
 
-void lightsOff()
+void lightsChaos()
 {
   digitalWrite(tl1Red, LOW);
   digitalWrite(tl1Yellow, LOW);
-  digitalWrite(tl1Green, LOW);
+  digitalWrite(tl2Red, LOW);
+  digitalWrite(tl2Yellow, LOW);
+  digitalWrite(tl1Green, HIGH);
+  digitalWrite(tl2Green, HIGH);
 }
 
 void sonarSensorData()
@@ -89,17 +94,17 @@ void sonarSensorData()
   Serial.print("Command: ");
   Serial.print(command);
   delay(500);
-  if (String(command) == "On")
+  if (String(command) == "Off")
   {
     Serial.println("normal operation:)");
-    lightsOn();
-    // outputCommand = "Fan On";
+    lightsNormal();
+    //outputCommand = "Fan On";
   }
   else
   {
-    // outputCommand = "Fan Off";
+    //outputCommand = "Fan Off";
     Serial.println("Traffic light chaos");
-    lightsOff();
+    lightsChaos();
   }
 }
 
@@ -157,7 +162,7 @@ void setup()
   pinMode(tl2Green, OUTPUT);
   pinMode(tl2Red, OUTPUT);
   pinMode(tl2Yellow, OUTPUT);
-  lightsOff();
+  lightsChaos();
   Serial.begin(9600);
 }
 
