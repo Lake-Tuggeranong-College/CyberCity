@@ -30,6 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" type="text/css" href="<?= BASE_URL; ?>assets/css/styles.css">
     <link rel="stylesheet" type="text/css" href="<?= BASE_URL; ?>assets/css/moduleList.css">
     <link rel="stylesheet" type="text/css" href="<?= BASE_URL; ?>assets/css/leaderboard.css">
+    <link rel="stylesheet" type="text/css" href="<?= BASE_URL; ?>assets/css/editAccount.css">
     <link rel="icon" type="image/png" href="<?= BASE_URL; ?>assets/img/CCLogo.png">
 </head>
 
@@ -258,16 +259,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <?php if (isset($_SESSION['flash_message'])): ?>
         <?php $message = $_SESSION['flash_message']; ?>
 
-        <!-- Flash message positoned on the top (?) when confirming the needed condition -->
+        <!-- Flash message positioned on the top (?) when confirming the needed condition -->
         <div class="position-static"><?= $message; ?></div>
 
         <?php unset($_SESSION['flash_message']); ?>
     <?php endif; ?>
 
     <!-- Boostrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
     <?php
     /**
