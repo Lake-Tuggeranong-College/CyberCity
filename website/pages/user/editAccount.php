@@ -1,4 +1,4 @@
-<?php 
+        <?php
     include_once "../../includes/template.php";
 
     if (!authorisedAccess(true, false, false)) {
@@ -28,19 +28,19 @@
                 <div class="d-flex justify-content-center align-items-center mb-3">
                     <h4>Edit Account</h4>
                 </div>
-                <form>
+                <form action="editAccount.php" method="post">
                     <div class="row mt-2">
                         <div class="col-md-12">
                             <label class="labels" for="userName">Username</label>
-                            <input type="text" class="form-control" id="userName" placeholder="Enter username here" value="">
+                            <input type="text" class="form-control" id="userName" placeholder="Enter username here">
                         </div>
                         
                         <div class="col-md-12">
-                            <label class="labels" for="email">Email ID</label>
-                            <input type="text" class="form-control" id="email" placeholder="Enter e-mail here" value="">
+                            <label class="labels" for="userEmail">Email ID</label>
+                            <input type="text" class="form-control" id="userEmail" placeholder="Enter email here">  
                         </div>
                     <div class="mt-5 text-center">
-                        <button class="btn btn-primary profile-button" type="button">Save Profile</button>
+                        <button class="btn btn-primary profile-button" type="submit">Update Profile</button>
                     </div>
                 </form>
             </div>
