@@ -42,12 +42,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($count > 0) {
         $query = $conn->query("SELECT * FROM `Users` WHERE `Username`='$username'");
         $row = $query->fetch();
-        if ($row[4] == 1) {
-            if (password_verify($password, $row[2])) {
+        if ($row[6] == 1) {
+            if (password_verify($password, $row[4])) {
                 // successful log on.
                 $_SESSION["user_id"] = $row[0];
                 $_SESSION["username"] = $row[1];
-                $_SESSION['access_level'] = $row[3];
+                $_SESSION['access_level'] = $row[5];
                 $_SESSION["flash_message"] = "<div class='bg-success'>Login Successful</div>";
                 header("Location:../../index.php");
             } else {
