@@ -43,6 +43,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($numberOfUsers > 0) {
         echo "This username has already been taken.";
+
+        header('Location: '. $_SERVER['REQUEST_URI']);
     } else {
         $sql = "INSERT INTO Users (Username, HashedPassword, AccessLevel, Enabled) VALUES (:newUsername, :newPassword, :newAccessLevel, 1)";
         $stmt = $conn->prepare($sql);
@@ -50,6 +52,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bindValue(':newPassword', $hashed_password);
         $stmt->bindValue(':newAccessLevel', $accessLevel);
         $stmt->execute();
+
+        $query = $conn->query("SELECT ID FROM Users WHERE Username='$username'");
+        $data = $query->fetch();
+        $UserID = $data["ID"];
+
+        $_SESSION["username"] = $username;
+        $_SESSION['access_level'] = '1';
+        $_SESSION['user_id'] = $UserID;
+
+
         $_SESSION["flash_message"] = "<div class='bg-success'>Account Created!</div>";
         header("Location:../../index.php");
 
