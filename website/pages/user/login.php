@@ -17,7 +17,7 @@ if (!authorisedAccess(true, false, false)) {
                 <p>Please enter your Username and Password:</p>
                 <p>User Name<input type="text" name="username" class="form-control" required="required"></p>
                 <p>Password<input type="password" name="password" class="form-control" required="required"></p>
-                <p>Email<input type="email" name="email" class="form-control" required="required"></p>
+<!--                <p>Email<input type="email" name="email" class="form-control" required="required"></p>-->
                 <input type="submit" name="formSubmit" value="Verify">
             </div>
         </div>
@@ -28,7 +28,7 @@ if (!authorisedAccess(true, false, false)) {
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = sanitise_data($_POST['username']);
     $password = sanitise_data($_POST['password']);
-    $email = sanitise_data($_POST['email']);
+//    $email = sanitise_data($_POST['email']);
 
     $query = $conn->query("SELECT COUNT(*) as count FROM `Users` WHERE `Username` ='$username'");
     $row = $query->fetch();
@@ -42,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 // successful log on.
                 $_SESSION["user_id"] = $row[0];
                 $_SESSION["username"] = $row[1];
-                $_SESSION["email"] = $row[2];
+//                $_SESSION["email"] = $row[2];
                 $_SESSION['access_level'] = $row[5];
                 $_SESSION["flash_message"] = "<div class='bg-success'>Login Successful</div>";
                 header("Location:../../index.php");
