@@ -8,3 +8,11 @@
 ![biolabguide.png](biolabguide.png)
 
 (4a 41 4d 7b 6d 56 62 55 6b 50 61 7d)
+
+## Step by Step
+
+<tabs>
+<tab title="Step 1">Click on the word "here" located in the challenge description.</tab>
+<tab title="Step 2">Under "Continuous Learning and Improvement" locate the encrypted hex and open a decrypter for decifer it.</tab>
+<tab title="Step 3">Once decrypted there will be another layer of encryption, this is a caeser cipher, decrypt this for the answer.</tab>
+</tabs>
