@@ -3,7 +3,6 @@ include_once "../../includes/template.php";
 
 if (!authorisedAccess(true, false, false)) {
     header("Location:../../index.php");
-    exit(); // clear one-time usage resource as best practice
 }
 
 // Fetch the user's current data from the database
