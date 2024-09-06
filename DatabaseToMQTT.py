@@ -5,14 +5,14 @@ import time
 
 # MySQL connection settings
 db_config = {
-    'host': '10.177.200.71',
+    'host': 'localhost',
     'user': 'LTC',
     'passwd': 'LTCpcgame5',
     'port': 3306
 }
 
 # MQTT configuration
-mqtt_broker = "10.177.200.71"
+mqtt_broker = "localhost"
 mqtt_port = 1883
 
 # Set up MQTT client with debugging
