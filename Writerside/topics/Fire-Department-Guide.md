@@ -8,4 +8,5 @@
 3. Once you have opened inspect under the "fire department" text, click on the dropdown that is highlighted.
 
 4. Click on the dropdown that has now revealed itself, you should see the answer (The beginning of the answer has CTF)
-![](firedepartmentinspectguide.png)
+
+![](Firedepartmentinspect_[MConverter.eu].png)
