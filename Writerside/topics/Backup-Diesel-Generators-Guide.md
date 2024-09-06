@@ -14,17 +14,3 @@ cause the address comparison function to work correctly and the program will dow
 
 Note that is named the same as the defualt address one that does not contain the CTF{} flag.
 
-## Skill Learned
-
-
-
-## User Experiences
-
-
-
-
-## Developer Experiences
-
-### How it works
-
-TODO: 
