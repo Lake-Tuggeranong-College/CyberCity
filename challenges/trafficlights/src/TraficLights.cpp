@@ -25,23 +25,25 @@ CyberCitySharedFunctionality cyberCity;
 void lightsNormal()
 {
   digitalWrite(tl1Green, LOW);
-  digitalWrite(tl1Green, LOW);
+  digitalWrite(tl2Green, LOW);
   digitalWrite(tl1Yellow, LOW);
   digitalWrite(tl1Red, HIGH);
+  digitalWrite(tl2Red, LOW);
   digitalWrite(tl2Green, HIGH);
+  digitalWrite(tl2Yellow, LOW); 
   delay(5000);
   digitalWrite(tl2Green, LOW);
   digitalWrite(tl2Yellow, HIGH);
+  digitalWrite(tl1Red, HIGH);
   delay(1000);
   digitalWrite(tl2Yellow, LOW);
-
   digitalWrite(tl2Red, HIGH);
   digitalWrite(tl1Red, LOW);
   digitalWrite(tl1Green, HIGH);
   delay(5000);
   digitalWrite(tl1Green, LOW);
   digitalWrite(tl1Yellow, HIGH);
-  digitalWrite(tl2Red, LOW);
+  digitalWrite(tl2Red, HIGH);
 
   delay(500);
   
