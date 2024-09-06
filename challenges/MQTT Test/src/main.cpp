@@ -39,7 +39,7 @@ void setup() {
 
     if (client.connect(mqttClient)) {
       Serial.println("Connected to MQTT");
-      client.subscribe("esp32/control");  // Subscribe to the control topic
+      client.subscribe("RegisteredModules/Servo");  // Subscribe to the control topic
       Serial.println("Connected to topic");
     } else {
       Serial.print("Failed with state ");
@@ -69,14 +69,13 @@ void callback(char* topic, byte* payload, unsigned int length) {
 }
 
 void loop() {
-  // Keep the MQTT client connected
   if (!client.connected()) {
     while (!client.connected()) {
       Serial.println("Reconnecting to MQTT...");
 
       if (client.connect("ESP32_Client")) {
         Serial.println("Reconnected to MQTT");
-        client.subscribe("esp32/control");
+        client.subscribe("RegisteredModules/Servo");
         Serial.println("Connected to topic");
       } else {
         Serial.print("Failed to reconnect, state ");
