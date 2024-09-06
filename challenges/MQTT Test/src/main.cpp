@@ -69,24 +69,6 @@ void callback(char* topic, byte* payload, unsigned int length) {
 }
 
 void loop() {
-  // Keep the MQTT client connected
-
-  // Connecting to WiFi 
-  /*
-  if (WiFi.status() != WL_CONNECTED) {
-      WiFi.begin(ssid, password);
-      Serial.print("Connecting to WiFi");
-
-      while (WiFi.status() != WL_CONNECTED) {
-        delay(1000);
-        Serial.print(".");
-      }
-      Serial.println();
-      Serial.println("Connected to WiFi");
-      Serial.print("IP address: ");
-      Serial.println(WiFi.localIP());
-
-  }*/
   if (!client.connected()) {
     while (!client.connected()) {
       Serial.println("Reconnecting to MQTT...");

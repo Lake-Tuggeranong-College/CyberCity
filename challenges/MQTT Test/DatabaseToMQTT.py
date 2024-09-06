@@ -102,7 +102,7 @@ def process_binlog_event():
                 topic = f"RegisteredModules/{topic}"
                 
                 # Publish the message to the topic
-                client.publish(topic, message)
+                client.publish(topic, message, retain=True)
                 print(f"Published '{message}' to topic '{topic}'")
 
 try:
