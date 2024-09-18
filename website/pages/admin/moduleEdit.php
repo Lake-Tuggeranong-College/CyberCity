@@ -24,6 +24,34 @@ if (isset($_GET["ModuleID"])) {
 } else {
     header("location:moduleList.php");
 }
+
+// Back End
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $newModule = sanitise_data($_POST["moduleName"]);
+    $newLocation = sanitise_data($_POST["moduleLocation"]);
+    $newOutput = sanitise_data($_POST["currentOutput"]);
+    $newAPIKey = sanitise_data($_POST["apiKey"]);
+    $newHashedAPIKey = password_hash($newAPIKey, PASSWORD_DEFAULT);
+    $newEnabled = ($_POST["Enabled"]);
+    $moduleToLoad = $_GET["ModuleID"];
+
+    $sql = "UPDATE RegisteredModules SET Location= :newLocation, Module= :newModule, HashedAPIKey= :newHashedAPIkey, Enabled= :newEnabled, CurrentOutput=:newOutput WHERE ID ='$moduleToLoad'";
+    //$sql = "INSERT INTO `RegisteredModules` (Location, Module, HashedAPIKey, Enabled) VALUES (:newLocation, :newModule, :newHashedAPIkey, :enabled)";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bindValue(":newModule", $newModule);
+    $stmt->bindValue(":newLocation", $newLocation);
+    $stmt->bindValue(":newOutput", $newOutput);
+    $stmt->bindValue(":newHashedAPIkey", $newHashedAPIKey);
+    $stmt->bindValue(":newEnabled", $newEnabled);
+
+    $stmt->execute();
+
+    header('Location: '. $_SERVER['REQUEST_URI']);
+
+//    header("location:moduleInformation.php?ModuleID=$moduleToLoad");
+
+}
 ?>
 
 
@@ -70,39 +98,6 @@ if (isset($_GET["ModuleID"])) {
     </div>
     <input type="submit" name="formSubmit" value="Update">
 </form>
-
-
-<!-- If the user presses update, this code runs-->
-
-<?php
-// Back End
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $newModule = sanitise_data($_POST["moduleName"]);
-    $newLocation = sanitise_data($_POST["moduleLocation"]);
-    $newOutput = sanitise_data($_POST["currentOutput"]);
-    $newAPIKey = sanitise_data($_POST["apiKey"]);
-    $newHashedAPIKey = password_hash($newAPIKey, PASSWORD_DEFAULT);
-    $newEnabled = ($_POST["Enabled"]);
-    $moduleToLoad = $_GET["ModuleID"];
-
-    $sql = "UPDATE RegisteredModules SET Location= :newLocation, Module= :newModule, HashedAPIKey= :newHashedAPIkey, Enabled= :newEnabled, CurrentOutput=:newOutput WHERE ID ='$moduleToLoad'";
-    //$sql = "INSERT INTO `RegisteredModules` (Location, Module, HashedAPIKey, Enabled) VALUES (:newLocation, :newModule, :newHashedAPIkey, :enabled)";
-
-    $stmt = $conn->prepare($sql);
-    $stmt->bindValue(":newModule", $newModule);
-    $stmt->bindValue(":newLocation", $newLocation);
-    $stmt->bindValue(":newOutput", $newOutput);
-    $stmt->bindValue(":newHashedAPIkey", $newHashedAPIKey);
-    $stmt->bindValue(":newEnabled", $newEnabled);
-
-    $stmt->execute();
-
-    header('Location: '. $_SERVER['REQUEST_URI']);
-
-//    header("location:moduleInformation.php?ModuleID=$moduleToLoad");
-
-}
-?>
 
 
 

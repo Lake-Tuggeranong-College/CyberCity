@@ -24,6 +24,34 @@ if (isset($_GET["UserID"])) {
 } else {
     header("location:userList.php");
 }
+
+// Back End
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+//    $userName = sanitise_data($_POST["userName"]);
+    $userPassword = sanitise_data($_POST["password"]);
+//    $userAccessLevel = sanitise_data($_POST["AccessLevel"]);
+//    $userEnabled = sanitise_data($_POST["Enabled"]);
+//    $userScore = sanitise_data($_POST["Score"]);
+    $userHashedPassword = password_hash($userPassword, PASSWORD_DEFAULT);
+    $userToLoad = $_GET["UserID"];
+
+    $sql = "UPDATE Users SET HashedPassword=:newpassword WHERE ID ='$userToLoad'";
+    //$sql = "INSERT INTO `RegisteredModules` (Location, Module, HashedAPIKey, Enabled) VALUES (:newLocation, :newModule, :newHashedAPIkey, :enabled)";
+
+    $stmt = $conn->prepare($sql);
+//    $stmt->bindValue(":newusername", $userName);
+    $stmt->bindValue(":newpassword", $userHashedPassword);
+//    $stmt->bindValue(":newaccesslevel", $userAccessLevel);
+//    $stmt->bindValue(":newEnabled", $userEnabled);
+//    $stmt->bindValue(":newscore", $userScore);
+
+    $stmt->execute();
+
+    header('Location: '. $_SERVER['REQUEST_URI']);
+
+//    header("location:moduleInformation.php?ModuleID=$moduleToLoad");
+
+}
 ?>
 
 
@@ -72,36 +100,6 @@ if (isset($_GET["UserID"])) {
 
 
 <!-- If the user presses update, this code runs-->
-
-<?php
-// Back End
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-//    $userName = sanitise_data($_POST["userName"]);
-    $userPassword = sanitise_data($_POST["password"]);
-//    $userAccessLevel = sanitise_data($_POST["AccessLevel"]);
-//    $userEnabled = sanitise_data($_POST["Enabled"]);
-//    $userScore = sanitise_data($_POST["Score"]);
-    $userHashedPassword = password_hash($userPassword, PASSWORD_DEFAULT);
-    $userToLoad = $_GET["UserID"];
-
-    $sql = "UPDATE Users SET HashedPassword=:newpassword WHERE ID ='$userToLoad'";
-    //$sql = "INSERT INTO `RegisteredModules` (Location, Module, HashedAPIKey, Enabled) VALUES (:newLocation, :newModule, :newHashedAPIkey, :enabled)";
-
-    $stmt = $conn->prepare($sql);
-//    $stmt->bindValue(":newusername", $userName);
-    $stmt->bindValue(":newpassword", $userHashedPassword);
-//    $stmt->bindValue(":newaccesslevel", $userAccessLevel);
-//    $stmt->bindValue(":newEnabled", $userEnabled);
-//    $stmt->bindValue(":newscore", $userScore);
-
-    $stmt->execute();
-
-    header('Location: '. $_SERVER['REQUEST_URI']);
-
-//    header("location:moduleInformation.php?ModuleID=$moduleToLoad");
-
-}
-?>
 
 
 
