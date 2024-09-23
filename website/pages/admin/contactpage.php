@@ -7,6 +7,23 @@ if (!authorisedAccess(false, false, true)) {
     header("Location:../../index.php");
 }
 
+$ContactList = $conn->query("SELECT Username, Email, ID, IsRead FROM ContactUs WHERE IsRead=0 ");
+
+while ($ContactData = $ContactList->fetch()) {
+?>
+<?php
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $postID = $_GET["ContactID"];
+    $sql = "UPDATE ContactUs SET IsRead = 1 WHERE ID ='$postID'";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $_SESSION["flash_message"] = "message read";
+//            header("Location:" . BASE_URL . "/pages/admin/contactpage.php");
+    echo $ContactData["IsRead"];
+}
+header('Location: '. $_SERVER['REQUEST_URI']);
+
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -33,9 +50,7 @@ if (!authorisedAccess(false, false, true)) {
 
 
 <?php
-$ContactList = $conn->query("SELECT Username, Email, ID, IsRead FROM ContactUs WHERE IsRead=0 ");
 
-while ($ContactData = $ContactList->fetch()) {
 
 
     echo "<div class='row'>";
@@ -49,20 +64,7 @@ while ($ContactData = $ContactList->fetch()) {
         <button type='submit' class='btn btn-outline-danger'>  READ  </button>
     </form>
 
-    <?php
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            $postID = $_GET["ContactID"];
-            $sql = "UPDATE ContactUs SET IsRead = 1 WHERE ID ='$postID'";
-            $stmt = $conn->prepare($sql);
-            $stmt->execute();
-            $_SESSION["flash_message"] = "message read";
-//            header("Location:" . BASE_URL . "/pages/admin/contactpage.php");
-            echo $ContactData["IsRead"];
-        }
-    header('Location: '. $_SERVER['REQUEST_URI']);
 
-}
-    ?>
     </div>
     <?php
     echo "</div>";

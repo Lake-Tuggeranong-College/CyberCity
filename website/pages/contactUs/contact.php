@@ -6,34 +6,6 @@ if (!authorisedAccess(true, true, true)) {
 }
 
 ?>
-
-
-<title>Contact Us</title>
-
-<div class = "wideBox">
-
-        <div class = "title" >
-
-<h1>Need assistance? Please fill out the form below, so we can get in contact with you.</h1>
-<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" enctype="multipart/form-data">
-    <div class="container-fluid">
-        <div class="row">
-            <!--Customer Details-->
-
-            <div class="col-md-12">
-                <h2>Personal Details</h2>
-
-                <p>Email<label>
-                        <input type="text" name="email" class="form-control" required="required">
-                    </label></p>
-                <p>Username<label>
-                        <input type="text" name="username" class="form-control" required="required">
-                    </label></p>
-            </div>
-        </div>
-    </div>
-    <input type="submit" name="formSubmit" value="Submit">
-</form>
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     header("Location:../../index.php");
@@ -61,6 +33,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 }
 ?>
+
+<title>Contact Us</title>
+
+<div class = "wideBox">
+
+        <div class = "title" >
+
+<h1>Need assistance? Please fill out the form below, so we can get in contact with you.</h1>
+<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" enctype="multipart/form-data">
+    <div class="container-fluid">
+        <div class="row">
+            <!--Customer Details-->
+
+            <div class="col-md-12">
+                <h2>Personal Details</h2>
+
+                <p>Email<label>
+                        <input type="text" name="email" class="form-control" required="required">
+                    </label></p>
+                <p>Username<label>
+                        <input type="text" name="username" class="form-control" required="required">
+                    </label></p>
+            </div>
+        </div>
+    </div>
+    <input type="submit" name="formSubmit" value="Submit">
+</form>
+
 
         </div>
 
