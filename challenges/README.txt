@@ -1,0 +1,1 @@
+When making a new challenge, copy all the code from ESP32MQTTTemplate as a start.
