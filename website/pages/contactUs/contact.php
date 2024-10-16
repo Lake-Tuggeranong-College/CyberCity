@@ -5,6 +5,31 @@ if (!authorisedAccess(true, true, true)) {
     header("Location:../../index.php");
 }
 
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    header("Location:../../index.php");
+
+    //takes username and email from form above.
+    $username = sanitise_data($_POST['username']);
+    $email = sanitise_data($_POST['email']);
+    //will connect to the server.
+    $query = $conn->query("SELECT COUNT(*) as count FROM ContactUs WHERE `Email` ='$email'");
+    $data = $query->fetch();
+    $complaintInProgress = (int)$data[0];
+
+    if ($complaintInProgress > 0) {
+        //if the username is already in the complaint table do not allow them to send another one.
+        echo "You have already tried to get in contact with us, please wait while we get in contact with you.";
+    } else {
+        // will insert into a new user table under complaints and will also contain a text box to hold the complaint
+        $sql = "INSERT INTO ContactUs (Username, Email) VALUES (:newUsername, :newEmail)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue(':newUsername', $username);
+        $stmt->bindValue(':newEmail', $email);
+        $stmt->execute();
+
+    }
+
+}
 ?>
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {

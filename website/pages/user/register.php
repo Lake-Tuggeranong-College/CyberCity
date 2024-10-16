@@ -5,30 +5,6 @@
         header("Location:../../index.php");
     }
 
-    ?>
-
-    <title>Register Page</title>
-
-    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" enctype="multipart/form-data">
-        <div class="container-fluid centerBox">
-            <div class="row">
-                <!--Customer Details-->
-
-                <div class="col-md-12">
-                    <h2>Registration</h2>
-                    <p>Please enter a Username and Password:</p>
-                    <p>User Name<input type="text" name="username" class="form-control" required="required"></p>
-                    <p>Password<input type="password" name="password" class="form-control" required="required"></p>
-                    <p>Email<input type="email" name="email" class="form-control" required="required"></p>
-                    <input type="submit" name="formSubmit" value="Register">
-                </div>
-            </div>
-        </div>
-
-    </form>
-
-    <?php
-
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $username = sanitise_data($_POST['username']);
         $password = sanitise_data($_POST['password']);
@@ -36,7 +12,7 @@
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
         $accessLevel = 1;
 
-    // check username in database
+        // check username in database
         $query = $conn->query("SELECT COUNT(*) FROM Users WHERE Username='$username'");
         $data = $query->fetch();
         $numberOfUsers = (int)$data[0];
@@ -70,5 +46,25 @@
 
     }
     ?>
+
+    <title>Register Page</title>
+
+    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" enctype="multipart/form-data">
+        <div class="container-fluid centerBox">
+            <div class="row">
+                <!--Customer Details-->
+
+                <div class="col-md-12">
+                    <h2>Registration</h2>
+                    <p>Please enter a Username and Password:</p>
+                    <p>User Name<input type="text" name="username" class="form-control" required="required"></p>
+                    <p>Password<input type="password" name="password" class="form-control" required="required"></p>
+                    <p>Email<input type="email" name="email" class="form-control" required="required"></p>
+                    <input type="submit" name="formSubmit" value="Register">
+                </div>
+            </div>
+        </div>
+
+    </form>
 
 

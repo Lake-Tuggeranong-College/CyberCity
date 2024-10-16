@@ -4,27 +4,7 @@ include_once "../../includes/template.php";
 if (!authorisedAccess(true, false, false)) {
     header("Location:../../index.php");
 }
-?>
 
-<title>Cyber City - Login</title>
-
-<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" enctype="multipart/form-data">
-    <div class="container-fluid centerBox">
-        <div class="row">
-            <!--Customer Details-->
-            <div class="col-md-12">
-                <h2>Log in</h2>
-                <p>Please enter your Username and Password:</p>
-                <p>User Name<input type="text" name="username" class="form-control" required="required"></p>
-                <p>Password<input type="password" name="password" class="form-control" required="required"></p>
-<!--                <p>Email<input type="email" name="email" class="form-control" required="required"></p>-->
-                <input type="submit" name="formSubmit" value="Verify">
-            </div>
-        </div>
-    </div>
-</form>
-
-<?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = sanitise_data($_POST['username']);
     $password = sanitise_data($_POST['password']);
@@ -60,3 +40,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         header('Location: '. $_SERVER['REQUEST_URI']);
     }
 }
+?>
+
+<title>Cyber City - Login</title>
+
+<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" enctype="multipart/form-data">
+    <div class="container-fluid centerBox">
+        <div class="row">
+            <!--Customer Details-->
+            <div class="col-md-12">
+                <h2>Log in</h2>
+                <p>Please enter your Username and Password:</p>
+                <p>User Name<input type="text" name="username" class="form-control" required="required"></p>
+                <p>Password<input type="password" name="password" class="form-control" required="required"></p>
+<!--                <p>Email<input type="email" name="email" class="form-control" required="required"></p>-->
+                <input type="submit" name="formSubmit" value="Verify">
+            </div>
+        </div>
+    </div>
+</form>
