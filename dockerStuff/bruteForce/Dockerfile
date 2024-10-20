@@ -6,7 +6,7 @@ RUN mkdir /var/run/sshd
 
 COPY flag.txt /home/cather/flag.txt
 
-RUN useradd -m -s /bin/bash cather && echo 'cather:geneva' | chpasswd
+RUN useradd -m -s /bin/bash cather && echo 'cather:sunshine' | chpasswd
 
 RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
 
