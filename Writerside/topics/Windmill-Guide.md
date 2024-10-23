@@ -21,10 +21,6 @@ For instance, ‘Q’ in the ciphertext corresponds to ‘T’ in the plaintext.
 
 ## Step one
 
-[Cryptii](https://cryptii.com)
+Open a caesar cipher decryptor, we recommend 'thewordfinder'.
 
-While using Cryptii, select decode in the options and input your cipher.
-
-(You may need to adjust the shift of letters to make the output coherent)
-
-![cryptiiexample.png](cryptiiexample.png)
+Put in the cipher on the decode side (left) and adjust the shift until you get a flag that's coherent 
