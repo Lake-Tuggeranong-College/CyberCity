@@ -42,5 +42,17 @@
         <toc-element topic="Criminal-Records-Hints.md"/>
         <toc-element topic="Criminal-Records-Guide.md"/>
     </toc-element>
+    <toc-element topic="West-End.md">
+        <toc-element topic="West-End-Hints.md"/>
+        <toc-element topic="West-End-Guide.md"/>
+    </toc-element>
+    <toc-element topic="Curly-Maps.md">
+        <toc-element topic="Curly-Maps-Hints.md"/>
+        <toc-element topic="Curly-Maps-Guide.md"/>
+    </toc-element>
+    <toc-element topic="Groundhog-Day.md">
+        <toc-element topic="Groundhog-Day-Hints.md"/>
+        <toc-element topic="Groundhog-Day-Guide.md"/>
+    </toc-element>
 
 </instance-profile>
