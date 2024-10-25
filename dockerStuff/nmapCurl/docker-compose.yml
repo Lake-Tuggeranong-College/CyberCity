@@ -1,0 +1,29 @@
+# File: docker-compose.yml
+version: '3'
+services:
+  nmapcurlssh-container:
+    build:
+      context: .
+      dockerfile: Dockerfile.ssh
+    container_name: ssh-container
+    ports:
+      - "2224:22"  # Expose SSH on port 2222
+    networks:
+      - nmapCurl-net
+      - getMeOut-net
+  nmapcurlweb-container:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    container_name: web-container
+    networks:
+      - nmapCurl-net
+networks:
+  nmapCurl-net:
+    driver: bridge
+    internal: true
+    ipam:
+      config:
+        - subnet: 192.168.1.0/24
+  getMeOut-net:
+    driver: bridge

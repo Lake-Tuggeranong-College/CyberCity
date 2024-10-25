@@ -1,0 +1,8 @@
+version: '3'
+services:
+  hiddenfile-server:
+    build: .
+    ports:
+      - "2226:22" # OUTSIDE:INSIDE
+    container_name: hiddenFile_container
+    restart: unless-stopped
