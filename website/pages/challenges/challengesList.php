@@ -13,6 +13,16 @@ if (!authorisedAccess(false, true, true)) {
 <h1>Challenges</h1>
 <?php
 
+//function createCategoryHeader($conn, $categoryData) {
+//   // Extract each field from the data array
+//    $categoryName = $categoryData['categoryName'];
+//echo $categoryData['categoryName'];
+//    ?>
+<!--    <h2>--><?php //= $categoryName ?><!--</h2>-->
+<!--    --><?php
+
+
+
 function createChallengeCard($conn, $completionStatus, $challengeData) {
     //Extract each field from the data array
     $challengeID = $challengeData['ID'];
@@ -53,26 +63,44 @@ function createChallengeCard($conn, $completionStatus, $challengeData) {
         <?php
     }
 }
+$categoryQuery = $conn->query("SELECT CategoryName FROM category");
+$categoryList = $categoryQuery->fetchAll( PDO::FETCH_ASSOC );
+for ($catcount = 0; $catcount < sizeof($categoryList); $catcount++) {
 
-$userID = $_SESSION['user_id'];
-$challengeListQuery = $conn->query("SELECT ID, challengeTitle, PointsValue, moduleID FROM Challenges WHERE Enabled = 1");
-$challengeList = $challengeListQuery->fetchAll(PDO::FETCH_ASSOC);
-for ($counter = 0; $counter < sizeof($challengeList); $counter++) {
-    // Get the challenge data for the current iteration.
-    // $counter is the index of the current challenge in the $challengeList array.
-    // $challengeList is an array that contains the array of data for each challenge.
-    // $challengeData is an associative array containing the challenge's ID, title, points value, and module ID.
+    $categoryData = $categoryList[$catcount];
+    ?>
+    <div class="product_wrapper">
+        <br>
 
-    $challengeData = $challengeList[$counter];
-    $challengeID = $challengeData['ID'];
+    <h2 style="text-align: left;, width: 95%;, padding: 50px"><?= $categoryData['CategoryName']  ?></h2>
+    <?php
 
-    //Get completion status of the challenge
-    $completionQuery = $conn->query("SELECT * FROM UserChallenges WHERE userID = '$userID' AND challengeID = '$challengeID'");
-    if ($completionQuery->rowCount()>0) {
-        createChallengeCard($conn,TRUE, $challengeData);
-    } else {
-        createChallengeCard($conn, FALSE, $challengeData);
+
+
+
+    $userID = $_SESSION['user_id'];
+    $challengeListQuery = $conn->query("SELECT ID, challengeTitle, PointsValue, moduleID FROM Challenges WHERE Enabled = 1 AND category = '$categoryData[CategoryName]'");
+    $challengeList = $challengeListQuery->fetchAll(PDO::FETCH_ASSOC);
+    for ($counter = 0; $counter < sizeof($challengeList); $counter++) {
+        // Get the challenge data for the current iteration.
+        // $counter is the index of the current challenge in the $challengeList array.
+        // $challengeList is an array that contains the array of data for each challenge.
+        // $challengeData is an associative array containing the challenge's ID, title, points value, and module ID.
+
+        $challengeData = $challengeList[$counter];
+        $challengeID = $challengeData['ID'];
+
+        //Get completion status of the challenge
+        $completionQuery = $conn->query("SELECT * FROM UserChallenges WHERE userID = '$userID' AND challengeID = '$challengeID'");
+        if ($completionQuery->rowCount() > 0) {
+            createChallengeCard($conn, TRUE, $challengeData);
+        } else {
+            createChallengeCard($conn, FALSE, $challengeData);
+        }
     }
+ ?>
+    </div>
+        <?php
 }
 ?>
 
