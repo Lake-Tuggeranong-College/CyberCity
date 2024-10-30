@@ -1,0 +1,3 @@
+# Curly Maps Hints
+
+Start typing here...

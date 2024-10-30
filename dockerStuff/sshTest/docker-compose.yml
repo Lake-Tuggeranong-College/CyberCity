@@ -1,0 +1,8 @@
+version: '3'
+services:
+  sshtest-server:
+    build: .
+    ports:
+      - "2222:22" # OUTSIDE:INSIDE
+    container_name: sshTest_container
+    restart: unless-stopped

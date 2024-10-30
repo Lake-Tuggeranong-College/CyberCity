@@ -1,0 +1,21 @@
+FROM ubuntu:latest
+
+RUN apt-get update && apt-get install -y openssh-server \
+	nmap \
+	curl \ 
+	net-tools \
+	sudo
+
+RUN mkdir /var/run/sshd
+
+RUN useradd -rm -d /home/traise -s /bin/bash -g root -G sudo traise && echo 'traise:Password01' | chpasswd
+
+RUN echo 'traise ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
+RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
+
+RUN sed -i 's/PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config
+
+EXPOSE 22
+
+CMD ["/usr/sbin/sshd", "-D"]

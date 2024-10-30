@@ -1,0 +1,8 @@
+version: '3'
+services:
+  grepchallenge-server:
+    build: .
+    ports:
+      - "2225:22" # OUTSIDE:INSIDE
+    container_name: grepChallenge_container
+    restart: unless-stopped
