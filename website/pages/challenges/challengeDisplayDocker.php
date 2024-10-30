@@ -12,7 +12,7 @@ if (isset($_GET["moduleID"])) {
     header("location:challengesList.php");
 }
 
-$sql = $conn->query("SELECT ID, moduleID, challengeTitle, challengeText, PointsValue, HashedFlag FROM Challenges WHERE moduleID = " . $challengeToLoad . " ORDER BY ID DESC");
+$sql = $conn->query("SELECT ID, moduleID, challengeTitle, challengeText, PointsValue, HashedFlag, dChallengeID FROM Challenges WHERE moduleID = " . $challengeToLoad . " ORDER BY ID DESC");
 $result = $sql->fetch();
 $challengeID = $result["ID"];
 $moduleID = $result["moduleID"];
@@ -26,13 +26,13 @@ $hashedFlag = $result["HashedFlag"];
 $user = $_SESSION["user_id"];
 $containerQuery = $conn->query("SELECT timeInitialised, port FROM docker_containers WHERE userID = '$user'");
 $containerData = $containerQuery->fetch();
+$dChallengeID = $result["dChallengeID"];
 if ($containerQuery->rowCount() != 0) {
     $timeInitialised = $containerData["timeInitialised"];
     $port = $containerData["port"];
     $timestamp = strtotime($containerData['timeInitialised']);
     $timestamp = $timestamp + 1200;
     $deletionTime = date('G:i', $timestamp);
-    $dChallengeID = $containerData["dChallengeID"];
 }
 
 $moduleQuery = $conn->query("SELECT Image from RegisteredModules WHERE ID = $moduleID");
@@ -83,7 +83,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 ?>
 
+
 <title>Challenge Information</title>
+
 
 </head>
 
@@ -199,7 +201,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 ?>
             </div>
             <div class="col border-start border-end border-dark-subtle border-2">
-                <button onclick="startContainer($dChallengeID)" class="btn btn-success">Start Container</button>
+                <button  id="startContainerButton" onclick="startContainer()" class="btn btn-success" <?php if ($containerQuery->rowCount() != 0){echo "disabled";}?>>Start Container</button>
             </div>
             <div class="col border-start border-end border-dark-subtle border-2">
                 <?php
@@ -263,5 +265,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 </footer>
 
+<script type="text/javascript">
+    function startContainer() {
+        console.log("before axios")
+
+        axios.post('<?= BASE_URL ?>pages/challenges/docker/startContainer.php', new URLSearchParams({
+            dChallengeID: '<?=$dChallengeID?>',
+            userID: '<?=$user?>',
+        }))
+            .then(response => {
+                console.log('Response:', response.data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+</script>
 </body>
+
 </html>
