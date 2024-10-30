@@ -1,10 +1,9 @@
 <?php
 include_once "../../includes/template.php";
 
-if (!authorisedAccess(true, false, false)) {
-    header("Location:../../index.php");
+if (authorisedAccess(true, false, false)) {
+    echo '<script type="text/javascript">location.replace("http://10.177.200.71/CyberCity/index.php")</script>';
 }
-
 // Fetch the user's current data from the database
 $userId = $_SESSION['user_id'];
 $query = "SELECT Username, user_email FROM Users WHERE ID = :userId";
