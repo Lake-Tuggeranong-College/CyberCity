@@ -8,6 +8,7 @@
     $dbPwd = "CyberCity";
     $dbName = "CyberCity";
 
+date_default_timezone_set("Australia/Sydney");
 
     // PDO options for maximum error handling
     $pdoFullOpt = [
