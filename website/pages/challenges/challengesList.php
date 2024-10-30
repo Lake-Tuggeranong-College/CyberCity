@@ -29,6 +29,7 @@ function createChallengeCard($conn, $completionStatus, $challengeData) {
     $challengeTitle = $challengeData['challengeTitle'];
     $pointsValue = $challengeData['PointsValue'];
     $moduleID = $challengeData['moduleID'];
+    $container_required = $challengeData['container'];
 
     // Check whether the challenge has an image
     $imageQuery = $conn->query("SELECT Image from RegisteredModules WHERE ID = $moduleID");
@@ -44,7 +45,7 @@ function createChallengeCard($conn, $completionStatus, $challengeData) {
                 <div class="card-body">
                     <h5 class="card-title"><?= $challengeData["challengeTitle"] ?></h5>
                     <p class="card-text"><?= $challengeData["PointsValue"] ?></p>
-                    <a href="challengeDisplay.php?moduleID=<?= $moduleID ?>" class="btn btn-warning">Start
+                    <a href="<?php if ($container_required == 1) {?>challengeDisplayDocker.php?moduleID=<?php } else {?>challengeDisplay.php?moduleID= <?php } ?><?= $moduleID ?>" class="btn btn-warning">Start
                         Challenge</a>
                 </div>
             </div>
@@ -79,7 +80,7 @@ for ($catcount = 0; $catcount < sizeof($categoryList); $catcount++) {
 
 
     $userID = $_SESSION['user_id'];
-    $challengeListQuery = $conn->query("SELECT ID, challengeTitle, PointsValue, moduleID FROM Challenges WHERE Enabled = 1 AND category = '$categoryData[CategoryName]'");
+    $challengeListQuery = $conn->query("SELECT ID, challengeTitle, PointsValue, moduleID, container FROM Challenges WHERE Enabled = 1 AND category = '$categoryData[CategoryName]'");
     $challengeList = $challengeListQuery->fetchAll(PDO::FETCH_ASSOC);
     for ($counter = 0; $counter < sizeof($challengeList); $counter++) {
         // Get the challenge data for the current iteration.
