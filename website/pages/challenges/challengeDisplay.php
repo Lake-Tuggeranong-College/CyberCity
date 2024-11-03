@@ -55,7 +55,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt = $conn->prepare($sql1);
             $stmt->execute([$addedScore, $user]);
 
-            $sql = "UPDATE RegisteredModules SET CurrentOutput = CurrentOutput + '1' WHERE ID='$moduleID'";
+            if ($challengeID == 19) {
+                $sql = "UPDATE RegisteredModules SET CurrentOutput = 'On' WHERE ID='$moduleID'";
+            }
+            else {
+                $sql = "UPDATE RegisteredModules SET CurrentOutput = CurrentOutput + '1' WHERE ID='$moduleID'";
+            }
             $stmt = $conn->prepare($sql);
             $stmt->execute();
             $_SESSION["flash_message"] = "<div class='bg-success'>Success!</div>";
