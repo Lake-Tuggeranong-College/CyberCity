@@ -55,7 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt = $conn->prepare($sql1);
             $stmt->execute([$addedScore, $user]);
 
-            if ($challengeID == 19) {
+            if ($moduleID == 19) {
                 $sql = "UPDATE RegisteredModules SET CurrentOutput = 'On' WHERE ID='$moduleID'";
             }
             else {
