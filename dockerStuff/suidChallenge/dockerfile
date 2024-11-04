@@ -11,7 +11,9 @@ RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/
 RUN sed -i 's/PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config
 
 COPY executor.sh /root/executor.sh
-COPY suidExecutor.cpp /root/suidExecutor.cpp
+COPY executor /home/overseer/executor
+RUN chmod 4711 /home/overseer/executor
+RUN chown root /home/overseer/executor
 
 EXPOSE 22
 

@@ -1,0 +1,11 @@
+version: '3'
+services:
+  chmodchallenge-server:
+    build: .
+    ports:
+      - "${PORT}:22" # OUTSIDE:INSIDE
+    container_name: "${USER}_${PORT}chmodChallenge_container"
+    environment:
+      - PORT=${PORT}
+      - USER=${USER}
+    restart: unless-stopped
