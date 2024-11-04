@@ -228,9 +228,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <ul class="navbar-nav ms-auto">
 
                         <!-- Direct link to 'Register' page if users are currently just view through the website -->
-                        <li class="nav-link active">
-                            <a href="<?= BASE_URL; ?>pages/user/register.php" class="nav-link" style="color: indianred;">Register</a>
-                        </li>
+<!--                        <li class="nav-link active">-->
+<!--                            <a href="--><?php //= BASE_URL; ?><!--pages/user/register.php" class="nav-link" style="color: indianred;">Register</a>-->
+<!--                        </li>-->
 
                         <!-- Direct link to 'Login' page if users are currently just view through the website -->
                         <li class="nav-link active">
