@@ -18,10 +18,13 @@ services:
     container_name: web-container
     networks:
       - nmapCurl-net
+
 networks:
   nmapCurl-net:
-    driver: bridge
+    driver: ipvlan
     internal: true
+    #driver_opts:
+   #   parent: docker0.222
     ipam:
       config:
         - subnet: 192.168.1.0/24

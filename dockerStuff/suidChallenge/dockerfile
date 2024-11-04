@@ -1,0 +1,21 @@
+FROM ubuntu:latest
+
+RUN apt-get update && apt-get install -y openssh-server
+
+RUN mkdir /var/run/sshd
+
+RUN useradd -m -s /bin/bash overseer && echo 'overseer:Password01' | chpasswd
+
+RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
+
+RUN sed -i 's/PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config
+
+COPY flag.txt /root/flag.txt
+COPY executor.sh /root/executor.sh
+COPY executor /home/overseer/executor
+RUN chmod 4711 /home/overseer/executor
+RUN chown root /home/overseer/executor
+
+EXPOSE 22
+
+CMD ["/usr/sbin/sshd", "-D"]

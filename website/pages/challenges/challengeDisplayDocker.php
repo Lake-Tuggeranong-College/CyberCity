@@ -201,7 +201,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 ?>
             </div>
             <div class="col border-start border-end border-dark-subtle border-2">
-                <button  id="startContainerButton" onclick="startContainer()" class="btn btn-success" <?php if ($containerQuery->rowCount() != 0){echo "disabled";}?>>Start Container</button>
+                <button  id="startContainerButton" onclick="startContainer()" class="btn <?php if ($containerQuery->rowCount() != 0){echo "disabled btn-outline-success";} else {echo "btn-success";}?>">Start Container</button>
+                <button  id="startContainerButton" onclick="stopContainer()" class="btn <?php if ($containerQuery->rowCount() == 0){echo "disabled btn-outline-danger";} else {echo "btn-danger";}?>">Stop Container</button>
+                <button  id="startContainerButton" onclick="addTime()" class="btn <?php if ($containerQuery->rowCount() == 0){echo "disabled btn-outline-warning";} else {echo "btn-warning";}?>">Add Time</button>
             </div>
             <div class="col border-start border-end border-dark-subtle border-2">
                 <?php
@@ -267,8 +269,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <script type="text/javascript">
     function startContainer() {
-        console.log("before axios")
-
         axios.post('<?= BASE_URL ?>pages/challenges/docker/startContainer.php', new URLSearchParams({
             dChallengeID: '<?=$dChallengeID?>',
             userID: '<?=$user?>',
@@ -279,6 +279,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             .catch(error => {
                 console.error('Error:', error);
             });
+        setTimeout(function () {
+            location.reload();
+        }, 1000);
+    }
+    function addTime() {
+        axios.post('<?= BASE_URL ?>pages/challenges/docker/addTime.php', new URLSearchParams({
+            dChallengeID: '<?=$dChallengeID?>',
+            userID: '<?=$user?>',
+        }))
+            .then(response => {
+                console.log('Response:', response.data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        setTimeout(function () {
+            location.reload();
+        }, 1000);
+    }
+    function stopContainer() {
+        axios.post('<?= BASE_URL ?>pages/challenges/docker/stopContainer.php', new URLSearchParams({
+            dChallengeID: '<?=$dChallengeID?>',
+            userID: '<?=$user?>',
+        }))
+            .then(response => {
+                console.log('Response:', response.data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        setTimeout(function () {
+            location.reload();
+        }, 1000);
     }
 </script>
 </body>
