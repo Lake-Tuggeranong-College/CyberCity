@@ -64,5 +64,13 @@
         <toc-element topic="Unexpected-Revelation-Hints.md"/>
         <toc-element topic="Unexpected-Revelation-Guide.md"/>
     </toc-element>
+    <toc-element topic="A-guest-admin-dilemma.md">
+        <toc-element topic="A-Guest-Admin-Dilemma-Hints.md"/>
+        <toc-element topic="A-Guest-Admin-Dilemma-Guide.md"/>
+    </toc-element>
+    <toc-element topic="Self-Signed.md">
+        <toc-element topic="Self-Signed-Hints.md"/>
+        <toc-element topic="Self-Signed-Guide.md"/>
+    </toc-element>
 
 </instance-profile>
