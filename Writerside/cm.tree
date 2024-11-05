@@ -13,6 +13,12 @@
         <toc-element topic="Fire-Department-Hints.md"/>
         <toc-element topic="Fire-Department-Guide.md"/>
     </toc-element>
+    <toc-element topic="FourStepCipher.md">
+        <toc-element topic="FourStepCipher-Hints.md"/>
+    </toc-element>
+    <toc-element topic="TripleThreat.md">
+        <toc-element topic="TripleThreat-Hints.md"/>
+    </toc-element>
     <toc-element topic="FinancialTracing.md">
         <toc-element topic="Financial-Tracing-Hints.md"/>
         <toc-element topic="Financial-Tracing-Guide.md"/>
