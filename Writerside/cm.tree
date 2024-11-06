@@ -13,6 +13,12 @@
         <toc-element topic="Fire-Department-Hints.md"/>
         <toc-element topic="Fire-Department-Guide.md"/>
     </toc-element>
+    <toc-element topic="FourStepCipher.md">
+        <toc-element topic="FourStepCipher-Hints.md"/>
+    </toc-element>
+    <toc-element topic="TripleThreat.md">
+        <toc-element topic="TripleThreat-Hints.md"/>
+    </toc-element>
     <toc-element topic="FinancialTracing.md">
         <toc-element topic="Financial-Tracing-Hints.md"/>
         <toc-element topic="Financial-Tracing-Guide.md"/>
@@ -53,6 +59,18 @@
     <toc-element topic="Groundhog-Day.md">
         <toc-element topic="Groundhog-Day-Hints.md"/>
         <toc-element topic="Groundhog-Day-Guide.md"/>
+    </toc-element>
+    <toc-element topic="Unexpected-Revelation.md">
+        <toc-element topic="Unexpected-Revelation-Hints.md"/>
+        <toc-element topic="Unexpected-Revelation-Guide.md"/>
+    </toc-element>
+    <toc-element topic="A-guest-admin-dilemma.md">
+        <toc-element topic="A-Guest-Admin-Dilemma-Hints.md"/>
+        <toc-element topic="A-Guest-Admin-Dilemma-Guide.md"/>
+    </toc-element>
+    <toc-element topic="Self-Signed.md">
+        <toc-element topic="Self-Signed-Hints.md"/>
+        <toc-element topic="Self-Signed-Guide.md"/>
     </toc-element>
 
 </instance-profile>

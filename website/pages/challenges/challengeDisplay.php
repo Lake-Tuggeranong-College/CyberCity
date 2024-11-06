@@ -44,7 +44,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $insert = $conn->prepare($insert);
             $insert->execute();
 
-            $sql = "UPDATE Users SET Score = SCORE + '$pointsValue' WHERE ID='$user'";
+            if ($moduleID == "69" ){
+                $sql = "UPDATE Users SET Score = SCORE - '$pointsValue' WHERE ID='$user'";
+            }
+            else {
+                $sql = "UPDATE Users SET Score = SCORE + '$pointsValue' WHERE ID='$user'";
+            }
             $stmt = $conn->prepare($sql);
             $stmt->execute();
             $_SESSION["flash_message"] = $query->rowCount();
