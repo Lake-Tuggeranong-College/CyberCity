@@ -13,8 +13,10 @@ RUN sed -i 's/PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config
 COPY flag.txt /root/flag.txt
 COPY executor.sh /root/executor.sh
 COPY executor /home/overseer/executor
-RUN chmod 4711 /home/overseer/executor
 RUN chown root /home/overseer/executor
+#RUN chmod 4711 /home/overseer/executor
+RUN chmod 711 /home/overseer/executor
+RUN chmod u+s /home/overseer/executor
 RUN chmod 744 /root/executor.sh
 RUN chmod +x /root/executor.sh
 
