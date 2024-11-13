@@ -35,10 +35,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" type="text/css" href="<?= BASE_URL; ?>assets/css/leaderboard.css">
     <link rel="stylesheet" type="text/css" href="<?= BASE_URL; ?>assets/css/editAccount.css">
     <link rel="icon" type="image/png" href="<?= BASE_URL; ?>assets/img/CCLogo.png">
+
 </head>
 
 <body>
-
     <!-- Navigation Bar section -->
     <nav class="navbar navbar-expand-lg navbar-dark navbarCustom navbar-bg-dark">
 
@@ -189,6 +189,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <!-- Navigation Bar (right side) -->
             <ul class="navbar-nav ms-auto">
+                <button id="modeToggle" class="btn btn-outline-secondary mode-toggle-btn">
+                    Switch to Dark Mode
+                </button>
                 <?php if (isset($_SESSION['username'])): ?>
                     <li class="nav-link dropdown">
                         <a href="#" class="nav-link dropdown-toggle text-white" id="navbarDropdown"
@@ -270,6 +273,44 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <!-- Boostrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    <script>
+        const modeToggleBtn = document.getElementById('modeToggle');
+        const body = document.body;
+
+        // Check the saved theme in localStorage and apply it
+        const savedTheme = localStorage.getItem('theme');
+
+        if (savedTheme) {
+            if (savedTheme === 'bg-dark text-white') {
+
+                modeToggleBtn.textContent = 'Switch to Light Mode';
+                body.classList.add('bg-dark', 'text-white');
+            } else {
+                body.classList.add('bg-light', 'text-black');
+                modeToggleBtn.textContent = 'Switch to Dark Mode';
+            }
+        }
+
+        modeToggleBtn.addEventListener('click', function () {
+            if (body.classList.contains('bg-light')) {
+                // Switch to dark mode
+                body.classList.replace('bg-light', 'bg-dark');
+                body.classList.replace('text-black', 'text-white');
+                modeToggleBtn.textContent = 'Switch to Light Mode'; // Update button text
+                // Save the dark mode preference in localStorage
+                localStorage.setItem('theme', 'bg-dark text-white');
+            } else {
+                // Switch to light mode
+                body.classList.replace('bg-dark', 'bg-light');
+                body.classList.replace('text-white', 'text-black');
+                modeToggleBtn.textContent = 'Switch to Dark Mode'; // Update button text
+                // Save the light mode preference in localStorage
+                localStorage.setItem('theme', 'bg-light text-black');
+            }
+        });
+    </script>
+
 
     <?php
     /**
