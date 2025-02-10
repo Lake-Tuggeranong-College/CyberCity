@@ -74,7 +74,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     <!-- Direct link to 'Challenges' page -->
                     <li class="nav-link active">
-                        <a href="<?= BASE_URL; ?>pages/challenges/challengesList.php" class="nav-link text-white">Challenges</a>
+                        <a href="<?= BASE_URL; ?>pages/challenges/challengesList.php?projectID=1" class="nav-link text-white">2024 Project</a>
+                    </li>
+                <li class="nav-link active">
+                        <a href="<?= BASE_URL; ?>pages/challenges/challengesList.php?projectID=2" class="nav-link text-white">2025 Project</a>
                     </li>
 
                     <!-- Direct link to 'Tutorials' page -->
