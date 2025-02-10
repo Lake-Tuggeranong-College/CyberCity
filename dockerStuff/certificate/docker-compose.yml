@@ -1,0 +1,11 @@
+# docker-compose.yml
+
+version: '3'
+services:
+  web:
+    build: .
+    ports:
+      - "41001:443"
+    volumes:
+      - ./html:/usr/share/nginx/html
+    restart: unless-stopped

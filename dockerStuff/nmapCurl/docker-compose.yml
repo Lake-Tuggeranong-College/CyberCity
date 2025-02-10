@@ -11,6 +11,7 @@ services:
     networks:
       - nmapCurl-net
       - getMeOut-net
+    restart: unless-stopped
   nmapcurlweb-container:
     build:
       context: .
@@ -18,7 +19,7 @@ services:
     container_name: web-container
     networks:
       - nmapCurl-net
-
+    restart: unless-stopped
 networks:
   nmapCurl-net:
     driver: ipvlan

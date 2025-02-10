@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Groundhog Day</title>
+    <!-- Tailwind CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+
+    <!-- Navbar -->
+    <nav class="bg-blue-600 p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <span class="text-white font-bold text-xl">my 'admin' is safe</span>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mx-auto mt-10 text-center">
+        <h1 class="text-4xl font-bold mb-4">Do you know what today is?</h1>
+        <p class="text-lg">No, what?</p>
+        <h2 class="text-2xl mt-4">Today is tomorrow. It happened.</h2>
+    </div>
+
+   
+<script>
+
+function getCookie(name) {
+    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+    return match ? match[2] : null;
+}
+
+
+let userAuth = getCookie('user_auth');
+
+
+const isOnIndexPage = window.location.pathname === '/index.html' || window.location.pathname === '/';
+
+if (!userAuth) {
+    
+    document.cookie = "user_auth=guest; path=/; SameSite=Strict";
+} else if (userAuth !== 'admin' && !isOnIndexPage) {
+    
+    window.location.href = '/index.html';
+} else if (userAuth === 'admin') {
+    
+    window.location.href = '/flag.html';
+}
+</script>
+
+</body>
+</html>

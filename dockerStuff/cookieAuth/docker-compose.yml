@@ -1,0 +1,9 @@
+# docker-compose.yml
+
+version: '3'
+services:
+  web:
+    build: .
+    ports:
+      - "41002:80"
+    restart: unless-stopped
