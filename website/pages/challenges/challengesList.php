@@ -6,13 +6,19 @@ if (!authorisedAccess(false, true, true)) {
     header("Location:../../index.php");
 }
 
+
+
 ?>
 <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/moduleList.css">
 
 
 <h1>Challenges</h1>
 <?php
-
+if (isset($_GET["projectID"])) {
+    $projectID = $_GET["projectID"];
+} else {
+    header("location:index.php");
+}
 //function createCategoryHeader($conn, $categoryData) {
 //   // Extract each field from the data array
 //    $categoryName = $categoryData['categoryName'];
@@ -30,6 +36,7 @@ function createChallengeCard($conn, $completionStatus, $challengeData) {
     $pointsValue = $challengeData['PointsValue'];
     $moduleID = $challengeData['moduleID'];
     $container_required = $challengeData['container'];
+    $projectID = $_GET["projectID"];
 
     // Check whether the challenge has an image
     $imageQuery = $conn->query("SELECT Image from RegisteredModules WHERE ID = $moduleID");
@@ -80,7 +87,7 @@ for ($catcount = 0; $catcount < sizeof($categoryList); $catcount++) {
 
 
     $userID = $_SESSION['user_id'];
-    $challengeListQuery = $conn->query("SELECT ID, challengeTitle, PointsValue, moduleID, container FROM Challenges WHERE Enabled = 1 AND category = '$categoryData[CategoryName]'");
+    $challengeListQuery = $conn->query("SELECT ID, challengeTitle, PointsValue, moduleID, container FROM Challenges WHERE Enabled = 1 AND category = '$categoryData[CategoryName]'AND projectID = $projectID");
     $challengeList = $challengeListQuery->fetchAll(PDO::FETCH_ASSOC);
     for ($counter = 0; $counter < sizeof($challengeList); $counter++) {
         // Get the challenge data for the current iteration.
