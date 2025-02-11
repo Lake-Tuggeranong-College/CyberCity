@@ -6,13 +6,13 @@ if (!authorisedAccess(false, true, true)) {
     header("Location:../../index.php");
 }
 
-if (isset($_GET["moduleID"])) {
-    $challengeToLoad = $_GET["moduleID"];
+if (isset($_GET["challengeID"])) {
+    $challengeToLoad = $_GET["challengeID"];
 } else {
     header("location:challengesList.php");
 }
 
-$sql = $conn->query("SELECT ID, moduleID, challengeTitle, challengeText, PointsValue, HashedFlag, dChallengeID FROM Challenges WHERE moduleID = " . $challengeToLoad . " ORDER BY ID DESC");
+$sql = $conn->query("SELECT ID, moduleID, challengeTitle, challengeText, PointsValue, HashedFlag, dChallengeID FROM Challenges WHERE challengeID = " . $challengeToLoad . " ORDER BY ID DESC");
 $result = $sql->fetch();
 $challengeID = $result["ID"];
 $moduleID = $result["moduleID"];
