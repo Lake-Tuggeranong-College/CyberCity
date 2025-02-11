@@ -71,7 +71,7 @@ function createChallengeCard($conn, $completionStatus, $challengeData) {
         <?php
     }
 }
-$categoryQuery = $conn->query("SELECT CategoryName FROM category");
+$categoryQuery = $conn->query("SELECT CategoryName FROM category WHERE projectID = $projectID");
 $categoryList = $categoryQuery->fetchAll( PDO::FETCH_ASSOC );
 for ($catcount = 0; $catcount < sizeof($categoryList); $catcount++) {
 
