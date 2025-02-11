@@ -19,12 +19,12 @@ $moduleID = $result["moduleID"];
 $title = $result["challengeTitle"];
 $challengeText = $result["challengeText"];
 $pointsValue = $result["PointsValue"];
-$hashedFlag = $result["HashedFlag"];
-//print_r($hashedFlag);
+//$hashedFlag = $result["HashedFlag"];
+////print_r($hashedFlag);
 
 //Docker Container Information
 $user = $_SESSION["user_id"];
-$containerQuery = $conn->query("SELECT timeInitialised, port FROM docker_containers WHERE userID = '$user'");
+$containerQuery = $conn->query("SELECT timeInitialised, port FROM DockerContainers WHERE userID = '$user'");
 $containerData = $containerQuery->fetch();
 $dChallengeID = $result["dChallengeID"];
 if ($containerQuery->rowCount() != 0) {
