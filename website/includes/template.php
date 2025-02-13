@@ -169,10 +169,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </li>
 
                     <!-- Direct link to 'Challenges' page -->
-                    <li class="nav-link active">
-                        <a href="<?= BASE_URL; ?>pages/challenges/challengesList.php" class="nav-link text-white">Challenges</a>
+                     <li class="nav-link active">
+                        <a href="<?= BASE_URL; ?>pages/challenges/challengesList.php?projectID=1" class="nav-link text-white">2024 Project</a>
                     </li>
-
+                <li class="nav-link active">
+                        <a href="<?= BASE_URL; ?>pages/challenges/challengesList.php?projectID=2" class="nav-link text-white">2025 Project</a>
+                    </li>
                     <!-- Direct link to 'Tutorials' page -->
                     <li class="nav-link active">
                         <a href="http://10.177.200.71/CyberCityDocs/welcome.html" class="nav-link text-white"
