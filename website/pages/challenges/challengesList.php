@@ -42,7 +42,6 @@ function createChallengeCard($conn, $completionStatus, $challengeData) {
 //    $imageQuery = $conn->query("SELECT Image from RegisteredModules WHERE ID = $moduleID");
     $imageQuery = $conn->query("SELECT Image from Challenges WHERE ID = $challengeID");
     $imageData = $imageQuery->fetch();
-    print_r($imageData);
     if ($imageData['Image']) {
         // Display Module Image.
         ?>
