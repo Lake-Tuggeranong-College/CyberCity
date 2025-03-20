@@ -76,6 +76,7 @@
         <toc-element topic="Feather-Modules.md">
             <toc-element topic="Windmill-Module.md"/>
         </toc-element>
+        <toc-element topic="Module-Template.md"/>
         <toc-element topic="MQTT.md"/>
     </toc-element>
 
