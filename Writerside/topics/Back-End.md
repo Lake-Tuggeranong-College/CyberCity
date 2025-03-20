@@ -13,5 +13,6 @@ See [MQTT](MQTT.md) for more information.
 
 ## Feather modules
 
+See [Feather Modules](Feather-Modules.md) for more information.
 
 ## Website Development
