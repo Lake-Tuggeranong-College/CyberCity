@@ -31,7 +31,7 @@ The data format is JSON. The data will be sent in the following format:
 ```
 
 
-## Data Trasmitted
+## Data Transmitted
 
 The ESP32 will upload the current temperature to the server.
 
