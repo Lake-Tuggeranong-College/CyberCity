@@ -23,7 +23,7 @@ String sensorName = "TrafficLight";
 String sensorLocation = "TrafficLightOne";
 
 // MQTT client name
-const char* mqttClient = "ESP32";
+const char* mqttClient = "ESP323";
 
 // MQTT Topic
 const char* mqttTopic = "RegisteredModules/TrafficLight"; // It's worth noting that an ESP32 can subscribe to more than 1 topic
