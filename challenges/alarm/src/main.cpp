@@ -94,13 +94,13 @@ void callback(char* topic, byte* payload, unsigned int length) {
 
   // Example: turn on/off an LED based on the message received (this is specialised, if you dont need it dont use it.)
   //
-  // if ((char)payload[0] == '1') {
-  //   Serial.println("LED ON");
-  //   digitalWrite(redLEDPin, HIGH);
-  // } else {
-  //   Serial.println("LED OFF");
-  //   digitalWrite(redLEDPin, LOW);
-  // }
+  if ((char)payload[0] == '1') {
+    Serial.println("LED ON");
+    digitalWrite(LED_BUILTIN, HIGH);
+  } else {
+    Serial.println("LED OFF");
+    digitalWrite(LED_BUILTIN, LOW);
+  }
 
   // Example: turn on/off an LED based on ANY message received (this is how this is intended to work, activating when this ESP32's respective
   // challenge is completed)
@@ -147,7 +147,7 @@ void setup() {
   
     pinMode(redLEDPin, OUTPUT);
   */
-
+  pinMode(LED_BUILTIN, OUTPUT); // Built in LED
 
 
   Serial.begin(9600);
