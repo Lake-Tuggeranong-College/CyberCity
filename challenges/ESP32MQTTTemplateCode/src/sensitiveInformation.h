@@ -19,5 +19,5 @@ const char* mqttClient = "ESP32";
 const char* mqttTopic = "RegisteredModules/Servo"; // It's worth noting that an ESP32 can subscribe to more than 1 topic
 
 // Replace with the MQTT broker IP address and port (default port for MQTT is 1883)
-const char* mqttServer = "10.177.200.71";  
+const char* mqttServer = "192.168.1.10";  
 const int mqttPort = 1883;
