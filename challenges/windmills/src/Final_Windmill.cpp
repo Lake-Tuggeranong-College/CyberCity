@@ -108,7 +108,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
     Serial.println("spin please");
     Servo1.write(0);
     outputCommand = "Fan On";
-    delay(5000);
+    delay(50);
     Servo1.write(90);
   } 
 }
