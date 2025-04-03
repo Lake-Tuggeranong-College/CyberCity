@@ -32,22 +32,24 @@ if (!authorisedAccess(false, true, true)) {
         $pointsValue = $challengeData['pointsValue'];
         $moduleID = $challengeData['moduleName'];
         $container_required = $challengeData['container'];
-        $completionStatus = false;
+        $completionStatus = false; //TODO: Check Userchallenges to see if the user has already completed the challenge.
 //    $projectID = $_GET["projectID"];
 
         // Check whether the challenge has an image
 //    $imageQuery = $conn->query("SELECT Image from RegisteredModules WHERE ID = $moduleID");
 //    $imageQuery = $conn->query("SELECT Image from Challenges WHERE ID = $challengeID");
 //    $imageData = $imageQuery->fetch();
-        $imageData = $challengeData['Image'];
-        if ($imageData) {
+        $imageFileName = $challengeData['Image'];
+
+        // Is there an image?
+        if ($imageFileName) {
             // Display Module Image.
             ?>
             <div class="product_wrapper">
                 <div class="card <?php if ($completionStatus == TRUE) { ?> text-bg-success <?php } else if ($completionStatus == FALSE) { ?> text-bg-secondary <?php } else {
                     throw new Error("Something has gone SERIOUSLY wrong!");
                 } ?>" style="width: 18rem;">
-                    <img src="<?= BASE_URL ?>assets/img/challengeImages/<?= $imageData ?>"
+                    <img src="<?= BASE_URL ?>assets/img/challengeImages/<?= $imageFileName ?>"
                          class="card-img-top" alt="..." width="100" height="200">
                     <div class="card-body">
                         <h5 class="card-title"><?= $challengeTitle ?></h5>
@@ -77,7 +79,7 @@ if (!authorisedAccess(false, true, true)) {
     function displayResultsByCategory()
     {
         global $conn, $projectID;
-        // SQL query to retrieve challenge data sorted by category
+        // This SQL query retrieves information about challenges related to a specific project, while also grouping them by category.
         $sql = "
         SELECT cat.CategoryName, ch.*
 FROM Category AS cat
@@ -100,7 +102,7 @@ ORDER BY cat.CategoryName;
         $currentCategory = null;
         echo "<div class='row'>";
         foreach ($results as $row) {
-
+            // Display the category name as a heading
             if ($currentCategory !== $row['CategoryName']) {
                 // Display category heading
                 $currentCategory = $row['CategoryName'];
@@ -114,9 +116,6 @@ ORDER BY cat.CategoryName;
         echo "</div>";
     }
 
-
-    // Call the function with a project ID
-    displayResultsByCategory(); // Replace 123 with the actual project ID
 
 
     function getChallengesForProject()
@@ -156,6 +155,11 @@ ORDER BY cat.CategoryName;
         }
 
     }
+
+
+
+    // Call the function with a project ID
+    displayResultsByCategory();
 
     //getChallengesForProject();
 
