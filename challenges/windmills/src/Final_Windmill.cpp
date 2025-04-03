@@ -106,9 +106,9 @@ void callback(char* topic, byte* payload, unsigned int length) {
 
   if ((char)payload[0]) {
     Serial.println("spin please");
-    Servo1.write(0);
+    Servo1.write(180); // 0 = full speed reverse 
     outputCommand = "Fan On";
-    delay(50);
+    delay(15000);
     Servo1.write(90);
   } 
 }
