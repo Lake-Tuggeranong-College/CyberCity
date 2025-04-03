@@ -39,24 +39,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" type="text/css" href="<?= BASE_URL; ?>assets/css/editAccount.css">
     <link rel="icon" type="image/png" href="<?= BASE_URL; ?>assets/img/CCLogo.png">
 
-</head>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">10.177.200.1</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="<?= BASE_URL; ?>pages/leaderboard/leaderboard.php" class="nav-link text-black">Leaderboard</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            project dropdown
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="<?= BASE_URL; ?>pages/challenges/challengesList.php?projectID=1">2024 Project</a></li>
+                            <li><a class="dropdown-item" href="<?= BASE_URL; ?>pages/challenges/challengesList.php?projectID=2">2025 Project</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#">Tutorials</a></li>\
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" aria-disabled="true">feedback</a>
+                    </li>
+                </ul>
+                <form class="d-flex" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
 
-<body>
 
-<nav class="navbar navbar-expand-lg  navbar-dark navbarCustom navbar-bg-dark">
-    <div class="container-fluid">
-        <img src="<?= BASE_URL; ?>assets/img/CCLogo.png" alt="Cyber City Logo" width="5%" height="5%" </img>
-        <!--        <a class="navbar-brand" href="#">Navbar</a>-->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
-                <li class="nav-link active">
-                    <a href="<?= BASE_URL; ?>index.php" class="nav-link text-white" style="padding-left: 2rem;">Home</a>
-                </li>
 
                 <!-- Check for account logged in that have admin-level of access -->
                 <?php if (isset($_SESSION['username']) && $_SESSION['access_level'] == ADMIN_ACCESS_LEVEL): ?>
@@ -82,8 +100,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             Challanges
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="projectDropdown">
-                            <li><a class="dropdown-item" href="<?= BASE_URL; ?>pages/challenges/challengesList.php?projectID=1">2024 Project</a></li>
-                            <li><a class="dropdown-item" href="<?= BASE_URL; ?>pages/challenges/challengesList.php?projectID=2">2025 Project</a></li>
+<!--                            <li><a class="dropdown-item" href="--><?php //= BASE_URL; ?><!--pages/challenges/challengesList.php?projectID=1">2024 Project</a></li>-->
+<!--                            <li><a class="dropdown-item" href="--><?php //= BASE_URL; ?><!--pages/challenges/challengesList.php?projectID=2">2025 Project</a></li>-->
                         </ul>
 
                     </li>
@@ -179,7 +197,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     <!-- Direct link to 'Leaderboard' page -->
                     <li class="nav-link active">
-                        <a href="<?= BASE_URL; ?>pages/leaderboard/leaderboard.php" class="nav-link text-white">Leaderboard</a>
+<!--                        <a href="--><?php //= BASE_URL; ?><!--pages/leaderboard/leaderboard.php" class="nav-link text-white">Leaderboard</a>-->
                     </li>
 
                     <!-- Direct link to 'Challenges' page -->
@@ -201,7 +219,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </li>
 
                     <li class="nav-link active">
-                        <a href="https://forms.gle/jgYrmMZesgtVhBZ39" class="nav-link text-white"
+<!--                        <a href="https://forms.gle/jgYrmMZesgtVhBZ39" class="nav-link text-white"-->
                            target="_blank">Feedback</a>
                     </li>
 
@@ -247,7 +265,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <?php if ($_SESSION['access_level'] == USER_ACCESS_LEVEL): ?>
                         <!-- Direct link to 'Contact Us' page on non-admin account -->
                         <li class="nav-link active">
-                            <a href="<?= BASE_URL; ?>pages/contactUs/contact.php" class="nav-link text-white">Contact
+<!--                            <a href="--><?php //= BASE_URL; ?><!--pages/contactUs/contact.php" class="nav-link text-white">Contact-->
                                 Us</a>
                         </li>
                     <?php endif; ?>
