@@ -77,14 +77,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </li>
 
                     <!-- Direct link to 'Challenges' page -->
-                    <li class="nav-link active">
-                        <a href="<?= BASE_URL; ?>pages/challenges/challengesList.php?projectID=1"
-                           class="nav-link text-white">2024 Project</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white" href="#" id="projectDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Challanges
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="projectDropdown">
+                            <li><a class="dropdown-item" href="<?= BASE_URL; ?>pages/challenges/challengesList.php?projectID=1">2024 Project</a></li>
+                            <li><a class="dropdown-item" href="<?= BASE_URL; ?>pages/challenges/challengesList.php?projectID=2">2025 Project</a></li>
+                        </ul>
+
                     </li>
-                    <li class="nav-link active">
-                        <a href="<?= BASE_URL; ?>pages/challenges/challengesList.php?projectID=2"
-                           class="nav-link text-white">2025 Project</a>
-                    </li>
+
 
                     <!-- Direct link to 'Tutorials' page -->
                     <!-- TODO: Don't do local direct link like this. Make a proper page or so please! -->
@@ -180,14 +183,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </li>
 
                     <!-- Direct link to 'Challenges' page -->
-                    <li class="nav-link active">
-                        <a href="<?= BASE_URL; ?>pages/challenges/challengesList.php?projectID=1"
-                           class="nav-link text-white">2024 Project</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white" href="#" id="projectDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Challanges
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="projectDropdown">
+                            <li><a class="dropdown-item" href="<?= BASE_URL; ?>pages/challenges/challengesList.php?projectID=1">2024 Project</a></li>
+                            <li><a class="dropdown-item" href="<?= BASE_URL; ?>pages/challenges/challengesList.php?projectID=2">2025 Project</a></li>
+                        </ul>
+
                     </li>
-                    <li class="nav-link active">
-                        <a href="<?= BASE_URL; ?>pages/challenges/challengesList.php?projectID=2"
-                           class="nav-link text-white">2025 Project</a>
-                    </li>
+
                     <!-- Direct link to 'Tutorials' page -->
                     <li class="nav-link active">
                         <a href="http://10.177.200.71/CyberCityDocs/welcome.html" class="nav-link text-white"

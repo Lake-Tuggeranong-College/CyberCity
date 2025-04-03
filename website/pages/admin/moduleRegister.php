@@ -70,23 +70,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") { //Make Module Entry
 
     <div class="container-fluid">
         <div class="row g-3">
-
-            <!-- Module location input form -->
-            <div class="col-md-6">
-                <label for="inputModuleLocation" class="form-label fw-bold text-warning">Module location</label>
-                <input type="text" class="form-control" name='Location' id="inputModuleLocation" placeholder="Type in the module location here" required>
-            </div>
+            
 
             <!-- Module type input form -->
             <div class="col-md-6">
                 <label for="inputModuleType" class="form-label fw-bold text-warning">Module type</label>
                 <input type="text" class="form-control" name="Module" id="inputModuleType" placeholder="Type in the module type here" required>
-            </div>
-
-            <!-- Module API key input form -->
-            <div class="col-md-6">
-                <label for="inputModuleApiKey" class="form-label fw-bold text-warning">Module API key</label>
-                <input type="text" class="form-control" name="APIKey" id="inputModuleApiKey" placeholder="Type in the module API key here" required>
             </div>
 
             <!-- Challenge name input form -->
