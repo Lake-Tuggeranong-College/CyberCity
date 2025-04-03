@@ -18,7 +18,7 @@
 int tl1Green = 15;
 int tl1Red = 16;
 int tl1Yellow = 17;
-int tl2Green = 23;  // Fix
+int tl2Green = 23;  // ESP32";";ix
 int tl2Red = 14;    // Fix
 int tl2Yellow = 22; // Fix
 
@@ -91,7 +91,7 @@ void sonarSensorData()
   digitalWrite(TRIG_PIN, HIGH);
   delayMicroseconds(10);
   digitalWrite(TRIG_PIN, LOW);
-
+/*
   duration = pulseIn(ECHO_PIN, HIGH);
   distance = (duration * .0343) / 2;
   Serial.print("Distance: ");
@@ -101,7 +101,7 @@ void sonarSensorData()
   Serial.print("Distance: ");
   Serial.print(distance);
   Serial.println(" cm");
-
+*/
 
 /*
 
