@@ -1,3 +1,46 @@
+# Windmill Module
+
+This is a sample document to show how to and what to write for the configration of a module.
+
+
+## Wiring Diagram
+
+![Windmill Module Wiring Diagram](wiringWindmill.png)
+
+|Module Pin| Adafruit ESP32 Feather pin|
+|--|--|
+| VCC | 3.3V|
+|GND | GND|
+|Signal | GPIO21|
+
+
+## Data Transport Method
+
+MQTT or HTTP/PHP.
+
+
+## Data Format
+
+The data format is JSON. The data will be sent in the following format:
+
+```json
+{
+  "wind_speed": 12.5,
+  "wind_direction": 180
+}
+```
+
+
+## Data Transmitted
+
+The ESP32 will upload the current temperature to the server.
+
+The ESP32 will receive a payload from the server to control whether the windmill will spin or not, using the servo.
+
+
+## Code
+
+```c++
 #define AIN_PIN A2  // Arduino pin that connects to AOUT pin of moisture sensor
 #include <ArduinoJson.h>
 #include "sensitiveInformation.h"
@@ -108,7 +151,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
     Serial.println("spin please");
     Servo1.write(0);
     outputCommand = "Fan On";
-    delay(50);
+    delay(5000);
     Servo1.write(90);
   } 
 }
@@ -168,3 +211,6 @@ void loop() {
   }
   client.loop();  // Check for incoming messages and keep the connection alive
 }
+
+
+```
