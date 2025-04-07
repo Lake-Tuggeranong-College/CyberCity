@@ -26,25 +26,6 @@ int tl2Yellow = 22; // Fix
 
 CyberCitySharedFunctionality cyberCity;
 
-
-void callback(char* topic, byte* payload, unsigned int length) {
-  Serial.print("Message arrived [");
-  Serial.print(topic);
-  Serial.print("] ");
-  for (int i = 0; i < length; i++) {
-    Serial.print((char)payload[i]);
-  }
-  Serial.println();
-
-}
-
-
-// Declare the callback function prototype before setup()
-void callback(char* topic, byte* payload, unsigned int length);
-// MQTT client setup
-WiFiClient espClient;
-PubSubClient client(espClient);
-
 void lightsNormal()
 {
   digitalWrite(tl1Green, LOW);
@@ -82,6 +63,42 @@ void lightsChaos()
   digitalWrite(tl2Green, HIGH);
 }
 
+
+
+void callback(char* topic, byte* payload, unsigned int length) 
+{
+  // Convert the incoming byte array to a string
+  String message = "";
+  for (int i = 0; i < length; i++) {
+    message += (char)payload[i];
+  }
+
+  // Debugging: print the topic and message
+  Serial.print("Message arrived [");
+  Serial.print(topic);
+  Serial.print("] ");
+  Serial.println(message);
+
+  // Check if the topic is the one we want for traffic light control
+  if (String(topic) == "RegisteredModules/TrafficLight") {
+    // Change the traffic lights based on the message
+    if (message == "normal") {
+      lightsNormal();  // Call the normal traffic light pattern
+    } else if (message == "chaos") {
+      lightsChaos();   // Call the chaotic traffic light pattern
+    } else {
+      Serial.println("Invalid command received for lights control.");
+    }
+  }
+}
+
+
+// Declare the callback function prototype before setup()
+void callback(char* topic, byte* payload, unsigned int length);
+// MQTT client setup
+WiFiClient espClient;
+PubSubClient client(espClient);
+
 void sonarSensorData()
 {
 
@@ -101,10 +118,6 @@ void sonarSensorData()
   Serial.print("Distance: ");
   Serial.print(distance);
   Serial.println(" cm");
-*/
-
-/*
-
 
   Serial.print("Payload from server:");
   String dataToPost = String(distance);
@@ -124,6 +137,7 @@ void sonarSensorData()
   Serial.print("Command: ");
   Serial.print(command);
   delay(500);
+
   if (String(command) == "Off")
   {
     Serial.println("normal operation:)");
