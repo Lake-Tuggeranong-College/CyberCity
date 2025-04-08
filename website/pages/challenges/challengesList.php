@@ -54,7 +54,7 @@ if (!authorisedAccess(false, true, true)) {
                     <div class="card-body">
                         <h5 class="card-title"><?= $challengeTitle ?></h5>
                         <p class="card-text"><?= $pointsValue ?></p>
-                        <a href="<?php if ($container_required == 1) { ?>challengeDisplayDocker.php?moduleID=<?php } else { ?>challengeDisplay.php?moduleID= <?php } ?><?= $moduleID ?>"
+                        <a href="<?php if ($container_required == 1) { ?>challengeDisplayDocker.php?challengeID=<?php } else { ?>challengeDisplay.php?challengeID=<?php } ?><?= $challengeID ?>"
                            class="btn btn-warning">Start
                             Challenge</a>
                     </div>
@@ -83,7 +83,7 @@ if (!authorisedAccess(false, true, true)) {
         $sql = "
         SELECT cat.CategoryName, ch.*
 FROM Category AS cat
-JOIN xChallenges AS ch ON cat.id = ch.categoryID
+JOIN Challenges AS ch ON cat.id = ch.categoryID
 JOIN ProjectChallenges AS pc ON ch.id = pc.challenge_id
 JOIN Projects AS p ON pc.project_id = p.project_id
 WHERE p.project_id = :project_id
@@ -125,7 +125,7 @@ ORDER BY cat.CategoryName;
         $sql = "
 SELECT cat.CategoryName, ch.*
 FROM Category AS cat
-JOIN xChallenges AS ch ON cat.id = ch.categoryID
+JOIN Challenges AS ch ON cat.id = ch.categoryID
 JOIN ProjectChallenges AS pc ON ch.id = pc.challenge_id
 JOIN Projects AS p ON pc.project_id = p.project_id
 WHERE p.project_id = :project_id
