@@ -79,7 +79,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <!-- Direct link to 'Challenges' page -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-white" href="#" id="projectDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Challanges
+                            Challenges
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="projectDropdown">
                             <li><a class="dropdown-item" href="<?= BASE_URL; ?>pages/challenges/challengesList.php?projectID=1">2024 Project</a></li>
