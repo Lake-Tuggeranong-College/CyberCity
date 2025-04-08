@@ -25,13 +25,12 @@ $userScore = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <?php
             // Top 3 users will be display a bit more special than the others
             $topThreeUserRankingScore = array_slice($userScore, 0, 3);
-            $topThreeUserPosition = ['second-place', 'first-place', 'third-place'];
+            $topThreeUserPosition = ['first-place', 'second-place', 'third-place'];
         ?>
 
         <!-- Dynamic display the top 3 users on leaderboard -->
         <?php foreach ($topThreeUserRankingScore as $arrayIndex => $userData): ?>
             <div class="leaderboard-item <?= $topThreeUserPosition[$arrayIndex] ?>">
-                <div class="user-position"><?= $arrayIndex + 1 ?></div>
                 <div class="user-profile" style="background-image: url();"></div>
                 <div class="user-name"><?= htmlspecialchars($userData['Username']) ?></div>
                 <div class="user-score"><?= htmlspecialchars($userData['Score']) ?></div>
@@ -56,5 +55,4 @@ $userScore = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <?php endforeach; ?>
     </div>
 </div>
-
 
