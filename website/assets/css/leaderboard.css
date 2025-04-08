@@ -9,7 +9,6 @@
 
 .top-three-ranking .leaderboard-item {
     position: relative;
-    background-color: #343a40;
     width: 9rem;
     height: 11.5rem;
     text-align: center;
@@ -24,7 +23,7 @@
 
 .top-three-ranking .leaderboard-item .user-profile {
     position: absolute;
-    top: -2rem;
+    top: 0.3rem;
     left: 2.5rem;
     width: 4rem;
     height: 4rem;
@@ -32,16 +31,19 @@
     background-size: cover;
     background-position: center;
     margin-right: 1rem;
+
     box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.2), 0 1rem 1rem -0.5rem rgba(0, 0, 0, 0.3);
 }
 
 .top-three-ranking .leaderboard-item .user-position {
+    top: 20rem;
     font-weight: 900;
     font-size: 1.5rem;
     margin-bottom: 0.25rem;
 }
 
 .top-three-ranking .leaderboard-item .user-name {
+margin-top: 2rem;
     font-size: 1.1rem;
     margin-bottom: 0.5rem;
 }
@@ -58,14 +60,48 @@
 
 .top-three-ranking .leaderboard-item.first-place {
     width: 10rem;
-    height: 11rem;
+    height: 11.5rem;
     padding-top: 3.5rem;
+    background-color: #d59725;
+}
+
+.top-three-ranking .leaderboard-item.second-place {
+    width: 10rem;
+    height: 11.5rem;
+    padding-top: 3.5rem;
+    background-color: #7e7c7c;
+}
+
+.top-three-ranking .leaderboard-item.third-place {
+    width: 10rem;
+    height: 11.5rem;
+    padding-top: 3.5rem;
+    background-color: #9e621e;
 }
 
 .top-three-ranking .leaderboard-item.first-place .user-profile {
     width: 5rem;
     height: 5rem;
     left: 2.5rem;
+    background-color: rgb(0, 0, 0);
+    content: url(/website/assets/img/FirstPlace.png);
+}
+
+.top-three-ranking .leaderboard-item.second-place .user-profile {
+    width: 5rem;
+    height: 5rem;
+    left: 2.5rem;
+    background-color: rgb(0, 0, 0);
+    content: url(/website/assets/img/SecondPlace.png);
+}
+
+.top-three-ranking .leaderboard-item.third-place .user-profile {
+    width: 5rem;
+    height: 5rem;
+    left: 2.5rem;
+    background-color: rgb(0, 0, 0);
+    content: url(/website/assets/img/ThirdPlace.png);
+
 }
 
 .top-three-ranking .leaderboard-item:hover {
