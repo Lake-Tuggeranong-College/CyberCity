@@ -12,7 +12,7 @@ if (isset($_GET["challengeID"])) {
     header("location:challengesList.php");
 }
 
-$sql = $conn->query("SELECT ID, moduleID, challengeTitle, challengeText, PointsValue, HashedFlag, dChallengeID FROM Challenges WHERE challengeID = " . $challengeToLoad . " ORDER BY ID DESC");
+$sql = $conn->query("SELECT ID, moduleID, challengeTitle, challengeText, PointsValue, HashedFlag, dChallengeID FROM archivedChallenges WHERE challengeID = " . $challengeToLoad . " ORDER BY ID DESC");
 $result = $sql->fetch();
 $challengeID = $result["ID"];
 $moduleID = $result["moduleID"];
@@ -35,7 +35,7 @@ if ($containerQuery->rowCount() != 0) {
     $deletionTime = date('G:i', $timestamp);
 }
 
-$moduleQuery = $conn->query("SELECT Image from RegisteredModules WHERE ID = $moduleID");
+$moduleQuery = $conn->query("SELECT Image from archivedRegisteredModules WHERE ID = $moduleID");
 $moduleInformation = $moduleQuery->fetch();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -45,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     //
     //    while ($flagData = $flagList->fetch()) {
 //                if (password_verify($userEnteredFlag, $hashedFlag)) {
-    if ($userEnteredFlag == $hashedFlag) {
+    if ($userEnteredFlag == $flag) {
         $user = $_SESSION["user_id"];
         $query = $conn->query("SELECT * FROM `UserChallenges` WHERE `challengeID` ='$challengeID' AND `userID` = '$user'");
         $row = $query->fetch();
@@ -68,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt = $conn->prepare($sql1);
             $stmt->execute([$addedScore, $user]);
 
-            $sql = "UPDATE RegisteredModules SET CurrentOutput = CurrentOutput + '1' WHERE ID='$moduleID'";
+            $sql = "UPDATE archivedRegisteredModules SET CurrentOutput = CurrentOutput + '1' WHERE ID='$moduleID'";
             $stmt = $conn->prepare($sql);
             $stmt->execute();
             $_SESSION["flash_message"] = "<div class='bg-success'>Success!</div>";

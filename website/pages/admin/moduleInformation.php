@@ -20,7 +20,7 @@ if (isset($_GET["ModuleID"])) {
     header("location:moduleList.php");
 }
 
-$sql = $conn->query("SELECT ID, Location, Module, CurrentOutput FROM RegisteredModules WHERE ID= '$moduleToLoad' ");
+$sql = $conn->query("SELECT ID, Location, Module, CurrentOutput FROM archivedRegisteredModules WHERE ID= '$moduleToLoad' ");
 $moduleInformation = $sql->fetch();
 $moduleID = $moduleInformation["ID"];
 $moduleLocation = $moduleInformation["Location"];

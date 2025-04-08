@@ -13,7 +13,7 @@ if (!authorisedAccess(false, false, true)) {
 <?php
 if (isset($_GET["ModuleID"])) {
     $moduleToLoad = $_GET["ModuleID"];
-    $sql = $conn->query("SELECT * FROM RegisteredModules WHERE ID= " . $moduleToLoad);
+    $sql = $conn->query("SELECT * FROM archivedRegisteredModules WHERE ID= " . $moduleToLoad);
     $moduleInformation = $sql->fetch();
     $moduleID = $moduleInformation["ID"];
     $moduleLocation = $moduleInformation["Location"];
@@ -35,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $newEnabled = ($_POST["Enabled"]);
     $moduleToLoad = $_GET["ModuleID"];
 
-    $sql = "UPDATE RegisteredModules SET Location= :newLocation, Module= :newModule, HashedAPIKey= :newHashedAPIkey, Enabled= :newEnabled, CurrentOutput=:newOutput WHERE ID ='$moduleToLoad'";
+    $sql = "UPDATE archivedRegisteredModules SET Location= :newLocation, Module= :newModule, HashedAPIKey= :newHashedAPIkey, Enabled= :newEnabled, CurrentOutput=:newOutput WHERE ID ='$moduleToLoad'";
     //$sql = "INSERT INTO `RegisteredModules` (Location, Module, HashedAPIKey, Enabled) VALUES (:newLocation, :newModule, :newHashedAPIkey, :enabled)";
 
     $stmt = $conn->prepare($sql);

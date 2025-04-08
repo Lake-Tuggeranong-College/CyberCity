@@ -13,7 +13,7 @@ if (!authorisedAccess(false, true, true)) {
     <h1>Module List</h1>
 
 <?php
-$moduleList = $conn->query("SELECT Location, Module, ID, Enabled, Image FROM RegisteredModules WHERE Enabled=1"); #Get all Enabled Modules
+$moduleList = $conn->query("SELECT Location, Module, ID, Enabled, Image FROM archivedRegisteredModules WHERE Enabled=1"); #Get all Enabled Modules
 while ($moduleData = $moduleList->fetch()) {
     $moduleID = $moduleData["ID"];
     echo "<div class='product_wrapper'>";
