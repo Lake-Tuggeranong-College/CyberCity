@@ -17,8 +17,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") { //Make Module Entry
     //echo  $hashed_APIkey;
 
 // check Module and location in database
-    $query = $conn->query("SELECT COUNT(*) FROM `RegisteredModules` WHERE Location='$location'");
-    $query2 = $conn->query("SELECT COUNT(*) FROM `RegisteredModules` WHERE Module='$module'");
+    $query = $conn->query("SELECT COUNT(*) FROM archivedRegisteredModules WHERE Location='$location'");
+    $query2 = $conn->query("SELECT COUNT(*) FROM archivedRegisteredModules WHERE Module='$module'");
     $data = $query->fetch();
     $data2 = $query2->fetch();
     $checkModule = (int)$data[0];
@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") { //Make Module Entry
     if ($checkModule > 0 && $checkLocation > 0) {
         echo "This Module is already in use at this location";
     } else {
-        $sql = "INSERT INTO `RegisteredModules` (Location, Module, HashedAPIKey, Enabled, Registered_date) VALUES (:newLocation, :newModule, :newHashedAPIkey, :enabled, :current_date)";
+        $sql = "INSERT INTO archivedRegisteredModules (Location, Module, HashedAPIKey, Enabled, Registered_date) VALUES (:newLocation, :newModule, :newHashedAPIkey, :enabled, :current_date)";
 
         $stmt = $conn->prepare($sql);
         $stmt->bindValue(':newLocation', $location);
@@ -39,7 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") { //Make Module Entry
         //$_SESSION["flash_message"] = "Module Created";
         //header("Location:index.php");
     }
-    $query = $conn->query("SELECT `ID` FROM `RegisteredModules` WHERE Location='$location' AND Module='$module'");
+    $query = $conn->query("SELECT `ID` FROM archivedRegisteredModules WHERE Location='$location' AND Module='$module'");
     $data = $query->fetch();
     $moduleID = $data[0];
     $flag = sanitise_data($_POST['flag']);
@@ -47,8 +47,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") { //Make Module Entry
     $points = sanitise_data($_POST['pointsValue']);
     $title = sanitise_data($_POST['challengeTitle']);
     $disc = sanitise_data($_POST['challengeDescription']);
-    $flagList = $conn->query("SELECT HashedFlag FROM Challenges");
-    $sql = "INSERT INTO Challenges (HashedFlag, PointsValue,challengeTitle,challengeText,moduleID) VALUES (:newFlag, :newPoints,:newTitle,:newText, :moduleID)";
+    $flagList = $conn->query("SELECT HashedFlag FROM archivedChallenges");
+    $sql = "INSERT INTO archivedChallenges (HashedFlag, PointsValue,challengeTitle,challengeText,moduleID) VALUES (:newFlag, :newPoints,:newTitle,:newText, :moduleID)";
     $stmt = $conn->prepare($sql);
     $stmt->bindValue(':newFlag', $hashed_flag);
     $stmt->bindValue(':newPoints', $points);
