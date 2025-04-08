@@ -77,7 +77,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </li>
 
                     <!-- Direct link to 'Challenges' page -->
-                    <li class="nav-item dropdown">
+                    <li class="nav-item dropdown nav-link">
                         <a class="nav-link dropdown-toggle text-white" href="#" id="projectDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Challenges
                         </a>
