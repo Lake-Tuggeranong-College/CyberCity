@@ -1,30 +1,30 @@
 <?php
 session_start();
-
-// Strict require this file, not 'require_once'
 require('config.php');
 
-// Define registered account's access levels
 define('USER_ACCESS_LEVEL', 1);
 define('ADMIN_ACCESS_LEVEL', 2);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     return;
 }
-/** @var $conn */
 
+function fetchUserScore($conn, $userId) {
+    $query = "SELECT Score FROM Users WHERE ID = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->execute([$userId]);
+    $userInformation = $stmt->fetch();
+    return $userInformation['Score'];
+}
+
+$userScore = isset($_SESSION['user_id']) ? fetchUserScore($conn, $_SESSION['user_id']) : null;
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <!-- Required meta tags -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- Website title -->
     <title>Cyber City</title>
     <script type="text/javascript">function doUnauthRedirect() {
             location.replace("http://10.177.200.71/index.html")
