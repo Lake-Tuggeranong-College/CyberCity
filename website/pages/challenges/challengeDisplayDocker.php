@@ -2,6 +2,8 @@
     include "../../includes/template.php";
 /** @var $conn */
 
+$challengeToLoad = -1;
+
 if (!authorisedAccess(false, true, true)) {
     header("Location:../../index.php");
 }
@@ -9,16 +11,17 @@ if (!authorisedAccess(false, true, true)) {
 if (isset($_GET["challengeID"])) {
     $challengeToLoad = $_GET["challengeID"];
 } else {
-    header("location:challengesList.php");
+//    header("location:challengesList.php");
 }
+//print_r($challengeToLoad);
 
-$sql = $conn->query("SELECT ID, moduleID, challengeTitle, challengeText, PointsValue, HashedFlag, dChallengeID FROM archivedChallenges WHERE challengeID = " . $challengeToLoad . " ORDER BY ID DESC");
+$sql = $conn->query("SELECT ID, moduleName, challengeTitle, challengeText, pointsValue, flag, dockerChallengeID FROM Challenges WHERE ID = " . $challengeToLoad . " ORDER BY ID DESC");
 $result = $sql->fetch();
 $challengeID = $result["ID"];
-$moduleID = $result["moduleID"];
+$moduleName = $result["moduleName"];
 $title = $result["challengeTitle"];
 $challengeText = $result["challengeText"];
-$pointsValue = $result["PointsValue"];
+$pointsValue = $result["pointsValue"];
 //$hashedFlag = $result["HashedFlag"];
 ////print_r($hashedFlag);
 
@@ -26,7 +29,7 @@ $pointsValue = $result["PointsValue"];
 $user = $_SESSION["user_id"];
 $containerQuery = $conn->query("SELECT timeInitialised, port FROM DockerContainers WHERE userID = '$user'");
 $containerData = $containerQuery->fetch();
-$dChallengeID = $result["dChallengeID"];
+$dChallengeID = $result["dockerChallengeID"];
 if ($containerQuery->rowCount() != 0) {
     $timeInitialised = $containerData["timeInitialised"];
     $port = $containerData["port"];
@@ -35,7 +38,7 @@ if ($containerQuery->rowCount() != 0) {
     $deletionTime = date('G:i', $timestamp);
 }
 
-$moduleQuery = $conn->query("SELECT Image from archivedRegisteredModules WHERE ID = $moduleID");
+$moduleQuery = $conn->query("SELECT Image from Challenges WHERE ID = $challengeToLoad");
 $moduleInformation = $moduleQuery->fetch();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -68,7 +71,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt = $conn->prepare($sql1);
             $stmt->execute([$addedScore, $user]);
 
-            $sql = "UPDATE archivedRegisteredModules SET CurrentOutput = CurrentOutput + '1' WHERE ID='$moduleID'";
+            $sql = "UPDATE Challenges SET pointsValue = pointsValue + '1' WHERE ID=$ID";
             $stmt = $conn->prepare($sql);
             $stmt->execute();
             $_SESSION["flash_message"] = "<div class='bg-success'>Success!</div>";
@@ -157,7 +160,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 ">
 
         <!-- Directs to correspond page if the flag entered is eligible. -->
-        <form action="challengeDisplay.php?moduleID=<?= $moduleID ?>" method="post" enctype="multipart/form-data">
+        <form action="challengeDisplay.php?moduleID=<?= $moduleName ?>" method="post" enctype="multipart/form-data">
             <div class="form-floating">
                 <input type="text" class="flag-input" id="flag" name="hiddenflag" placeholder="CTF{Flag_Here}">
 <!--                <label for="flag">Please enter the flag: </label>-->
@@ -247,7 +250,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <?php
 
         // Ryan's Module - Do not change under pain of death. Or at least a stern talking to.
-        if ($moduleID == 43) {
+        if ($moduleName == 43) {
             $sql = $conn->query("SELECT * FROM ModuleData WHERE moduleID = " . $challengeToLoad . " ORDER BY id DESC LIMIT 10");
         } else {
             $sql = $conn->query("SELECT * FROM ModuleData WHERE moduleID = " . $challengeToLoad . " ORDER BY id DESC LIMIT 5");
