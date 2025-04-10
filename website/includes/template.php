@@ -97,22 +97,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                            aria-expanded="false">
-                            Admin panel
+                            Admin panel</a>
 
-                    <!-- Direct link to 'Leaderboard' page -->
-                    <li class="nav-link active">
-                        <a href="<?= BASE_URL; ?>pages/leaderboard/leaderboard.php" class="nav-link text-white">Leaderboard</a>
-                    </li>
+
 
                     <!-- Direct link to 'Challenges' page -->
                     <li class="nav-item dropdown nav-link">
-                        <a class="nav-link dropdown-toggle text-white" href="#" id="projectDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Challenges
-                        </a>
+
                         <ul class="dropdown-menu">
+                            <li>
+                            <a class="nav-link dropdown-toggle text-white" href="#" id="projectDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Challenges
+                            </a>
+                            </li>
                             <li>
                                 <a href="<?= BASE_URL; ?>pages/admin/userList.php" class="dropdown-item">Enabled User
                                     List</a>
+                            </li>
+                            <!-- Direct link to 'Leaderboard' page -->
+                            <li class="nav-link active">
+                                <a href="<?= BASE_URL; ?>pages/leaderboard/leaderboard.php" class="nav-link text-white">Leaderboard</a>
                             </li>
                             <li>
                                 <a href="<?= BASE_URL; ?>pages/admin/disabledUsers.php" class="dropdown-item">Disabled
@@ -122,108 +126,51 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <hr class="dropdown-divider">
                             </li>
 
+                            <li>
+                                <a href="<?= BASE_URL; ?>pages/admin/contactpage.php" class="dropdown-item">View
+                                    Contact
+                                    Requests</a>
+                            </li>
+
+                            <!-- Direct link to 'Read Contact Requests' page on admin-level of access -->
+                            <li>
+                                <a href="<?= BASE_URL; ?>pages/admin/readContactRequests.php"
+                                   class="dropdown-item">Read
+                                    Contact Requests</a>
+                            </li>
+
+                            <li>
+                                <a href="<?= BASE_URL; ?>pages/admin/moduleRegister.php" class="dropdown-item">Add
+                                    New
+                                    Module & Challenge</a>
+                            </li>
+
+                            <!-- Direct link to 'Reset Game' page on admin-level of access -->
+                            <li>
+                                <a href="<?= BASE_URL; ?>pages/admin/resetGame.php" class="dropdown-item">Reset
+                                    Game</a>
+                            </li>
+
+                            <li>
+                                <a href="<?= BASE_URL; ?>pages/admin/contactpage.php" class="dropdown-item">View
+                                    Contact
+                                    Requests</a>
+                            </li>
+
+                            <!-- Direct link to 'Read Contact Requests' page on admin-level of access -->
+                            <li>
+                                <a href="<?= BASE_URL; ?>pages/admin/readContactRequests.php"
+                                   class="dropdown-item">Read
+                                    Contact Requests</a>
+                            </li>
                         </ul>
+
+
 
                     </li>
 
-<!--                     Direct link to 'Leaderboard' page -->
-<!--                    <li class="nav-link active">-->
-<!--                        <a href="--><?php //= BASE_URL; ?><!--pages/leaderboard/leaderboard.php"-->
-<!--                           class="nav-link text-white">Leaderboard</a>-->
-<!--                    </li>-->
+<!--
 
-                    <!-- Direct link to 'Challenges' page -->
-                    <li class="nav-item dropdown">
-<!--                        <a class="nav-link dropdown-toggle text-white" href="#" id="projectDropdown" role="button"-->
-<!--                           data-bs-toggle="dropdown" aria-expanded="false">-->
-<!--                            Challanges-->
-<!--                        </a>-->
-                        <ul class="dropdown-menu" aria-labelledby="projectDropdown">
-                            <!--
-                                                    </ul>
-
-                                                </li>
-
-
-                                                <!-- Direct link to 'Tutorials' page -->
-                            <!-- TODO: Don't do local direct link like this. Make a proper page or so please! -->
-                            <li class="nav-link active">
-                                <a href="http://10.177.200.71/CyberCityDocs/welcome.html" class="nav-link text-white"
-                                   target="_blank">Tutorials</a>
-                            </li>
-
-                            <!-- Direct link to 'Edit Users' page on admin-level of access -->
-                            <li class="nav-link dropdown">
-                                <a href="#" class="nav-link dropdown-toggle text-white" id="navbarDropdown"
-                                   data-bs-toggle="dropdown" aria-expanded="false">Edit Users</a>
-
-                                <!-- Controlling different user account's accessibility on the website section -->
-                                <!-- TODO: What in the bottle flip is this?!? <ul> inside <li>?? -->
-                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-
-                                    <!-- Direct link to 'Enabled User List' page on admin-level of access -->
-                                    <li>
-                                        <a href="<?= BASE_URL; ?>pages/admin/userList.php" class="dropdown-item">Enabled
-                                            User
-                                            List</a>
-                                    </li>
-
-                                    <!-- Direct link to 'Disabled User List' page on admin-level of access -->
-                                    <li>
-                                        <a href="<?= BASE_URL; ?>pages/admin/disabledUsers.php" class="dropdown-item">Disabled
-                                            User List</a>
-                                    </li>
-                                </ul>
-                            </li>
-
-                            <!-- Direct link to 'Modules' page on admin-level of access -->
-                            <li class="nav-link dropdown">
-                                <a href="#" class="nav-link dropdown-toggle text-white" id="navbarDropdown"
-                                   data-bs-toggle="dropdown" aria-expanded="false">Modules</a>
-
-                                <!-- Control different module registered for the CTF challenge on the website section -->
-                                <!-- TODO: Again ?!? -->
-                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-
-                                    <!-- Direct link to 'Add New Module & Challenge' page on admin-level of access -->
-                                    <li>
-                                        <a href="<?= BASE_URL; ?>pages/admin/moduleRegister.php" class="dropdown-item">Add
-                                            New
-                                            Module & Challenge</a>
-                                    </li>
-
-                                    <!-- Direct link to 'Reset Game' page on admin-level of access -->
-                                    <li>
-                                        <a href="<?= BASE_URL; ?>pages/admin/resetGame.php" class="dropdown-item">Reset
-                                            Game</a>
-                                    </li>
-                                </ul>
-                            </li>
-
-                            <!-- Direct link to 'Contacts' page on admin-level of access -->
-                            <li class="nav-link dropdown">
-                                <a href="#" class="nav-link dropdown-toggle text-white" id="navbarDropdown"
-                                   data-bs-toggle="dropdown" aria-expanded="false">Contacts</a>
-
-                                <!-- Control the amount of support requests sent to the admin on the website section -->
-                                <!-- TODO: Seriously ?!? -->
-                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-
-                                    <!-- Direct link to 'View Contact Requests' page on admin-level of access -->
-                                    <li>
-                                        <a href="<?= BASE_URL; ?>pages/admin/contactpage.php" class="dropdown-item">View
-                                            Contact
-                                            Requests</a>
-                                    </li>
-
-                                    <!-- Direct link to 'Read Contact Requests' page on admin-level of access -->
-                                    <li>
-                                        <a href="<?= BASE_URL; ?>pages/admin/readContactRequests.php"
-                                           class="dropdown-item">Read
-                                            Contact Requests</a>
-                                    </li>
-                                </ul>
-                            </li>
 
                             <!-- Check for account logged in that have user-level of access -->
                             <?php elseif (isset($_SESSION['username']) && $_SESSION['access_level'] == USER_ACCESS_LEVEL): ?>
@@ -333,7 +280,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <!-- Direct link to 'Login' page if users are currently just view through the website -->
                                     <li class="nav-link active">
                                         <a href="<?= BASE_URL; ?>pages/user/login.php"
-                                           class="nav-link text-white">Login</a>
+                                           class="nav-link text-black">Login</a>
                                     </li>
                                 </ul>
                             <?php endif; ?>
