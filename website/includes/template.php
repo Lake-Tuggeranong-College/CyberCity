@@ -98,6 +98,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                            aria-expanded="false">
                             Admin panel
+
+                    <!-- Direct link to 'Leaderboard' page -->
+                    <li class="nav-link active">
+                        <a href="<?= BASE_URL; ?>pages/leaderboard/leaderboard.php" class="nav-link text-white">Leaderboard</a>
+                    </li>
+
+                    <!-- Direct link to 'Challenges' page -->
+                    <li class="nav-item dropdown nav-link">
+                        <a class="nav-link dropdown-toggle text-white" href="#" id="projectDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Challenges
                         </a>
                         <ul class="dropdown-menu">
                             <li>

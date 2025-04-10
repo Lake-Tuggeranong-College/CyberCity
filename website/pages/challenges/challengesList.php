@@ -5,127 +5,180 @@
 if (!authorisedAccess(false, true, true)) {
     header("Location:../../index.php");
 }
-
-
+//$projectID=0;
 
 ?>
 <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/moduleList.css">
 
 
 <h1>Challenges</h1>
-<?php
-if (isset($_GET["projectID"])) {
-    $projectID = $_GET["projectID"];
-} else {
-    header("location:index.php");
-}
-//function createCategoryHeader($conn, $categoryData) {
-//   // Extract each field from the data array
-//    $categoryName = $categoryData['categoryName'];
-//echo $categoryData['categoryName'];
-//    ?>
-<!--    <h2>--><?php //= $categoryName ?><!--</h2>-->
-<!--    --><?php
 
+<div class="container-fluid>">
 
-
-function createChallengeCard($conn, $completionStatus, $challengeData) {
-    //Extract each field from the data array
-    $challengeID = $challengeData['ID'];
-    $challengeTitle = $challengeData['challengeTitle'];
-    $pointsValue = $challengeData['PointsValue'];
-    $moduleID = $challengeData['moduleID'];
-    $container_required = $challengeData['container'];
-    $projectID = $_GET["projectID"];
-
-    // Check whether the challenge has an image
-//    $imageQuery = $conn->query("SELECT Image from RegisteredModules WHERE ID = $moduleID");
-    $imageQuery = $conn->query("SELECT Image from Challenges WHERE ID = $challengeID");
-    $imageData = $imageQuery->fetch();
-    if ($imageData['Image']) {
-        // Display Module Image.
-        ?>
-        <div class="product_wrapper">
-            <div class="card <?php if ($completionStatus == TRUE) {?> text-bg-success <?php } else if ($completionStatus == FALSE) {?> text-bg-secondary <?php } else {throw new Error("Something has gone SERIOUSLY wrong!");} ?>" style="width: 18rem;">
-                <img src="<?= BASE_URL ?>assets/img/challengeImages/<?= $imageData['Image'] ?>"
-                     class="card-img-top" alt="..." width="100" height="200">
-                <div class="card-body">
-                    <h5 class="card-title"><?= $challengeData["challengeTitle"] ?></h5>
-                    <p class="card-text"><?= $challengeData["PointsValue"] ?></p>
-                    <a href="<?php if ($container_required == 1) {?>challengeDisplayDocker.php?moduleID=<?php } else {?>challengeDisplay.php?moduleID= <?php } ?><?= $moduleID ?>" class="btn btn-warning">Start
-                        Challenge</a>
-                </div>
-            </div>
-        </div>
-
-        <?php
-
-    } else {
-        // Display Placeholder Image
-        ?>
-        <div class='image'><img
-                    src="<?= BASE_URL ?>assets/img/challengeImages/Image Not Found.jpg"
-                    width='100' height='100'>
-        </div>
-
-        <?php
-    }
-}
-$categoryQuery = $conn->query("SELECT CategoryName FROM Category WHERE projectID = $projectID");
-$categoryList = $categoryQuery->fetchAll( PDO::FETCH_ASSOC );
-for ($catcount = 0; $catcount < sizeof($categoryList); $catcount++) {
-
-    $categoryData = $categoryList[$catcount];
-    ?>
-    <div class="product_wrapper">
-        <br>
-
-    <h2 style="text-align: left;, width: 95%;, padding: 50px"><?= $categoryData['CategoryName']  ?></h2>
     <?php
 
+    if (isset($_GET["projectID"])) {
+        $projectID = $_GET["projectID"];
+    } else {
+        header("location:index.php");
+    }
 
-
-
-    $userID = $_SESSION['user_id'];
-    $challengeListQuery = $conn->query("SELECT ID, challengeTitle, PointsValue, moduleID, container FROM Challenges WHERE Enabled = 1 AND category = '$categoryData[CategoryName]'AND projectID = $projectID");
-    $challengeList = $challengeListQuery->fetchAll(PDO::FETCH_ASSOC);
-    for ($counter = 0; $counter < sizeof($challengeList); $counter++) {
-        // Get the challenge data for the current iteration.
-        // $counter is the index of the current challenge in the $challengeList array.
-        // $challengeList is an array that contains the array of data for each challenge.
-        // $challengeData is an associative array containing the challenge's ID, title, points value, and module ID.
-
-        $challengeData = $challengeList[$counter];
+    function createChallengeCard($challengeData)
+    {
+        global $projectID, $conn;
+        //Extract each field from the data array
         $challengeID = $challengeData['ID'];
+        $challengeTitle = $challengeData['challengeTitle'];
+        $pointsValue = $challengeData['pointsValue'];
+        $moduleID = $challengeData['moduleName'];
+        $container_required = $challengeData['container'];
+        $completionStatus = false; //TODO: Check Userchallenges to see if the user has already completed the challenge.
+//    $projectID = $_GET["projectID"];
 
-        //Get completion status of the challenge
-        $completionQuery = $conn->query("SELECT * FROM UserChallenges WHERE userID = '$userID' AND challengeID = '$challengeID'");
-        if ($completionQuery->rowCount() > 0) {
-            createChallengeCard($conn, TRUE, $challengeData);
+        // Check whether the challenge has an image
+//    $imageQuery = $conn->query("SELECT Image from RegisteredModules WHERE ID = $moduleID");
+//    $imageQuery = $conn->query("SELECT Image from Challenges WHERE ID = $challengeID");
+//    $imageData = $imageQuery->fetch();
+        $imageFileName = $challengeData['Image'];
+
+        // Is there an image?
+        if ($imageFileName) {
+            // Display Module Image.
+            ?>
+            <div class="product_wrapper">
+                <div class="card <?php if ($completionStatus == TRUE) { ?> text-bg-success <?php } else if ($completionStatus == FALSE) { ?> text-bg-secondary <?php } else {
+                    throw new Error("Something has gone SERIOUSLY wrong!");
+                } ?>" style="width: 18rem;">
+                    <img src="<?= BASE_URL ?>assets/img/challengeImages/<?= $imageFileName ?>"
+                         class="card-img-top" alt="..." width="100" height="200">
+                    <div class="card-body">
+                        <h5 class="card-title"><?= $challengeTitle ?></h5>
+                        <p class="card-text"><?= $pointsValue ?></p>
+                        <a href="<?php if ($container_required == 1) { ?>challengeDisplayDocker.php?challengeID=<?php } else { ?>challengeDisplay.php?challengeID=<?php } ?><?= $challengeID ?>"
+                           class="btn btn-warning">Start
+                            Challenge</a>
+                    </div>
+                </div>
+            </div>
+
+            <?php
+
         } else {
-            createChallengeCard($conn, FALSE, $challengeData);
+            // Display Placeholder Image
+            ?>
+            <div class='image'><img
+                        src="<?= BASE_URL ?>assets/img/challengeImages/Image Not Found.jpg"
+                        width='100' height='100'>
+            </div>
+
+            <?php
         }
     }
- ?>
-    </div>
-        <?php
-}
-?>
 
-<!-- CUSTOM WEBPAGES GO HERE -->
-<!--            <!-- <div class='product_wrapper' style='text-align: center;'><a href='backupDieselGenerators.php'>-->
-<!--                 <!-- CUSTOM WEBPAGE CHALLENGE TEST -->
-<!--                 <div class='image'><img style= 'width: 100px; height: 100px' src='../../assets/img/challengeImages/toilet.jpg'</img></div>-->
-<!--                 <a>Custom Webpage Challenge Test</a>-->
-<!--                 <p>Points: 0</p>-->
-<!--             </a></div>-->
-<!---->
-<!--             <div class='product_wrapper' style='text-align: center;'><a href='biolabShutdown.php'>-->
-<!--                 <!-- BIOLAB SHUTDOWN TEST-->
-<!--                 <div class='image'><img style= 'width: 100px; height: 100px' src='../../assets/img/challengeImages/Biolab.png'</img></div>-->
-<!--                 <a>Biolab Shutdown</a>-->
-<!--                 <p>Points: 500</p>-->
-<!--             </a></div>-->
+
+    function displayResultsByCategory()
+    {
+        global $conn, $projectID;
+        // This SQL query retrieves information about challenges related to a specific project, while also grouping them by category.
+        $sql = "
+        SELECT cat.CategoryName, ch.*
+FROM Category AS cat
+JOIN Challenges AS ch ON cat.id = ch.categoryID
+JOIN ProjectChallenges AS pc ON ch.id = pc.challenge_id
+JOIN Projects AS p ON pc.project_id = p.project_id
+WHERE p.project_id = :project_id
+ORDER BY cat.CategoryName;
+        ";
+
+        // Prepare and execute the query
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':project_id', $projectID, PDO::PARAM_INT);
+        $stmt->execute();
+
+        // Fetch the results
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Display the results grouped by category
+        $currentCategory = null;
+        echo "<div class='row'>";
+        foreach ($results as $row) {
+            // Display the category name as a heading
+            if ($currentCategory !== $row['CategoryName']) {
+                // Display category heading
+                $currentCategory = $row['CategoryName'];
+                echo "<h2>" . htmlspecialchars($currentCategory) . "</h2>";
+            }
+            // Display challenge data
+//        echo "<p>" . htmlspecialchars($row['challengeTitle']) . "</p>";
+            createChallengeCard($row);
+
+        }
+        echo "</div>";
+    }
+
+
+
+    function getChallengesForProject()
+    {
+        global $projectID, $conn;
+
+        $sql = "
+SELECT cat.CategoryName, ch.*
+FROM Category AS cat
+JOIN Challenges AS ch ON cat.id = ch.categoryID
+JOIN ProjectChallenges AS pc ON ch.id = pc.challenge_id
+JOIN Projects AS p ON pc.project_id = p.project_id
+WHERE p.project_id = :project_id
+ORDER BY cat.CategoryName;
+        ";
+
+        // Prepare and execute the query
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':project_id', $projectID, PDO::PARAM_INT);
+        $stmt->execute();
+
+        // Fetch the results
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        print_r($results);
+        // Display the results grouped by category
+        $currentCategory = null;
+        foreach ($results as $row) {
+            print_r($row);
+            if ($currentCategory !== $row['CategoryName']) {
+                // Display category heading
+                $currentCategory = $row['CategoryName'];
+                echo "<h2>" . htmlspecialchars($currentCategory) . "</h2>";
+                createChallengeCard(true, $row);
+            }
+            // Display challenge data
+//        print_r($row);
+        }
+
+    }
+
+
+
+    // Call the function with a project ID
+    displayResultsByCategory();
+
+    //getChallengesForProject();
+
+    ?>
+
+    <!-- CUSTOM WEBPAGES GO HERE -->
+    <!--            <!-- <div class='product_wrapper' style='text-align: center;'><a href='backupDieselGenerators.php'>-->
+    <!--                 <!-- CUSTOM WEBPAGE CHALLENGE TEST -->
+    <!--                 <div class='image'><img style= 'width: 100px; height: 100px' src='../../assets/img/challengeImages/toilet.jpg'</img></div>-->
+    <!--                 <a>Custom Webpage Challenge Test</a>-->
+    <!--                 <p>Points: 0</p>-->
+    <!--             </a></div>-->
+    <!---->
+    <!--             <div class='product_wrapper' style='text-align: center;'><a href='biolabShutdown.php'>-->
+    <!--                 <!-- BIOLAB SHUTDOWN TEST-->
+    <!--                 <div class='image'><img style= 'width: 100px; height: 100px' src='../../assets/img/challengeImages/Biolab.png'</img></div>-->
+    <!--                 <a>Biolab Shutdown</a>-->
+    <!--                 <p>Points: 500</p>-->
+    <!--             </a></div>-->
 
 
 </div>
