@@ -74,9 +74,9 @@ function checkFlag()
                 $stmt->execute([$addedScore, $user]);
 
                 if ($challengeID == 19) {
-                    $sql = "UPDATE archivedRegisteredModules SET CurrentOutput = 'On' WHERE ID='$challengeID'";
+                    $sql = "UPDATE Challenges SET moduleValue = 'On' WHERE ID='$challengeID'";
                 } else {
-                    $sql = "UPDATE archivedRegisteredModules SET CurrentOutput = CurrentOutput + '1' WHERE ID='$challengeID'";
+                    $sql = "UPDATE Challenges SET CurrentOutput = Challenges.moduleValue + '1' WHERE ID='$challengeID'";
                 }
                 $stmt = $conn->prepare($sql);
                 $stmt->execute();
