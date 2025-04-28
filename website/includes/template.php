@@ -141,7 +141,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             </li>
 
                             <li>
-                                <a href="<?= BASE_URL; ?>pages/admin/moduleRegister.php" class="dropdown-item">Add
+                                <a href="<?= BASE_URL; ?>pages/admin/challengeRegister.php" class="dropdown-item">Add
                                     New
                                     Module & Challenge</a>
                             </li>
