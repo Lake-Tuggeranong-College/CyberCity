@@ -1,15 +1,12 @@
-#define AIN_PIN A2  // Arduino pin that connects to AOUT pin of moisture sensor
-#include <ArduinoJson.h>
-#include "sensitiveInformation.h"
 #include <CyberCitySharedFunctionality.h>
+#include <Arduino.h>
 #include <WiFi.h>
 #include <PubSubClient.h>
-#include <Arduino.h>
-CyberCitySharedFunctionality cyberCity;
-
+#include "sensitiveInformation.h"
 #include <ESP32Servo.h>
+CyberCitySharedFunctionality cyberCity;
 // Declare the Servo pin
-int servoPin = 13;
+int servoPin = 14;
 // Create a servo object
 Servo Servo1;
 String outputCommand = "NaN";
@@ -18,26 +15,38 @@ String outputCommand = "NaN";
 WiFiClient espClient;
 PubSubClient client(espClient);
 
-// Declare the callback function prototype before setup()
-void callback(char* topic, byte* payload, unsigned int length);
+void mqttConnect() {
+// Connecting to MQTT Broker
+  while (!client.connected()) {
+    Serial.println("Connecting to MQTT...");
+    if (client.connect(mqttClient)) {
+      Serial.println("Connected to MQTT");
+      client.subscribe(mqttTopic);  // Subscribe to the control topic
+      Serial.println("Connected to topic");
+    } else {
+      Serial.print("Failed with state ");
+      Serial.print(client.state());
+      delay(2000);
+    }
+  }
+
+}
 
 
-void setup() {
+
+void setup()
+{
+
   Serial.begin(9600);
-  // We need to attach the servo to the used pin number
-  ESP32PWM::allocateTimer(0);
-  ESP32PWM::allocateTimer(1);
-  ESP32PWM::allocateTimer(2);
-  ESP32PWM::allocateTimer(3);
-  Servo1.setPeriodHertz(50);  // standard 50 hz servo
-  Servo1.attach(servoPin);
-  while (!Serial) {
+  while (!Serial)
+  {
     delay(10);
   }
   delay(1000);
   WiFi.begin(ssid, password);
 
-  while (WiFi.status() != WL_CONNECTED) {
+  while (WiFi.status() != WL_CONNECTED)
+  {
     delay(1000);
     Serial.println("Connecting to WiFi..");
   }
@@ -47,12 +56,9 @@ void setup() {
   Serial.println(WiFi.localIP());
   pinMode(LED_BUILTIN, OUTPUT);
 
-  // Setting up MQTT
-  client.setServer(mqttServer, mqttPort);
-  client.setCallback(callback);  // Set the callback function to handle incoming messages
-
   // RTC
-  if (!rtc.begin()) {
+  if (!rtc.begin())
+  {
     Serial.println("Couldn't find RTC");
     Serial.flush();
   }
@@ -62,109 +68,21 @@ void setup() {
 
   rtc.start();
 
-  //EINK
-  display.begin();
-  display.clearBuffer();
+  // Setting up MQTT
+  client.setServer(mqttServer, mqttPort);
 
-    // Connecting to MQTT Broker
-  while (!client.connected()) {
-    Serial.println("Connecting to MQTT...");
-
-    if (client.connect(mqttClient)) {
-      Serial.println("Connected to MQTT");
-      client.subscribe("RegisteredModules/servo");  // Subscribe to the control topic
-      Serial.println("Connected to topic");
-    } else {
-      Serial.print("Failed with state ");
-      Serial.print(client.state());
-      delay(2000);
-    }
-  }
-
-  cyberCity.logEvent("System Initialisation...");
+  mqttConnect();
+ 
 }
 
-void callback(char* topic, byte* payload, unsigned int length) {
-  Serial.print("Message arrived [");
-  Serial.print(topic);
-  Serial.print("] ");
-  for (int i = 0; i < length; i++) {
-    Serial.print((char)payload[i]);
-  }
-  Serial.println();
-
-  // Example: turn on/off an LED based on the message received
-  // if ((char)payload[0] == '1') {
-  //   Serial.println("spin please");
-  //   Servo1.write(0);
-  //   outputCommand = "Fan On";
-  // } else {
-  //   outputCommand = "Fan Off";
-  //   Servo1.write(90);
-  //   Serial.println("not spinnin");
-  // }
-
-  if ((char)payload[0]) {
-    Serial.println("spin please");
-    Servo1.write(0);
-    outputCommand = "Fan On";
-    delay(5000);
-    Servo1.write(90);
-  }
-}
-
-void loop() {
-  /*int value = analogRead(AIN_PIN);  // read the analog value from sensor
-
-  Serial.println(value);
-  int sensorData = value * 1.0;
-  cyberCity.updateEPD("Farm", "value", sensorData, outputCommand);
-  String dataToPost = String(value);
-  // cyberCity.uploadData(dataToPost, apiKeyValue, sensorName, sensorLocation, 30000, serverName);
-  String payload = cyberCity.dataTransfer(dataToPost, apiKeyValue, sensorName, sensorLocation, 40, serverName, true, true);
-  //notes need to // the next to line
-//  int payloadLocation = payload.indexOf("Payload:");
- //char serverCommand = payload.charAt(payloadLocation + 8);
-
- Serial.print("Payload from server:");
-  Serial.println(payload);
-  DynamicJsonDocument doc(1024);
-//  Serial.println(deserializeJson(doc, payload));
-  DeserializationError error = deserializeJson(doc, payload);
-  if (error) {
-    Serial.print(F("deserializeJson() failed: "));
-    Serial.println(error.f_str());
-    return;
-  }
-  const char* command = doc["command"];
-  Serial.print("Command: ");
-  Serial.println(command);
-
-
-  if (String(command) == "On") {
-    Serial.println("spin:)");
-    Servo1.write(0);
-   outputCommand = "Fan On";
-
- } else {
-   outputCommand = "Fan Off";
-    Servo1.write(90);
-  }*/
-
-    if (!client.connected()) {
-    while (!client.connected()) {
-      Serial.println("Reconnecting to MQTT...");
-
-      if (client.connect("ESP32_Client")) {
-        Serial.println("Reconnected to MQTT");
-        client.subscribe("RegisteredModules/servo");
-        Serial.println("Connected to topic");
-      } else {
-        Serial.print("Failed to reconnect, state ");
-        Serial.print(client.state());
-        delay(2000);
-      }
+void mqttLoop() {
+   if (!client.connected()) {
+      mqttConnect();
     }
-  }
   client.loop();  // Check for incoming messages and keep the connection alive
+}
+
+void loop()
+{
+  mqttLoop();
 }
