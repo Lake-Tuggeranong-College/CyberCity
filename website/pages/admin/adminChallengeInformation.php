@@ -7,10 +7,10 @@ if (!authorisedAccess(false, false, true)) {
 
 ?>
 
-<title>Module Details</title>
+<title>Challenge Details</title>
 
 
-<h1> Module Details</h1>
+<h1> Challenge Details</h1>
 
 
 <?php
