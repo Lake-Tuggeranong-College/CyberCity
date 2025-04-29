@@ -70,16 +70,16 @@ void setup() {
   while (!client.connected()) {
     Serial.println("Connecting to MQTT...");
 
-    if (client.connect(mqttClient)) {
+   if (client.connect(mqttClient)) {
       Serial.println("Connected to MQTT");
-      client.subscribe("RegisteredModules/Servo");  // Subscribe to the control topic
+      client.subscribe("Challenges/Windmill");  // Subscribe to the control topic
       Serial.println("Connected to topic");
     } else {
       Serial.print("Failed with state ");
       Serial.print(client.state());
       delay(2000);
     }
-  }
+  } 
 
   cyberCity.logEvent("System Initialisation...");
 }
@@ -104,60 +104,30 @@ void callback(char* topic, byte* payload, unsigned int length) {
   //   Serial.println("not spinnin");
   // }
 
-  if ((char)payload[0]) {
+  if ((char)payload[0] == '1') {
     Serial.println("spin please");
     Servo1.write(180); // 0 = full speed reverse 
     outputCommand = "Fan On";
-    delay(15000);
+    delay(5000);
     Servo1.write(90);
-  } 
+  }
+  if ((char)payload[0] == '2') {
+    Serial.println("no spin");
+    Servo1.write(90); // 0 = full speed reverse 
+    outputCommand = "Fan Off";
+    delay(5000);
+  }   
+
 }
 
 void loop() {
-  /*int value = analogRead(AIN_PIN);  // read the analog value from sensor
-
-  Serial.println(value);
-  int sensorData = value * 1.0;
-  cyberCity.updateEPD("Farm", "value", sensorData, outputCommand);
-  String dataToPost = String(value);
-  // cyberCity.uploadData(dataToPost, apiKeyValue, sensorName, sensorLocation, 30000, serverName);
-  String payload = cyberCity.dataTransfer(dataToPost, apiKeyValue, sensorName, sensorLocation, 40, serverName, true, true);
-  //notes need to // the next to line 
-//  int payloadLocation = payload.indexOf("Payload:");
- //char serverCommand = payload.charAt(payloadLocation + 8);
-
- Serial.print("Payload from server:");
-  Serial.println(payload);
-  DynamicJsonDocument doc(1024);
-//  Serial.println(deserializeJson(doc, payload));
-  DeserializationError error = deserializeJson(doc, payload);
-  if (error) {
-    Serial.print(F("deserializeJson() failed: "));
-    Serial.println(error.f_str());
-    return;
-  }
-  const char* command = doc["command"];
-  Serial.print("Command: ");
-  Serial.println(command);
-  
-  
-  if (String(command) == "On") {
-    Serial.println("spin:)");
-    Servo1.write(0);
-   outputCommand = "Fan On";
-    
- } else {
-   outputCommand = "Fan Off";
-    Servo1.write(90);
-  }*/
-
-    if (!client.connected()) {
+   if (!client.connected()) {
     while (!client.connected()) {
       Serial.println("Reconnecting to MQTT...");
 
       if (client.connect("ESP32_Client")) {
         Serial.println("Reconnected to MQTT");
-        client.subscribe("RegisteredModules/Servo");
+        client.subscribe("Challenges/Windmill");
         Serial.println("Connected to topic");
       } else {
         Serial.print("Failed to reconnect, state ");
