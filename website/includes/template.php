@@ -41,7 +41,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
-            <!--User side navbar-->
+
+            <!--Start of Navigation Bar (left side)-->
             <a class="navbar-brand">Cyber City</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -57,7 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <a href="<?= BASE_URL; ?>pages/leaderboard/leaderboard.php" class="nav-link text-black">Leaderboard</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                        <a class="nav-link text-black dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                            aria-expanded="false">
                             project dropdown
                         </a>
@@ -67,11 +68,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     Project</a></li>
                             <li><a class="dropdown-item"
                                    href="<?= BASE_URL; ?>pages/challenges/challengesList.php?projectID=2">2026
-                                    Project</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
+                                    Project</a>
                             </li>
-                            <li>
+                            </li><hr class="dropdown-divider">
+                            </li>
                                 <a href="http://10.177.200.71/CyberCityDocs/welcome.html" class="nav-link text-black"
                                    target="_blank">Tutorials</a>
                             </li>
@@ -82,7 +82,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                            target="_blank">Feedback</a>
                     </li>
                     <!--defining whether User is Admin or not-->
-                    <il <?php if (isset($_SESSION['username']) && $_SESSION['access_level'] == ADMIN_ACCESS_LEVEL): ?>
+                    <?php if (isset($_SESSION['username']) && $_SESSION['access_level'] == ADMIN_ACCESS_LEVEL): ?>
                     <?php
                     // Fetch user information from the database
                     $userToLoad = $_SESSION['user_id'];
@@ -93,144 +93,62 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     $userScore = $userInformation['Score'];
                     ?>
-                    <!--admin side navbar-->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                           aria-expanded="false">
-                            Admin panel</a>
 
-
-
-                    <!-- Direct link to 'Challenges' page -->
-                    <li class="nav-item dropdown nav-link">
-
-                        <ul class="dropdown-menu">
-                            <li>
-                            <a class="nav-link dropdown-toggle text-white" href="#" id="projectDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Challenges
+                    <!--Admin panel section of navbar with links to admin settings for website-->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link text-black dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Admin Panel
                             </a>
-                            </li>
-                            <li>
+                            <ul class="dropdown-menu">
                                 <a href="<?= BASE_URL; ?>pages/admin/userList.php" class="dropdown-item">Enabled User
                                     List</a>
-                            </li>
-                            <!-- Direct link to 'Leaderboard' page -->
-                            <li class="nav-link active">
-                                <a href="<?= BASE_URL; ?>pages/leaderboard/leaderboard.php" class="nav-link text-white">Leaderboard</a>
-                            </li>
-                            <li>
-                                <a href="<?= BASE_URL; ?>pages/admin/disabledUsers.php" class="dropdown-item">Disabled
-                                    User List</a>
-                            </li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
 
-                            <li>
-                                <a href="<?= BASE_URL; ?>pages/admin/contactpage.php" class="dropdown-item">View
-                                    Contact
-                                    Requests</a>
-                            </li>
-
-                            <!-- Direct link to 'Read Contact Requests' page on admin-level of access -->
-                            <li>
-                                <a href="<?= BASE_URL; ?>pages/admin/readContactRequests.php"
-                                   class="dropdown-item">Read
-                                    Contact Requests</a>
-                            </li>
-
-                            <li>
-                                <a href="<?= BASE_URL; ?>pages/admin/moduleRegister.php" class="dropdown-item">Add
-                                    New
-                                    Module & Challenge</a>
-                            </li>
-
-                            <!-- Direct link to 'Reset Game' page on admin-level of access -->
-                            <li>
-                                <a href="<?= BASE_URL; ?>pages/admin/resetGame.php" class="dropdown-item">Reset
-                                    Game</a>
-                            </li>
-
-                            <li>
-                                <a href="<?= BASE_URL; ?>pages/admin/contactpage.php" class="dropdown-item">View
-                                    Contact
-                                    Requests</a>
-                            </li>
-
-                            <!-- Direct link to 'Read Contact Requests' page on admin-level of access -->
-                            <li>
-                                <a href="<?= BASE_URL; ?>pages/admin/readContactRequests.php"
-                                   class="dropdown-item">Read
-                                    Contact Requests</a>
-                            </li>
-                        </ul>
-
-
-
+                                <li>
+                                    <a href="<?= BASE_URL; ?>pages/admin/disabledUsers.php" class="dropdown-item">Disabled
+                                        User List</a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a href="<?= BASE_URL; ?>pages/admin/contact page.php" class="dropdown-item">View
+                                        Contact Requests</a>
+                                <li>
+                                    <a href="<?= BASE_URL; ?>pages/admin/readContactRequests.php"
+                                       class="dropdown-item">Read
+                                        Contact Requests</a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                </li>
+                                    <a href="<?= BASE_URL; ?>pages/admin/moduleRegister.php" class="dropdown-item">Add
+                                        New Modules & Challenges</a>
+                                <li>
+                                    <a href="<?= BASE_URL; ?>pages/admin/resetGame.php" class="dropdown-item">Reset
+                                        Game</a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                </li>
+                                    <a href="<?= BASE_URL; ?>pages/admin/contactpage.php" class="dropdown-item">View
+                                        Contact
+                                        Requests</a>
+                                <li>
+                                    <a href="<?= BASE_URL; ?>pages/admin/readContactRequests.php"
+                                       class="dropdown-item">Read
+                                        Contact Requests</a>
+                                </li>
+                            </ul>
+                        </li>
                     </li>
+                <!-- End of Navigation Bar (left side) -->
 
-<!--
+                <?php endif; ?>
 
-
-                            <!-- Check for account logged in that have user-level of access -->
-                            <?php elseif (isset($_SESSION['username']) && $_SESSION['access_level'] == USER_ACCESS_LEVEL): ?>
-                                <?php
-                                // Fetch user information from the database
-                                $userToLoad = $_SESSION['user_id'];
-                                $query = "SELECT Score FROM Users WHERE ID = ?";
-                                $stmt = $conn->prepare($query);
-                                $stmt->execute([$userToLoad]);
-                                $userInformation = $stmt->fetch();
-
-                                $userScore = $userInformation['Score'];
-                                ?>
-
-                                <!-- Direct link to 'Leaderboard' page -->
-                                <li class="nav-link active">
-                                    <!--                        <a href="-->
-                                    <?php //= BASE_URL; ?><!--pages/leaderboard/leaderboard.php" class="nav-link text-white">Leaderboard</a>-->
-                                </li>
-
-                                <!-- Direct link to 'Challenges' page -->
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle text-white" href="#" id="projectDropdown"
-                                       role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Challanges
-                                    </a>
-                                    <ul class="dropdown-menu" aria-labelledby="projectDropdown">
-                                        <!--                            <li><a class="dropdown-item" href="-->
-                                        <?php //= BASE_URL; ?><!--pages/challenges/challengesList.php?projectID=1">2024 Project</a></li>-->
-                                        <!--                            <li><a class="dropdown-item" href="-->
-                                        <?php //= BASE_URL; ?><!--pages/challenges/challengesList.php?projectID=2">2025 Project</a></li>-->
-                                    </ul>
-
-                                </li>
-
-                                <!-- Direct link to 'Tutorials' page -->
-                                <li class="nav-link active">
-                                    <!--                        <a href="http://10.177.200.71/CyberCityDocs/welcome.html" class="nav-link text-white"-->
-<!--                                    target="_blank">Tutorials</a>-->
-                                </li>
-
-                                <li class="nav-link active">
-                                    <!--                        <a href="https://forms.gle/jgYrmMZesgtVhBZ39" class="nav-link text-white"-->
-<!--                                    target="_blank">Feedback</a>-->
-                                </li>
-
-
-                            <?php endif; ?>
-
-                            <!-- End of Navigation Bar (left side) -->
-                        </ul>
-
-                        <!-- Navigation Bar (right side) -->
+                        <!-- Start of Navigation Bar (right side) -->
                         <ul class="navbar-nav ms-auto">
                             <button id="modeToggle" class="btn btn-outline-secondary mode-toggle-btn">
                                 Switch to Dark Mode
                             </button>
                             <?php if (isset($_SESSION['username'])): ?>
                                 <li class="nav-link dropdown">
-                                    <a href="#" class="nav-link dropdown-toggle text-white" id="navbarDropdown"
+                                    <a href="#" class="nav-link dropdown-toggle text-black" id="navbarDropdown"
                                        data-bs-toggle="dropdown"
                                        aria-expanded="false"><?= htmlspecialchars($_SESSION['username']); ?></a>
 
