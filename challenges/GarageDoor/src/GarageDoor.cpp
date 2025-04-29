@@ -9,7 +9,7 @@ CyberCitySharedFunctionality cyberCity;
 
 #include <ESP32Servo.h>
 // Declare the Servo pin
-int servoPin = 21;
+int servoPin = 14;
 // Create a servo object
 Servo Servo1;
 String outputCommand = "NaN";
@@ -70,16 +70,16 @@ void setup() {
   while (!client.connected()) {
     Serial.println("Connecting to MQTT...");
 
-   if (client.connect(mqttClient)) {
+    if (client.connect(mqttClient)) {
       Serial.println("Connected to MQTT");
-      client.subscribe("Challenges/Windmill");  // Subscribe to the control topic
+      client.subscribe("Challenges/Two");  // Subscribe to the control topic
       Serial.println("Connected to topic");
     } else {
       Serial.print("Failed with state ");
       Serial.print(client.state());
       delay(2000);
     }
-  } 
+  }
 
   cyberCity.logEvent("System Initialisation...");
 }
@@ -105,29 +105,25 @@ void callback(char* topic, byte* payload, unsigned int length) {
   // }
 
   if ((char)payload[0] == '1') {
-    Serial.println("spin please");
-    Servo1.write(180); // 0 = full speed reverse 
-    outputCommand = "Fan On";
-    delay(5000);
-    Servo1.write(90);
-  }
+    Serial.println("close");
+    Servo1.write(0); // 0 = full speed reverse 
+  } 
   if ((char)payload[0] == '2') {
-    Serial.println("no spin");
+    Serial.println("open");
     Servo1.write(90); // 0 = full speed reverse 
-    outputCommand = "Fan Off";
-    delay(5000);
-  }   
-
+  } 
 }
 
 void loop() {
-   if (!client.connected()) {
+
+
+    if (!client.connected()) {
     while (!client.connected()) {
       Serial.println("Reconnecting to MQTT...");
 
       if (client.connect("ESP32_Client")) {
         Serial.println("Reconnected to MQTT");
-        client.subscribe("Challenges/Windmill");
+        client.subscribe("Challenges/Two");
         Serial.println("Connected to topic");
       } else {
         Serial.print("Failed to reconnect, state ");

@@ -5,6 +5,7 @@
     z-index: 10;
     /*background-color: #212529;*/
     color: #f8f9fa;
+    background: radial-gradient(#222222 1px, #000000) ;
 }
 
 .top-three-ranking .leaderboard-item {
@@ -18,7 +19,7 @@
     transform-origin: bottom;
     cursor: pointer;
     transition: transform 200ms ease-in-out;
-    box-shadow: 0 0 4rem 0 rgba(0, 0, 0, 0.1), 0 1rem 2rem -1rem rgba(0, 0, 0, 0.3);
+    /*box-shadow: 0 0 4rem 0 rgba(0, 0, 0, 0.1), 0 1rem 2rem -1rem rgba(0, 0, 0, 0.3); */
 }
 
 .top-three-ranking .leaderboard-item .user-profile {
@@ -32,7 +33,7 @@
     background-position: center;
     margin-right: 1rem;
 
-    box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.2), 0 1rem 1rem -0.5rem rgba(0, 0, 0, 0.3);
+    /* box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.2), 0 1rem 1rem -0.5rem rgba(0, 0, 0, 0.3); */
 }
 
 .top-three-ranking .leaderboard-item .user-position {
@@ -49,41 +50,42 @@ margin-top: 2rem;
 }
 
 .top-three-ranking .leaderboard-item .user-score {
-    opacity: 0.5;
+    opacity: 0.8;
 }
 
 .top-three-ranking .leaderboard-item .user-score:after {
     display: block;
     content: "points";
-    opacity: 0.5;
+    color: rgb(255, 255, 255);
+    opacity: 1;
 }
 
 .top-three-ranking .leaderboard-item.first-place {
     width: 10rem;
     height: 11.5rem;
     padding-top: 3.5rem;
-    background-color: #d59725;
+    background: linear-gradient(#7a5008 30%, #d59725) ;
 }
 
 .top-three-ranking .leaderboard-item.second-place {
     width: 10rem;
     height: 11.5rem;
     padding-top: 3.5rem;
-    background-color: #7e7c7c;
+    background: linear-gradient(#3c3b3b 30%, #989898) ;
 }
 
 .top-three-ranking .leaderboard-item.third-place {
     width: 10rem;
     height: 11.5rem;
     padding-top: 3.5rem;
-    background-color: #9e621e;
+    background: linear-gradient(#40280c 30%, #9e621e) ;
 }
 
 .top-three-ranking .leaderboard-item.first-place .user-profile {
     width: 5rem;
     height: 5rem;
     left: 2.5rem;
-    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0);
     content: url(/website/assets/img/FirstPlace.png);
 }
 
@@ -91,7 +93,7 @@ margin-top: 2rem;
     width: 5rem;
     height: 5rem;
     left: 2.5rem;
-    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0);
     content: url(/website/assets/img/SecondPlace.png);
 }
 
@@ -99,7 +101,6 @@ margin-top: 2rem;
     width: 5rem;
     height: 5rem;
     left: 2.5rem;
-    background-color: rgb(0, 0, 0);
     content: url(/website/assets/img/ThirdPlace.png);
 
 }
@@ -158,7 +159,8 @@ margin-top: 2rem;
 .leaderboard-list .leaderboard-item .user-score:after {
     margin-right: 1rem;
     content: "points";
-    opacity: 0.5;
+    color: rgb(255, 255, 255);
+    opacity: 1;
 }
 
 .leaderboard-list .leaderboard-item:hover {

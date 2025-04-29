@@ -38,7 +38,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" type="text/css" href="<?= BASE_URL; ?>assets/css/leaderboard.css">
     <link rel="stylesheet" type="text/css" href="<?= BASE_URL; ?>assets/css/editAccount.css">
     <link rel="icon" type="image/png" href="<?= BASE_URL; ?>assets/img/CCLogo.png">
-
+</head>
+<body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
 
@@ -102,6 +103,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <ul class="dropdown-menu">
                                 <a href="<?= BASE_URL; ?>pages/admin/userList.php" class="dropdown-item">Enabled User
                                     List</a>
+
 
                                 <li>
                                     <a href="<?= BASE_URL; ?>pages/admin/disabledUsers.php" class="dropdown-item">Disabled

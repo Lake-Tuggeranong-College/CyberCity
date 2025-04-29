@@ -26,7 +26,7 @@ String sensorLocation = "TrafficLightOne";
 const char* mqttClient = "ESP32";
 
 // MQTT Topic
-const char* mqttTopic = "RegisteredModules/TrafficLight"; // It's worth noting that an ESP32 can subscribe to more than 1 topic
+const char* mqttTopic = "Challenges/TrafficLights"; // It's worth noting that an ESP32 can subscribe to more than 1 topic
 
 // Replace with the MQTT broker IP address and port (default port for MQTT is 1883)
 const char* mqttServer = "192.168.1.10";  
