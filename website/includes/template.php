@@ -120,12 +120,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 </li>
                                 <li><hr class="dropdown-divider"></li>
                                 </li>
-                                    <a href="<?= BASE_URL; ?>pages/admin/moduleRegister.php" class="dropdown-item">Add
+                                    <a href="<?= BASE_URL; ?>pages/admin/challengeRegister.php" class="dropdown-item">Add
                                         New Modules & Challenges</a>
                                 <li>
                                     <a href="<?= BASE_URL; ?>pages/admin/resetGame.php" class="dropdown-item">Reset
                                         Game</a>
-                                </li>
+                                </li>   
                                 <li><hr class="dropdown-divider"></li>
                                 </li>
                                     <a href="<?= BASE_URL; ?>pages/admin/contactpage.php" class="dropdown-item">View
