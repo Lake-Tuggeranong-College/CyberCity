@@ -50,6 +50,7 @@ margin-top: 2rem;
 
 .top-three-ranking .leaderboard-item .user-score {
     opacity: 0.8;
+    color: #f8f9fa;
 }
 
 .top-three-ranking .leaderboard-item .user-score:after {
@@ -112,7 +113,7 @@ margin-top: 2rem;
     position: relative;
     display: flex;
     align-items: center;
-    height: 3rem;
+    height: 4rem;
     border-radius: 4rem;
     margin-right: 50px;
     margin-bottom: 2rem;
@@ -128,7 +129,7 @@ margin-top: 2rem;
 .leaderboard-list .leaderboard-item .user-position {
     font-weight: 900;
     position: absolute;
-    left: -2rem;
+    left: 1rem;
     text-align: center;
     font-size: 1.25rem;
     width: 1.5rem;
@@ -155,13 +156,14 @@ margin-top: 2rem;
 
 .leaderboard-list .leaderboard-item .user-score {
     margin-right: 1.5rem;
-    opacity: 0.6;
+    opacity: 1;
+    color: rgb(255, 255, 255);
 }
 
 .leaderboard-list .leaderboard-item .user-score:after {
     margin-right: 1rem;
-    content: "points";
-    color: rgb(255, 255, 255);
+    content: " points";
+    color: rgb(150, 150, 150);
     opacity: 1;
 }
 
@@ -171,5 +173,5 @@ margin-top: 2rem;
 }
 
 .leaderboard-list .leaderboard-item:hover .user-position {
-    opacity: 1;
+    background: rgb(255, 255, 255);
 }
