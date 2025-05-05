@@ -3,8 +3,37 @@
 #include <WiFi.h>
 #include <PubSubClient.h>
 #include "sensitiveInformation.h" //ENSURE WIFI & MQTT IS CONFIGURED CORRECTLY
+#include "pitches.h"
 
 const int buzzer = 14;
+// Notes for "Twinkle Twinkle Little Star"
+int melody[] = {
+  NOTE_C4, NOTE_C4, NOTE_G4, NOTE_G4, NOTE_A4, NOTE_A4, NOTE_G4,
+  NOTE_F4, NOTE_F4, NOTE_E4, NOTE_E4, NOTE_D4, NOTE_D4, NOTE_C4,
+  NOTE_G4, NOTE_G4, NOTE_F4, NOTE_F4, NOTE_E4, NOTE_E4, NOTE_D4,
+  NOTE_G4, NOTE_G4, NOTE_F4, NOTE_F4, NOTE_E4, NOTE_E4, NOTE_D4,
+  NOTE_C4, NOTE_C4, NOTE_G4, NOTE_G4, NOTE_A4, NOTE_A4, NOTE_G4,
+  NOTE_F4, NOTE_F4, NOTE_E4, NOTE_E4, NOTE_D4, NOTE_D4, NOTE_C4
+};
+
+// Durations: 4 = quarter note, 8 = eighth note, etc.
+int noteDurations[] = {
+  4, 4, 4, 4, 4, 4, 2,
+  4, 4, 4, 4, 4, 4, 2,
+  4, 4, 4, 4, 4, 4, 2,
+  4, 4, 4, 4, 4, 4, 2,
+  4, 4, 4, 4, 4, 4, 2,
+  4, 4, 4, 4, 4, 4, 2
+};
+
+void playTwinkle() {
+  for (int i = 0; i < sizeof(melody) / sizeof(melody[0]); i++) {
+    int duration = 1000 / noteDurations[i];
+    tone(buzzer, melody[i], duration);
+    delay(duration * 1.3); // pause between notes
+    noTone(buzzer);
+  }
+}
 
 void callback(char* topic, byte* payload, unsigned int length) {
   Serial.print("Message arrived [");
@@ -15,28 +44,14 @@ void callback(char* topic, byte* payload, unsigned int length) {
   }
   Serial.println();
 
-  // Example: turn on/off an LED based on the message received (this is specialised, if you dont need it dont use it.)
-  //
   if ((char)payload[0] == '1') {
-    Serial.println("LED ON");
-    digitalWrite(LED_BUILTIN, HIGH);
-    tone(buzzer, 1000);
+    Serial.println("Playing Twinkle Twinkle");
+    playTwinkle();
   } else {
     Serial.println("LED OFF");
     digitalWrite(LED_BUILTIN, LOW);
     tone(buzzer, 0);
   }
-
-  // Example: turn on/off an LED based on ANY message received (this is how this is intended to work, activating when this ESP32's respective
-  // challenge is completed)
-  //
-  // if ((char)payload[0]) {
-  //   Serial.println("LED ON");
-  //   digitalWrite(redLEDPin, HIGH);
-  //   delay(250);
-  //   Serial.println("LED OFF");
-  //   digitalWrite(redLEDPin, LOW);
-  // }
 }
 
 
@@ -66,15 +81,8 @@ void connectMqtt() {
 }
 
 void setup() {
-  /*
-    STEP 3. CONTINUED.
-    DECLARE YOUR pinMode()'s below, e.g:
-  
-    pinMode(redLEDPin, OUTPUT);
-  */
   pinMode(LED_BUILTIN, OUTPUT); // Built in LED
   pinMode(buzzer, OUTPUT); // Set buzzer - pin 9 as an output
-
 
   Serial.begin(9600);
   while (!Serial) {
