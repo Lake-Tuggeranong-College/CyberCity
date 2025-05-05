@@ -19,11 +19,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <!DOCTYPE html>
 <html lang="en">
 
+
 <head>
     <!-- Required meta tags -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <!-- Website title -->
     <title>Cyber City</title>
     <script type="text/javascript">function doUnauthRedirect() {
@@ -41,7 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
-        <div class="container-fluid">
+        <div class="container-fluid nav-bar">
 
             <!--Start of Navigation Bar (left side)-->
             <a class="navbar-brand">Cyber City</a>
@@ -64,7 +64,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             project dropdown
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item"
+                            <a class="dropdown-item"
                                    href="<?= BASE_URL; ?>pages/challenges/challengesList.php?projectID=1">2025
                                     Project</a></li>
                             <li><a class="dropdown-item"
@@ -83,7 +83,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                            target="_blank">Feedback</a>
                     </li>
                     <!--defining whether User is Admin or not-->
-                    <?php if (isset($_SESSION['username']) && $_SESSION['access_level'] == ADMIN_ACCESS_LEVEL): ?>
+                <?php if (isset($_SESSION['username']) && $_SESSION['access_level'] == ADMIN_ACCESS_LEVEL): ?>
                     <?php
                     // Fetch user information from the database
                     $userToLoad = $_SESSION['user_id'];
@@ -182,7 +182,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <li class="nav-link active">
                                         <!--                            <a href="-->
                                         <?php //= BASE_URL; ?><!--pages/contactUs/contact.php" class="nav-link text-white">Contact-->
-                                        Us</a>
+                                        </a>
                                     </li>
                                 <?php endif; ?>
 
