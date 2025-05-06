@@ -6,27 +6,23 @@
 #include "pitches.h"
 
 const int buzzer = 14;
-// Notes for "Twinkle Twinkle Little Star"
+// Notes for "A Cruel Angel's Thesis"
 int melody[] = {
-  NOTE_C4, NOTE_C4, NOTE_G4, NOTE_G4, NOTE_A4, NOTE_A4, NOTE_G4,
-  NOTE_F4, NOTE_F4, NOTE_E4, NOTE_E4, NOTE_D4, NOTE_D4, NOTE_C4,
-  NOTE_G4, NOTE_G4, NOTE_F4, NOTE_F4, NOTE_E4, NOTE_E4, NOTE_D4,
-  NOTE_G4, NOTE_G4, NOTE_F4, NOTE_F4, NOTE_E4, NOTE_E4, NOTE_D4,
-  NOTE_C4, NOTE_C4, NOTE_G4, NOTE_G4, NOTE_A4, NOTE_A4, NOTE_G4,
-  NOTE_F4, NOTE_F4, NOTE_E4, NOTE_E4, NOTE_D4, NOTE_D4, NOTE_C4
+  NOTE_C5, NOTE_DS5, NOTE_F5, NOTE_DS5, NOTE_F5, NOTE_F5, NOTE_F5,
+  NOTE_AS5, NOTE_GS5, NOTE_G5, NOTE_F5, NOTE_G5, REST, NOTE_G5, NOTE_AS5,
+  NOTE_C6, NOTE_F5, NOTE_DS5, NOTE_AS5, NOTE_AS5, NOTE_G5, NOTE_AS5,
+  NOTE_AS5, NOTE_C6, 
 };
 
 // Durations: 4 = quarter note, 8 = eighth note, etc.
 int noteDurations[] = {
-  4, 4, 4, 4, 4, 4, 2,
-  4, 4, 4, 4, 4, 4, 2,
-  4, 4, 4, 4, 4, 4, 2,
-  4, 4, 4, 4, 4, 4, 2,
-  4, 4, 4, 4, 4, 4, 2,
-  4, 4, 4, 4, 4, 4, 2
+  2, 2, 2, 2, 4, 4, 4,
+  4, 4, 8, 4, 2, 4, 2, 2,
+  2, 2, 4, 4, 4, 4, 4,
+  2, 2,
 };
 
-void playTwinkle() {
+void playEvangelionTheme() {
   for (int i = 0; i < sizeof(melody) / sizeof(melody[0]); i++) {
     int duration = 1000 / noteDurations[i];
     tone(buzzer, melody[i], duration);
@@ -44,9 +40,9 @@ void callback(char* topic, byte* payload, unsigned int length) {
   }
   Serial.println();
 
-  if ((char)payload[0] == '1') {
-    Serial.println("Playing Twinkle Twinkle");
-    playTwinkle();
+  if ((char)payload[0] == '2') {
+    Serial.println("Playing EvangelionTheme");
+    playEvangelionTheme();
   } else {
     Serial.println("LED OFF");
     digitalWrite(LED_BUILTIN, LOW);
