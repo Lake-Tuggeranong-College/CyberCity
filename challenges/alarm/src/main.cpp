@@ -3,8 +3,33 @@
 #include <WiFi.h>
 #include <PubSubClient.h>
 #include "sensitiveInformation.h" //ENSURE WIFI & MQTT IS CONFIGURED CORRECTLY
+#include "pitches.h"
 
 const int buzzer = 14;
+// Notes for "A Cruel Angel's Thesis"
+int melody[] = {
+  NOTE_C5, NOTE_DS5, NOTE_F5, NOTE_DS5, NOTE_F5, NOTE_F5, NOTE_F5,
+  NOTE_AS5, NOTE_GS5, NOTE_G5, NOTE_F5, NOTE_G5, REST, NOTE_G5, NOTE_AS5,
+  NOTE_C6, NOTE_F5, NOTE_DS5, NOTE_AS5, NOTE_AS5, NOTE_G5, NOTE_AS5,
+  NOTE_AS5, NOTE_C6, 
+};
+
+// Durations: 4 = quarter note, 8 = eighth note, etc.
+int noteDurations[] = {
+  2, 2, 2, 2, 4, 4, 4,
+  4, 4, 8, 4, 2, 4, 2, 2,
+  2, 2, 4, 4, 4, 4, 4,
+  2, 2,
+};
+
+void playEvangelionTheme() {
+  for (int i = 0; i < sizeof(melody) / sizeof(melody[0]); i++) {
+    int duration = 1000 / noteDurations[i];
+    tone(buzzer, melody[i], duration);
+    delay(duration * 1.3); // pause between notes
+    noTone(buzzer);
+  }
+}
 
 void callback(char* topic, byte* payload, unsigned int length) {
   Serial.print("Message arrived [");
@@ -15,28 +40,14 @@ void callback(char* topic, byte* payload, unsigned int length) {
   }
   Serial.println();
 
-  // Example: turn on/off an LED based on the message received (this is specialised, if you dont need it dont use it.)
-  //
-  if ((char)payload[0] == '1') {
-    Serial.println("LED ON");
-    digitalWrite(LED_BUILTIN, HIGH);
-    tone(buzzer, 1000);
+  if ((char)payload[0] == '2') {
+    Serial.println("Playing EvangelionTheme");
+    playEvangelionTheme();
   } else {
     Serial.println("LED OFF");
     digitalWrite(LED_BUILTIN, LOW);
     tone(buzzer, 0);
   }
-
-  // Example: turn on/off an LED based on ANY message received (this is how this is intended to work, activating when this ESP32's respective
-  // challenge is completed)
-  //
-  // if ((char)payload[0]) {
-  //   Serial.println("LED ON");
-  //   digitalWrite(redLEDPin, HIGH);
-  //   delay(250);
-  //   Serial.println("LED OFF");
-  //   digitalWrite(redLEDPin, LOW);
-  // }
 }
 
 
@@ -66,15 +77,8 @@ void connectMqtt() {
 }
 
 void setup() {
-  /*
-    STEP 3. CONTINUED.
-    DECLARE YOUR pinMode()'s below, e.g:
-  
-    pinMode(redLEDPin, OUTPUT);
-  */
   pinMode(LED_BUILTIN, OUTPUT); // Built in LED
   pinMode(buzzer, OUTPUT); // Set buzzer - pin 9 as an output
-
 
   Serial.begin(9600);
   while (!Serial) {

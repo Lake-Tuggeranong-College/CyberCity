@@ -14,7 +14,7 @@ if (!authorisedAccess(true, true, true)) {
 }
 
 // TODO: create a new value in the database that store user's avatar
-$query = "SELECT ID, Username, Score FROM Users WHERE AccessLevel=1 AND Enabled=1 ORDER BY Score DESC";
+$query = "SELECT ID, Username, Score FROM Users WHERE Enabled=1 ORDER BY Score DESC";
 $stmt = $conn->prepare($query);
 $stmt->execute();
 $userScore = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -41,7 +41,7 @@ $userScore = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <div class="leaderboard-list">
         <?php
             // Max 10 users can be display on the leaderboard. 3 have been displayed in the above code so this one will display the rest 7
-            $userRankingScore = array_slice($userScore, 3, 10);
+            $userRankingScore = array_slice($userScore, 3, 7);
         ?>
 
         <!-- Dynamic display the rest 7 on leaderboard -->

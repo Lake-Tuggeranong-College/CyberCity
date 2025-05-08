@@ -30,7 +30,7 @@ if (!authorisedAccess(false, true, true)) {
         $challengeID = $challengeData['ID'];
         $challengeTitle = $challengeData['challengeTitle'];
         $pointsValue = $challengeData['pointsValue'];
-        $moduleID = $challengeData['moduleName'];
+        $moduleName = $challengeData['moduleName'];
         $container_required = $challengeData['container'];
         $completionStatus = false; //TODO: Check Userchallenges to see if the user has already completed the challenge.
 //    $projectID = $_GET["projectID"];
