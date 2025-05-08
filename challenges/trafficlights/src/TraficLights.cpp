@@ -133,18 +133,16 @@ void mqttConnect() {
     Serial.println("Connecting to MQTT...");
     if (client.connect(mqttClient)) {
       Serial.println("Connected to MQTT");
-      client.subscribe(mqttTopic);  // Subscribe to the control topic
+      client.subscribe("Challenges/TrafficLights");  // Subscribe to the control topic
       Serial.println("Connected to topic");
     } else {
       Serial.print("Failed with state ");
       Serial.print(client.state());
-      delay(2000);
+      delay(5000);
     }
   }
 
 }
-
-
 
 void setup()
 {
@@ -216,17 +214,14 @@ void mqttLoop() {
    if (!client.connected()) {
       mqttConnect();
     }
-  client.loop();  // Check for incoming messages and keep the connection alive
+  client.loop(); // Check for incoming messages and keep the connection alive
 }
 
 void chaosControl() {
-
-    if (message == "normal") {
+    if (message == "2") {
       lightsNormal();  // Call the normal traffic light pattern
-    } else if (message == "chaos") {
+    } else if (message == "1") {
       lightsChaos();   // Call the chaotic traffic light pattern
-    } else {
-      Serial.println("Invalid command received for lights control.");
     }
   // }
 }
