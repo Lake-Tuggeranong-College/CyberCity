@@ -72,7 +72,7 @@ void setup() {
 
     if (client.connect(mqttClient)) {
       Serial.println("Connected to MQTT");
-      client.subscribe("Challenges/Two");  // Subscribe to the control topic
+      client.subscribe("Challenges/GarageDoor");  // Subscribe to the control topic
       Serial.println("Connected to topic");
     } else {
       Serial.print("Failed with state ");
@@ -123,7 +123,7 @@ void loop() {
 
       if (client.connect("ESP32_Client")) {
         Serial.println("Reconnected to MQTT");
-        client.subscribe("Challenges/Two");
+        client.subscribe("Challenges/GarageDoor");
         Serial.println("Connected to topic");
       } else {
         Serial.print("Failed to reconnect, state ");

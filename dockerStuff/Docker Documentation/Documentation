@@ -1,0 +1,42 @@
+🐳 Docker & Docker Compose Setup Documentation
+
+📁 Step 1: Project Setup
+Create a new folder for your docker container:
+
+Create the following files inside that folder
+Dockerfile
+docker-compose.yml
+flag.txt (with your custom flag or secret if needed)
+
+📝 Step 2: Creating the Dockerfile:
+edit the file named Dockerfile and copy the code for a template:
+FROM ubuntu:latest
+
+RUN apt-get update && apt-get install -y openssh-server
+
+RUN mkdir /var/run/sshd
+
+RUN useradd -m -s /bin/bash {InsertUser} && echo 'User:Password' | chpasswd
+
+RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
+
+RUN sed -i 's/PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config
+
+EXPOSE 22
+
+CMD ["/usr/sbin/sshd", "-D"]
+
+remove {InsertUser} and put in custom user
+
+🧾 Step 3: Creating the docker-compose.yml File
+version: '3'
+services:
+  Test-server:
+    build: .
+    ports:
+      - "${PORT}:22" # OUTSIDE:INSIDE
+    container_name: Test_container
+    restart: unless-stopped
+
+🧃 Step 4: Creating the flag.txt File (if necessary)
+CTF{you_found_the_flag}
