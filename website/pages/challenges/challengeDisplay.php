@@ -76,7 +76,8 @@ function checkFlag()
                 if ($challengeID == 19) {
                     $sql = "UPDATE Challenges SET moduleValue = 'On' WHERE ID='$challengeID'";
                 } else {
-                    $sql = "UPDATE Challenges SET CurrentOutput = Challenges.moduleValue + '1' WHERE ID='$challengeID'";
+                    $sql = "UPDATE Challenges SET moduleValue = moduleValue + 1 WHERE ID='$challengeID'";
+
                 }
                 $stmt = $conn->prepare($sql);
                 $stmt->execute();
