@@ -9,22 +9,22 @@ const int buzzer = 14;
 // Notes for "Hot Milk"
 int melody[] = {
   NOTE_G6, NOTE_FS6, NOTE_D6, NOTE_B5, NOTE_A5, REST, NOTE_G5, NOTE_A5,
-  NOTE_G6, NOTE_FS6, NOTE_A5, NOTE_D6, NOTE_DS6, NOTE_D6, NOTE_A5
+  NOTE_G6, NOTE_FS6, NOTE_D6, NOTE_A5, NOTE_B5
 };
 
 // Durations: 4 = quarter note, 8 = eighth note, etc.
 int noteDurations[] = {
   3, 3, 3, 3, 
-  3, 1, 3, 5,
-  3, 2, 8, 3,
-  8, 5, 6
+  3, 1, 5, 6,
+  5, 5, 5, 6, 
+  3,
 };
 
-void playEvangelionTheme() {
+void playHotMilk() {
   for (int i = 0; i < sizeof(melody) / sizeof(melody[0]); i++) {
     int duration = 1000 / noteDurations[i];
     tone(buzzer, melody[i], duration * 0.9);
-    delay(duration * 1.3); // pause between notes
+    delay(duration * 1.2); // pause between notes
     noTone(buzzer);
   }
   delay(1500);
@@ -40,8 +40,8 @@ void callback(char* topic, byte* payload, unsigned int length) {
   Serial.println();
 
   if ((char)payload[0] == '2') {
-    Serial.println("Playing EvangelionTheme");
-    playEvangelionTheme();
+    Serial.println("Playing Hot Milk");
+    playHotMilk();
   } else {
     Serial.println("LED OFF");
     digitalWrite(LED_BUILTIN, LOW);
