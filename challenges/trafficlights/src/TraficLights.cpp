@@ -25,6 +25,7 @@ int tl2Yellow = 22; // Fix
 #include "sensitiveInformation.h"
 
 CyberCitySharedFunctionality cyberCity;
+String message = "chaos";
 
 void lightsNormal()
 {
@@ -92,25 +93,20 @@ void lightsChaos()
 
 
 
-int command = 0;  // new global variable to store raw data command
+void callback(char* topic, byte* payload, unsigned int length) 
+{
+  // Convert the incoming byte array to a string
+  message = "";
+  for (int i = 0; i < length; i++) {
+    message += (char)payload[i];
+  }
 
-void callback(char* topic, byte* payload, unsigned int length) {
+  // Debugging: print the topic and message
   Serial.print("Message arrived [");
   Serial.print(topic);
   Serial.print("] ");
-  for (int i = 0; i < length; i++) {
-    Serial.print((char)payload[i]);
-  }
-  Serial.println();
+  Serial.println(message);
 
-  if ((char)payload[0] == '2') {
-    Serial.println("Chaos!!!!!!!!!");
-    lightsChaos();
-  } else {
-    Serial.println("You Fixed It");
-    digitalWrite(LED_BUILTIN, LOW);
-    lightsNormal();
-  }
 }
 
 
@@ -137,8 +133,8 @@ void mqttConnect() {
     Serial.println("Connecting to MQTT...");
     if (client.connect(mqttClient)) {
       Serial.println("Connected to MQTT");
-      client.subscribe(mqttTopic);  // Subscribe to the control topic
-      Serial.println("Connected to topic");  
+      client.subscribe("Challenges/TrafficLights");  // Subscribe to the control topic
+      Serial.println("Connected to topic");
     } else {
       Serial.print("Failed with state ");
       Serial.print(client.state());
@@ -147,8 +143,6 @@ void mqttConnect() {
   }
 
 }
-
-
 
 void setup()
 {
@@ -220,7 +214,16 @@ void mqttLoop() {
    if (!client.connected()) {
       mqttConnect();
     }
-  client.loop();  // Check for incoming messages and keep the connection alive
+  client.loop(); // Check for incoming messages and keep the connection alive
+}
+
+void chaosControl() {
+    if (message == "2") {
+      lightsNormal();  // Call the normal traffic light pattern
+    } else if (message == "1") {
+      lightsChaos();   // Call the chaotic traffic light pattern
+    }
+  // }
 }
 
 void loop()
@@ -229,5 +232,7 @@ void loop()
   // put your main code here, to run repeatedly:
   // int sensorData = red, green, yellow;
   sonarSensorData(); // this function runs both sonarSensorData and Lights on and Off
+  chaosControl();
+
   mqttLoop();
 }
