@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 
 
 <head>
@@ -54,36 +54,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
                         <a href="<?= BASE_URL; ?>index.php" class="nav-link text-black"
-                           style="padding-left: 2rem;">Home</a></li>
-                    <li class="nav-item">
-                        <a href="<?= BASE_URL; ?>pages/leaderboard/leaderboard.php" class="nav-link text-black">Leaderboard</a>
+                           style="padding-left: 2rem;">Home</a>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link text-black dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                           aria-expanded="false">
-                            project dropdown
-                        </a>
-                        <ul class="dropdown-menu">
-                            <a class="dropdown-item"
-                                   href="<?= BASE_URL; ?>pages/challenges/challengesList.php?projectID=1">2025
-                                    Project</a></li>
-                            <li><a class="dropdown-item"
-                                   href="<?= BASE_URL; ?>pages/challenges/challengesList.php?projectID=2">2026
-                                    Project</a>
-                            </li>
-                            </li><hr class="dropdown-divider">
-                            </li>
-                                <a href="http://10.177.200.71/CyberCityDocs/welcome.html" class="nav-link text-black"
-                                   target="_blank">Tutorials</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a href="https://forms.gle/jgYrmMZesgtVhBZ39" class="nav-link text-black"
-                           target="_blank">Feedback</a>
-                    </li>
-                    <!--defining whether User is Admin or not-->
-                <?php if (isset($_SESSION['username']) && $_SESSION['access_level'] == ADMIN_ACCESS_LEVEL): ?>
+                    <?php if (isset($_SESSION['username']) && $_SESSION['access_level'] == ADMIN_ACCESS_LEVEL): ?>
                     <?php
                     // Fetch user information from the database
                     $userToLoad = $_SESSION['user_id'];
@@ -94,8 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                     $userScore = $userInformation['Score'];
                     ?>
-
-                    <!--Admin panel section of navbar with links to admin settings for website-->
+                        <!--Admin panel section of navbar with links to admin settings for website-->
                         <li class="nav-item dropdown">
                             <a class="nav-link text-black dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Admin Panel
@@ -119,15 +91,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         Contact Requests</a>
                                 </li>
                                 <li><hr class="dropdown-divider"></li>
-                                </li>
+                                <li>
                                     <a href="<?= BASE_URL; ?>pages/admin/challengeRegister.php" class="dropdown-item">Add
                                         New Modules & Challenges</a>
                                 <li>
                                     <a href="<?= BASE_URL; ?>pages/admin/resetGame.php" class="dropdown-item">Reset
                                         Game</a>
-                                </li>   
-                                <li><hr class="dropdown-divider"></li>
                                 </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
                                     <a href="<?= BASE_URL; ?>pages/admin/contactpage.php" class="dropdown-item">View
                                         Contact
                                         Requests</a>
@@ -136,10 +108,75 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                        class="dropdown-item">Read
                                         Contact Requests</a>
                                 </li>
+
                             </ul>
-                        </li>
+                    <li class="nav-item">
+                        <a href="<?= BASE_URL; ?>pages/leaderboard/leaderboard.php" class="nav-link text-black">Leaderboard</a>
                     </li>
-                <!-- End of Navigation Bar (left side) -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link text-black dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                           aria-expanded="false">
+                            project dropdown
+                        </a>
+                        <ul class="dropdown-menu">
+                            <a class="dropdown-item"
+                               href="<?= BASE_URL; ?>pages/challenges/challengesList.php?projectID=1">2025
+                                Project</a>
+                            <li><a class="dropdown-item"
+                                   href="<?= BASE_URL; ?>pages/challenges/challengesList.php?projectID=2">2026
+                                    Project</a>
+                            </li>
+                    </li><hr class="dropdown-divider">
+                    <li>
+                        <a href="http://10.177.200.71/CyberCityDocs/welcome.html" class="nav-link text-black"
+                           target="_blank">Tutorials</a>
+                    </li>
+                </ul>
+                </li>
+
+                <?php elseif (isset($_SESSION['username']) && $_SESSION['access_level'] == USER_ACCESS_LEVEL): ?>
+                    <?php
+                    // Fetch user information from the database
+                    $userToLoad = $_SESSION['user_id'];
+                    $query = "SELECT Score FROM Users WHERE ID = ?";
+                    $stmt = $conn->prepare($query);
+                    $stmt->execute([$userToLoad]);
+                    $userInformation = $stmt->fetch();
+
+                    $userScore = $userInformation['Score'];
+                    ?>
+                     <li class="nav-item">
+                         <a href="<?= BASE_URL; ?>pages/leaderboard/leaderboard.php" class="nav-link text-black">Leaderboard</a>
+                     </li>
+                     <li class="nav-item dropdown">
+                         <a class="nav-link text-black dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                             project dropdown
+                         </a>
+                         <ul class="dropdown-menu">
+                             <a class="dropdown-item"
+                                href="<?= BASE_URL; ?>pages/challenges/challengesList.php?projectID=1">2025
+                                 Project</a>
+                             <li><a class="dropdown-item"
+                                    href="<?= BASE_URL; ?>pages/challenges/challengesList.php?projectID=2">2026
+                                     Project</a>
+                             </li>
+                             </li><hr class="dropdown-divider">
+                             <li>
+                                 <a href="http://10.177.200.71/CyberCityDocs/welcome.html" class="nav-link text-black"
+                                    target="_blank">Tutorials</a>
+                             </li>
+                <li class="nav-item">
+                    <a href="<?= BASE_URL; ?>index.php" class="nav-link text-black"
+                       style="padding-left: 2rem;">rifle</a>
+                </li>
+                         </ul>
+                     </li>
+                </ul>
+            </div>
+
+
+                    <!-- End of Navigation Bar (left side) -->
 
                 <?php endif; ?>
 
