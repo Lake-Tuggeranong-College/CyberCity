@@ -166,10 +166,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                  <a href="http://10.177.200.71/CyberCityDocs/welcome.html" class="nav-link text-black"
                                     target="_blank">Tutorials</a>
                              </li>
-                <li class="nav-item">
-                    <a href="<?= BASE_URL; ?>index.php" class="nav-link text-black"
-                       style="padding-left: 2rem;">rifle</a>
-                </li>
                          </ul>
                      </li>
                 </ul>
