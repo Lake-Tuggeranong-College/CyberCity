@@ -113,6 +113,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <li class="nav-item">
                         <a href="<?= BASE_URL; ?>pages/leaderboard/leaderboard.php" class="nav-link text-black">Leaderboard</a>
                     </li>
+                    <li class="nav-item">
+                        <a href="https://forms.gle/jgYrmMZesgtVhBZ39" class="nav-link text-black"
+                           target="_blank">Feedback</a>
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link text-black dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                            aria-expanded="false">
@@ -126,11 +130,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                    href="<?= BASE_URL; ?>pages/challenges/challengesList.php?projectID=2">2026
                                     Project</a>
                             </li>
-                    </li><hr class="dropdown-divider">
-                    <li>
-                        <a href="http://10.177.200.71/CyberCityDocs/welcome.html" class="nav-link text-black"
-                           target="_blank">Tutorials</a>
-                    </li>
+                        </li><hr class="dropdown-divider">
+                        <li>
+                            <a href="http://10.177.200.71/CyberCityDocs/welcome.html" class="nav-link text-black"
+                            target="_blank">Tutorials</a>
+                        </li>
                 </ul>
                 </li>
 
@@ -147,6 +151,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     ?>
                      <li class="nav-item">
                          <a href="<?= BASE_URL; ?>pages/leaderboard/leaderboard.php" class="nav-link text-black">Leaderboard</a>
+                     </li>
+                     <li class="nav-item">
+                         <a href="https://forms.gle/jgYrmMZesgtVhBZ39" class="nav-link text-black"
+                         target="_blank">Feedback</a>
                      </li>
                      <li class="nav-item dropdown">
                          <a class="nav-link text-black dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
