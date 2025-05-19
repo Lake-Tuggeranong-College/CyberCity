@@ -25,7 +25,6 @@ int tl2Yellow = 22; // Fix
 #include "sensitiveInformation.h"
 
 CyberCitySharedFunctionality cyberCity;
-String message = "chaos";
 
 void lightsNormal()
 {
@@ -93,20 +92,25 @@ void lightsChaos()
 
 
 
-void callback(char* topic, byte* payload, unsigned int length) 
-{
-  // Convert the incoming byte array to a string
-  message = "";
-  for (int i = 0; i < length; i++) {
-    message += (char)payload[i];
-  }
+int command = 0;  // new global variable to store raw data command
 
-  // Debugging: print the topic and message
+void callback(char* topic, byte* payload, unsigned int length) {
   Serial.print("Message arrived [");
   Serial.print(topic);
   Serial.print("] ");
-  Serial.println(message);
+  for (int i = 0; i < length; i++) {
+    Serial.print((char)payload[i]);
+  }
+  Serial.println();
 
+  if ((char)payload[0] == '2') {
+    Serial.println("Chaos!!!!!!!!!");
+    lightsChaos();
+  } else {
+    Serial.println("You Fixed It");
+    digitalWrite(LED_BUILTIN, LOW);
+    lightsNormal();
+  }
 }
 
 
@@ -134,11 +138,11 @@ void mqttConnect() {
     if (client.connect(mqttClient)) {
       Serial.println("Connected to MQTT");
       client.subscribe(mqttTopic);  // Subscribe to the control topic
-      Serial.println("Connected to topic");
+      Serial.println("Connected to topic");  
     } else {
       Serial.print("Failed with state ");
       Serial.print(client.state());
-      delay(2000);
+      delay(5000);
     }
   }
 
@@ -219,25 +223,11 @@ void mqttLoop() {
   client.loop();  // Check for incoming messages and keep the connection alive
 }
 
-void chaosControl() {
-
-    if (message == "normal") {
-      lightsNormal();  // Call the normal traffic light pattern
-    } else if (message == "chaos") {
-      lightsChaos();   // Call the chaotic traffic light pattern
-    } else {
-      Serial.println("Invalid command received for lights control.");
-    }
-  // }
-}
-
 void loop()
 {
 
   // put your main code here, to run repeatedly:
   // int sensorData = red, green, yellow;
   sonarSensorData(); // this function runs both sonarSensorData and Lights on and Off
-  chaosControl();
-
   mqttLoop();
 }

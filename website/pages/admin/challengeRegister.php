@@ -90,10 +90,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" ) {
 
                     // Insert into ProjectChallenges table
                     $projectID = 2; // Assuming project_id is 2
-                    $insertProjectChallengeSql = "INSERT INTO ProjectChallenges (challenge_id, project_id) VALUES (:challenge_id, :project_id)";
+                    $insertProjectChallengeSql = "INSERT INTO Challenges (dChallengeID, projectID) VALUES (:dChallengeID, :projectID)";
                     $stmtProjectChallenge = $conn->prepare($insertProjectChallengeSql);
-                    $stmtProjectChallenge->bindParam(':challenge_id', $challengeID, PDO::PARAM_INT);
-                    $stmtProjectChallenge->bindParam(':project_id', $projectID, PDO::PARAM_INT);
+                    $stmtProjectChallenge->bindParam(':dChallengeID', $challengeID, PDO::PARAM_INT);
+                    $stmtProjectChallenge->bindParam(':projectID', $projectID, PDO::PARAM_INT);
 
                     if ($stmtProjectChallenge->execute()) {
                         echo "<div class='alert alert-success'>Challenge registered and linked to project successfully.</div>";
