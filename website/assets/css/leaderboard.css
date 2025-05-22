@@ -3,8 +3,6 @@
     margin-left: 3rem;
     margin-right: 3rem;
     z-index: 10;
-    /*background-color: #212529;*/
-    background: linear-gradient(rgba(122, 80, 8, 0) 30%, #d59725), 90 ;
 }
 
 .top-three-ranking .leaderboard-item {
@@ -18,7 +16,7 @@
     transform-origin: bottom;
     cursor: pointer;
     transition: transform 200ms ease-in-out;
-    /*box-shadow: 0 0 4rem 0 rgba(0, 0, 0, 0.1), 0 1rem 2rem -1rem rgba(0, 0, 0, 0.3); */
+    box-shadow: 0 0 4rem 0 rgba(0, 0, 0, 0.1), 0 1rem 2rem 0rem rgba(0, 0, 0, 0.4);
 }
 
 .top-three-ranking .leaderboard-item .user-profile {
@@ -46,6 +44,7 @@
 margin-top: 2rem;
     font-size: 1.1rem;
     margin-bottom: 0.5rem;
+    color: rgb(255, 255, 255)
 }
 
 .top-three-ranking .leaderboard-item .user-score {
@@ -115,15 +114,14 @@ margin-top: 2rem;
     align-items: center;
     height: 4rem;
     border-radius: 4rem;
-    margin-right: 50px;
     margin-bottom: 2rem;
-    margin-left: 30%;
-    margin-right: 30%;
-    background-color: #343a40;
+    margin-left: 25%;
+    margin-right: 25%;
+    background-color: rgb(40, 40, 50);
     transform-origin: left;
     cursor: pointer;
     transition: transform 200ms ease-in-out;
-    box-shadow: 0 0 4rem 0 rgba(0, 0, 0, 0.1), 0 1rem 2rem -1rem rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0 4rem 0 rgba(0, 0, 0, 0.1), 0 1rem 2rem 0rem rgba(0, 0, 0, 0.6);
 }
 
 .leaderboard-list .leaderboard-item .user-position {
@@ -152,6 +150,7 @@ margin-top: 2rem;
     flex-grow: 2;
     flex-basis: 10rem;
     font-size: 1.1rem;
+    color: rgb(255, 255, 255)
 }
 
 .leaderboard-list .leaderboard-item .user-score {
@@ -173,5 +172,4 @@ margin-top: 2rem;
 }
 
 .leaderboard-list .leaderboard-item:hover .user-position {
-    background: rgb(255, 255, 255);
 }
