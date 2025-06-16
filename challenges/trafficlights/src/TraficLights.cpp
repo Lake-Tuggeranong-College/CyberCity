@@ -138,7 +138,7 @@ void mqttConnect() {
     } else {
       Serial.print("Failed with state ");
       Serial.print(client.state());
-      delay(5000);
+      delay(1000);
     }
   }
 
@@ -217,6 +217,7 @@ void mqttLoop() {
   client.loop(); // Check for incoming messages and keep the connection alive
 }
 
+
 void chaosControl() {
     if (message == "2") {
       lightsNormal();  // Call the normal traffic light pattern
@@ -225,6 +226,15 @@ void chaosControl() {
     }
   // }
 }
+
+
+/*void chaosControl() {
+    delay();
+      lightsNormal();  // Call the normal traffic light pattern
+    delay(500);
+      lightsChaos();   // Call the chaotic traffic light pattern
+    }
+*/
 
 void loop()
 {
