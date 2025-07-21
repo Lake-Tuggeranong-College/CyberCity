@@ -3,31 +3,53 @@
 #include <WiFi.h>
 #include <PubSubClient.h>
 #include "sensitiveInformation.h" //ENSURE WIFI & MQTT IS CONFIGURED CORRECTLY
-#include "pitches.h"1
+#include "pitches.h"
 
 const int buzzer = 14;
-// Notes for "Hot Milk"
+// Notes for "Bad Apple"
 int melody[] = {
-  NOTE_G6, NOTE_FS6, NOTE_D6, NOTE_B5, NOTE_A5, REST, NOTE_G5, NOTE_A5,
-  NOTE_G6, NOTE_FS6, NOTE_D6, NOTE_A5, NOTE_B5
+  NOTE_DS5, NOTE_F5, NOTE_FS5, NOTE_GS5, NOTE_AS5, NOTE_DS6, NOTE_CS6,
+  NOTE_AS5, NOTE_DS5, NOTE_AS5, NOTE_GS5, NOTE_FS5, NOTE_F5, NOTE_DS5, NOTE_F5,
+  NOTE_FS5, NOTE_GS5, NOTE_AS5, NOTE_GS5, NOTE_FS5, NOTE_F5, NOTE_DS5,
+  NOTE_F5, NOTE_FS5, NOTE_F5, NOTE_DS5, NOTE_D5, NOTE_F5, NOTE_DS5, NOTE_F5,
+  NOTE_FS5, NOTE_GS5, NOTE_AS5, NOTE_DS6, NOTE_CS6, NOTE_AS5,
+  NOTE_DS5, NOTE_AS5, NOTE_GS5, NOTE_FS5, NOTE_F5, NOTE_DS5, NOTE_F5, NOTE_FS5,
+  NOTE_GS5, NOTE_AS5, NOTE_GS5, NOTE_FS5, NOTE_F5, NOTE_FS5, NOTE_GS5, NOTE_AS5, 
+  NOTE_CS6, NOTE_DS6, NOTE_AS5, NOTE_GS5, NOTE_AS5, NOTE_GS5, NOTE_AS5,
+  NOTE_CS6, NOTE_DS6, NOTE_AS5, NOTE_GS5, NOTE_AS5, NOTE_GS5, NOTE_AS5, NOTE_GS5, NOTE_FS5,
+  NOTE_F5, NOTE_CS5, NOTE_DS5, NOTE_CS5, NOTE_DS5, NOTE_F5, NOTE_FS5, NOTE_GS5,
+  NOTE_AS5, NOTE_DS5,
+  NOTE_AS5, NOTE_CS6, NOTE_DS6, NOTE_AS5, NOTE_GS5, NOTE_AS5, NOTE_GS5, NOTE_AS5,
+  NOTE_CS6, NOTE_DS6, NOTE_AS5, NOTE_GS5, NOTE_AS5, NOTE_DS6, NOTE_F6, NOTE_FS6, NOTE_F6, NOTE_DS6,
+  NOTE_CS6, NOTE_AS5, NOTE_GS5, NOTE_AS5, NOTE_GS5, NOTE_FS5, NOTE_F5, NOTE_CS5, NOTE_DS5,
 };
 
 // Durations: 4 = quarter note, 8 = eighth note, etc.
 int noteDurations[] = {
-  3, 3, 3, 3, 
-  3, 1, 5, 6,
-  5, 5, 4, 6, 
-  3,
+  4, 4, 4, 4, 2, 4, 4,
+  2, 2, 4, 4, 4, 4, 4, 4,
+  4, 4, 2, 4, 4, 4, 4,
+  4, 4, 4, 4, 4, 4, 4, 4,
+  4, 4, 2, 4, 4, 2,
+  2, 4, 4, 4, 4, 4, 4, 4,
+  4, 2, 4, 4, 2, 2, 2, 2,
+  4, 4, 4, 4, 2, 4, 4,
+  4, 4, 4, 4, 2, 4, 4, 4, 4,
+  4, 4, 2, 4, 4, 4, 4, 4,
+  4, 2,
+  4, 4, 4, 4, 4, 2, 4, 4,
+  4, 4, 4, 4, 2, 4, 4, 4, 4, 4,
+  4, 2, 4, 4, 4, 4, 4, 4, 4,
+
 };
 
-void playHotMilk() {
+void playBadApple() {
   for (int i = 0; i < sizeof(melody) / sizeof(melody[0]); i++) {
     int duration = 1000 / noteDurations[i];
-    tone(buzzer, melody[i], duration * 0.9);
-    delay(duration * 1.2); // pause between notes
+    tone(buzzer, melody[i], duration);
+    delay(duration * 1.3); // pause between notes
     noTone(buzzer);
   }
-  delay(1500);
 }
 
 void callback(char* topic, byte* payload, unsigned int length) {
@@ -39,9 +61,12 @@ void callback(char* topic, byte* payload, unsigned int length) {
   }
   Serial.println();
 
+  delay(500);
+  playBadApple();
+
   if ((char)payload[0] == '2') {
-    Serial.println("Playing Hot Milk");
-    playHotMilk();
+    Serial.println("Playing BadApple");
+    playBadApple();
   } else {
     Serial.println("LED OFF");
     digitalWrite(LED_BUILTIN, LOW);
@@ -65,7 +90,7 @@ void connectMqtt() {
     Serial.println("Connecting to MQTT...");
     if (client.connect(mqttClient)) {
       Serial.println("Connected to MQTT");
-      client.subscribe("Challenges/module6");  // Subscribe to the control topic
+      client.subscribe(mqttTopic);  // Subscribe to the control topic
       Serial.println("Connected to topic");
     } else {
       Serial.print("Failed with state ");
@@ -99,7 +124,7 @@ void setup() {
   // Setting up MQTT
   client.setServer(mqttServer, mqttPort);
   client.setCallback(callback);  // Set the callback function to handle incoming messages
-  client.subscribe("Challenges/module6");
+  client.subscribe(mqttTopic);
   connectMqtt();
 }
 

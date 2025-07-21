@@ -3,7 +3,7 @@
     const BASE_URL = '/CyberCity/website/';
 
     // Had to be done because PHPStorm wouldn't play ball
-    $serverHost = "10.177.206.156";
+    $serverHost = "10.177.203.92";
     $dbUsr = "CyberCity";
     $dbPwd = "CyberCity";
     $dbName = "CyberCity";
