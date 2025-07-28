@@ -10,5 +10,5 @@
 
 .cell {
     display: table-cell;
-    outline: 1px solid black;
+    outline: 1px solid #000000;
 }
