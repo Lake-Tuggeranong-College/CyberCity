@@ -1,35 +1,8 @@
-<?php include "includes/template.php"; /** @var $conn */ ?>
+<?php include "includes/template.php";
+/** @var $conn */
+?>
 
 <title>Cyber City</title>
-
-<script>
-    // Check localStorage for theme preference
-    window.onload = () => {
-        const savedTheme = localStorage.getItem('theme');
-        const body = document.body;
-
-        if (savedTheme) {
-            // Apply the saved theme on page load
-            body.className = savedTheme;
-
-            // Check if dark mode is active and update the "wideBox" class accordingly
-            if (savedTheme.includes('bg-dark')) {
-                // If dark mode is active, replace wideBox with wideBoxDark
-                const wideBoxes = document.querySelectorAll('.wideBox');
-                wideBoxes.forEach(box => {
-                    box.classList.replace('wideBox', 'wideBoxDark');
-
-            else {
-                const wideBoxes = document.querySelectorAll('.wideBoxDark');
-                wideBoxes.forEach(box => {
-                    box.classList.replace('wideBoxDark', 'wideBox');
-                });
-            }
-        }
-    }
-
-
-</script>
 
 <div class="wideBox">
     <div class="title">
@@ -37,26 +10,35 @@
 
         <?php
         if (isset($_SESSION["username"])) {
-            echo "<h2 class=''>You're logged in, you may now contribute to the cause</h2>";
+            echo "<h3>You're logged in, you may now contribute to the cause</h3>";
         } else {
-            echo "<h2 class=''> Please log in or register to gain access to the cause</h2>";
+            echo "<h3>Please log in or register to gain access to the cause</h3>";
         }
         ?>
     </div>
 </div>
 
-<div class="wideBox">
+<div class="wideBox subBox-container">
     <div class="subBoxWhite">
         <div class="title">
             <h2>Beginnings</h2>
-            <p>In 1850 a rural town was created, referred to as Latafa...</p>
+            <p>
+                In 1850 a rural town was created, referred to as Latafa. This town was a logging town bringing in great riches
+                for those who controlled it. During its earlier years, the town was a hot spot for illegal testing as it was
+                far from any other towns. During the Red Tuesday bushfires in 1898, the town was consumed by a blazing inferno.
+                Later rebuilt, it became isolated and was erased from modern maps. Its location remains unknown and lost to time.
+            </p>
         </div>
     </div>
 
     <div class="subBoxWhite">
         <div class="title">
             <h2>Currently</h2>
-            <p>Oak-Crack is the remains of the town...</p>
+            <p>
+                Oak-Crack is the remains of the town, the forest creating a natural barrier for which the TBW can hide.
+                We at the LTC have found that the TBW is currently cultivating a super-virus in a French Bio-Lab
+                by the name of Lab 404 deep underground.
+            </p>
         </div>
     </div>
 </div>
