@@ -6,12 +6,11 @@ if (!authorisedAccess(false, false, true)) {
 }
 ?>
 <h2 class="mt-5">Register New Challenge</h2>
-<h2 class="mt-4">Register deez nutz</h2>
 <?php
 
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" ) {
-   
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
 
     // Check if the image file is set and handle the upload
     if (isset($_FILES["image"]) && $_FILES["image"]["error"] == 0) {
@@ -90,10 +89,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" ) {
 
                     // Insert into ProjectChallenges table
                     $projectID = 2; // Assuming project_id is 2
-                    $insertProjectChallengeSql = "INSERT INTO Challenges (dChallengeID, projectID) VALUES (:dChallengeID, :projectID)";
+                    $insertProjectChallengeSql = "INSERT INTO ProjectChallenges (challenge_id, project_id) VALUES (:challenge_id, :project_id)";
                     $stmtProjectChallenge = $conn->prepare($insertProjectChallengeSql);
-                    $stmtProjectChallenge->bindParam(':dChallengeID', $challengeID, PDO::PARAM_INT);
-                    $stmtProjectChallenge->bindParam(':projectID', $projectID, PDO::PARAM_INT);
+                    $stmtProjectChallenge->bindParam(':challenge_id', $challengeID, PDO::PARAM_INT);
+                    $stmtProjectChallenge->bindParam(':project_id', $projectID, PDO::PARAM_INT);
 
                     if ($stmtProjectChallenge->execute()) {
                         echo "<div class='alert alert-success'>Challenge registered and linked to project successfully.</div>";
