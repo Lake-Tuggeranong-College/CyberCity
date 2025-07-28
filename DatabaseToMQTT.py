@@ -73,7 +73,7 @@ stream = BinLogStreamReader(
 def process_binlog_event():
     for binlogevent in stream:
         # Check if the event is related to the 'RegisteredModules' table
-        if binlogevent.table == "RegisteredModules":
+        if binlogevent.table == "Challenges":
             for row in binlogevent.rows:
                 # Handle different types of row events
                 if isinstance(binlogevent, WriteRowsEvent):
@@ -87,8 +87,8 @@ def process_binlog_event():
                 print(f"Debug: Row data = {data}")
 
                 # Ensure the keys match exactly to what's in your database schema
-                topic = data.get('UNKNOWN_COL2')
-                message = data.get('UNKNOWN_COL4')
+                topic = data.get('UNKNOWN_COL5')
+                message = data.get('UNKNOWN_COL6')
 
                 # Check if 'Module' and 'CurrentOutput' columns exist in the data
                 if topic is None:
@@ -99,7 +99,7 @@ def process_binlog_event():
                     message = "No data"
 
                 # Construct MQTT topic and message
-                topic = f"RegisteredModules/{topic}"
+                topic = f"Challenges/{topic}"
                 
                 # Publish the message to the topic
                 client.publish(topic, message, retain=True)
