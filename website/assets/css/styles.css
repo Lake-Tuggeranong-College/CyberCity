@@ -1,4 +1,4 @@
-.navbarCustom {
+.navbar {
     /* background: #232526; */
 
     background: rgba(35,37,38,0.5);
@@ -20,114 +20,37 @@
 
 
 
-.center {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width: 50%;
-}
-
-.contactTable{
-    border: white;
-    border-color: white;
-    border-bottom-style: solid;
-}
-
-.leaderboard{
-    border: white;
-    border-color: white;
-    border-bottom-style: solid;
-}
-
-body {
-    background: linear-gradient(to bottom right, black 0%, #232526, lightskyblue 100%)
-    , radial-gradient(50% 90% at 30% 150%, hotpink, #232526)
-    , radial-gradient(100% 150% at -33% 5%, greenyellow, #232526);
-    background-blend-mode: overlay;
-
-
-    -webkit-font-smoothing: antialiased;
-    margin: 0;
-    padding: 5px;
-    width: auto;
-    height: auto;
-    color: white;
-
-}
-
-
-h1{
-    padding: 2%;
-    color: white;
-    font-size: 3.8rem;
-    line-height: 4.4rem;
-}
-
-input {
-    margin-left: 10px;
-}
-
-a {
-    color: white;
-}
-
-.centerBox {
-    background: rgba(35,37,38,0.5);
-    border-radius: 1rem;
-    padding: 1rem;
-    text-align: center;
+.subBox-container {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 40rem;
-    max-width: 50rem;
-    width: 100%;
-    margin: 5rem auto;
-}
-
-.wideBox {
-    background: rgba(35,37,38,0.5);
-    border-radius: 1rem;
-    padding: 1rem;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 48rem;
-
-
-
-    margin: 1%  ;
+    gap: 2rem;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding: 2rem;
 }
 
 .subBoxWhite {
-    background: rgba(65,67,68,0.5);
-    border-radius: 1rem;
-    padding: 1rem;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 40rem;
-
-    max-width: 100%;
-    width: 100%;
-
-    margin: 1%  ;
+    flex: 1 1 45%;
+    padding: 1.5rem;
+    border-radius: 12px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-
-.title {
-    margin-bottom: 2rem;
-}
-.title h1,
-.title h2 {
-    display: block;
-
+/* Light Mode */
+body.bg-light .subBoxWhite {
+    background-color: white;
+    color: #000;
 }
 
-.flag-input {
-    min-width: 100%;
-    height: 50px;
-    border-radius: 10px;
+/* Dark Mode */
+body.bg-dark .subBoxWhite {
+    background-color: #1f1f1f;
+    color: #f0f0f0;
+}
+
+/* Responsive layout */
+@media (max-width: 768px) {
+    .subBoxWhite {
+        flex: 1 1 100%;
+    }
 }
