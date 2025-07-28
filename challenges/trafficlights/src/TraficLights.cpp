@@ -77,7 +77,7 @@ void lightsChaos()
   digitalWrite(tl2Red, LOW);
   digitalWrite(tl2Green, LOW);
   digitalWrite(tl2Yellow, LOW); 
-  delay(250);
+  delay(1000);
   //all lights on
   digitalWrite(tl1Green, HIGH);
   digitalWrite(tl2Green, HIGH);
@@ -87,7 +87,7 @@ void lightsChaos()
   digitalWrite(tl2Green, HIGH);
   digitalWrite(tl2Yellow, HIGH); 
 
-  delay(100);
+  delay(1000);
 }
 
 
