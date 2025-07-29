@@ -54,3 +54,35 @@ body.bg-dark .subBoxWhite {
         flex: 1 1 100%;
     }
 }
+
+.dynamicModeBox {
+    padding: 10rem;
+    border-radius: 12px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Light mode */
+body.bg-light .dynamicModeBox {
+    background-color: white;
+    color: #000;
+}
+
+/* Dark mode */
+body.bg-dark .dynamicModeBox {
+    background-color: #1a1a1a;
+    color: #f0f0f0;
+}
+
+.heroCenter {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 60vh; /* Adjust height as needed */
+    text-align: center;
+}
+
+.shadowBox {
+    box-shadow: 0 20px 20px rgba(0, 0, 0, 0.15); /* subtle shading */
+}

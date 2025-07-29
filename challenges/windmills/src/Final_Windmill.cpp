@@ -93,27 +93,16 @@ void callback(char* topic, byte* payload, unsigned int length) {
   }
   Serial.println();
 
-  // Example: turn on/off an LED based on the message received
-  // if ((char)payload[0] == '1') {
-  //   Serial.println("spin please");
-  //   Servo1.write(0);
-  //   outputCommand = "Fan On";
-  // } else {
-  //   outputCommand = "Fan Off";
-  //   Servo1.write(90);
-  //   Serial.println("not spinnin");
-  // }
 
   if ((char)payload[0] == '1') {
     Serial.println("spin please");
-    Servo1.write(180); // 0 = full speed reverse 
+    Servo1.write(180); // 180 = full speed
     outputCommand = "Fan On";
     delay(5000);
-    Servo1.write(90);
   }
   if ((char)payload[0] == '2') {
     Serial.println("no spin");
-    Servo1.write(90); // 0 = full speed reverse 
+    Servo1.write(90); // 90 = stopped 
     outputCommand = "Fan Off";
     delay(5000);
   }   
