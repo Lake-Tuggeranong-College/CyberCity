@@ -31,7 +31,7 @@ if (!authorisedAccess(false, true, true)) {
         $challengeTitle = $challengeData['challengeTitle'];
         $pointsValue = $challengeData['pointsValue'];
         $moduleName = $challengeData['moduleName'];
-        $container_required = $challengeData['container'];
+        $container_required = $challengeData['dockerChallengeID'];
         $completionStatus = false; //TODO: Check Userchallenges to see if the user has already completed the challenge.
 //    $projectID = $_GET["projectID"];
 
@@ -54,7 +54,7 @@ if (!authorisedAccess(false, true, true)) {
                     <div class="card-body">
                         <h5 class="card-title"><?= $challengeTitle ?></h5>
                         <p class="card-text"><?= $pointsValue ?></p>
-                        <a href="<?php if ($container_required == 1) { ?>challengeDisplayDocker.php?challengeID=<?php } else { ?>challengeDisplay.php?challengeID=<?php } ?><?= $challengeID ?>"
+                        <a href="<?php if (isset($container_required) ){ ?>challengeDisplayDocker.php?challengeID=<?php } else { ?>challengeDisplay.php?challengeID=<?php } ?><?= $challengeID ?>"
                            class="btn btn-warning">Start
                             Challenge</a>
                     </div>
