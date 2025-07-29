@@ -25,7 +25,6 @@ int tl2Yellow = 22; // Fix
 #include "sensitiveInformation.h"
 
 CyberCitySharedFunctionality cyberCity;
-String message = "chaos";
 
 void lightsNormal()
 {
@@ -78,7 +77,7 @@ void lightsChaos()
   digitalWrite(tl2Red, LOW);
   digitalWrite(tl2Green, LOW);
   digitalWrite(tl2Yellow, LOW); 
-  delay(250);
+  delay(1000);
   //all lights on
   digitalWrite(tl1Green, HIGH);
   digitalWrite(tl2Green, HIGH);
@@ -88,25 +87,7 @@ void lightsChaos()
   digitalWrite(tl2Green, HIGH);
   digitalWrite(tl2Yellow, HIGH); 
 
-  delay(100);
-}
-
-
-
-void callback(char* topic, byte* payload, unsigned int length) 
-{
-  // Convert the incoming byte array to a string
-  message = "";
-  for (int i = 0; i < length; i++) {
-    message += (char)payload[i];
-  }
-
-  // Debugging: print the topic and message
-  Serial.print("Message arrived [");
-  Serial.print(topic);
-  Serial.print("] ");
-  Serial.println(message);
-
+  delay(1000);
 }
 
 
@@ -178,7 +159,6 @@ void setup()
     Serial.flush();
   }
 
-  // The following line can be uncommented if the time needs to be reset.
   rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
 
   rtc.start();
@@ -189,16 +169,12 @@ void setup()
 
   cyberCity.logEvent("System Initialisation...");
 
-  // Module Specific Code
-
-  // put your setup code here, to run once:
   pinMode(tl1Green, OUTPUT);
   pinMode(tl1Red, OUTPUT);
   pinMode(tl1Yellow, OUTPUT);
   pinMode(tl2Green, OUTPUT);
   pinMode(tl2Red, OUTPUT);
   pinMode(tl2Yellow, OUTPUT);
-  //lightsChaos();
 
 
 
@@ -218,23 +194,26 @@ void mqttLoop() {
 }
 
 
-void chaosControl() {
-    if (message == "2") {
-      lightsNormal();  // Call the normal traffic light pattern
-    } else if (message == "1") {
-      lightsChaos();   // Call the chaotic traffic light pattern
-    }
-  // }
+void callback(char* topic, byte* payload, unsigned int length) {
+  Serial.print("Message arrived [");
+  Serial.print(topic);
+  Serial.print("] ");
+  for (int i = 0; i < length; i++) {
+    Serial.print((char)payload[i]);
+  }
+  Serial.println();
+
+
+  if ((char)payload[0] == '2') {
+    Serial.println("CHAOSSSS");
+    lightsChaos();
+  }
+  if ((char)payload[0] == '1') {
+    Serial.println("You Fixed It!");
+    lightsNormal();
+  }   
+
 }
-
-
-/*void chaosControl() {
-    delay();
-      lightsNormal();  // Call the normal traffic light pattern
-    delay(500);
-      lightsChaos();   // Call the chaotic traffic light pattern
-    }
-*/
 
 void loop()
 {
@@ -242,7 +221,5 @@ void loop()
   // put your main code here, to run repeatedly:
   // int sensorData = red, green, yellow;
   sonarSensorData(); // this function runs both sonarSensorData and Lights on and Off
-  chaosControl();
-
   mqttLoop();
 }
