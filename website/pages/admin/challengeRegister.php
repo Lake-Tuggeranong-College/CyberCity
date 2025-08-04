@@ -5,7 +5,7 @@ if (!authorisedAccess(false, false, true)) {
     header("Location:../../index.php");
 }
 ?>
-<h2 class="mt-5">Register New Challenge</h2>
+<h2 style="margin-left: 41%;" class="mt-5">Register New Challenge</h2>
 <?php
 
 
@@ -120,48 +120,48 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <form method="post" action="" enctype="multipart/form-data">
     <div class="mb-3">
-        <label for="challengeTitle" class="form-label">Challenge Title</label>
-        <input type="text" class="form-control" id="challengeTitle" name="challengeTitle" required>
+        <label for="challengeTitle" class="RNC form-label">Challenge Title</label>
+        <input type="text" class="RNCB form-control" id="challengeTitle" name="challengeTitle" required>
     </div>
     <div class="mb-3">
-        <label for="challengeText" class="form-label">Challenge Text</label>
-        <textarea class="form-control" id="challengeText" name="challengeText" rows="3" required></textarea>
+        <label for="challengeText" class="RNC form-label">Challenge Text</label>
+        <textarea class="RNCB form-control" id="challengeText" name="challengeText" rows="3" required></textarea>
     </div>
     <div class="mb-3">
-        <label for="flag" class="form-label">Flag</label>
-        <input type="text" class="form-control" id="flag" name="flag" required>
+        <label for="flag" class="RNC form-label">Flag</label>
+        <input type="text" class="RNCB form-control" id="flag" name="flag" required>
     </div>
     <div class="mb-3">
-        <label for="pointsValue" class="form-label">Points Value</label>
-        <input type="number" class="form-control" id="pointsValue" name="pointsValue" required>
+        <label for="pointsValue" class="RNC form-label">Points Value</label>
+        <input type="number" class="RNCB form-control" id="pointsValue" name="pointsValue" required>
     </div>
     <div class="mb-3">
-        <label for="moduleName" class="form-label">Module Name</label>
-        <input type="text" class="form-control" id="moduleName" name="moduleName" required>
+        <label for="moduleName" class="RNC form-label">Module Name</label>
+        <input type="text" class="RNCB form-control" id="moduleName" name="moduleName" required>
     </div>
     <div class="mb-3">
-        <label for="moduleValue" class="form-label">Module Value</label>
-        <input type="text" class="form-control" id="moduleValue" name="moduleValue" required>
+        <label for="moduleValue" class="RNC form-label">Module Value</label>
+        <input type="text" class="RNCB form-control" id="moduleValue" name="moduleValue" required>
     </div>
     <div class="mb-3">
-        <label for="dockerChallengeID" class="form-label">Docker Challenge ID</label>
-        <input type="text" class="form-control" id="dockerChallengeID" name="dockerChallengeID" required>
+        <label for="dockerChallengeID" class="RNC form-label">Docker Challenge ID</label>
+        <input type="text" class="RNCB form-control" id="dockerChallengeID" name="dockerChallengeID" required>
     </div>
     <div class="mb-3">
-        <label for="container" class="form-label">Container</label>
-        <input type="number" class="form-control" id="container" name="container" required>
+        <label for="container" class="RNC form-label">Container</label>
+        <input type="number" class="RNCB form-control" id="container" name="container" required>
     </div>
     <div class="mb-3">
-        <label for="image" class="form-label">Image</label>
-        <input type="file" class="form-control" id="image" name="image" required>
+        <label for="image" class="RNC form-label">Image</label>
+        <input type="file" class="RNCB form-control" id="image" name="image" required>
     </div>
     <div class="mb-3">
-        <label for="enabled" class="form-label">Enabled</label>
-        <input type="number" class="form-control" id="enabled" name="enabled" required>
+        <label for="enabled" class="RNC form-label">Enabled</label>
+        <input type="number" class="RNCB form-control" id="enabled" name="enabled" required>
     </div>
     <div class="mb-3">
-        <label for="categoryID" class="form-label">Category ID</label>
-        <input type="number" class="form-control" id="categoryID" name="categoryID" required>
+        <label for="categoryID" class="RNC form-label">Category ID</label>
+        <input type="number" class="RNCB form-control" id="categoryID" name="categoryID" required>
     </div>
     <button type="submit" class="btn btn-primary">Register Challenge</button>
 </form>
