@@ -98,13 +98,13 @@ void callback(char* topic, byte* payload, unsigned int length) {
     Serial.println("spin please");
     Servo1.write(180); // 180 = full speed
     outputCommand = "Fan On";
-    delay(5000);
+    delay(1000);
   }
-  if ((char)payload[0] == '2') {
+  if ((char)payload[0] == '0') {
     Serial.println("no spin");
-    Servo1.write(90); // 90 = stopped 
+    Servo1.write(89); // 90 = stopped 
     outputCommand = "Fan Off";
-    delay(5000);
+    delay(1000);
   }   
 
 }
@@ -121,7 +121,7 @@ void loop() {
       } else {
         Serial.print("Failed to reconnect, state ");
         Serial.print(client.state());
-        delay(2000);
+        delay(500);
       }
     }
   }
