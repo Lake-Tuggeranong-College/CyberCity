@@ -4,7 +4,7 @@
 
 <title>Cyber City</title>
 
-<div class="wideBox">
+<div class="wideBox dynamicModeBox heroCenter shadowBox">
     <div class="title">
         <h1>Rebels we need your help</h1>
 
@@ -17,9 +17,8 @@
         ?>
     </div>
 </div>
-
 <div class="wideBox subBox-container">
-    <div class="subBoxWhite">
+    <div class="subBoxWhite shadowBox">
         <div class="title">
             <h2>Beginnings</h2>
             <p>
@@ -31,7 +30,7 @@
         </div>
     </div>
 
-    <div class="subBoxWhite">
+    <div class="subBoxWhite shadowBox">
         <div class="title">
             <h2>Currently</h2>
             <p>
