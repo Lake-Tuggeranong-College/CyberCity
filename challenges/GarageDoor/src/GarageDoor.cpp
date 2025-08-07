@@ -104,11 +104,11 @@ void callback(char* topic, byte* payload, unsigned int length) {
   //   Serial.println("not spinnin");
   // }
 
-  if ((char)payload[0] == '1') {
+  if ((char)payload[0] == '0') {
     Serial.println("close");
     Servo1.write(0); // 0 = full speed reverse 
   } 
-  if ((char)payload[0] == '2') {
+  if ((char)payload[0] == '1') {
     Serial.println("open");
     Servo1.write(90); // 0 = full speed reverse 
   } 
