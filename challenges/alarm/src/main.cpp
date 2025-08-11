@@ -40,7 +40,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
   }
   Serial.println();
 
-  if ((char)payload[0] == '2') {
+  if ((char)payload[0] == '1') {
     Serial.println("Playing EvangelionTheme");
     playEvangelionTheme();
   } else {
