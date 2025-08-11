@@ -62,7 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <li class="nav-item dropdown">
                     <a class="nav-link text-black dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                        aria-expanded="false">
-                        project dropdown
+                        Project Version
                     </a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item"
