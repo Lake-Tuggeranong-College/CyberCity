@@ -66,10 +66,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item"
-                               href="<?= BASE_URL; ?>pages/challenges/challengesList.php?projectID=1">2025
+                               href="<?= BASE_URL; ?>pages/challenges/challengesList.php?projectID=1">2024
                                 Project</a></li>
                         <li><a class="dropdown-item"
-                               href="<?= BASE_URL; ?>pages/challenges/challengesList.php?projectID=2">2026
+                               href="<?= BASE_URL; ?>pages/challenges/challengesList.php?projectID=2">2025
                                 Project</a>
                         </li>
                         <li><hr class="dropdown-divider"></li>
