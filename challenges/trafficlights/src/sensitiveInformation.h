@@ -16,11 +16,6 @@ const char* password        = "CyberRange";       // Wifi Password
  //const char* serverName = "http://192.168.1.18/postESPData.php";
 //String serverName = "http://192.168.1.10/CyberCity/website/esp32/dataTransfer.php";
 //
-String apiKeyValue = "IcFxFF";
-
-String sensorName = "TrafficLight";
-
-String sensorLocation = "TrafficLightOne";
 
 // MQTT client name
 const char* mqttClient = "ESP32";
