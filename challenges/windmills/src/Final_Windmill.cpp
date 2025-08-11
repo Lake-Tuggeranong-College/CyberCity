@@ -112,15 +112,9 @@ void callback(char* topic, byte* payload, unsigned int length) {
 void loop() {
    if (!client.connected()) {
     while (!client.connected()) {
-      Serial.println("Reconnecting to MQTT...");
-
       if (client.connect("ESP32_Client")) {
-        Serial.println("Reconnected to MQTT");
         client.subscribe("Challenges/Windmill");
-        Serial.println("Connected to topic");
       } else {
-        Serial.print("Failed to reconnect, state ");
-        Serial.print(client.state());
         delay(500);
       }
     }
