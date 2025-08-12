@@ -70,7 +70,7 @@ void setup() {
   while (!client.connected()) {
     Serial.println("Connecting to MQTT...");
 
-    if (client.connect(mqttClient)) {
+   if (client.connect(mqttClient)) {
       Serial.println("Connected to MQTT");
       client.subscribe("Challenges/GarageDoor");  // Subscribe to the control topic
       Serial.println("Connected to topic");
@@ -79,7 +79,7 @@ void setup() {
       Serial.print(client.state());
       delay(2000);
     }
-  }
+  } 
 
   cyberCity.logEvent("System Initialisation...");
 }
@@ -93,42 +93,29 @@ void callback(char* topic, byte* payload, unsigned int length) {
   }
   Serial.println();
 
-  // Example: turn on/off an LED based on the message received
-  // if ((char)payload[0] == '1') {
-  //   Serial.println("spin please");
-  //   Servo1.write(0);
-  //   outputCommand = "Fan On";
-  // } else {
-  //   outputCommand = "Fan Off";
-  //   Servo1.write(90);
-  //   Serial.println("not spinnin");
-  // }
 
   if ((char)payload[0] == '0') {
-    Serial.println("close");
-    Servo1.write(0); // 0 = full speed reverse 
-  } 
+    Serial.println("shut");
+    Servo1.write(0); // 180 = full speed
+    outputCommand = "shut garage door";
+    delay(1000);
+  }
   if ((char)payload[0] == '1') {
     Serial.println("open");
-    Servo1.write(90); // 0 = full speed reverse 
-  } 
+    Servo1.write(90); // 90 = stopped 
+    outputCommand = "open garage door";
+    delay(1000);
+  }   
+
 }
 
 void loop() {
-
-
-    if (!client.connected()) {
+   if (!client.connected()) {
     while (!client.connected()) {
-      Serial.println("Reconnecting to MQTT...");
-
       if (client.connect("ESP32_Client")) {
-        Serial.println("Reconnected to MQTT");
         client.subscribe("Challenges/GarageDoor");
-        Serial.println("Connected to topic");
       } else {
-        Serial.print("Failed to reconnect, state ");
-        Serial.print(client.state());
-        delay(2000);
+        delay(500);
       }
     }
   }
