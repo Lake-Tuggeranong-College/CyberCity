@@ -118,51 +118,77 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
-<form method="post" action="" enctype="multipart/form-data">
-    <div class="mb-3">
-        <label for="challengeTitle" class="form-label">Challenge Title</label>
-        <input type="text" class="form-control" id="challengeTitle" name="challengeTitle" required>
+<div class="container mt-5">
+  <div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+      <h4 class="mb-0">Register Challenge</h4>
     </div>
-    <div class="mb-3">
-        <label for="challengeText" class="form-label">Challenge Text</label>
-        <textarea class="form-control" id="challengeText" name="challengeText" rows="3" required></textarea>
+    <div class="card-body">
+      <form method="post" action="" enctype="multipart/form-data">
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="challengeTitle" class="form-label">Challenge Title</label>
+            <input type="text" class="form-control" id="challengeTitle" name="challengeTitle" required>
+          </div>
+          <div class="col-md-6">
+            <label for="flag" class="form-label">Flag</label>
+            <input type="text" class="form-control" id="flag" name="flag" required>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="challengeText" class="form-label">Challenge Text</label>
+          <textarea class="form-control" id="challengeText" name="challengeText" rows="4" required></textarea>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-4">
+            <label for="pointsValue" class="form-label">Points Value</label>
+            <input type="number" class="form-control" id="pointsValue" name="pointsValue" required>
+          </div>
+          <div class="col-md-4">
+            <label for="container" class="form-label">Container</label>
+            <input type="number" class="form-control" id="container" name="container" required>
+          </div>
+          <div class="col-md-4">
+            <label for="enabled" class="form-label">Enabled</label>
+            <input type="number" class="form-control" id="enabled" name="enabled" required>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="moduleName" class="form-label">Module Name</label>
+            <input type="text" class="form-control" id="moduleName" name="moduleName" required>
+          </div>
+          <div class="col-md-6">
+            <label for="moduleValue" class="form-label">Module Value</label>
+            <input type="text" class="form-control" id="moduleValue" name="moduleValue" required>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="dockerChallengeID" class="form-label">Docker Challenge ID</label>
+            <input type="text" class="form-control" id="dockerChallengeID" name="dockerChallengeID" required>
+          </div>
+          <div class="col-md-6">
+            <label for="categoryID" class="form-label">Category ID</label>
+            <input type="number" class="form-control" id="categoryID" name="categoryID" required>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="image" class="form-label">Image Upload</label>
+          <input type="file" class="form-control" id="image" name="image" required>
+        </div>
+
+        <div class="d-grid">
+          <button type="submit" class="btn btn-primary">Register Challenge</button>
+        </div>
+      </form>
     </div>
-    <div class="mb-3">
-        <label for="flag" class="form-label">Flag</label>
-        <input type="text" class="form-control" id="flag" name="flag" required>
-    </div>
-    <div class="mb-3">
-        <label for="pointsValue" class="form-label">Points Value</label>
-        <input type="number" class="form-control" id="pointsValue" name="pointsValue" required>
-    </div>
-    <div class="mb-3">
-        <label for="moduleName" class="form-label">Module Name</label>
-        <input type="text" class="form-control" id="moduleName" name="moduleName" required>
-    </div>
-    <div class="mb-3">
-        <label for="moduleValue" class="form-label">Module Value</label>
-        <input type="text" class="form-control" id="moduleValue" name="moduleValue" required>
-    </div>
-    <div class="mb-3">
-        <label for="dockerChallengeID" class="form-label">Docker Challenge ID</label>
-        <input type="text" class="form-control" id="dockerChallengeID" name="dockerChallengeID" required>
-    </div>
-    <div class="mb-3">
-        <label for="container" class="form-label">Container</label>
-        <input type="number" class="form-control" id="container" name="container" required>
-    </div>
-    <div class="mb-3">
-        <label for="image" class="form-label">Image</label>
-        <input type="file" class="form-control" id="image" name="image" required>
-    </div>
-    <div class="mb-3">
-        <label for="enabled" class="form-label">Enabled</label>
-        <input type="number" class="form-control" id="enabled" name="enabled" required>
-    </div>
-    <div class="mb-3">
-        <label for="categoryID" class="form-label">Category ID</label>
-        <input type="number" class="form-control" id="categoryID" name="categoryID" required>
-    </div>
-    <button type="submit" class="btn btn-primary">Register Challenge</button>
-</form>
+  </div>
+</div>
+
 </div>
