@@ -16,16 +16,21 @@ define('USER_ACCESS_LEVEL', 1);
 define('ADMIN_ACCESS_LEVEL', 2);
 
 /* ---------------------- Utilities ---------------------- */
-function set_flash(string $type, string $text): void {
+function set_flash(string $type, string $text): void
+{
     $_SESSION['flash'] = ['type' => $type, 'text' => $text];
 }
-function take_flash(): ?array {
+
+function take_flash(): ?array
+{
     if (empty($_SESSION['flash'])) return null;
     $f = $_SESSION['flash'];
     unset($_SESSION['flash']);
     return $f;
 }
-function sanitise_data(string $data): string {
+
+function sanitise_data(string $data): string
+{
     return htmlspecialchars(stripslashes(trim($data)), ENT_QUOTES, 'UTF-8');
 }
 
@@ -33,7 +38,8 @@ function sanitise_data(string $data): string {
  * Gatekeeper for page access.
  * Set the allows for this page below where it's called.
  */
-function authorisedAccess(bool $allow_unauth, bool $allow_user, bool $allow_admin): bool {
+function authorisedAccess(bool $allow_unauth, bool $allow_user, bool $allow_admin): bool
+{
     if (!isset($_SESSION["username"])) {
         if (!$allow_unauth) {
             set_flash('danger', 'Access Denied');
@@ -120,36 +126,68 @@ $flash = take_flash();
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <!-- Left -->
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item"><a href="<?= BASE_URL; ?>index.php" class="nav-link text-black" style="padding-left: 2rem;">Home</a></li>
-                <li class="nav-item"><a href="<?= BASE_URL; ?>pages/leaderboard/leaderboard.php" class="nav-link text-black">Leaderboard</a></li>
+                <li class="nav-item"><a href="<?= BASE_URL; ?>index.php" class="nav-link text-black"
+                                        style="padding-left: 2rem;">Home</a></li>
+                <li class="nav-item"><a href="<?= BASE_URL; ?>pages/leaderboard/leaderboard.php"
+                                        class="nav-link text-black">Leaderboard</a></li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link text-black dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link text-black dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                       aria-expanded="false">
                         Project Version
                     </a>
+
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="<?= BASE_URL; ?>pages/challenges/challengesList.php?projectID=2024">2024 Project</a></li>
-                        <li><a class="dropdown-item" href="<?= BASE_URL; ?>pages/challenges/challengesList.php?projectID=2025">2025 Project</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a href="http://10.177.200.71/CyberCityDocs/welcome.html" class="nav-link text-black" target="_blank">Tutorials</a></li>
+                        <?php
+                        // Database connection using PDO
+                        try {
+                            // Query to get projects
+                            $stmt = $conn->query("SELECT project_id, project_name FROM CyberCity.Projects");
+
+                            // Generate list items
+                            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                                echo '<li><a class="dropdown-item" href="' . BASE_URL . 'pages/challenges/challengesList.php?projectID=' . $row['project_id'] . '">' . htmlspecialchars($row['project_name']) . '</a></li>';
+                            }
+                        } catch (PDOException $e) {
+                            echo '<li><span class="dropdown-item text-danger">Error loading projects</span></li>';
+                            // Optionally log the error: error_log($e->getMessage());
+                        }
+                        ?>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a href="http://10.177.200.71/CyberCityDocs/welcome.html" class="nav-link text-black"
+                               target="_blank">Tutorials</a></li>
                     </ul>
                 </li>
-                <li class="nav-item"><a href="https://forms.gle/jgYrmMZesgtVhBZ39" class="nav-link text-black" target="_blank">Feedback</a></li>
+                <li class="nav-item"><a href="https://forms.gle/jgYrmMZesgtVhBZ39" class="nav-link text-black"
+                                        target="_blank">Feedback</a></li>
 
                 <!-- Admin Panel -->
                 <?php if (isset($_SESSION['username']) && ($_SESSION['access_level'] ?? null) == ADMIN_ACCESS_LEVEL): ?>
                     <li class="nav-item dropdown">
-                        <a class="nav-link text-black dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link text-black dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                           aria-expanded="false">
                             Admin Panel
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="<?= BASE_URL; ?>pages/admin/userList.php" class="dropdown-item">Enabled User List</a></li>
-                            <li><a href="<?= BASE_URL; ?>pages/admin/disabledUsers.php" class="dropdown-item">Disabled User List</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a href="<?= BASE_URL; ?>pages/admin/contactpage.php" class="dropdown-item">View Contact Requests</a></li>
-                            <li><a href="<?= BASE_URL; ?>pages/admin/readContactRequests.php" class="dropdown-item">Read Contact Requests</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a href="<?= BASE_URL; ?>pages/admin/challengeRegister.php" class="dropdown-item">Add New Modules & Challenges</a></li>
-                            <li><a href="<?= BASE_URL; ?>pages/admin/resetGame.php" class="dropdown-item">Reset Game</a></li>
+                            <li><a href="<?= BASE_URL; ?>pages/admin/userList.php" class="dropdown-item">Enabled User
+                                    List</a></li>
+                            <li><a href="<?= BASE_URL; ?>pages/admin/disabledUsers.php" class="dropdown-item">Disabled
+                                    User List</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a href="<?= BASE_URL; ?>pages/admin/contactpage.php" class="dropdown-item">View Contact
+                                    Requests</a></li>
+                            <li><a href="<?= BASE_URL; ?>pages/admin/readContactRequests.php" class="dropdown-item">Read
+                                    Contact Requests</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a href="<?= BASE_URL; ?>pages/admin/challengeRegister.php" class="dropdown-item">Add
+                                    New Modules & Challenges</a></li>
+                            <li><a href="<?= BASE_URL; ?>pages/admin/resetGame.php" class="dropdown-item">Reset Game</a>
+                            </li>
                         </ul>
                     </li>
                 <?php endif; ?>
@@ -161,21 +199,27 @@ $flash = take_flash();
 
                 <?php if (isset($_SESSION['username'])): ?>
                     <li class="nav-link dropdown">
-                        <a href="#" class="nav-link dropdown-toggle text-black" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a href="#" class="nav-link dropdown-toggle text-black" id="navbarDropdown"
+                           data-bs-toggle="dropdown" aria-expanded="false">
                             <?= htmlspecialchars($_SESSION['username']); ?>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a href="<?= BASE_URL; ?>pages/user/editAccount.php" class="dropdown-item">Edit Account</a></li>
+                            <li><a href="<?= BASE_URL; ?>pages/user/editAccount.php" class="dropdown-item">Edit
+                                    Account</a></li>
                             <li><a class="dropdown-item">Score: <?= htmlspecialchars((string)$userScore); ?></a></li>
                         </ul>
                     </li>
-                    <li class="nav-link active"><a href="<?= BASE_URL; ?>pages/user/logout.php" class="nav-link" style="color:#000;">Logout</a></li>
+                    <li class="nav-link active"><a href="<?= BASE_URL; ?>pages/user/logout.php" class="nav-link"
+                                                   style="color:#000;">Logout</a></li>
                     <?php if (($_SESSION['access_level'] ?? null) == USER_ACCESS_LEVEL): ?>
-                        <li class="nav-link active"><a href="<?= BASE_URL; ?>pages/contactUs/contact.php" class="nav-link text-white">Contact Us</a></li>
+                        <li class="nav-link active"><a href="<?= BASE_URL; ?>pages/contactUs/contact.php"
+                                                       class="nav-link text-white">Contact Us</a></li>
                     <?php endif; ?>
                 <?php else: ?>
-                    <li class="nav-link active"><a href="<?= BASE_URL; ?>pages/user/register.php" class="nav-link" style="color:indianred;">Register</a></li>
-                    <li class="nav-link active"><a href="<?= BASE_URL; ?>pages/user/login.php" class="nav-link text-black">Login</a></li>
+                    <li class="nav-link active"><a href="<?= BASE_URL; ?>pages/user/register.php" class="nav-link"
+                                                   style="color:indianred;">Register</a></li>
+                    <li class="nav-link active"><a href="<?= BASE_URL; ?>pages/user/login.php"
+                                                   class="nav-link text-black">Login</a></li>
                 <?php endif; ?>
             </ul>
         </div>
