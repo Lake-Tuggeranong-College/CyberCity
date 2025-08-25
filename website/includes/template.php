@@ -179,9 +179,7 @@ $flash = take_flash();
                             </li>
                             <li><a href="<?= BASE_URL; ?>pages/admin/contactpage.php" class="dropdown-item">View Contact
                                     Requests</a></li>
-                            <li><a href="<?= BASE_URL; ?>pages/admin/readContactRequests.php" class="dropdown-item">Read
-                                    Contact Requests</a></li>
-                            <li>
+
                                 <hr class="dropdown-divider">
                             </li>
                             <li><a href="<?= BASE_URL; ?>pages/admin/challengeRegister.php" class="dropdown-item">Add
