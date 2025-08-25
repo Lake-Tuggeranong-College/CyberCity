@@ -17,7 +17,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_FILES["image"]) && $_FILES["image"]["error"] == 0) {
         $targetDir = BASE_URL."assets/img/challengeImages";
         $targetFile = basename($_FILES["image"]["name"]);
-        echo "<div class='alert alert-danger'>".$targetDir."</div>";
 
         $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
         $uploadOk = 1;
@@ -54,7 +53,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "<div class='alert alert-danger'>Sorry, your file was not uploaded.</div>";
             // if everything is ok, try to upload file
         } else {
-            if (move_uploaded_file($_FILES["image"]["tmp_name"], $targetDir)) {
+            $finalDir = "/var/www/".$targetDir."/".$targetFile;
+            if (move_uploaded_file($_FILES["image"]["tmp_name"], $finalDir)) {
                 echo "<div class='alert alert-success'>The file " . htmlspecialchars(basename($_FILES["image"]["name"])) . " has been uploaded.</div>";
 
                 // Insert new challenge
@@ -69,7 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $image = $targetFile;
                 $enabled = $_POST["enabled"];
                 $categoryID = $_POST["categoryID"];
-                $projectID = $_POST["project_id"];
+                $projectID = $_POST["projectID"];
 
                 $insertSql = "INSERT INTO Challenges (challengeTitle, challengeText, flag, pointsValue, moduleName, moduleValue, dockerChallengeID, container, Image, Enabled, categoryID) 
                                       VALUES (:challengeTitle, :challengeText, :flag, :pointsValue, :moduleName, :moduleValue, :dockerChallengeID, :container, :image, :enabled, :categoryID)";
