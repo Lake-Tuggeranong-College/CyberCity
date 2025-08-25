@@ -5,7 +5,7 @@ include "../../includes/template.php";
 // Handle status toggle
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['toggle_read_id'], $_POST['current_status'])) {
     $id = intval($_POST['toggle_read_id']);
-    $newStatus = $_POST['current_status'] == 1 ? 0 : 1; // Toggle between 1 and 0
+    $newStatus = $_POST['current_status'] == 1 ? 0 : 1;
 
     try {
         $updateStmt = $conn->prepare("UPDATE ContactUs SET IsRead = ? WHERE ID = ?");
@@ -15,9 +15,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['toggle_read_id'], $_P
     }
 }
 
-// Fetch all messages
+// Determine view mode
+$view = isset($_GET['view']) && $_GET['view'] === 'unread' ? 'unread' : 'all';
+
+// Fetch messages based on view
 try {
-    $stmt = $conn->prepare("SELECT ID, Username, Email, IsRead FROM ContactUs ORDER BY ID DESC");
+    if ($view === 'unread') {
+        $stmt = $conn->prepare("SELECT ID, Username, Email, IsRead FROM ContactUs WHERE IsRead = 0 ORDER BY ID DESC");
+    } else {
+        $stmt = $conn->prepare("SELECT ID, Username, Email, IsRead FROM ContactUs ORDER BY ID DESC");
+    }
     $stmt->execute();
     $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
@@ -25,7 +32,14 @@ try {
 }
 ?>
 
-<h2 class="text-center mb-4">All Contact Messages</h2>
+<h2 class="text-center mb-4">
+    <?= $view === 'unread' ? 'Unread Contact Messages' : 'All Contact Messages' ?>
+</h2>
+
+<div class="text-center mb-3">
+    <a href="?view=all" class="btn btn-primary btn-sm <?= $view === 'all' ? 'disabled' : '' ?>">View All</a>
+    <a href="?view=unread" class="btn btn-secondary btn-sm <?= $view === 'unread' ? 'disabled' : '' ?>">View Unread Only</a>
+</div>
 
 <?php if (count($messages) > 0): ?>
     <div class="table-responsive">
@@ -35,7 +49,6 @@ try {
                     <th scope="col">ID</th>
                     <th scope="col">Username</th>
                     <th scope="col">Email</th>
-                    <th scope="col">Status</th>
                     <th scope="col">Action</th>
                 </tr>
             </thead>
@@ -44,14 +57,13 @@ try {
                     <tr>
                         <td><?= htmlspecialchars($msg['ID']) ?></td>
                         <td><?= htmlspecialchars($msg['Username']) ?></td>
-                        <td><?= htmlspecialchars($msg['Email']) ?></td>
-                        <td><?= $msg['IsRead'] ? 'Read' : 'Unread' ?></td>
+                       <td><?= htmlspecialchars($msg['Email']) ?></td>
+<!--                        <td>--><?php //= $msg['IsRead'] ? 'Read' : 'Unread' ?><!--</td>-->
                         <td>
                             <form method="POST" style="display:inline;">
                                 <input type="hidden" name="toggle_read_id" value="<?= $msg['ID'] ?>">
-                                <input type="hidden" name="current_status" value="<?= $msg['IsRead'] ?>">
                                 <button type="submit" class="btn btn-sm <?= $msg['IsRead'] ? 'btn-warning' : 'btn-success' ?>">
-                                    <?= $msg['IsRead'] ? 'Mark Unread' : 'Mark Read' ?>
+                                    <?= $msg['IsRead'] ? 'Mark As Unread' : 'Mark AS Read' ?>
                                 </button>
                             </form>
                         </td>
@@ -62,6 +74,6 @@ try {
     </div>
 <?php else: ?>
     <div class="alert alert-info text-center" role="alert">
-        No messages found.
+        <?= $view === 'unread' ? 'No unread messages.' : 'No messages found.' ?>
     </div>
 <?php endif; ?>
