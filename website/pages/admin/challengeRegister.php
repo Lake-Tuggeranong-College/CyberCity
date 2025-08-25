@@ -66,6 +66,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $image = $targetFile;
                 $enabled = $_POST["enabled"];
                 $categoryID = $_POST["categoryID"];
+                $projectID = $_POST["project_id"];
 
                 $insertSql = "INSERT INTO Challenges (challengeTitle, challengeText, flag, pointsValue, moduleName, moduleValue, dockerChallengeID, container, Image, Enabled, categoryID) 
                                       VALUES (:challengeTitle, :challengeText, :flag, :pointsValue, :moduleName, :moduleValue, :dockerChallengeID, :container, :image, :enabled, :categoryID)";
@@ -88,7 +89,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $challengeID = $conn->lastInsertId();
 
                     // Insert into ProjectChallenges table
-                    $projectID = 2; // Assuming project_id is 2
+
                     $insertProjectChallengeSql = "INSERT INTO ProjectChallenges (challenge_id, project_id) VALUES (:challenge_id, :project_id)";
                     $stmtProjectChallenge = $conn->prepare($insertProjectChallengeSql);
                     $stmtProjectChallenge->bindParam(':challenge_id', $challengeID, PDO::PARAM_INT);
@@ -118,51 +119,95 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
-<form method="post" action="" enctype="multipart/form-data">
-    <div class="mb-3">
-        <label for="challengeTitle" class="RNC form-label">Challenge Title</label>
-        <input type="text" class="RNCB form-control" id="challengeTitle" name="challengeTitle" required>
+<div class="container mt-5">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Register Challenge</h4>
+        </div>
+        <div class="card-body">
+            <form method="post" action="" enctype="multipart/form-data">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="challengeTitle" class="form-label">Challenge Title</label>
+                        <input type="text" class="form-control" id="challengeTitle" name="challengeTitle" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="flag" class="form-label">Flag</label>
+                        <input type="text" class="form-control" id="flag" name="flag" required>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="challengeText" class="form-label">Challenge Text</label>
+                    <textarea class="form-control" id="challengeText" name="challengeText" rows="4" required></textarea>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="pointsValue" class="form-label">Points Value</label>
+                        <input type="number" class="form-control" id="pointsValue" name="pointsValue" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="container" class="form-label">Container</label>
+                        <input type="number" class="form-control" id="container" name="container" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="enabled" class="form-label">Enabled</label>
+                        <input type="number" class="form-control" id="enabled" name="enabled" required>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="moduleName" class="form-label">Module Name</label>
+                        <input type="text" class="form-control" id="moduleName" name="moduleName" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="moduleValue" class="form-label">Module Value</label>
+                        <input type="text" class="form-control" id="moduleValue" name="moduleValue" required>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="dockerChallengeID" class="form-label">Docker Challenge ID</label>
+                        <input type="text" class="form-control" id="dockerChallengeID" name="dockerChallengeID"
+                               required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="categoryID" class="form-label">Category ID</label>
+                        <input type="number" class="form-control" id="categoryID" name="categoryID" required>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+
+                        <label for="projectID" class="form-label">Select Project</label>
+                        <!-- These options should be populated dynamically from the Projects table -->
+                        <select class="form-select" id="projectID" name="projectID" required>
+
+                            <?php
+                            $projectList = $conn->query("SELECT project_id, project_name FROM CyberCity.Projects");
+                            while ($row = $projectList->fetch(PDO::FETCH_ASSOC)) {
+                                echo '<option value="' . htmlspecialchars($row['project_id']) . '">' . htmlspecialchars($row['project_name']) . '</option>';
+                            }
+                            ?>
+                        </select>
+
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="image" class="form-label">Image Upload</label>
+                    <input type="file" class="form-control" id="image" name="image" required>
+                </div>
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary">Register Challenge</button>
+                </div>
+            </form>
+        </div>
     </div>
-    <div class="mb-3">
-        <label for="challengeText" class="RNC form-label">Challenge Text</label>
-        <textarea class="RNCB form-control" id="challengeText" name="challengeText" rows="3" required></textarea>
-    </div>
-    <div class="mb-3">
-        <label for="flag" class="RNC form-label">Flag</label>
-        <input type="text" class="RNCB form-control" id="flag" name="flag" required>
-    </div>
-    <div class="mb-3">
-        <label for="pointsValue" class="RNC form-label">Points Value</label>
-        <input type="number" class="RNCB form-control" id="pointsValue" name="pointsValue" required>
-    </div>
-    <div class="mb-3">
-        <label for="moduleName" class="RNC form-label">Module Name</label>
-        <input type="text" class="RNCB form-control" id="moduleName" name="moduleName" required>
-    </div>
-    <div class="mb-3">
-        <label for="moduleValue" class="RNC form-label">Module Value</label>
-        <input type="text" class="RNCB form-control" id="moduleValue" name="moduleValue" required>
-    </div>
-    <div class="mb-3">
-        <label for="dockerChallengeID" class="RNC form-label">Docker Challenge ID</label>
-        <input type="text" class="RNCB form-control" id="dockerChallengeID" name="dockerChallengeID" required>
-    </div>
-    <div class="mb-3">
-        <label for="container" class="RNC form-label">Container</label>
-        <input type="number" class="RNCB form-control" id="container" name="container" required>
-    </div>
-    <div class="mb-3">
-        <label for="image" class="RNC form-label">Image</label>
-        <input type="file" class="RNCB form-control" id="image" name="image" required>
-    </div>
-    <div class="mb-3">
-        <label for="enabled" class="RNC form-label">Enabled</label>
-        <input type="number" class="RNCB form-control" id="enabled" name="enabled" required>
-    </div>
-    <div class="mb-3">
-        <label for="categoryID" class="RNC form-label">Category ID</label>
-        <input type="number" class="RNCB form-control" id="categoryID" name="categoryID" required>
-    </div>
-    <button type="submit" class="btn btn-primary">Register Challenge</button>
-</form>
+</div>
+
 </div>

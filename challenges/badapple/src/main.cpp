@@ -61,11 +61,8 @@ void callback(char* topic, byte* payload, unsigned int length) {
   }
   Serial.println();
 
-  delay(500);
-  playBadApple();
-
-  if ((char)payload[0] == '2') {
-    Serial.println("Playing BadApple");
+  if ((char)payload[0] == '1') {
+    Serial.println("Playing Bad Apple");
     playBadApple();
   } else {
     Serial.println("LED OFF");
@@ -73,7 +70,6 @@ void callback(char* topic, byte* payload, unsigned int length) {
     tone(buzzer, 0);
   }
 }
-
 
 
 
