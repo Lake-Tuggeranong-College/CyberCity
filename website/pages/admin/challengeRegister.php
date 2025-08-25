@@ -1,6 +1,6 @@
 <?php include "../../includes/template.php";
 /** @var $conn */
-
+echo BASE_URL;
 if (!authorisedAccess(false, false, true)) {
     header("Location:../../index.php");
 }
@@ -9,13 +9,16 @@ if (!authorisedAccess(false, false, true)) {
 <?php
 
 
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
     // Check if the image file is set and handle the upload
     if (isset($_FILES["image"]) && $_FILES["image"]["error"] == 0) {
-        $targetDir = "website/assets/img/challengeImages/";
-        $targetFile = $targetDir . basename($_FILES["image"]["name"]);
+        $targetDir = BASE_URL."assets/img/challengeImages";
+        $targetFile = basename($_FILES["image"]["name"]);
+        echo "<div class='alert alert-danger'>".$targetDir."</div>";
+
         $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
         $uploadOk = 1;
 
@@ -51,7 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "<div class='alert alert-danger'>Sorry, your file was not uploaded.</div>";
             // if everything is ok, try to upload file
         } else {
-            if (move_uploaded_file($_FILES["image"]["tmp_name"], $targetFile)) {
+            if (move_uploaded_file($_FILES["image"]["tmp_name"], $targetDir)) {
                 echo "<div class='alert alert-success'>The file " . htmlspecialchars(basename($_FILES["image"]["name"])) . " has been uploaded.</div>";
 
                 // Insert new challenge
