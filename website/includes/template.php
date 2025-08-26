@@ -170,7 +170,7 @@ $flash = take_flash();
                         Admin Panel
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a href="<?= BASE_URL; ?>pages/admin/userList.php" class="dropdown-item">Enabled User
+                        <li><a href="<?= BASE_URL; ?>pages/admin/userList.php" class="dropdown-item">User
                                 List</a></li>
 
                         <hr class="dropdown-divider">
