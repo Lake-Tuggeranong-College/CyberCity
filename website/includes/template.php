@@ -180,8 +180,12 @@ $flash = take_flash();
 
                 <hr class="dropdown-divider">
                 </li>
-                <li><a href="<?= BASE_URL; ?>pages/admin/challengeRegister.php" class="dropdown-item">Add
-                        New Modules & Challenges</a></li>
+                <li><a href="<?= BASE_URL; ?>pages/admin/challengeRegister.php" class="dropdown-item">
+                        Create New Challenges</a></li>
+<!--                <hr class="dropdown-divider">-->
+                <li><a href="<?= BASE_URL; ?>pages/admin/createCategory.php" class="dropdown-item">
+                        Create New Category</a></li>
+                <hr class="dropdown-divider">
                 <li><a href="<?= BASE_URL; ?>pages/admin/resetGame.php" class="dropdown-item">Reset Game</a>
                 </li>
             </ul>
