@@ -67,7 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $image = $targetFile;
                 $enabled = $_POST["enabled"];
                 $categoryID = $_POST["categoryID"];
-                $projectID = $_POST["project_id"];
+                $projectID = $_POST["projectID"];
 
                 $insertSql = "INSERT INTO Challenges (challengeTitle, challengeText, flag, pointsValue, moduleName, moduleValue, dockerChallengeID, container, Image, Enabled, categoryID) 
                                       VALUES (:challengeTitle, :challengeText, :flag, :pointsValue, :moduleName, :moduleValue, :dockerChallengeID, :container, :image, :enabled, :categoryID)";
