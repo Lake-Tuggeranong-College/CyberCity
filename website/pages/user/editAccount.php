@@ -39,41 +39,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	exit(); // clear one-time usage resource as best practice
 }
 ?>
-
-<div class="container rounded bg-dark bg-gradient mt-5 mb-5">
-    <div class="row">
-        <div class="col">
-            <div class="d-flex flex-column align-items-center text-center p-3 py-5">
-                <!-- TODO: SQL for this to dynamically fetch user's profile picture. -->
-                <img class="rounded-circle mt-5" width="150px" src="" alt="placeholder">
-                <!-- TODO: Maybe put this in a <form> tag so user can just click on the image to change, rather than clicking on the button. -->
-                <input type="file" id="avatarInput" class="mt-3" accept="image/jpeg, image/jpg, image/png, image/webp, image/gif">
-                <span class="text-warning font-weight-bold"><?= htmlspecialchars($userData['Username']); ?></span>
-                <span class="text-danger"><?= htmlspecialchars($userData['user_email']); ?></span>
+<div class="container mt-5 mb-5">
+    <div class="row g-4">
+        <!-- Profile Section -->
+        <div class="col-md-4 text-center">
+            <div class="card bg-dark text-white p-4">
+                <img src="path/to/profile.jpg" class="rounded-circle mx-auto" width="150" alt="Profile Picture">
+                <input type="file" id="avatarInput" class="form-control mt-3" accept="image/*">
+                <h5 class="mt-3"><?= htmlspecialchars($userData['Username']); ?></h5>
+                <p><?= htmlspecialchars($userData['user_email']); ?></p>
             </div>
         </div>
 
-        <div class="col">
-            <div class="p-3 py-5">
-                <div class="d-flex justify-content-center align-items-center mb-3">
-                    <h4>Edit Account</h4>
-                </div>
-
+        <!-- Edit Form Section -->
+        <div class="col-md-8">
+            <div class="card p-4">
+                <h4 class="mb-4 text-center">Edit Account</h4>
                 <form action="editAccount.php" method="post">
-                    <div class="row mt-2">
-                        <div class="col-md-12">
-                            <label class="labels" for="username">Username</label>
-                            <input type="text" class="form-control" id="username" name="username" value="<?= htmlspecialchars($userData['Username']); ?>" placeholder="Enter username here">
-                        </div>
-
-                        <div class="col-md-12">
-                            <label class="labels" for="email">Email</label>
-                            <input type="email" class="form-control" id="email" name="email" value="<?= htmlspecialchars($userData['user_email']); ?>" placeholder="Enter email here">
-                        </div>
-
-                        <div class="mt-5 text-center">
-                            <button class="btn btn-primary profile-button" type="submit">Update Profile</button>
-                        </div>
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" id="username" name="username" class="form-control"
+                               value="<?= htmlspecialchars($userData['Username']); ?>" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" id="email" name="email" class="form-control"
+                               value="<?= htmlspecialchars($userData['user_email']); ?>" required>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary">Update Profile</button>
                     </div>
                 </form>
             </div>
