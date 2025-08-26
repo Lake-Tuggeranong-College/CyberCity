@@ -51,7 +51,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "<div class='alert alert-danger'>Sorry, your file was not uploaded.</div>";
             // if everything is ok, try to upload file
         } else {
-            if (move_uploaded_file($_FILES["image"]["tmp_name"], $targetDir)) {
+             $finalDir = "/var/www".$targetDir."/".$targetFile;
+            if (move_uploaded_file($_FILES["image"]["tmp_name"], $finalDir)) {
                 echo "<div class='alert alert-success'>The file " . htmlspecialchars(basename($_FILES["image"]["name"])) . " has been uploaded.</div>";
 
                 // Insert new challenge
