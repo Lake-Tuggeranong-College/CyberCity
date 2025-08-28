@@ -164,33 +164,33 @@ $flash = take_flash();
 
                 <!-- Admin Panel -->
                 <?php if (isset($_SESSION['username']) && ($_SESSION['access_level'] ?? null) == ADMIN_ACCESS_LEVEL): ?>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link text-black dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                           aria-expanded="false">
-                            Admin Panel
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="<?= BASE_URL; ?>pages/admin/userList.php" class="dropdown-item">Enabled User
-                                    List</a></li>
-                            <li><a href="<?= BASE_URL; ?>pages/admin/disabledUsers.php" class="dropdown-item">Disabled
-                                    User List</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a href="<?= BASE_URL; ?>pages/admin/contactpage.php" class="dropdown-item">View Contact
-                                    Requests</a></li>
-                            <li><a href="<?= BASE_URL; ?>pages/admin/readContactRequests.php" class="dropdown-item">Read
-                                    Contact Requests</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a href="<?= BASE_URL; ?>pages/admin/challengeRegister.php" class="dropdown-item">Add
-                                    New Modules & Challenges</a></li>
-                            <li><a href="<?= BASE_URL; ?>pages/admin/resetGame.php" class="dropdown-item">Reset Game</a>
-                            </li>
-                        </ul>
-                    </li>
-                <?php endif; ?>
+                <li class="nav-item dropdown">
+                    <a class="nav-link text-black dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                       aria-expanded="false">
+                        Admin Panel
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="<?= BASE_URL; ?>pages/admin/userList.php" class="dropdown-item">User
+                                List</a></li>
+
+                        <hr class="dropdown-divider">
+                </li>
+                <li><a href="<?= BASE_URL; ?>pages/admin/contactpage.php" class="dropdown-item">View Contact
+                        Requests</a></li>
+
+                <hr class="dropdown-divider">
+                </li>
+                <li><a href="<?= BASE_URL; ?>pages/admin/challengeRegister.php" class="dropdown-item">
+                        Create New Challenges</a></li>
+<!--                <hr class="dropdown-divider">-->
+                <li><a href="<?= BASE_URL; ?>pages/admin/createCategory.php" class="dropdown-item">
+                        Create New Category</a></li>
+                <hr class="dropdown-divider">
+                <li><a href="<?= BASE_URL; ?>pages/admin/resetGame.php" class="dropdown-item">Reset Game</a>
+                </li>
+            </ul>
+            </li>
+            <?php endif; ?>
             </ul>
 
             <!-- Right -->

@@ -1,6 +1,5 @@
 <?php include "../../includes/template.php";
 /** @var $conn */
-
 if (!authorisedAccess(false, false, true)) {
     header("Location:../../index.php");
 }
@@ -14,8 +13,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Check if the image file is set and handle the upload
     if (isset($_FILES["image"]) && $_FILES["image"]["error"] == 0) {
-        $targetDir = "website/assets/img/challengeImages/";
-        $targetFile = $targetDir . basename($_FILES["image"]["name"]);
+        $targetDir = BASE_URL . "assets/img/challengeImages";
+        $targetFile = basename($_FILES["image"]["name"]);
+
         $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
         $uploadOk = 1;
 
@@ -51,7 +51,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "<div class='alert alert-danger'>Sorry, your file was not uploaded.</div>";
             // if everything is ok, try to upload file
         } else {
-            if (move_uploaded_file($_FILES["image"]["tmp_name"], $targetFile)) {
+             $finalDir = "/var/www".$targetDir."/".$targetFile;
+            if (move_uploaded_file($_FILES["image"]["tmp_name"], $finalDir)) {
                 echo "<div class='alert alert-success'>The file " . htmlspecialchars(basename($_FILES["image"]["name"])) . " has been uploaded.</div>";
 
                 // Insert new challenge
@@ -66,7 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $image = $targetFile;
                 $enabled = $_POST["enabled"];
                 $categoryID = $_POST["categoryID"];
-                $projectID = $_POST["project_id"];
+                $projectID = $_POST["projectID"];
 
                 $insertSql = "INSERT INTO Challenges (challengeTitle, challengeText, flag, pointsValue, moduleName, moduleValue, dockerChallengeID, container, Image, Enabled, categoryID) 
                                       VALUES (:challengeTitle, :challengeText, :flag, :pointsValue, :moduleName, :moduleValue, :dockerChallengeID, :container, :image, :enabled, :categoryID)";
@@ -175,9 +176,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                required>
                     </div>
                     <div class="col-md-6">
-                        <label for="categoryID" class="form-label">Category ID</label>
-                        <input type="number" class="form-control" id="categoryID" name="categoryID" required>
+                        <label for="categoryID" class="form-label">Select Category</label>
+                        <select class="form-select" id="categoryID" name="categoryID" required>
+                            <?php
+                            // Assuming $conn is your PDO connection
+                            $categoryList = $conn->query("SELECT id, CategoryName FROM CyberCity.Category");
+                            while ($row = $categoryList->fetch(PDO::FETCH_ASSOC)) {
+                                echo '<option value="' . htmlspecialchars($row['id']) . '">' . htmlspecialchars($row['CategoryName']) . '</option>';
+                            }
+                            ?>
+                        </select>
                     </div>
+
                 </div>
                 <div class="row mb-3">
                     <div class="col-md-6">

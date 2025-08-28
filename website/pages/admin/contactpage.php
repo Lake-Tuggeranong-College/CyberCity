@@ -1,82 +1,83 @@
-<?php include "../../includes/template.php";
-/** @var $conn */
-$sec = 60;
-$page = $_SERVER['PHP_SELF'];
+<?php
+// Include your database connection
+include "../../includes/template.php";
 
-if (!authorisedAccess(false, false, true)) {
-    header("Location:../../index.php");
+// Handle status toggle
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['toggle_read_id'], $_POST['current_status'])) {
+    $id = intval($_POST['toggle_read_id']);
+    $newStatus = $_POST['current_status'] == 1 ? 0 : 1;
+
+    try {
+        $updateStmt = $conn->prepare("UPDATE ContactUs SET IsRead = ? WHERE ID = ?");
+        $updateStmt->execute([$newStatus, $id]);
+    } catch (PDOException $e) {
+        die("Update error: " . $e->getMessage());
+    }
 }
 
-$ContactList = $conn->query("SELECT Username, Email, ID, IsRead FROM ContactUs WHERE IsRead=0 ");
+// Determine view mode
+$view = isset($_GET['view']) && $_GET['view'] === 'unread' ? 'unread' : 'all';
 
-while ($ContactData = $ContactList->fetch()) {
-?>
-<?php
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $postID = $_GET["ContactID"];
-    $sql = "UPDATE ContactUs SET IsRead = 1 WHERE ID ='$postID'";
-    $stmt = $conn->prepare($sql);
+// Fetch messages based on view
+try {
+    if ($view === 'unread') {
+        $stmt = $conn->prepare("SELECT ID, Username, Email, IsRead FROM ContactUs WHERE IsRead = 0 ORDER BY ID DESC");
+    } else {
+        $stmt = $conn->prepare("SELECT ID, Username, Email, IsRead FROM ContactUs ORDER BY ID DESC");
+    }
     $stmt->execute();
-    $_SESSION["flash_message"] = "message read";
-//            header("Location:" . BASE_URL . "/pages/admin/contactpage.php");
-    echo $ContactData["IsRead"];
-}
-header('Location: '. $_SERVER['REQUEST_URI']);
-
+    $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    die("Database error: " . $e->getMessage());
 }
 ?>
-<!DOCTYPE html>
-<html>
-<head>
-    <meta http-equiv="refresh" content="<?php echo $sec ?>;URL='<?php echo $page ?>'">
-    <title>Cyber City - ContactPage</title>
-</head>
-<body>
-<h1>Contact Page</h1>
-<div class="container-fluid">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="contactTable" style="min-width: 30px; max-width: 24%"><strong>Request</strong></div>
-            <div class="contactTable" style="min-width: 30px; max-width: 24%"><strong>Username</strong></div>
-            <div class="contactTable" style="min-width: 300px; max-width: 24%"><strong>Email</strong></div>
-            <div class="contactTable" style="min-width: 300px; max-width: 24%"></div>
 
+<h2 class="text-center mb-4">
+    <?= $view === 'unread' ? 'Unread Contact Messages' : 'All Contact Messages' ?>
+</h2>
 
-        </div>
+<div class="text-center mb-3">
+    <a href="?view=all" class="btn btn-primary btn-sm <?= $view === 'all' ? 'disabled' : '' ?>">View All</a>
+    <a href="?view=unread" class="btn btn-secondary btn-sm <?= $view === 'unread' ? 'disabled' : '' ?>">View Unread
+        Only</a>
+</div>
 
+<?php if (count($messages) > 0): ?>
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead class="table-light">
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Username</th>
+                <th scope="col">Email</th>
+                <th scope="col">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($messages as $msg): ?>
+                <tr>
+                    <td><?= htmlspecialchars($msg['ID']) ?></td>
+                    <td><?= htmlspecialchars($msg['Username']) ?></td>
+                    <td><?= htmlspecialchars($msg['Email']) ?></td>
+                    <!--                        <td>--><?php //= $msg['IsRead'] ? 'Read' : 'Unread' ?><!--</td>-->
+                    <td>
+                        <form method="POST" style="display:inline;">
+                            <input type="hidden" name="toggle_read_id" value="<?= $msg['ID'] ?>">
+                            <input type="hidden" name="current_status" value="<?= $msg['IsRead'] ?>">
+                            <button type="submit"
+                                    class="btn btn-sm <?= $msg['IsRead'] ? 'btn-warning' : 'btn-success' ?>">
+                                <?= $msg['IsRead'] ? 'Mark As Unread' : 'Mark As Read' ?>
+                            </button>
+                        </form>
 
-</body>
-</html>
-
-
-<?php
-
-
-
-    echo "<div class='row'>";
-    echo "<div class='contactTable' style='min-width: 30px; max-width: 24%'>" . $ContactData['ID'] . "</div>";
-    echo "<div class='contactTable' style='min-width: 30px; max-width: 24%'>" . $ContactData['Username'] . "</div>";
-    echo "<div class='contactTable' style='min-width: 300px; max-width: 24%'>" . $ContactData['Email'] . "</div>";
-    echo "<div class='contactTable' style='min-width: 300px; max-width: 24%'>";
-    ?>
-    <form action="contactpage.php?ContactID= <?php echo $ContactData['ID'] ?> " method="post">
-
-        <button type='submit' class='btn btn-outline-danger'>  READ  </button>
-    </form>
-
-
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
     </div>
-    <?php
-    echo "</div>";
-
-
-
-
-?>
-</div>
-</div>
-</div>
-
-
-
-
+<?php else: ?>
+    <div class="alert alert-info text-center" role="alert">
+        <?= $view === 'unread' ? 'No unread messages.' : 'No messages found.' ?>
+    </div>
+<?php endif; ?>

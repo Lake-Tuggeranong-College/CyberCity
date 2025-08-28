@@ -1,158 +1,92 @@
-<?php include "../../includes/template.php";
+<?php
+include "../../includes/template.php";
 /** @var $conn */
-
 
 if (!authorisedAccess(false, false, true)) {
     header("Location:../../index.php");
+    exit;
 }
 
-// Back End
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $userName = sanitise_data($_POST["userName"]);
-//    $userPassword = sanitise_data($_POST["moduleLocation"]);
-    $userAccessLevel = sanitise_data($_POST["AccessLevel"]);
-    $userEnabled = sanitise_data($_POST["Enabled"]);
-    $userScore = sanitise_data($_POST["Score"]);
-//    $userHashedPassword = password_hash($userPassword, PASSWORD_DEFAULT);
-    $userToLoad = $_GET["UserID"];
-
-    $sql = "UPDATE Users SET Username= :newusername, AccessLevel= :newaccesslevel, Enabled= :newEnabled, Score=:newscore WHERE ID ='$userToLoad'";
-    //$sql = "INSERT INTO `RegisteredModules` (Location, Module, HashedAPIKey, Enabled) VALUES (:newLocation, :newModule, :newHashedAPIkey, :enabled)";
-
-    $stmt = $conn->prepare($sql);
-    $stmt->bindValue(":newusername", $userName);
-//    $stmt->bindValue(":newpassword", $userHashedPassword);
-    $stmt->bindValue(":newaccesslevel", $userAccessLevel);
-    $stmt->bindValue(":newEnabled", $userEnabled);
-    $stmt->bindValue(":newscore", $userScore);
-
-    $stmt->execute();
-
-    header('Location: '. $_SERVER['REQUEST_URI']);
-
-//    header("location:moduleInformation.php?ModuleID=$moduleToLoad");
-
-}
-?>
-
-<title>User Edit</title>
-
-
-<?php
 if (isset($_GET["UserID"])) {
     $userToLoad = $_GET["UserID"];
-    $sql = $conn->query("SELECT * FROM Users WHERE ID= " . $userToLoad);
+    $sql = $conn->query("SELECT * FROM Users WHERE ID = " . intval($userToLoad));
     $userInformation = $sql->fetch();
-    $userID = $userInformation["ID"];
-    $userHashedPassword = $userInformation["HashedPassword"];
-    $userName = $userInformation["Username"];
-    $userAccessLevel = $userInformation["AccessLevel"];
-    $userEnabled = $userInformation["Enabled"];
-    $userScore = $userInformation["Score"];
+
+    if ($userInformation) {
+        $userID = $userInformation["ID"];
+        $userName = $userInformation["Username"];
+        $userAccessLevel = $userInformation["AccessLevel"];
+        $userEnabled = $userInformation["Enabled"];
+        $userScore = $userInformation["Score"];
+    } else {
+        header("Location:userList.php");
+        exit;
+    }
 } else {
-    header("location:userList.php");
+    header("Location:userList.php");
+    exit;
 }
-//function enableUser(){
-//    echo "123";
-//    $userEnabled = 1;
-//
-//}
-
-
 ?>
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit User Information</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@ss/bootstrap.min.css
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet           background-color: #f8f9fa;
+        }
+        .card {
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Edit User Information</h4>
+                </div>
+                <div class="card-body">
+                    <form action="userEdit.php?UserID=<?= $userToLoad ?>" method="post">
+                        <div class="mb-3">
+                            <label for="userName" class="form-label">Username</label>
+                            <input type="text" name="userName" id="userName" class="form-control" required
+                                   value="<?= htmlspecialchars($userName ?? '') ?>">
+                        </div>
 
-<h1>Edit User Information</h1>
+                        <div class="mb-3">
+                            <label for="AccessLevel" class="form-label">Access Level</label>
+                            <select name="AccessLevel" id="AccessLevel" class="form-select">
+                                <option value="1" <?= $userAccessLevel == 1 ? 'selected' : '' ?>>User</option>
+                                <option value="2" <?= $userAccessLevel == 2 ? 'selected' : '' ?>>Admin</option>
+                            </select>
+                        </div>
 
-<form action="userEdit.php?UserID=<?= $userToLoad ?>" method="post" enctype="multipart/form-data">
-    <div class="container-fluid">
-        <div class="row">
-            <!--Customer Details-->
-            <div class="col-md-6">
-                <h2>User Details</h2>
-                <p>User Name<label>
-                        <input type="text" name="userName" class="form-control" required="required"
-                               value="<?= $userName ?>">
-                    </label></p>
-<!--                <p>Password-->
-<!--                    <label>-->
-<!--                        <input type="text" name="password" class="form-control" required="required"-->
-<!--                               value="--><?php //= $userHashedPassword ?><!--">-->
-<!--                    </label></p>-->
-            </div>
-            <div class="col-md-6">
-                <h2>More Details</h2>
-                <!--Product List-->
-                <p>Access Level
-                    <label>
-<!--                        <input type="text" name="AccessLevel" class="form-control" required="required"-->
-<!--                               value="--><?php //= $userAccessLevel ?><!--">-->
-                        <?php
-                        if ($userAccessLevel == 1){
-                        ?>
-                        <select name="AccessLevel" size="1">
-                            <option value="1">User</option>
-                            <option value="2">Admin</option>
-                        </select>
-                        <?php
-                        }
-                        if ($userAccessLevel == 2){
-                        ?>
-                        <select name="AccessLevel" size="1">
-                            <option value="2">Admin</option>
-                            <option value="1">User</option>
-                        </select>
-                        <?php
-                        }
-                        ?>
-                    </label></p>
+                        <div class="mb-3">
+                            <label for="Enabled" class="form-label">Status</label>
+                            <select name="Enabled" id="Enabled" class="form-select">
+                                <option value="1" <?= $userEnabled == 1 ? 'selected' : '' ?>>Enabled</option>
+                                <option value="0" <?= $userEnabled == 0 ? 'selected' : '' ?>>Disabled</option>
+                            </select>
+                        </div>
 
-                <p>Enabled/Disabled
-                    <label>
-                        <?php
-                        if ($userEnabled == 0){
-                        ?>
-                        <select name="Enabled" size="1">
-                            <option value="0">Disable</option>
-                            <option value="1">Enable</option>
-                        </select>
-                        <?php
-                        }
-                        if ($userEnabled == 1){
-                        ?>
-                        <select name="Enabled" size="1">
-                            <option value="1">Enable</option>
-                            <option value="0">Disable</option>
-                        </select>
-                        <?php
-                        }
-                        ?>
-                    </label></p>
-                <p>Current Score
-                    <label>
-                        <input type="text" name="Score" class="form-control" required="required"
-                               value="<?= $userScore ?>">
-                    </label></p>
+                        <div class="mb-3">
+                            <label for="Score" class="form-label">Current Score</label>
+                            <input type="number" name="Score" id="Score" class="form-control" required
+                                   value="<?= htmlspecialchars($userScore ?? '') ?>">
+                        </div>
 
+                        <div class="d-grid">
+                            <button type="submit" name="formSubmit" class="btn btn-success btn-lg">
+                                <i class="bi bi-save me-2"></i>Update User
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-    <input type="submit" name="formSubmit" value="Update">
-</form>
-
-
-<!-- If the user presses update, this code runs-->
-
-
-
-
-
-<?php
-/*echo '<h2 class="text-danger">Debug Information. Comment out as necessary</h2><pre>';
-print_r($moduleInformation);
-echo '</pre>';
-
-
-*/ ?>
-
-
+</div>
