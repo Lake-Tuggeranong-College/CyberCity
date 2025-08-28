@@ -14,7 +14,7 @@ import shutil
 # =========================
 # DEBUG / VERBOSITY
 # =========================
-DEBUG = True  # <-- set to False (or comment this out) to silence debug prints
+DEBUG = True  # <-- set to False to silence debug prints
 
 def debug(*args, **kwargs):
     if DEBUG:
@@ -25,11 +25,11 @@ def debug(*args, **kwargs):
 # =========================
 
 db_config = {
-    'host': '10.177.202.196',  # updated
-    'user': 'CyberCity',       # updated
-    'passwd': 'CyberCity',     # updated
+    'host': '10.177.202.196',
+    'user': 'CyberCity',
+    'passwd': 'CyberCity',
     'port': 3306,
-    'database': 'CyberCity',   # updated
+    'database': 'CyberCity',
     'charset': 'utf8mb4'
 }
 
@@ -46,6 +46,9 @@ TTL_MINUTES = 20
 # How often the time_tracker polls DB for stale containers
 TRACKER_POLL_SECONDS = 15
 
+# Poller interval (fallback when binlog perms are missing)
+NEWROW_POLL_SECONDS = 2
+
 # Compose binary check
 DOCKER_BIN = shutil.which("docker") or "/usr/bin/docker"
 
@@ -54,8 +57,11 @@ DOCKER_BIN = shutil.which("docker") or "/usr/bin/docker"
 # =========================
 
 # Tracks active containers by DB row_id
-#   row_id: {"userID": int, "challengeID": int, "port": int, "delete_time": datetime}
+#   row_id: {"userID": int, "challengeID": (int|str), "port": int, "delete_time": datetime}
 active_containers = {}
+
+# Tracks which DB rows we have already handled in polling mode
+processed_rows = set()
 
 # =========================
 # DB helpers
@@ -69,15 +75,24 @@ def db_conn():
         print(f"[FATAL] Could not connect to MySQL: {e}")
         if DEBUG:
             traceback.print_exc()
-        # hard exit is safer here
         raise
 
-def resolve_chal_folder(challengeID: int) -> str:
-    """Returns the folder name for the challenge by looking up Challenges.dockerChallengeID."""
+def resolve_chal_folder(challengeID) -> str:
+    """
+    Returns the folder name for the challenge.
+    Accepts either numeric Challenges.ID or a slug (as stored in DockerContainers.challengeID).
+    """
+    # If it's a slug already, just use it
+    s = str(challengeID)
+    if not s.isdigit():
+        folder = s
+        debug(f"[resolve_chal_folder] slug detected -> folder={folder}")
+        return folder
+
     con = db_conn()
     try:
         with con.cursor() as c:
-            c.execute("SELECT dockerChallengeID FROM Challenges WHERE ID=%s", (challengeID,))
+            c.execute("SELECT dockerChallengeID FROM Challenges WHERE ID=%s", (int(challengeID),))
             row = c.fetchone()
             if not row or not row[0]:
                 raise RuntimeError(f"No dockerChallengeID for challenge {challengeID}")
@@ -93,7 +108,7 @@ def get_used_ports() -> set:
         with con.cursor() as c:
             c.execute("SELECT port FROM DockerContainers WHERE port IS NOT NULL")
             res = c.fetchall()
-            ports = {r[0] for r in res}
+            ports = {int(r[0]) for r in res if r[0] is not None}
             debug(f"[get_used_ports] currently used: {sorted(ports)}")
             return ports
     finally:
@@ -120,7 +135,7 @@ def update_port_in_db(assigned_port: int, row_id: int):
     finally:
         con.close()
 
-def delete_row_from_db(row_id: int, challengeID: int):
+def delete_row_from_db(row_id: int, challengeID):
     con = db_conn()
     try:
         with con.cursor() as c:
@@ -137,7 +152,6 @@ def delete_row_from_db(row_id: int, challengeID: int):
 def _check_docker_available():
     if not DOCKER_BIN:
         raise RuntimeError("docker binary not found in PATH")
-    # basic docker version check
     try:
         subprocess.run([DOCKER_BIN, "--version"], check=True, capture_output=True)
         debug("[check] docker is available")
@@ -145,7 +159,6 @@ def _check_docker_available():
         raise RuntimeError(f"Docker not available: {e}")
 
 def _check_compose_support():
-    # docker compose v2: `docker compose version`
     try:
         subprocess.run([DOCKER_BIN, "compose", "version"], check=True, capture_output=True)
         debug("[check] docker compose v2 is available")
@@ -163,7 +176,7 @@ def write_env_file(chal_dir: str, userID: int, port: int):
         f.write(f"USER={userID}\n")
     debug(f"[write_env_file] wrote .env at {env_file_path} with PORT={port} USER={userID}")
 
-def launch_container(userID: int, challengeID: int, port: int, row_id: int):
+def launch_container(userID: int, challengeID, port: int, row_id: int):
     """
     Runs `docker compose up -d --build` in the challenge folder with project name = port.
     Assumes compose reads .env for PORT and USER.
@@ -203,7 +216,7 @@ def launch_container(userID: int, challengeID: int, port: int, row_id: int):
         if DEBUG:
             traceback.print_exc()
 
-def remove_container(userID: int, challengeID: int, port: int, row_id: int):
+def remove_container(userID: int, challengeID, port: int, row_id: int):
     """
     Runs `docker compose down` in the challenge folder for project name = port, then
     deletes the DockerContainers DB row.
@@ -260,7 +273,7 @@ def time_tracker():
                 delete_time = time_initialised + timedelta(minutes=TTL_MINUTES)
                 if port and current_time > delete_time:
                     print(f"Located expired container row {row_id}.. attempting to remove")
-                    remove_container(user_id, challenge_id, port, row_id)
+                    remove_container(user_id, challenge_id, int(port), row_id)
 
             for rid, info in list(active_containers.items()):
                 if datetime.now() > info["delete_time"]:
@@ -280,21 +293,59 @@ def time_tracker():
         time.sleep(TRACKER_POLL_SECONDS)
 
 # =========================
-# Binlog processing
+# Shared row processing
+# =========================
+
+def _process_insert_like(row_id, time_initialised, userID, challengeID, port):
+    """
+    Common logic for INSERT (binlog) or NEW ROW (polling).
+    Allocates a port if needed, launches container, and sets local TTL.
+    """
+    if row_id is None or userID is None or challengeID is None or not time_initialised:
+        debug("[row] missing required fields; skipping")
+        return
+
+    # Allocate port and update DB (retry a few times in case of race)
+    if not port:
+        for attempt in range(5):
+            try:
+                assigned_port = get_next_available_port()
+                update_port_in_db(assigned_port, row_id)
+                port = assigned_port
+                break
+            except Exception as e:
+                debug(f"[row] Port allocation/update failed (attempt {attempt+1}): {e}")
+                time.sleep(0.2)
+        if not port:
+            print("[ERROR] Could not allocate a port; skipping launch")
+            return
+
+    # Launch container
+    launch_container(int(userID), challengeID, int(port), int(row_id))
+
+    # Schedule local TTL (DB poller also enforces)
+    delete_time = time_initialised + timedelta(minutes=TTL_MINUTES)
+    active_containers[int(row_id)] = {
+        "userID": int(userID),
+        "challengeID": challengeID,
+        "port": int(port),
+        "delete_time": delete_time
+    }
+    debug(f"[row] delete_time for row {row_id} -> {delete_time}")
+
+# =========================
+# Binlog processing (preferred)
 # =========================
 
 def process_binlog_event():
     """
     Watches MySQL binlog for INSERT/UPDATE/DELETE on DockerContainers.
-    On INSERT: allocates port, updates DB, launches container, schedules TTL.
-    On UPDATE: refreshes TTL if timeInitialised changed.
-    On DELETE: clears local tracking.
     """
     stream = BinLogStreamReader(
         connection_settings=db_config,
         server_id=101,  # must be unique and not equal to MySQL server-id
         only_schemas=[db_config['database']],
-        only_tables=['DockerContainers'],  # exact table name
+        only_tables=['DockerContainers'],
         only_events=[WriteRowsEvent, UpdateRowsEvent, DeleteRowsEvent],
         blocking=True,
         resume_stream=True
@@ -324,40 +375,11 @@ def process_binlog_event():
                     row_id           = data.get('ID')
                     time_initialised = data.get('timeInitialised')
                     userID           = data.get('userID')
-                    challengeID      = data.get('challengeID')
+                    challengeID      = data.get('challengeID')  # may be slug or numeric
                     port             = data.get('port')
 
                     if event_type == "INSERT":
-                        if row_id is None or userID is None or challengeID is None or not time_initialised:
-                            debug("[binlog][WARN] INSERT missing required fields; skipping")
-                            continue
-
-                        # Allocate port and update DB (retry a few times in case of race)
-                        for attempt in range(5):
-                            try:
-                                assigned_port = get_next_available_port()
-                                update_port_in_db(assigned_port, row_id)
-                                port = assigned_port
-                                break
-                            except Exception as e:
-                                debug(f"[binlog] Port allocation/update failed (attempt {attempt+1}): {e}")
-                                time.sleep(0.2)
-                        if not port:
-                            print("[ERROR] Could not allocate a port; skipping launch")
-                            continue
-
-                        # Launch container
-                        launch_container(userID, challengeID, port, row_id)
-
-                        # Schedule local TTL (DB poller also enforces)
-                        delete_time = time_initialised + timedelta(minutes=TTL_MINUTES)
-                        active_containers[row_id] = {
-                            "userID": userID,
-                            "challengeID": challengeID,
-                            "port": port,
-                            "delete_time": delete_time
-                        }
-                        debug(f"[binlog] delete_time for row {row_id} -> {delete_time}")
+                        _process_insert_like(row_id, time_initialised, userID, challengeID, port)
 
                     elif event_type == "UPDATE":
                         if row_id is not None and time_initialised:
@@ -385,16 +407,60 @@ def process_binlog_event():
             pass
 
 # =========================
+# Polling fallback (no binlog privileges)
+# =========================
+
+def poll_for_new_rows():
+    """
+    Fallback watcher that polls DockerContainers for new rows needing a port/launch.
+    Does not require REPLICATION privileges.
+    """
+    debug("[poller] starting DB polling fallback")
+    while True:
+        try:
+            con = db_conn()
+            with con.cursor() as c:
+                # Pick rows that look like "start requests"
+                c.execute("""
+                    SELECT ID, timeInitialised, userID, challengeID, port
+                    FROM DockerContainers
+                    WHERE timeInitialised IS NOT NULL
+                      AND (port IS NULL OR port = 0)
+                    ORDER BY ID ASC
+                """)
+                rows = c.fetchall()
+
+            for row in rows:
+                row_id, time_initialised, userID, challengeID, port = row
+                if row_id in processed_rows:
+                    continue
+                processed_rows.add(row_id)
+                debug(f"[poller] discovered row needing launch: id={row_id}, chal={challengeID}, user={userID}")
+
+                _process_insert_like(row_id, time_initialised, userID, challengeID, port)
+
+        except Exception as e:
+            print(f"[poller] error: {e}")
+            if DEBUG:
+                traceback.print_exc()
+        finally:
+            try:
+                con.close()
+            except Exception:
+                pass
+
+        time.sleep(NEWROW_POLL_SECONDS)
+
+# =========================
 # Main
 # =========================
 
 if __name__ == "__main__":
     try:
-        # Optional environment checks (comment out once stable)
         _check_docker_available()
         _check_compose_support()
     except Exception as e:
-        print(f"[FATAL] Environment check failed: {e}")
+        print(f("[FATAL] Environment check failed: {e}"))
         if DEBUG:
             traceback.print_exc()
         raise
@@ -403,5 +469,18 @@ if __name__ == "__main__":
     time_thread = threading.Thread(target=time_tracker, daemon=True)
     time_thread.start()
 
-    # Start binlog watcher (blocking)
-    process_binlog_event()
+    # Try binlog watcher; if perms are missing, fall back to polling
+    try:
+        process_binlog_event()
+    except pymysql.err.OperationalError as e:
+        # MySQL error 1227 is "Access denied; need REPLICATION CLIENT/SUPER"
+        if getattr(e, "args", [None])[0] == 1227:
+            print("[warn] Missing REPLICATION privileges for binlog. Falling back to polling mode.")
+            poll_for_new_rows()  # blocking
+        else:
+            raise
+    except Exception as e:
+        print(f"[warn] Binlog watcher failed ({e}). Falling back to polling mode.")
+        if DEBUG:
+            traceback.print_exc()
+        poll_for_new_rows()  # blocking
