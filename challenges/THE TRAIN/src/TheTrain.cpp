@@ -97,11 +97,13 @@ void callback(char* topic, byte* payload, unsigned int length) {
   if (message == "0") {
     Serial.println("HALT");
     step(RED, PWM_BRK, 0);
+    delay(2000);
   } 
   // "1" = Enable normal mode (standard traffic light sequence)
   else if (message == "1") {
     Serial.println("ADVANCE");
     step(RED, PWM_FWD3, 0);
+    delay(2000);
   }
 }
 
