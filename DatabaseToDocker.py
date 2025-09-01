@@ -2,7 +2,7 @@
 from pymysqlreplication import BinLogStreamReader
 from pymysqlreplication.row_event import WriteRowsEvent, UpdateRowsEvent, DeleteRowsEvent
 import time
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import pymysql
 import subprocess
 import threading
@@ -16,17 +16,42 @@ import re
 # =========================
 DB = {'host':'localhost','user':'LTC','passwd':'LTCpcgame5','port':3306,'db':'CyberCity'}
 BINLOG_CONN = {'host':DB['host'],'port':DB['port'],'user':DB['user'],'passwd':DB['passwd']}
-TABLE_CONTAINERS = "DockerContainers"   # your table with rows to watch
-TABLE_CHALLENGES = "Challenges"         # table that has dockerChallengeID
+
+TABLE_CONTAINERS = "DockerContainers"   # watched table
+TABLE_CHALLENGES = "Challenges"         # has dockerChallengeID
 CHALLENGE_ROOT = Path("/var/www/CyberCity/dockerStuff")
+
 BASE_PORT, MAX_PORT = 17001, 17999
+SAFETY_GRACE_SECONDS = 90  # protects brand-new containers from clock skew
 
 active_containers = {}  # row_id -> {challengeID, dockerChallengeID, port, delete_time}
-TABLE_COLS = []         # detected column order for DockerContainers
+TABLE_COLS = []         # detected order for DockerContainers columns
 CACHE = {}              # challengeID -> {"dockerChallengeID": str, "ts": float}
 CACHE_TTL = 300         # seconds
 
 def log(*a): print("[DB2Docker]", *a)
+
+# =========================
+# TIME HELPERS (UTC)
+# =========================
+def to_utc(dt):
+    """Treat MySQL datetimes as UTC and make them timezone-aware."""
+    if dt is None:
+        return None
+    if dt.tzinfo is None:
+        return dt.replace(tzinfo=timezone.utc)
+    return dt.astimezone(timezone.utc)
+
+def now_utc():
+    return datetime.now(timezone.utc)
+
+def compute_delete_time(time_initialised_utc: datetime):
+    """timeInitialised + 20m, but never sooner than now + grace."""
+    delete_time = time_initialised_utc + timedelta(minutes=20)
+    min_delete = now_utc() + timedelta(seconds=SAFETY_GRACE_SECONDS)
+    if delete_time < min_delete:
+        delete_time = min_delete
+    return delete_time
 
 # =========================
 # DB HELPERS
@@ -43,7 +68,7 @@ def db_query(sql, params=None, fetch=True, commit=False):
         if conn: conn.close()
 
 def load_cols():
-    """Detect column order for DockerContainers to map UNKNOWN_COLi."""
+    """Detect column order for DockerContainers to map UNKNOWN_COLi from binlog."""
     global TABLE_COLS
     rows = db_query(f"SHOW COLUMNS FROM {TABLE_CONTAINERS}")
     TABLE_COLS = [r[0] for r in rows]
@@ -83,7 +108,6 @@ def get_docker_challenge_id(challenge_id) -> str:
     key = str(challenge_id)
     cached = cache_get(key)
     if cached: return cached
-
     row = db_query(f"SELECT dockerChallengeID FROM {TABLE_CHALLENGES} WHERE ID = %s", (challenge_id,))
     if not row or not row[0][0]:
         return None
@@ -122,7 +146,7 @@ def resolve_challenge_dir(docker_challenge_id: str) -> Path:
 # =========================
 def launch_container(userID, challengeID, dockerChallengeID, port, row_id):
     if not dockerChallengeID:
-        log(f"Row {row_id}: no dockerChallengeID found for challengeID={challengeID}; skipping launch.")
+        log(f"Row {row_id}: no dockerChallengeID for challengeID={challengeID}; skipping launch.")
         return
     try:
         cdir = resolve_challenge_dir(dockerChallengeID)
@@ -154,6 +178,7 @@ def launch_container(userID, challengeID, dockerChallengeID, port, row_id):
         log(f"Launch error (row {row_id}): {e}")
 
 def remove_container(userID, challengeID, dockerChallengeID, port, row_id):
+    # Best-effort: if not provided, look it up
     if not dockerChallengeID:
         dockerChallengeID = get_docker_challenge_id(challengeID)
 
@@ -192,9 +217,9 @@ def remove_container(userID, challengeID, dockerChallengeID, port, row_id):
 # =========================
 def time_tracker():
     while True:
-        current_time = datetime.now()
+        current_time = now_utc()
         try:
-            # Pull dockerChallengeID via JOIN so polling never references a missing column
+            # Pull dockerChallengeID via JOIN so polling always knows folder
             sql = f"""
             SELECT dc.ID, dc.timeInitialised, dc.userID, dc.challengeID, c.dockerChallengeID, dc.port
             FROM {TABLE_CONTAINERS} dc
@@ -206,7 +231,9 @@ def time_tracker():
                 if not time_initialised or not port:
                     continue
 
-                delete_time = time_initialised + timedelta(minutes=20)
+                t0_utc = to_utc(time_initialised)
+                delete_time = compute_delete_time(t0_utc)
+
                 if current_time > delete_time:
                     log(f"expiry hit: row={row_id}")
                     remove_container(user_id, challenge_id, docker_challenge_id, port, row_id)
@@ -217,7 +244,7 @@ def time_tracker():
         time.sleep(15)
 
 # =========================
-# BINLOG PROCESSOR (per-row lookup)
+# BINLOG PROCESSOR (per-row lookup, UTC times)
 # =========================
 def process_binlog_event():
     stream = None
@@ -249,7 +276,6 @@ def process_binlog_event():
                 challenge_id = data.get("challengeID")
                 port         = data.get("port")
 
-                # DELETE -> best-effort removal
                 if evt == "DELETE":
                     info = active_containers.pop(row_id, None)
                     docker_challenge_id = (info or {}).get("dockerChallengeID") or get_docker_challenge_id(challenge_id)
@@ -261,8 +287,9 @@ def process_binlog_event():
                     log(f"Row {row_id} missing timeInitialised; skip.")
                     continue
 
+                t0_utc = to_utc(time_init)
+                delete_time = compute_delete_time(t0_utc)
                 docker_challenge_id = get_docker_challenge_id(challenge_id)
-                delete_time = time_init + timedelta(minutes=20)
 
                 if evt == "INSERT":
                     if not port:
@@ -282,8 +309,8 @@ def process_binlog_event():
                         ac["dockerChallengeID"] = docker_challenge_id or ac["dockerChallengeID"]
                         if port: ac["port"] = port
 
-                # Opportunistic sweep
-                now = datetime.now()
+                # Opportunistic sweep (UTC)
+                now = now_utc()
                 for rid, info in list(active_containers.items()):
                     if now > info["delete_time"]:
                         remove_container(user_id, info["challengeID"], info["dockerChallengeID"], info["port"], rid)
@@ -299,6 +326,6 @@ def process_binlog_event():
 # BOOT
 # =========================
 if __name__ == "__main__":
-    load_cols()  # get container table column order for binlog mapping
+    load_cols()  # detect container table column order for binlog mapping
     threading.Thread(target=time_tracker, daemon=True).start()
     process_binlog_event()
