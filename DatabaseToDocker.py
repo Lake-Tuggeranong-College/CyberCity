@@ -16,14 +16,15 @@ import re
 # =========================
 DB = {'host':'localhost','user':'LTC','passwd':'LTCpcgame5','port':3306,'db':'CyberCity'}
 BINLOG_CONN = {'host':DB['host'],'port':DB['port'],'user':DB['user'],'passwd':DB['passwd']}
-TABLE = "DockerContainers"
+TABLE_CONTAINERS = "DockerContainers"   # your table with rows to watch
+TABLE_CHALLENGES = "Challenges"         # table that has dockerChallengeID
 CHALLENGE_ROOT = Path("/var/www/CyberCity/dockerStuff")
-MAP_FILE = CHALLENGE_ROOT / "challenge_map.json"  # optional fallback when dockerChallengeID is missing
 BASE_PORT, MAX_PORT = 17001, 17999
 
-active_containers = {}  # row_id -> {dockerChallengeID, challengeID, port, delete_time}
-TABLE_COLS = []         # populated at boot
-HAS_DCID = False        # dockerChallengeID presence
+active_containers = {}  # row_id -> {challengeID, dockerChallengeID, port, delete_time}
+TABLE_COLS = []         # detected column order for DockerContainers
+CACHE = {}              # challengeID -> {"dockerChallengeID": str, "ts": float}
+CACHE_TTL = 300         # seconds
 
 def log(*a): print("[DB2Docker]", *a)
 
@@ -42,28 +43,59 @@ def db_query(sql, params=None, fetch=True, commit=False):
         if conn: conn.close()
 
 def load_cols():
-    global TABLE_COLS, HAS_DCID
-    rows = db_query(f"SHOW COLUMNS FROM {TABLE}")
-    # rows: Field, Type, Null, Key, Default, Extra
+    """Detect column order for DockerContainers to map UNKNOWN_COLi."""
+    global TABLE_COLS
+    rows = db_query(f"SHOW COLUMNS FROM {TABLE_CONTAINERS}")
     TABLE_COLS = [r[0] for r in rows]
-    HAS_DCID = 'dockerChallengeID' in TABLE_COLS
-    log(f"Detected columns: {TABLE_COLS}; dockerChallengeID present? {HAS_DCID}")
+    log(f"Detected {TABLE_CONTAINERS} columns:", TABLE_COLS)
 
 def normalize_binlog_row(data: dict) -> dict:
     """Map UNKNOWN_COLi keys to real column names based on table order."""
     if not data: return {}
     if all(k.startswith("UNKNOWN_COL") for k in data.keys()):
-        # keys like UNKNOWN_COL0..N correspond to ordinal columns
         mapped = {}
         for k, v in data.items():
-            idx = int(re.search(r"(\d+)$", k).group(1))
+            m = re.search(r"(\d+)$", k)
+            if not m: continue
+            idx = int(m.group(1))
             if idx < len(TABLE_COLS):
                 mapped[TABLE_COLS[idx]] = v
         return mapped
     return data
 
+# =========================
+# CHALLENGE LOOKUP (via Challenges table)
+# =========================
+def cache_get(challenge_id: str):
+    item = CACHE.get(challenge_id)
+    if not item: return None
+    if time.time() - item["ts"] > CACHE_TTL:
+        CACHE.pop(challenge_id, None)
+        return None
+    return item["dockerChallengeID"]
+
+def cache_put(challenge_id: str, docker_challenge_id: str):
+    CACHE[str(challenge_id)] = {"dockerChallengeID": docker_challenge_id, "ts": time.time()}
+
+def get_docker_challenge_id(challenge_id) -> str:
+    """Return dockerChallengeID string for a given Challenges.ID (cached)."""
+    if challenge_id is None: return None
+    key = str(challenge_id)
+    cached = cache_get(key)
+    if cached: return cached
+
+    row = db_query(f"SELECT dockerChallengeID FROM {TABLE_CHALLENGES} WHERE ID = %s", (challenge_id,))
+    if not row or not row[0][0]:
+        return None
+    dcid = str(row[0][0])
+    cache_put(key, dcid)
+    return dcid
+
+# =========================
+# PORT MGMT
+# =========================
 def get_next_available_port():
-    rows = db_query(f"SELECT port FROM {TABLE} WHERE port IS NOT NULL")
+    rows = db_query(f"SELECT port FROM {TABLE_CONTAINERS} WHERE port IS NOT NULL")
     used = {r[0] for r in rows if r[0]}
     for p in range(BASE_PORT, MAX_PORT + 1):
         if p not in used:
@@ -71,70 +103,35 @@ def get_next_available_port():
     raise RuntimeError("No available ports in the specified range.")
 
 def update_port_in_db(row_id, port):
-    db_query(f"UPDATE {TABLE} SET port=%s WHERE ID=%s", (port, row_id), fetch=False, commit=True)
+    db_query(f"UPDATE {TABLE_CONTAINERS} SET port=%s WHERE ID=%s", (port, row_id), fetch=False, commit=True)
     log(f"Port assigned: row {row_id} -> {port}")
 
 # =========================
-# CHALLENGE FOLDER RESOLUTION
+# FOLDER RESOLUTION
 # =========================
-def load_map():
-    if MAP_FILE.exists():
-        try: return json.loads(MAP_FILE.read_text())
-        except Exception: log("Warning: challenge_map.json invalid JSON; ignored.")
-    return {}
-
-CH_MAP = load_map()
-
-def resolve_by_dockerChallengeID(dcid: str) -> Path:
-    cdir = CHALLENGE_ROOT / str(dcid)
+def resolve_challenge_dir(docker_challenge_id: str) -> Path:
+    cdir = CHALLENGE_ROOT / str(docker_challenge_id)
     if not cdir.is_dir():
-        raise FileNotFoundError(f"Challenge folder not found for dockerChallengeID='{dcid}' at {cdir}")
+        raise FileNotFoundError(
+            f"Challenge folder not found for dockerChallengeID='{docker_challenge_id}' at {cdir}"
+        )
     return cdir
-
-def resolve_by_challengeID(challenge_id: str) -> Path:
-    """
-    Fallback if dockerChallengeID column doesn't exist:
-    - If challenge_id maps in challenge_map.json, use that folder name.
-    - Else, try a loose match by name.
-    """
-    cid = str(challenge_id).strip()
-    mapped = CH_MAP.get(cid)
-    if mapped:
-        cdir = CHALLENGE_ROOT / mapped
-        if cdir.is_dir(): return cdir
-        raise FileNotFoundError(f"Mapped folder '{mapped}' for challengeID='{cid}' not found at {cdir}")
-
-    # Loose match: try to find a folder containing the token
-    norm = re.sub(r'[^a-z0-9]+','',cid.lower())
-    candidates = []
-    for p in CHALLENGE_ROOT.iterdir():
-        if not p.is_dir(): continue
-        name_norm = re.sub(r'[^a-z0-9]+','',p.name.lower())
-        if norm and (name_norm.startswith(norm) or norm in name_norm):
-            candidates.append(p)
-    if candidates:
-        candidates.sort(key=lambda p: (len(p.name), p.name.lower()))
-        return candidates[0]
-    raise FileNotFoundError(
-        f"No folder found for challengeID='{cid}'. Add a mapping in {MAP_FILE} like {{\"{cid}\": \"chmod\"}}."
-    )
-
-def resolve_challenge_dir(dockerChallengeID, challengeID) -> Path:
-    if dockerChallengeID:
-        return resolve_by_dockerChallengeID(dockerChallengeID)
-    return resolve_by_challengeID(challengeID)
 
 # =========================
 # DOCKER OPS
 # =========================
 def launch_container(userID, challengeID, dockerChallengeID, port, row_id):
+    if not dockerChallengeID:
+        log(f"Row {row_id}: no dockerChallengeID found for challengeID={challengeID}; skipping launch.")
+        return
     try:
-        cdir = resolve_challenge_dir(dockerChallengeID, challengeID)
-    except Exception as e:
-        log(e); return
+        cdir = resolve_challenge_dir(dockerChallengeID)
+    except FileNotFoundError as e:
+        log(str(e)); return
 
     compose_file = cdir / "docker-compose.yml"
     env_file     = cdir / ".env"
+
     try:
         cdir.mkdir(parents=True, exist_ok=True)
         env_file.write_text(f"PORT={port}\nUSER={userID}\n")
@@ -150,18 +147,28 @@ def launch_container(userID, challengeID, dockerChallengeID, port, row_id):
             ["sudo","docker","compose","-p",str(port),"-f",str(compose_file),"up","-d","--build"],
             check=True, cwd=str(cdir)
         )
-        log(f"Launched user {userID} ({dockerChallengeID or challengeID}) on port {port}")
+        log(f"Launched user {userID} ({dockerChallengeID}) on port {port}")
     except subprocess.CalledProcessError as e:
         log(f"Compose up failed (row {row_id}) in {cdir}: {e}")
     except Exception as e:
         log(f"Launch error (row {row_id}): {e}")
 
 def remove_container(userID, challengeID, dockerChallengeID, port, row_id):
+    if not dockerChallengeID:
+        dockerChallengeID = get_docker_challenge_id(challengeID)
+
+    if not dockerChallengeID:
+        log(f"Row {row_id}: cannot resolve dockerChallengeID for challengeID={challengeID}; DB-removing only.")
+        try:
+            db_query(f"DELETE FROM {TABLE_CONTAINERS} WHERE ID=%s", (row_id,), fetch=False, commit=True)
+        except Exception as db_err: log(f"DB cleanup failed for row {row_id}: {db_err}")
+        return
+
     try:
-        cdir = resolve_challenge_dir(dockerChallengeID, challengeID)
-    except Exception as e:
-        log(e)
-        try: db_query(f"DELETE FROM {TABLE} WHERE ID=%s", (row_id,), fetch=False, commit=True)
+        cdir = resolve_challenge_dir(dockerChallengeID)
+    except FileNotFoundError as e:
+        log(str(e))
+        try: db_query(f"DELETE FROM {TABLE_CONTAINERS} WHERE ID=%s", (row_id,), fetch=False, commit=True)
         except Exception as db_err: log(f"DB cleanup failed for row {row_id}: {db_err}")
         return
 
@@ -173,34 +180,29 @@ def remove_container(userID, challengeID, dockerChallengeID, port, row_id):
             check=True, cwd=str(cdir)
         )
         active_containers.pop(row_id, None)
-        db_query(f"DELETE FROM {TABLE} WHERE ID=%s", (row_id,), fetch=False, commit=True)
-        log(f"Removed row {row_id} {dockerChallengeID or challengeID} port {port}")
+        db_query(f"DELETE FROM {TABLE_CONTAINERS} WHERE ID=%s", (row_id,), fetch=False, commit=True)
+        log(f"Removed row {row_id} {dockerChallengeID} port {port}")
     except subprocess.CalledProcessError as e:
         log(f"Compose down failed (row {row_id}) in {cdir}: {e}")
     except Exception as e:
         log(f"Remove error (row {row_id}): {e}")
 
 # =========================
-# HOUSEKEEPER
+# HOUSEKEEPER (JOIN reads dockerChallengeID)
 # =========================
 def time_tracker():
     while True:
         current_time = datetime.now()
         try:
-            cols = ["ID","timeInitialised","userID","challengeID","port"]
-            if HAS_DCID: cols.insert(4, "dockerChallengeID")  # after challengeID
-            rows = db_query(f"SELECT {', '.join(cols)} FROM {TABLE}")
+            # Pull dockerChallengeID via JOIN so polling never references a missing column
+            sql = f"""
+            SELECT dc.ID, dc.timeInitialised, dc.userID, dc.challengeID, c.dockerChallengeID, dc.port
+            FROM {TABLE_CONTAINERS} dc
+            LEFT JOIN {TABLE_CHALLENGES} c ON c.ID = dc.challengeID
+            """
+            rows = db_query(sql)
 
-            for row in rows:
-                # Unpack according to cols list
-                row_dict = dict(zip(cols, row))
-                row_id = row_dict.get("ID")
-                time_initialised = row_dict.get("timeInitialised")
-                user_id = row_dict.get("userID")
-                challenge_id = row_dict.get("challengeID")
-                docker_challenge_id = row_dict.get("dockerChallengeID") if HAS_DCID else None
-                port = row_dict.get("port")
-
+            for (row_id, time_initialised, user_id, challenge_id, docker_challenge_id, port) in rows:
                 if not time_initialised or not port:
                     continue
 
@@ -215,7 +217,7 @@ def time_tracker():
         time.sleep(15)
 
 # =========================
-# BINLOG PROCESSOR
+# BINLOG PROCESSOR (per-row lookup)
 # =========================
 def process_binlog_event():
     stream = None
@@ -228,7 +230,7 @@ def process_binlog_event():
             resume_stream=True
         )
         for be in stream:
-            if getattr(be, "table", None) != TABLE:
+            if getattr(be, "table", None) != TABLE_CONTAINERS:
                 continue
             for r in be.rows:
                 if isinstance(be, WriteRowsEvent):
@@ -241,23 +243,25 @@ def process_binlog_event():
                 data = normalize_binlog_row(data)
                 log(f"Debug: Event={evt} Data={data}")
 
-                row_id             = data.get("ID")
-                time_init          = data.get("timeInitialised")
-                user_id            = data.get("userID")
-                challenge_id       = data.get("challengeID")
-                docker_challenge_id= data.get("dockerChallengeID") if HAS_DCID else None
-                port               = data.get("port")
+                row_id       = data.get("ID")
+                time_init    = data.get("timeInitialised")
+                user_id      = data.get("userID")
+                challenge_id = data.get("challengeID")
+                port         = data.get("port")
 
+                # DELETE -> best-effort removal
                 if evt == "DELETE":
                     info = active_containers.pop(row_id, None)
-                    if info:
-                        remove_container(user_id, challenge_id, info["dockerChallengeID"], info["port"], row_id)
+                    docker_challenge_id = (info or {}).get("dockerChallengeID") or get_docker_challenge_id(challenge_id)
+                    if port is None and info: port = info.get("port")
+                    remove_container(user_id, challenge_id, docker_challenge_id, port, row_id)
                     continue
 
                 if not time_init:
                     log(f"Row {row_id} missing timeInitialised; skip.")
                     continue
 
+                docker_challenge_id = get_docker_challenge_id(challenge_id)
                 delete_time = time_init + timedelta(minutes=20)
 
                 if evt == "INSERT":
@@ -266,8 +270,8 @@ def process_binlog_event():
                         update_port_in_db(row_id, port)
                     launch_container(user_id, challenge_id, docker_challenge_id, port, row_id)
                     active_containers[row_id] = {
-                        "dockerChallengeID": docker_challenge_id,
                         "challengeID": challenge_id,
+                        "dockerChallengeID": docker_challenge_id,
                         "port": port,
                         "delete_time": delete_time
                     }
@@ -275,10 +279,10 @@ def process_binlog_event():
                     if row_id in active_containers:
                         ac = active_containers[row_id]
                         ac["delete_time"] = delete_time
-                        if HAS_DCID: ac["dockerChallengeID"] = docker_challenge_id or ac["dockerChallengeID"]
+                        ac["dockerChallengeID"] = docker_challenge_id or ac["dockerChallengeID"]
                         if port: ac["port"] = port
 
-                # opportunistic sweep
+                # Opportunistic sweep
                 now = datetime.now()
                 for rid, info in list(active_containers.items()):
                     if now > info["delete_time"]:
@@ -295,6 +299,6 @@ def process_binlog_event():
 # BOOT
 # =========================
 if __name__ == "__main__":
-    load_cols()  # detect columns & dockerChallengeID availability
+    load_cols()  # get container table column order for binlog mapping
     threading.Thread(target=time_tracker, daemon=True).start()
     process_binlog_event()
