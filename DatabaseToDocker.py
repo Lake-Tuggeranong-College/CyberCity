@@ -18,10 +18,10 @@ def time_tracker():
             connection = pymysql.connect(**db_config)
             with connection.cursor() as cursor:
                 # Query to fetch all active containers with their initialized times
-                sql = "SELECT ID, timeInitialised, userID, challengeID, port FROM docker_containers"
+                sql = "SELECT ID, timeInitialised, userID, challengeID, port FROM DockerContainers"
                 cursor.execute(sql)
                 containers = cursor.fetchall()
-                
+
                 # Process each container to check if it's expired
                 for row in containers:
                     row_id = row[0]             # Column 1: ID
@@ -29,20 +29,20 @@ def time_tracker():
                     user_id = row[2]            # Column 3: userID
                     challenge_id = row[3]       # Column 4: challengeID
                     port = row[4]               # Column 5: port
-                    
+
                     # Calculate the delete time (20 minutes after initialization)
                     delete_time = time_initialised + timedelta(minutes=20)
-                    
+
                     # If the container is expired, remove it
                     if current_time > delete_time:
                         print("located container.. attempting to remove")
                         remove_container(user_id, challenge_id, port, row_id)
-        
+
         except Exception as e:
             print(f"Error polling database for expired containers: {e}")
         finally:
             connection.close()
-        
+
         # Sleep for 15 seconds before polling again
         time.sleep(15)
 
@@ -50,8 +50,8 @@ def time_tracker():
 # MySQL connection settings
 db_config = {
     'host': 'localhost',
-    'user': 'CyberCity',
-    'passwd': 'CyberCity',
+    'user': 'LTC',
+    'passwd': 'LTCpcgame5',
     'port': 3306,
     'db': 'CyberCity'  # Replace with your actual database name
 }
@@ -71,7 +71,7 @@ def get_next_available_port():
     try:
         connection = pymysql.connect(**db_config)
         with connection.cursor() as cursor:
-            cursor.execute("SELECT port FROM docker_containers WHERE port IS NOT NULL")
+            cursor.execute("SELECT port FROM DockerContainers WHERE port IS NOT NULL")
             result = cursor.fetchall()
             used_ports = {row[0] for row in result}  # Set of used ports
     finally:
@@ -92,7 +92,7 @@ def update_port_in_db(user_id, assigned_port, row_id):
         connection = pymysql.connect(**db_config)
         with connection.cursor() as cursor:
             # Update the database with the assigned port
-            sql = "UPDATE docker_containers SET port = %s WHERE ID = %s"
+            sql = "UPDATE DockerContainers SET port = %s WHERE ID = %s"
             cursor.execute(sql, (assigned_port, row_id))
             connection.commit()
             print(f"Database updated: ROW {row_id} assigned port {assigned_port}")
@@ -168,7 +168,7 @@ def remove_container(userID, challengeID, port, row_id):
         try:
             connection = pymysql.connect(**db_config)
             with connection.cursor() as cursor:
-                sql = "DELETE FROM docker_containers WHERE ID = %s AND challengeID = %s"
+                sql = "DELETE FROM DockerContainers WHERE ID = %s AND challengeID = %s"
                 cursor.execute(sql, (row_id, challengeID))
                 connection.commit()
                 print(f"Database entry removed for User ID {userID}, row ID {row_id} and Challenge ID {challengeID}")
@@ -184,7 +184,7 @@ def remove_container(userID, challengeID, port, row_id):
 # Function to handle binlog events and manage containers
 def process_binlog_event():
     for binlogevent in stream:
-        if binlogevent.table == "docker_containers":  # Adjust table name as needed
+        if binlogevent.table == "DockerContainers":  # Adjust table name as needed
             for row in binlogevent.rows:
                 # Handle different types of row events
                 if isinstance(binlogevent, WriteRowsEvent):
