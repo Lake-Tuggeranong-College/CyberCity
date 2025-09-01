@@ -1,6 +1,6 @@
+#!/usr/bin/env python3
 from pymysqlreplication import BinLogStreamReader
 from pymysqlreplication.row_event import WriteRowsEvent, UpdateRowsEvent, DeleteRowsEvent
-#import docker
 import time
 from datetime import datetime, timedelta
 import pymysql
@@ -8,253 +8,277 @@ import os
 import subprocess
 import threading
 
+# =========================
+# CONFIG
+# =========================
+DB = {
+    "host": "localhost",
+    "user": "LTC",
+    "passwd": "LTCpcgame5",
+    "port": 3306,
+    "db": "CyberCity",
+    "charset": "utf8mb4",
+    "cursorclass": pymysql.cursors.DictCursor,  # <-- name-based access
+}
+TABLE = "DockerContainers"  # columns: ID, timeInitialised, userID, challengeID(text), port
+DOCKER_ROOT = "/var/www/CyberCity/dockerStuff"  # expects {challengeID}/docker-compose.yml
+BASE_PORT = 17001
+MAX_PORT = 17999
+REMOVE_AFTER_MINUTES = 20
+POLL_SECONDS = 15
+BINLOG_SERVER_ID = 101  # must be unique vs mysqld server-id
 
+# =========================
+# HELPERS
+# =========================
+def get_conn():
+    return pymysql.connect(**DB)
+
+def safe_close(conn):
+    try:
+        if conn:
+            conn.close()
+    except Exception:
+        pass
+
+def path_for_challenge(challenge_id: str):
+    # challengeID is TEXT in DB, so treat as string everywhere (including path)
+    base = os.path.join(DOCKER_ROOT, str(challenge_id))
+    compose = os.path.join(base, "docker-compose.yml")
+    envfile = os.path.join(base, ".env")
+    return base, compose, envfile
+
+def ensure_challenge_paths(challenge_id: str):
+    base, compose, envfile = path_for_challenge(challenge_id)
+    if not os.path.isdir(base):
+        os.makedirs(base, exist_ok=True)
+    if not os.path.isfile(compose):
+        raise FileNotFoundError(f"docker-compose.yml not found for challenge {challenge_id} at {compose}")
+    return base, compose, envfile
+
+# =========================
+# PORT MANAGEMENT
+# =========================
+def get_next_available_port():
+    conn = None
+    try:
+        conn = get_conn()
+        with conn.cursor() as cur:
+            cur.execute(f"SELECT port FROM {TABLE} WHERE port IS NOT NULL")
+            rows = cur.fetchall()
+            used = {int(r["port"]) for r in rows if r["port"] is not None}
+    finally:
+        safe_close(conn)
+
+    for p in range(BASE_PORT, MAX_PORT + 1):
+        if p not in used:
+            print("Allocated port:", p)
+            return p
+    raise RuntimeError("No available ports in the specified range.")
+
+def update_port_in_db(row_id: int, assigned_port: int):
+    conn = None
+    try:
+        conn = get_conn()
+        with conn.cursor() as cur:
+            cur.execute(f"UPDATE {TABLE} SET port=%s WHERE ID=%s", (assigned_port, row_id))
+        conn.commit()
+        print(f"DB updated: row {row_id} -> port {assigned_port}")
+    finally:
+        safe_close(conn)
+
+# =========================
+# DOCKER LIFECYCLE
+# =========================
+active_containers = {}  # key: row_id; value: {"challengeID": str, "port": int, "delete_time": dt}
+
+def launch_container(user_id: int, challenge_id: str, port: int, row_id: int):
+    _, compose, envfile = ensure_challenge_paths(challenge_id)
+
+    # Write env for compose
+    with open(envfile, "w") as f:
+        f.write(f"PORT={port}\nUSER={user_id}\n")
+
+    print(f"Launching container: challenge='{challenge_id}' port={port} uid={user_id}")
+
+    subprocess.run(
+        ["sudo", "docker", "compose", "-p", str(port), "-f", compose, "up", "-d", "--build"],
+        check=True,
+    )
+    print("Container launched.")
+
+def remove_container(user_id: int, challenge_id: str, port: int, row_id: int):
+    try:
+        _, compose, _ = ensure_challenge_paths(challenge_id)
+    except FileNotFoundError:
+        compose = None
+
+    print(f"Removing container: row={row_id} challenge='{challenge_id}' port={port} uid={user_id}")
+    try:
+        if compose and os.path.isfile(compose):
+            subprocess.run(
+                ["sudo", "docker", "compose", "-p", str(port), "-f", compose, "down", "--volumes", "--remove-orphans"],
+                check=True,
+            )
+        else:
+            subprocess.run(
+                ["sudo", "docker", "compose", "-p", str(port), "down", "--volumes", "--remove-orphans"],
+                check=True,
+            )
+        print("Compose down complete.")
+    except subprocess.CalledProcessError as e:
+        print(f"Compose down failed: {e}")
+
+    # Clean DB row
+    conn = None
+    try:
+        conn = get_conn()
+        with conn.cursor() as cur:
+            cur.execute(f"DELETE FROM {TABLE} WHERE ID=%s AND challengeID=%s", (row_id, challenge_id))
+        conn.commit()
+        print(f"DB row removed for row={row_id}, challenge='{challenge_id}'")
+    except Exception as e:
+        print(f"DB delete error for row={row_id}: {e}")
+    finally:
+        safe_close(conn)
+
+    active_containers.pop(row_id, None)
+
+# =========================
+# POLLER (failsafe cleanup)
+# =========================
 def time_tracker():
     while True:
         current_time = datetime.now()
-        
+        conn = None
         try:
-            print("Searching for containers that should be removed")
-            connection = pymysql.connect(**db_config)
-            with connection.cursor() as cursor:
-                # Query to fetch all active containers with their initialized times
-                sql = "SELECT ID, timeInitialised, userID, challengeID, port FROM DockerContainers"
-                cursor.execute(sql)
-                containers = cursor.fetchall()
-
-                # Process each container to check if it's expired
-                for row in containers:
-                    row_id = row[0]             # Column 1: ID
-                    time_initialised = row[1]   # Column 2: timeInitialised
-                    user_id = row[2]            # Column 3: userID
-                    challenge_id = row[3]       # Column 4: challengeID
-                    port = row[4]               # Column 5: port
-
-                    # Calculate the delete time (20 minutes after initialization)
-                    delete_time = time_initialised + timedelta(minutes=20)
-
-                    # If the container is expired, remove it
+            print("Polling for expired containers...")
+            conn = get_conn()
+            with conn.cursor() as cur:
+                cur.execute(f"SELECT ID, timeInitialised, userID, challengeID, port FROM {TABLE}")
+                for row in cur.fetchall():
+                    row_id = int(row["ID"])
+                    t_init = row["timeInitialised"]
+                    user_id = int(row["userID"])
+                    challenge_id = str(row["challengeID"])
+                    port = row["port"]
+                    if t_init is None or port is None:
+                        continue
+                    port = int(port)
+                    delete_time = t_init + timedelta(minutes=REMOVE_AFTER_MINUTES)
                     if current_time > delete_time:
-                        print("located container.. attempting to remove")
+                        print(f"Expired: row={row_id} port={port} delete_time={delete_time} now={current_time}")
                         remove_container(user_id, challenge_id, port, row_id)
-
         except Exception as e:
-            print(f"Error polling database for expired containers: {e}")
+            print(f"Error polling DB: {e}")
         finally:
-            connection.close()
+            safe_close(conn)
 
-        # Sleep for 15 seconds before polling again
-        time.sleep(15)
+        time.sleep(POLL_SECONDS)
 
-
-# MySQL connection settings
-db_config = {
-    'host': 'localhost',
-    'user': 'LTC',
-    'passwd': 'LTCpcgame5',
-    'port': 3306,
-    'db': 'CyberCity'  # Replace with your actual database name
-}
-
-# Store active containers and their creation timestamps
-active_containers = {}
-
-# Track the base and maximum ports
-BASE_PORT = 17001
-MAX_PORT = 17999
-
-# Function to find the next available port
-def get_next_available_port():
-    used_ports = set()
-    
-    # Connect to the MySQL database to check currently used ports
-    try:
-        connection = pymysql.connect(**db_config)
-        with connection.cursor() as cursor:
-            cursor.execute("SELECT port FROM DockerContainers WHERE port IS NOT NULL")
-            result = cursor.fetchall()
-            used_ports = {row[0] for row in result}  # Set of used ports
-    finally:
-        connection.close()
-
-    # Find the next available port in the range
-    print("attempting to get next available port")
-    for port in range(BASE_PORT, MAX_PORT + 1):
-        if port not in used_ports:
-            print("successfully located next available port. PORT:", port)
-            return port
-
-    raise RuntimeError("No available ports in the specified range.")
-
-# Function to update the database with the assigned port
-def update_port_in_db(user_id, assigned_port, row_id):
-    try:
-        connection = pymysql.connect(**db_config)
-        with connection.cursor() as cursor:
-            # Update the database with the assigned port
-            sql = "UPDATE DockerContainers SET port = %s WHERE ID = %s"
-            cursor.execute(sql, (assigned_port, row_id))
-            connection.commit()
-            print(f"Database updated: ROW {row_id} assigned port {assigned_port}")
-    except Exception as e:
-        print(f"Failed to update the database with the port: {e}")
-    finally:
-        connection.close()
-
-# Create a binlog stream reader
+# =========================
+# BINLOG HANDLER
+# =========================
 stream = BinLogStreamReader(
-    connection_settings=db_config,
-    server_id=101,  # Unique server ID, different from your MySQL server-id
+    connection_settings=DB,
+    server_id=BINLOG_SERVER_ID,
     only_events=[WriteRowsEvent, UpdateRowsEvent, DeleteRowsEvent],
     blocking=True,
-    resume_stream=True
+    resume_stream=True,
 )
 
-# Function to launch a Docker container using docker-compose
-def launch_container(userID, challengeID, port, row_id):
-    compose_file_path = f"/var/www/CyberCity/dockerStuff/{challengeID}/docker-compose.yml"
-    env_file_path = f"/var/www/CyberCity/dockerStuff/{challengeID}/.env"
-
-    with open(env_file_path, 'w') as f:
-        f.write(f"PORT={port}\n")
-        f.write(f"USER={userID}\n")
-
-    print("attempting to launch container")
-
-    try:
-        # Use docker-compose to spin up the container with the specified port
-
-        subprocess.run(
-            ["sudo", "docker", "compose", "-p", str(port), "-f", compose_file_path, "up", "-d", "--build"],
-            check=True,
-	)
-        print(f"Launched container for user {userID} with challenge ID {challengeID} on port {port}")
-
-        # Store the creation time of the container
-        timeInitialised = datetime.now()
-        active_containers[row_id] = {
-            "challenge_id": challengeID,
-            "port": port,
-            "creation_time": timeInitialised
-        }
-        print("successfully launched container")
-
-
-    except Exception as e:
-        print(f"Error while launching container for user {userID} with challenge ID {challengeID}: {e}")
-
-# Function to remove a Docker container using docker-compose and delete the database entry
-def remove_container(userID, challengeID, port, row_id):
-    compose_file_path = f"/var/www/CyberCity/dockerStuff/{challengeID}/docker-compose.yml"
-
-
-    print(f"Attempting to remove container on port: {port}")
-    env_vars = os.environ.copy()
-    env_vars["PORT"] = str(port)
-    env_vars["USER"] = str(userID)
-
-    try:
-        # Remove the container and associated resources using docker-compose
-        subprocess.run(["sudo", f"USER={userID}", f"PORT={port}", "docker", "compose", "-p", f"{port}", "down", "--volumes", "--remove-orphans"], check=True)
-        # subprocess.run(["docker", "compose", "-p", str(port), "-f", compose_file_path, "down", "--volumes", "--remove-orphans"], check=True, env=env_vars)
-        print(f"Completely removed container and resources for user {userID}, row ID {row_id} on challenge {challengeID} at port {port}")
-
-        # Remove from active containers list
-        active_containers.pop(row_id, None)
-
-        print("Removed container")
-
-        # Remove the database entry for this container
-        try:
-            connection = pymysql.connect(**db_config)
-            with connection.cursor() as cursor:
-                sql = "DELETE FROM DockerContainers WHERE ID = %s AND challengeID = %s"
-                cursor.execute(sql, (row_id, challengeID))
-                connection.commit()
-                print(f"Database entry removed for User ID {userID}, row ID {row_id} and Challenge ID {challengeID}")
-        except Exception as db_error:
-            print(f"Error while removing the database entry for user {userID}, row ID {row_id}: {db_error}")
-        finally:
-            connection.close()
-
-    except Exception as e:
-        print(f"Error while stopping container for user {userID}, row ID {row_id}: {e}")
-
-
-# Function to handle binlog events and manage containers
 def process_binlog_event():
-    for binlogevent in stream:
-        if binlogevent.table == "DockerContainers":  # Adjust table name as needed
-            for row in binlogevent.rows:
-                # Handle different types of row events
-                if isinstance(binlogevent, WriteRowsEvent):
-                    data = row["values"]
-                    event_type = "INSERT"
-                elif isinstance(binlogevent, UpdateRowsEvent):
-                    data = row["after_values"]
-                    event_type = "UPDATE"
-                elif isinstance(binlogevent, DeleteRowsEvent):
-                    data = row["values"]
-                    event_type = "DELETE"
-                
-                print(f"Debug: Row data = {data}, Event Type = {event_type}")
+    for ev in stream:
+        if getattr(ev, "table", None) != TABLE:
+            continue
 
-                # Retrieve necessary information from database row
-                userID = data.get('UNKNOWN_COL2')  # Adjust column name
-                challengeID = data.get('UNKNOWN_COL3')  # Adjust column name
-                time_initialised = data.get('UNKNOWN_COL1')  # Get time from the event
-                row_id = data.get('UNKNOWN_COL0')  # Get row ID
+        for row in ev.rows:
+            if isinstance(ev, WriteRowsEvent):
+                data = row["values"]
+                event_type = "INSERT"
+            elif isinstance(ev, UpdateRowsEvent):
+                data = row["after_values"]
+                event_type = "UPDATE"
+            elif isinstance(ev, DeleteRowsEvent):
+                data = row["values"]
+                event_type = "DELETE"
+            else:
+                continue
 
-                if time_initialised:
-                    # Convert the time_initialised to a datetime object
+            row_id = int(data.get("ID")) if data.get("ID") is not None else None
+            user_id = int(data.get("userID")) if data.get("userID") is not None else None
+            challenge_id = str(data.get("challengeID")) if data.get("challengeID") is not None else None  # TEXT
+            t_init = data.get("timeInitialised")
+
+            print(f"Binlog {event_type}: row_id={row_id} user={user_id} challenge='{challenge_id}' t_init={t_init}")
+
+            if event_type == "DELETE":
+                info = active_containers.pop(row_id, None)
+                if info:
                     try:
-                        creation_time = time_initialised
-                        creation_time = creation_time + timedelta(hours=11)
-                        print("database time is:", creation_time)
-                        #creation_time = datetime.strptime(time_initialised, '%Y-%m-%d %H:%M:%S')
-                        #creation_time = datetime.now()
-                    except ValueError:
-                        print(f"Error parsing timeInitialised for User ID {userID}")
-                        continue
+                        remove_container(user_id or 0, challenge_id or info["challengeID"], info["port"], row_id)
+                    except Exception as e:
+                        print(f"Remove on DELETE failed: {e}")
+                continue
 
-                    # Handle container creation on INSERT
-                    if event_type == "INSERT":
-                        port = get_next_available_port()
-                        update_port_in_db(userID, port, row_id)
-                        launch_container(userID, challengeID, port, row_id)
+            if not t_init or row_id is None or user_id is None or challenge_id is None:
+                continue
 
-                        # Schedule the container removal
-                        delete_time = creation_time + timedelta(minutes=20)
-                        print("Container deletion time for user:", userID, "on row: ", row_id, "is:", delete_time)
-                        active_containers[row_id] = {
-                             "challengeID": challengeID,
-                            "port": port,
-                            "delete_time": delete_time
-                        }
+            creation_time = t_init
+            delete_time = creation_time + timedelta(minutes=REMOVE_AFTER_MINUTES)
 
-                    # Handle time extension on UPDATE
-                    elif event_type == "UPDATE":
-                        # Update the container's deletion time
-                        delete_time = creation_time + timedelta(minutes=20)
-                        if row_id in active_containers:
-                            active_containers[row_id]["delete_time"] = delete_time
-                            print(f"Updated deletion time for User ID {userID}, row {row_id} to {delete_time}")
+            if event_type == "INSERT":
+                try:
+                    port = get_next_available_port()
+                    update_port_in_db(row_id, port)
+                    launch_container(user_id, challenge_id, port, row_id)
+                    active_containers[row_id] = {
+                        "challengeID": challenge_id,
+                        "port": port,
+                        "delete_time": delete_time,
+                    }
+                    print(f"Scheduled deletion for row={row_id} at {delete_time}")
+                except Exception as e:
+                    print(f"Launch failed for row={row_id}: {e}")
 
-                # Check for expired containers
-                current_time = datetime.now()
-                for userID, container_info in list(active_containers.items()):
-                    delete_time = container_info["delete_time"]
-                    if current_time > delete_time:
-                        print("removing container with delete time of", delete_time, "because current time is:", current_time)
-                        remove_container(userID, container_info["challengeID"], container_info["port"], row_id)
+            elif event_type == "UPDATE":
+                if row_id in active_containers:
+                    active_containers[row_id]["delete_time"] = delete_time
+                    print(f"Extended deletion for row={row_id} -> {delete_time}")
 
-# Start the time tracker in a separate thread
-time_thread = threading.Thread(target=time_tracker, daemon=True)
-time_thread.start()
+        # After each event batch, sweep any expired (extra safety)
+        now = datetime.now()
+        for rid, info in list(active_containers.items()):
+            if now > info["delete_time"]:
+                conn = None
+                try:
+                    conn = get_conn()
+                    with conn.cursor() as cur:
+                        cur.execute(f"SELECT userID, challengeID, port FROM {TABLE} WHERE ID=%s", (rid,))
+                        r = cur.fetchone()
+                    if r:
+                        user_id_db = int(r["userID"])
+                        challenge_id_db = str(r["challengeID"])
+                        port_db = int(r["port"])
+                        print(f"Binlog sweep expired row={rid}")
+                        remove_container(user_id_db, challenge_id_db, port_db, rid)
+                    else:
+                        print(f"Row {rid} missing in DB; attempting cleanup with cached info.")
+                        remove_container(0, info["challengeID"], info["port"], rid)
+                except Exception as e:
+                    print(f"Sweep removal error for row={rid}: {e}")
+                finally:
+                    safe_close(conn)
 
-try:
-    process_binlog_event()
-except KeyboardInterrupt:
-    print("Stopping the binlog monitoring.")
-finally:
-    stream.close()
+# =========================
+# START
+# =========================
+if __name__ == "__main__":
+    t = threading.Thread(target=time_tracker, daemon=True)
+    t.start()
+    try:
+        process_binlog_event()
+    except KeyboardInterrupt:
+        print("Stopping binlog monitoring.")
+    finally:
+        stream.close()
