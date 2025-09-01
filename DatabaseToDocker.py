@@ -50,8 +50,8 @@ def time_tracker():
 # MySQL connection settings
 db_config = {
     'host': 'localhost',
-    'user': 'CyberCity',
-    'passwd': 'CyberCity',
+    'user': 'LTC',
+    'passwd': 'LTCpcgame5',
     'port': 3306,
     'db': 'CyberCity'  # Replace with your actual database name
 }
