@@ -2,211 +2,178 @@
 include "../../includes/template.php";
 /** @var $conn */
 
-$challengeToLoad = null;
-$challengeID = null;
-$title = null;
-$challengeText = null;
-$pointsValue = null;
-$flag = null;
-$projectID = null;
-
-if (!authorisedAccess(false, true, true)) {
-    header("Location:../../index.php");
-}
-
-if (isset($_GET["challengeID"])) {
-    $challengeToLoad = $_GET["challengeID"];
-} else {
+$challengeToLoad = $_GET["challengeID"] ?? null;
+if (!$challengeToLoad) {
     header("location:challengesList.php");
+    exit;
 }
 
+$challengeID = $title = $challengeText = $pointsValue = $flag = $projectID = null;
 
-function loadChallengeData()
-{
+/* ------------ FUNCTIONS ------------- */
+function loadChallengeData() {
     global $conn, $challengeToLoad, $challengeID, $title, $challengeText, $pointsValue, $flag, $projectID;
 
-    $sql = $conn->query("SELECT ID, challengeTitle, challengeText, pointsValue, flag FROM Challenges WHERE ID=" . $challengeToLoad);
-
-
-    while ($result = $sql->fetch()) {
-        $challengeID = $result["ID"];
-        $title = $result["challengeTitle"];
-        $challengeText = $result["challengeText"];
-        $pointsValue = $result["pointsValue"];
-        $flag = $result["flag"];
+    $stmt = $conn->prepare("SELECT ID, challengeTitle, challengeText, pointsValue, flag 
+                            FROM Challenges WHERE ID = ?");
+    $stmt->execute([$challengeToLoad]);
+    if ($row = $stmt->fetch()) {
+        $challengeID   = $row["ID"];
+        $title         = $row["challengeTitle"];
+        $challengeText = $row["challengeText"];
+        $pointsValue   = $row["pointsValue"];
+        $flag          = $row["flag"];
     }
 
-    // SQL query to fetch projectID
-
-    $projectIDSQL = "SELECT project_id FROM ProjectChallenges WHERE challenge_id = :challengeID";
-    $projectIDStmt = $conn->prepare($projectIDSQL);
-    $projectIDStmt->bindParam(':challengeID', $challengeID, PDO::PARAM_INT);
-    $projectIDStmt->execute();
-    $projectIDResult = $projectIDStmt->fetch(PDO::FETCH_ASSOC);
-    $projectID = $projectIDResult["project_id"];
+    // Project ID
+    $projectStmt = $conn->prepare("SELECT project_id FROM ProjectChallenges WHERE challenge_id = ?");
+    $projectStmt->execute([$challengeID]);
+    $result = $projectStmt->fetch(PDO::FETCH_ASSOC);
+    $projectID = $result["project_id"] ?? null;
 }
 
-
-function checkFlag()
-{
-    global $conn, $challengeToLoad, $challengeID, $title, $challengeText, $pointsValue, $flag, $projectID;
-
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+function checkFlag() {
+    global $conn, $challengeID, $flag, $projectID, $pointsValue;
+    if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $userEnteredFlag = sanitise_data($_POST['hiddenflag']);
-        if ($userEnteredFlag == $flag) {
+        if ($userEnteredFlag === $flag) {
             $user = $_SESSION["user_id"];
-            $query = $conn->query("SELECT * FROM `UserChallenges` WHERE `challengeID` ='$challengeID' and `userID` = '$user'");
-            $row = $query->fetch();
-            if ($query->rowCount() > 0) {
-                $_SESSION["flash_message"] = "<div class='bg-warning'>Flag Success! Challenge already completed, no points awarded</div>";
+            $query = $conn->prepare("SELECT 1 FROM UserChallenges WHERE challengeID=? AND userID=?");
+            $query->execute([$challengeID, $user]);
+
+            if ($query->fetch()) {
+                set_flash('warning', 'Flag Success! Challenge already completed, no points awarded');
                 header("Location:./challengesList.php");
-            } else {
-                $insert = "INSERT INTO `UserChallenges` (userID, challengeID) VALUES ('$user', '$challengeID')";
-                $insert = $conn->prepare($insert);
-                $insert->execute();
-
-
-                $userInformation = $conn->query("SELECT Score FROM Users WHERE ID='$user'");
-                $userData = $userInformation->fetch();
-                $addedScore = $userData["Score"] += $pointsValue;
-                $sql1 = "UPDATE Users SET Score=? WHERE Username=?";
-                $stmt = $conn->prepare($sql1);
-                $stmt->execute([$addedScore, $user]);
-
-                if ($challengeID == 19) {
-                    $sql = "UPDATE Challenges SET moduleValue = 'On' WHERE ID='$challengeID'";
-                } else {
-                    $sql = "UPDATE Challenges SET moduleValue = moduleValue + 1 WHERE ID='$challengeID'";
-
-                }
-                $stmt = $conn->prepare($sql);
-                $stmt->execute();
-                $_SESSION["flash_message"] = "<div class='bg-success'>Success!</div>";
-                header("Location:./challengesList.php?projectID=$projectID");
+                exit;
             }
+
+            // Insert into UserChallenges
+            $insert = $conn->prepare("INSERT INTO UserChallenges (userID, challengeID) VALUES (?, ?)");
+            $insert->execute([$user, $challengeID]);
+
+            // Update user score
+            $scoreStmt = $conn->prepare("SELECT Score FROM Users WHERE ID=?");
+            $scoreStmt->execute([$user]);
+            $userScore = $scoreStmt->fetchColumn();
+            $newScore = $userScore + $pointsValue;
+
+            $updateScore = $conn->prepare("UPDATE Users SET Score=? WHERE ID=?");
+            $updateScore->execute([$newScore, $user]);
+
+            // Increment module value
+            if ($challengeID == 19) {
+                $conn->exec("UPDATE Challenges SET moduleValue='On' WHERE ID=$challengeID");
+            } else {
+                $conn->exec("UPDATE Challenges SET moduleValue = moduleValue + 1 WHERE ID=$challengeID");
+            }
+
+            set_flash('success', 'Success!');
+            header("Location:./challengesList.php?projectID=$projectID");
+            exit;
         } else {
-            $_SESSION["flash_message"] = "<div class='bg-danger'>Flag failed - try again</div>";
+            set_flash('danger', 'Flag failed - try again');
             header('Location: ' . $_SERVER['REQUEST_URI']);
-            die;
+            exit;
         }
     }
 }
 
 loadChallengeData();
-
-
 ?>
 
-    <title>Challenge Information</title>
+<title>Challenge Information</title>
 
-    </head>
+<header class="container text-center mt-4">
+    <h1 class="text-uppercase">Challenge - <?= htmlspecialchars($title) ?></h1>
+</header>
 
-    <body>
-    <!-- Indicate heading secion of the whole page. -->
-    <header class="container-fluid d-flex align-items-center justify-content-center">
-        <h1 class="text-uppercase">Challenge - <?= $title ?></h1>
-    </header>
+<main class="container my-5">
 
-    <!-- Indicate section (middle part) section of the whole page. -->
-    <section class="pt-4 pd-2" style="padding: 10px;">
-        <!-- Boostrap Grid Table System. -->
+    <!-- Challenge Details Table -->
+    <div class="table-responsive my-4">
+    <table class="table table-bordered table-hover text-center align-middle theme-table mb-0">
+            <thead>
+            <tr>
+                <th style="width:15%">Challenge Image</th>
+                <th style="width:20%">Challenge Name</th>
+                <th style="width:50%">Description</th>
+                <th style="width:10%">Points</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td><span class="text-muted">No Image</span></td>
+                <td><?= htmlspecialchars($title) ?></td>
+                <td class="text-start"><?= nl2br(htmlspecialchars($challengeText)) ?></td>
+                <td class="fw-bold"><?= htmlspecialchars($pointsValue) ?></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
-        <div class="container-fluid text-center">
+    <p class="text-success fw-bold text-center mt-3">Good luck and have fun!</p>
+    <hr class="my-4 border-2 border-danger opacity-100">
 
-            <div class="row border border-dark-subtle border-2">
-                <div class="col-2 border-start border-end border-dark-subtle border-2">
-                    Challenge Image
-                </div>
-                <div class="col-2 border-start border-end border-dark-subtle border-2">
+    <!-- Flag Submission -->
+    <form action="challengeDisplay.php?challengeID=<?= $challengeID ?>" method="post" class="mt-3">
+        <div class="form-floating mb-3">
+            <input type="text"
+                   class="form-control flag-input"
+                   id="flag"
+                   name="hiddenflag"
+                   placeholder="CTF{Flag_Here}">
+            <p class="form-text text-start small">
+                Press <b>Enter</b> when finished entering the flag.
+            </p>
+        </div>
+    </form>
 
-                    Challenge Name
-                </div>
-                <div class="col-7 border-start border-end border-dark-subtle border-2">
-                    Challenge Description
-                </div>
-                <div class="col-1 border-start border-end border-dark-subtle border-2">
-                    Challenge Points
-                </div>
-            </div>
+</main>
 
-            <div class="row border border-top-0 border-dark-subtle border-2">
-                <div class="col-2 border-start border-end border-dark-subtle border-2">
-
-
-                    <?= $title ?>
-                </div>
-                <div class="col-7 border-start border-end border-dark-subtle border-2">
-                    <?= $challengeText ?>
-                </div>
-                <div class="col-1 d-flex align-items-center justify-content-center">
-                    <?= $pointsValue ?>
-                </div>
-            </div>
-
-            <div class="row border border-top-0 border-dark-subtle border-2">
-                <p class="text-success fw-bold pt-3">Good luck and have fun!</p>
-            </div>
-
-            <!-- Inline CSS styling for Horizontal line. -->
-            <hr style="
-                    border: none; 
-                    position: relative; 
-                    margin: 1.5rem 0; 
-                    height: 4px; /* Adjust horizontal line thickness.*/
-                    color: red; /* Compatible for users using older version of any Web Browser Apps.*/
-                    background-color: red;
-                ">
-
-            <!-- Directs to correspond page if the flag entered is eligible. -->
-            <form action="challengeDisplay.php?challengeID=<?= $challengeID ?>" method="post"
-                  enctype="multipart/form-data">
-                <div class="form-floating">
-                    <input type="text" class="flag-input" id="flag" name="hiddenflag" placeholder="CTF{Flag_Here}">
-                    <!--                <label for="flag">Please enter the flag: </label>-->
-                    <p id="functionAssistant" class="form-text text-start font-size-sm">
-                        You'll have to hit the "Enter" key when finish
-                        entering the hidden flag.
-                    </p>
-                </div>
-
-            </form>
-    </section>
-
-    <!-- Indicate footer (end part) section of the whole page. -->
-    <footer style="padding: 10px;">
-        <h2 class='ps-3'>Recent Data</h2>
-
-        <!-- Boostrap Grid Table System. -->
-        <div class="container-fluid">
-            <div class="row border text-center">
-                <div class="col border-end">Data & Time</div>
-                <div class="col">Data</div>
-            </div>
-
-
-            <!-- Automatically create new row to display ESP32 modules data & logged time on the specific challege webpage. -->
+<footer class="container my-5">
+    <h2 class="ps-1">Recent Data</h2>
+    <div class="table-responsive my-4">
+    <table class="table table-bordered table-striped text-center align-middle theme-table mb-0">
+            <thead>
+            <tr>
+                <th style="width:30%">Date & Time</th>
+                <th style="width:70%">Data</th>
+            </tr>
+            </thead>
+            <tbody>
             <?php
-
-            // SQL query to select all data from ModuleData table
             $sql = $conn->query("SELECT * FROM ModuleData WHERE ModuleID=" . $challengeID);
-            while ($moduleIndividualData = $sql->fetch()) {
-                echo "<div class='row border border-top-0'>";
-
-                // $moduleInformation = $sql->fetch();
-                $moduleData = $moduleIndividualData["Data"];
-                $moduleDateTime = $moduleIndividualData["DateTime"];
-
-                echo "<div class='col border-end text-center'>" . $moduleDateTime . "</div>";
-                echo "<div class='col text-center'>" . $moduleData . "</div>";
-                echo "</div>";
+            while ($row = $sql->fetch()) {
+                echo '<tr>';
+                echo '<td>' . htmlspecialchars($row["DateTime"]) . '</td>';
+                echo '<td>' . htmlspecialchars($row["Data"]) . '</td>';
+                echo '</tr>';
             }
             ?>
-        </div>
-    </footer>
+            </tbody>
+        </table>
+    </div>
+</footer>
 
-    </body>
-    </html>
+<?php checkFlag(); ?>
 
-<?php
-checkFlag();
-?>
+<!-- Dark/Light Mode Table Toggling -->
+<script>
+    function applyTableTheme() {
+        const body = document.body;
+        const tables = document.querySelectorAll('.theme-table');
+        tables.forEach(table => {
+            table.classList.remove('table-dark', 'table-light');
+            if (body.classList.contains('bg-dark')) {
+                table.classList.add('table-dark');
+            } else {
+                table.classList.add('table-light');
+            }
+        });
+    }
+
+    applyTableTheme();
+    document.getElementById('modeToggle')?.addEventListener('click', () => {
+        setTimeout(applyTableTheme, 50);
+    });
+</script>
