@@ -1,25 +1,28 @@
+/* ---------------- NAVBAR ---------------- */
 .navbar {
-    /* background: #232526; */
-
-    background: rgba(35,37,38,0.5);
-
+    background: rgba(35,37,38,0.5); /* semi-transparent dark */
     font-size: 1em;
     text-overflow: ellipsis;
-
-
     color: white;
     border-radius: 1rem;
-    margin-left: 1%;
-    margin-right: 1%;
-    margin-top: 1%;
+    margin: 1% 1% 0 1%;
     padding: 0.5%;
-
-
-
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+/* Light mode navbar */
+body.bg-light .navbar {
+    background: rgba(255, 255, 255, 0.8);
+    color: #000;
+}
 
+/* Dark mode navbar */
+body.bg-dark .navbar {
+    background: rgba(35, 37, 38, 0.9);
+    color: #f0f0f0;
+}
 
+/* ---------------- SUB BOXES ---------------- */
 .subBox-container {
     display: flex;
     gap: 2rem;
@@ -38,7 +41,7 @@
 
 /* Light Mode */
 body.bg-light .subBoxWhite {
-    background-color: white;
+    background-color: #fff;
     color: #000;
 }
 
@@ -55,6 +58,7 @@ body.bg-dark .subBoxWhite {
     }
 }
 
+/* ---------------- DYNAMIC BOX ---------------- */
 .dynamicModeBox {
     padding: 10rem;
     border-radius: 12px;
@@ -63,7 +67,7 @@ body.bg-dark .subBoxWhite {
 
 /* Light mode */
 body.bg-light .dynamicModeBox {
-    background-color: white;
+    background-color: #fff;
     color: #000;
 }
 
@@ -73,6 +77,7 @@ body.bg-dark .dynamicModeBox {
     color: #f0f0f0;
 }
 
+/* ---------------- HERO CENTER ---------------- */
 .heroCenter {
     margin-top: 1rem;
     display: flex;
@@ -83,6 +88,112 @@ body.bg-dark .dynamicModeBox {
     text-align: center;
 }
 
+/* ---------------- SHADOWS ---------------- */
 .shadowBox {
     box-shadow: 0 20px 20px rgba(0, 0, 0, 0.15); /* subtle shading */
+}
+
+/* ---------------- THEME-AWARE TABLES ---------------- */
+.theme-table {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Light mode tables */
+body.bg-light .theme-table {
+    background-color: #fff;
+    color: #212529;
+}
+body.bg-light .theme-table thead {
+    background-color: #f8f9fa;
+    color: #212529;
+}
+
+/* Dark mode tables */
+body.bg-dark .theme-table {
+    background-color: #212529;
+    color: #f0f0f0;
+}
+body.bg-dark .theme-table thead {
+    background-color: #343a40;
+    color: #f8f9fa;
+}
+/* Light mode (matches Bootstrap default) */
+body.bg-light .form-text {
+    color: #6c757d; /* Bootstrap's default muted */
+}
+
+/* Dark mode - make help text brighter for contrast */
+body.bg-dark .form-text {
+    color: #f0f0f0 !important;
+}
+/* Form input placeholder adapts for dark mode */
+body.bg-dark .form-control::placeholder {
+    color: #e0e0e0 !important;   /* or use #bcbcbc for softer contrast */
+    opacity: 1;                  /* makes sure it's fully visible */
+}
+
+/* Bonus: Also make sure the input's text is always visible */
+body.bg-dark .form-control {
+    background-color: #232526;
+    color: #fff;
+    border: 1px solid #444;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+body.bg-light .form-control {
+    background-color: #fff;
+    color: #212529;
+    border: 1px solid #ced4da;
+    transition: background-color 0.3s, color 0.3s;
+}
+/* Light mode styling */
+body.bg-light .form-control.flag-input {
+    background-color: #fff;
+    color: #212529;
+    border: 1px solid #ced4da;
+    transition: background-color 0.3s, color 0.3s;
+}
+body.bg-light .form-control.flag-input::placeholder {
+    color: #6c757d;
+}
+
+/* Dark mode styling */
+body.bg-dark .form-control.flag-input {
+    background-color: #232526 !important;
+    color: #f0f0f0 !important;
+    border: 1px solid #444;
+    transition: background-color 0.3s, color 0.3s;
+}
+body.bg-dark .form-control.flag-input::placeholder {
+    color: #bcbcbc !important;
+    opacity: 1;
+}
+
+
+/* ---------------- ALERT FIXES ---------------- */
+/* Ensure flash messages look consistent */
+body.bg-dark .alert {
+    background-color: #2a2d31;
+    color: #f0f0f0;
+    border: 1px solid #444;
+}
+body.bg-dark .alert-success {
+    background-color: #225d2a;
+    color: #d4f7d8;
+    border-color: #267a31;
+}
+body.bg-dark .alert-danger {
+    background-color: #712626;
+    color: #f7d4d4;
+    border-color: #962b2b;
+}
+body.bg-dark .alert-warning {
+    background-color: #665c20;
+    color: #fff2cc;
+    border-color: #807029;
+}
+body.bg-dark .alert-info {
+    background-color: #204e66;
+    color: #d4f0f7;
+    border-color: #2a6880;
 }
