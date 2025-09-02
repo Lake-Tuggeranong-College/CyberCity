@@ -155,7 +155,7 @@ $flash = take_flash();
                         <li>
                             <hr class="dropdown-divider">
                         </li>
-                        <li><a href="http://10.177.200.71/CyberCityDocs/welcome.html" class="nav-link text-black"
+                        <li><a href="http://10.177.202.196/CyberCityDocs/welcome.html" class="nav-link text-black"
                                target="_blank">Tutorials</a></li>
                     </ul>
                 </li>

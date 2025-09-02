@@ -4,7 +4,7 @@ if (!authorisedAccess(false, false, true)) {
     header("Location:../../index.php");
 }
 ?>
-<h2 class="mt-5">Register New Challenge</h2>
+<h2 style="margin-left: 41%;" class="mt-5">Register New Challenge</h2>
 <?php
 
 
