@@ -3,6 +3,5 @@ services:
   sshtest-server:
     build: .
     ports:
-      - "2222:22" # OUTSIDE:INSIDE
-    container_name: sshTest_container
+      - "${PORT}:22" # OUTSIDE:INSIDE
     restart: unless-stopped
