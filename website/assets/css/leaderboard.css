@@ -1,141 +1,155 @@
+/* Base styles */
 .leaderboard-container {
     position: relative;
     margin-left: 3rem;
     margin-right: 3rem;
     z-index: 10;
+    color: white;
+    line-height: 1.2;
+    letter-spacing: normal;
+    word-spacing: normal;
+    transition: background-color 0.3s ease, color 0.3s ease, line-height 0.3s ease, letter-spacing 0.3s ease, word-spacing 0.3s ease;
 }
 
+/* Top 3 users styling */
 .top-three-ranking .leaderboard-item {
     position: relative;
     width: 9rem;
-    height: 11.5rem;
+    min-height: 11.5rem;
+    height: auto;
     text-align: center;
     padding: 2.8rem 0 0;
     margin: 1rem 1rem 2rem;
     border-radius: 0.5rem;
     transform-origin: bottom;
     cursor: pointer;
-    transition: transform 200ms ease-in-out;
-    box-shadow: 0 0 4rem 0 rgba(0, 0, 0, 0.1), 0 1rem 2rem 0rem rgba(0, 0, 0, 0.4);
+    transition: transform 200ms ease-in-out, background-color 0.3s ease;
+    box-shadow: 0 0 4rem 0 rgba(0, 0, 0, 0.1), 0 1rem 2rem 0 rgba(0, 0, 0, 0.4);
+    background-color: inherit;
+    color: white;
 }
 
+/* User profile images for top 3 */
 .top-three-ranking .leaderboard-item .user-profile {
     position: absolute;
     top: 0.3rem;
     left: 2.5rem;
-    width: 4rem;
-    height: 4rem;
+    width: 5rem;
+    height: 5rem;
     border-radius: 50%;
-    background-size: cover;
+    background-repeat: no-repeat;
+    background-size: contain;
     background-position: center;
+    background-color: transparent;
     margin-right: 1rem;
-
-    /* box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.2), 0 1rem 1rem -0.5rem rgba(0, 0, 0, 0.3); */
 }
 
-.top-three-ranking .leaderboard-item .user-position {
-    top: 20rem;
-    font-weight: 900;
-    font-size: 1.5rem;
-    margin-bottom: 0.25rem;
+/* Specific images for top 3 users */
+/* Adjust relative paths as needed */
+.top-three-ranking .leaderboard-item.first-place .user-profile {
+    background-image: url('../assets/img/FirstPlace.png');
 }
 
-.top-three-ranking .leaderboard-item .user-name {
-margin-top: 2rem;
-    font-size: 1.1rem;
-    margin-bottom: 0.5rem;
-    color: rgb(255, 255, 255)
+.top-three-ranking .leaderboard-item.second-place .user-profile {
+    background-image: url('../assets/img/SecondPlace.png');
 }
 
+.top-three-ranking .leaderboard-item.third-place .user-profile {
+    background-image: url('../assets/img/ThirdPlace.png');
+}
+
+/* User name and score for top 3 */
+.top-three-ranking .leaderboard-item .user-name,
 .top-three-ranking .leaderboard-item .user-score {
-    opacity: 0.8;
-    color: #f8f9fa;
+    font-size: inherit;
+    color: white !important;
+    margin-top: 2rem;
+    margin-bottom: 0.5rem;
+    opacity: 1;
+    line-height: inherit;
+    letter-spacing: inherit;
+    word-spacing: inherit;
+    white-space: normal; /* allow wrapping */
+    min-height: 2.5rem; /* enough height for line spacing */
 }
 
+/* User score "points" label */
 .top-three-ranking .leaderboard-item .user-score:after {
     display: block;
     content: "points";
-    color: rgb(255, 255, 255);
+    color: white !important;
     opacity: 1;
 }
 
+/* Special backgrounds for top 3 */
 .top-three-ranking .leaderboard-item.first-place {
     width: 10rem;
-    height: 11.5rem;
+    min-height: 11.5rem;
+    height: auto;
     padding-top: 3.5rem;
-    background: linear-gradient(#7a5008 30%, #d59725) ;
+    background: linear-gradient(#7a5008 30%, #d59725);
 }
 
 .top-three-ranking .leaderboard-item.second-place {
     width: 10rem;
-    height: 11.5rem;
+    min-height: 11.5rem;
+    height: auto;
     padding-top: 3.5rem;
-    background: linear-gradient(#3c3b3b 30%, #989898) ;
+    background: linear-gradient(#3c3b3b 30%, #989898);
 }
 
 .top-three-ranking .leaderboard-item.third-place {
     width: 10rem;
-    height: 11.5rem;
+    min-height: 11.5rem;
+    height: auto;
     padding-top: 3.5rem;
-    background: linear-gradient(#40280c 30%, #9e621e) ;
+    background: linear-gradient(#40280c 30%, #9e621e);
 }
 
-.top-three-ranking .leaderboard-item.first-place .user-profile {
-    width: 5rem;
-    height: 5rem;
-    left: 2.5rem;
-    background-color: rgba(0, 0, 0, 0);
-    content: url(/website/assets/img/FirstPlace.png);
-}
-
-.top-three-ranking .leaderboard-item.second-place .user-profile {
-    width: 5rem;
-    height: 5rem;
-    left: 2.5rem;
-    background-color: rgba(0, 0, 0, 0);
-    content: url(/website/assets/img/SecondPlace.png);
-}
-
-.top-three-ranking .leaderboard-item.third-place .user-profile {
-    width: 5rem;
-    height: 5rem;
-    left: 2.5rem;
-    content: url(/website/assets/img/ThirdPlace.png);
-
-}
-
+/* Hover effect for top 3 */
 .top-three-ranking .leaderboard-item:hover {
     transform: scale(1.05);
 }
 
+/* Leaderboard list (users ranked 4-10) */
 .leaderboard-list .leaderboard-item {
     position: relative;
     display: flex;
     align-items: center;
-    height: 4rem;
+    min-height: 4rem;
+    height: auto;
+    padding: 0.5rem 1rem;
     border-radius: 4rem;
     margin-bottom: 2rem;
     margin-left: 25%;
     margin-right: 25%;
-    background-color: rgb(40, 40, 50);
+    background-color: rgba(40, 40, 50, 0.8);
     transform-origin: left;
     cursor: pointer;
-    transition: transform 200ms ease-in-out;
-    box-shadow: 0 0 4rem 0 rgba(0, 0, 0, 0.1), 0 1rem 2rem 0rem rgba(0, 0, 0, 0.6);
+    transition: transform 200ms ease-in-out, background-color 0.3s ease;
+    box-shadow: 0 0 4rem 0 rgba(0, 0, 0, 0.1), 0 1rem 2rem 0 rgba(0, 0, 0, 0.6);
+    color: white;
 }
 
+/* User position number */
 .leaderboard-list .leaderboard-item .user-position {
     font-weight: 900;
     position: absolute;
     left: 1rem;
     text-align: center;
-    font-size: 1.25rem;
+    font-size: inherit;
     width: 1.5rem;
-    color: #f8f9fa;
+    color: white !important;
     opacity: 0.6;
     transition: opacity 200ms ease-in-out;
+    line-height: inherit;
+    letter-spacing: inherit;
+    word-spacing: inherit;
+    white-space: normal; /* allow wrapping */
+    min-height: 2.5rem; /* enough height for line spacing */
 }
 
+/* User profile image */
 .leaderboard-list .leaderboard-item .user-profile {
     width: 2rem;
     height: 4rem;
@@ -143,33 +157,108 @@ margin-top: 2rem;
     background-size: cover;
     background-position: center;
     margin-right: 1rem;
-
 }
 
+/* User name */
 .leaderboard-list .leaderboard-item .user-name {
     flex-grow: 2;
     flex-basis: 10rem;
-    font-size: 1.1rem;
-    color: rgb(255, 255, 255)
+    font-size: inherit;
+    color: white !important;
+    line-height: inherit;
+    letter-spacing: inherit;
+    word-spacing: inherit;
+    white-space: normal; /* allow wrapping */
+    min-height: 2.5rem; /* enough height for line spacing */
 }
 
+/* User score */
 .leaderboard-list .leaderboard-item .user-score {
     margin-right: 1.5rem;
     opacity: 1;
-    color: rgb(255, 255, 255);
+    color: white !important;
+    font-size: inherit;
+    line-height: inherit;
+    letter-spacing: inherit;
+    word-spacing: inherit;
+    white-space: normal; /* allow wrapping */
+    min-height: 2.5rem; /* enough height for line spacing */
 }
 
+/* User score "points" label */
 .leaderboard-list .leaderboard-item .user-score:after {
     margin-right: 1rem;
     content: " points";
-    color: rgb(150, 150, 150);
+    color: rgba(255, 255, 255, 0.8) !important;
     opacity: 1;
 }
 
+/* Hover effect for leaderboard list */
 .leaderboard-list .leaderboard-item:hover {
     transform: scale(1.02);
-    background-color: #495057;
+    background-color: rgba(73, 80, 87, 0.8);
 }
 
-.leaderboard-list .leaderboard-item:hover .user-position {
+/* ========================= */
+/* Accessibility: High Contrast Mode */
+/* Add class 'high-contrast' to .leaderboard-container to enable */
+.leaderboard-container.high-contrast {
+    background-color: black !important;
+    color: white !important;
+}
+
+.leaderboard-container.high-contrast .top-three-ranking .leaderboard-item.first-place {
+    background: black !important;
+    box-shadow: 0 0 0.5rem 0.2rem yellow !important;
+}
+
+.leaderboard-container.high-contrast .top-three-ranking .leaderboard-item.second-place {
+    background: black !important;
+    box-shadow: 0 0 0.5rem 0.2rem silver !important;
+}
+
+.leaderboard-container.high-contrast .top-three-ranking .leaderboard-item.third-place {
+    background: black !important;
+    box-shadow: 0 0 0.5rem 0.2rem #cd7f32 !important; /* bronze */
+}
+
+.leaderboard-container.high-contrast .leaderboard-list .leaderboard-item {
+    background-color: black !important;
+    box-shadow: 0 0 0.5rem 0.2rem white !important;
+    color: white !important;
+}
+
+.leaderboard-container.high-contrast .leaderboard-list .leaderboard-item:hover {
+    background-color: yellow !important;
+    color: black !important;
+}
+
+.leaderboard-container.high-contrast .leaderboard-list .leaderboard-item:hover .user-position {
+    color: black !important;
+}
+
+/* ========================= */
+/* Accessibility: Line Spacing */
+/* Add class 'line-spacing' to .leaderboard-container to increase line height and spacing */
+.leaderboard-container.line-spacing {
+    line-height: 1.8 !important;
+    letter-spacing: 0.05em !important;
+    word-spacing: 0.2em !important;
+}
+
+/* Ensure line spacing applies to all text elements */
+.leaderboard-container.line-spacing .user-name,
+.leaderboard-container.line-spacing .user-score,
+.leaderboard-container.line-spacing .user-position {
+    line-height: 1.8 !important;
+    letter-spacing: 0.05em !important;
+    word-spacing: 0.2em !important;
+    white-space: normal !important;
+    min-height: 2.5rem !important;
+}
+
+/* Add vertical padding to leaderboard items for line spacing */
+.leaderboard-container.line-spacing .leaderboard-item {
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
 }
