@@ -1,168 +1,114 @@
 <?php
 include "../../includes/template.php";
-$challengeToLoad = $_GET["challengeID"] ?? null;
 
-// ---- Resolve and validate challengeID from query ----
-$challengeToLoad = isset($_GET["challengeID"]) ? (int) $_GET["challengeID"] : -1;
+// ---------------------------------------------------------
+// Config: keep this in sync with the watcher
+// ---------------------------------------------------------
+$TIME_LIMIT_MINUTES = (int) (getenv('CYBER_DOCKER_TIME_LIMIT_MINUTES') ?: 10);
 
-
+// ---------------------------------------------------------
+// Auth & inputs
+// ---------------------------------------------------------
 if (!authorisedAccess(false, true, true)) {
-    header("Location:../../index.php");
+    header("Location: ../../index.php");
     exit;
 }
 
-if (!$challengeToLoad) {
-    header("Location: challengesList.php");
+$challengeToLoad = isset($_GET["challengeID"]) ? (int) $_GET["challengeID"] : 0;
+if ($challengeToLoad <= 0) {
+    header("Location: ./challengesList.php");
     exit;
 }
 
-$userID = $_SESSION["user_id"];
+$userID = $_SESSION["user_id"] ?? null;
+if (!$userID) {
+    header("Location: ../../index.php");
+    exit;
+}
 
-/* ------------ FUNCTIONS ------------- */
-function loadChallengeData() {
-    global $conn, $challengeToLoad, $challengeID, $title, $challengeText, $pointsValue, $flag, $Image;
+// ---------------------------------------------------------
+// Fetch challenge
+// ---------------------------------------------------------
+$stmt = $conn->prepare("
+    SELECT ID, challengeTitle, challengeText, pointsValue, flag, Image
+    FROM Challenges
+    WHERE ID = ?
+");
+$stmt->execute([$challengeToLoad]);
+$challenge = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $stmt = $conn->prepare("SELECT ID, challengeTitle, challengeText, pointsValue, flag, Image FROM Challenges WHERE ID = ?");
-    $stmt->execute([$challengeToLoad]);
-    if ($row = $stmt->fetch()) {
-        $challengeID   = $row["ID"];
-        $title         = $row["challengeTitle"];
-        $challengeText = $row["challengeText"];
-        $pointsValue   = $row["pointsValue"];
-        $flag          = $row["flag"];
-        $Image         = $row["Image"];
+if (!$challenge) {
+    echo "<div class='alert alert-danger text-center mt-4'>Challenge not found.</div>";
+    exit;
+}
+
+$challengeID   = (int)$challenge["ID"];
+$title         = $challenge["challengeTitle"];
+$challengeText = $challenge["challengeText"];
+$pointsValue   = (int)$challenge["pointsValue"];
+$flag          = $challenge["flag"];
+$image         = $challenge["Image"];
+
+// ---------------------------------------------------------
+// Handle flag submission
+// ---------------------------------------------------------
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["hiddenflag"])) {
+    $userFlag = sanitise_data($_POST["hiddenflag"]);
+
+    if ($userFlag === $flag) {
+        // Already solved?
+        $check = $conn->prepare("SELECT 1 FROM UserChallenges WHERE userID = ? AND challengeID = ?");
+        $check->execute([$userID, $challengeID]);
+        if ($check->fetch()) {
+            $_SESSION["flash_message"] = "<div class='bg-warning text-center p-2'>Flag Success! Challenge already completed, no points awarded.</div>";
+            header("Location: ./challengesList.php");
+            exit;
+        }
+
+        // Record solve + add points
+        $ins = $conn->prepare("INSERT INTO UserChallenges (userID, challengeID) VALUES (?, ?)");
+        $ins->execute([$userID, $challengeID]);
+
+        $upd = $conn->prepare("UPDATE Users SET Score = Score + ? WHERE ID = ?");
+        $upd->execute([$pointsValue, $userID]);
+
+        $_SESSION["flash_message"] = "<div class='bg-success text-center p-2'>Success!</div>";
+        header("Location: ./challengesList.php");
+        exit;
     } else {
-        // Challenge not found
-        echo "<div class='alert alert-danger text-center mt-4'>Challenge not found.</div>";
+        $_SESSION["flash_message"] = "<div class='bg-danger text-center p-2'>Flag failed - try again</div>";
+        // stay on page
+        header("Location: " . strtok($_SERVER['REQUEST_URI'], '?') . '?challengeID=' . $challengeID);
         exit;
     }
 }
 
-function getContainerInfo($userID, $challengeID) {
-    global $conn;
-    $containerQuery = $conn->prepare("SELECT timeInitialised, port FROM DockerContainers WHERE userID = ? AND challengeID = ?");
-    $containerQuery->execute([$userID, $challengeID]);
-    return $containerQuery->fetch();
-}
-
-function checkFlag() {
-    global $conn, $challengeID, $flag, $pointsValue, $userID;
-    if ($_SERVER["REQUEST_METHOD"] === "POST") {
-        $userEnteredFlag = sanitise_data($_POST['hiddenflag']);
-        if ($userEnteredFlag === $flag) {
-            $query = $conn->prepare("SELECT 1 FROM UserChallenges WHERE challengeID=? AND userID=?");
-            $query->execute([$challengeID, $userID]);
-
-            if ($query->fetch()) {
-                $_SESSION["flash_message"] = "<div class='bg-warning text-center p-2'>Flag Success! Challenge already completed, no points awarded.</div>";
-                header("Location: ./challengesList.php");
-                exit;
-            }
-
-            // Insert into UserChallenges
-            $insert = $conn->prepare("INSERT INTO UserChallenges (userID, challengeID) VALUES (?, ?)");
-            $insert->execute([$userID, $challengeID]);
-
-            // Update user score
-            $updateScore = $conn->prepare("UPDATE Users SET Score = Score + ? WHERE ID = ?");
-            $updateScore->execute([$pointsValue, $userID]);
-
-            $_SESSION["flash_message"] = "<div class='bg-success text-center p-2'>Success!</div>";
-            header("Location: ./challengesList.php");
-            exit;
-        } else {
-            $_SESSION["flash_message"] = "<div class='bg-danger text-center p-2'>Flag failed - try again</div>";
-            header('Location: ' . $_SERVER['REQUEST_URI']);
-            exit;
-        }
-    }
-}
-// ---- Fetch challenge info ----
-$sql = $conn->prepare("
-    SELECT ID, moduleName, challengeTitle, challengeText, pointsValue, flag, dockerChallengeID, Image
-    FROM Challenges
-    WHERE ID = ?
-");
-$sql->execute([$challengeToLoad]);
-$challenge = $sql->fetch(PDO::FETCH_ASSOC);
-
-if (!$challenge) {
-    echo "Challenge not found.";
-    exit;
-}
-
-extract($challenge); // Creates $ID, $moduleName, $challengeTitle, etc.
-
-$userID = $_SESSION["user_id"] ?? null;
-if (!$userID) {
-    header("Location:../../index.php");
-    exit;
-}
-
-// ---- Fetch container info if running ----
-$containerQuery = $conn->prepare("
+// ---------------------------------------------------------
+// Container state (per-user per-challenge)
+// ---------------------------------------------------------
+$containerStmt = $conn->prepare("
     SELECT timeInitialised, port
     FROM DockerContainers
     WHERE userID = ? AND challengeID = ?
     LIMIT 1
 ");
-$containerQuery->execute([$userID, $ID]);
-$container = $containerQuery->fetch(PDO::FETCH_ASSOC);
+$containerStmt->execute([$userID, $challengeID]);
+$container = $containerStmt->fetch(PDO::FETCH_ASSOC);
 
-$port            = $container['port'] ?? null;
 $ipAddress       = "10.177.202.196"; // TODO: make dynamic if needed
 $timeInitialised = $container['timeInitialised'] ?? null;
-$deletionTime    = $timeInitialised
-    ? date('G:i', strtotime($timeInitialised) + 20 * 60) // +20 minutes
-    : "Container not initialised";
+$port            = $container['port'] ?? null;
+$isRunning       = !empty($timeInitialised);
 
-$isRunning = (bool) $timeInitialised;
-
-// ---- Handle flag submission ----
-if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['hiddenflag'])) {
-    $userFlag = sanitise_data($_POST['hiddenflag']);
-
-    if ($userFlag === $flag) {
-        // already completed?
-        $check = $conn->prepare("SELECT 1 FROM UserChallenges WHERE userID = ? AND challengeID = ?");
-        $check->execute([$userID, $ID]);
-
-        if ($check->rowCount() > 0) {
-            $_SESSION["flash_message"] = "<div class='bg-warning p-2'>Flag Success! Already completed.</div>";
-        } else {
-            $ins = $conn->prepare("INSERT INTO UserChallenges (userID, challengeID) VALUES (?, ?)");
-            $ins->execute([$userID, $ID]);
-
-            $upd = $conn->prepare("UPDATE Users SET Score = Score + ? WHERE ID = ?");
-            $upd->execute([$pointsValue, $userID]);
-
-            $_SESSION["flash_message"] = "<div class='bg-success p-2'>Success!</div>";
-        }
-        header("Location:./challengesList.php");
-        exit;
-    } else {
-        $_SESSION["flash_message"] = "<div class='bg-danger p-2'>Flag failed - try again</div>";
-        header('Location: ' . strtok($_SERVER['REQUEST_URI'], '?') . '?challengeID=' . (int)$ID);
-        exit;
+// Deletion time matches the watcher hard cap
+$deletionTime = "Container not initialised";
+if ($isRunning) {
+    $t0 = strtotime($timeInitialised);
+    if ($t0 !== false) {
+        $deletionTime = date('G:i', $t0 + ($TIME_LIMIT_MINUTES * 60));
     }
 }
-
-loadChallengeData();
-checkFlag();
-
-$container = getContainerInfo($userID, $challengeID);
-$port = $container['port'] ?? 'N/A';
-$ipAddress = "10.177.202.196"; // Replace with dynamic IP if needed
-$timeInitialised = $container['timeInitialised'] ?? null;
-$deletionTime = $timeInitialised ? date('G:i', strtotime($timeInitialised) + 1200) : "Container not initialised";
-
 ?>
-
-<title>Challenge Information</title>
-
-<header class="container text-center mt-4">
-    <h1 class="text-uppercase">Challenge - <?= htmlspecialchars($title) ?></h1>
-</header>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -174,50 +120,28 @@ $deletionTime = $timeInitialised ? date('G:i', strtotime($timeInitialised) + 120
     <!-- (Bootstrap assumed available via your template include) -->
     <style>
         .flag-input { width: 100%; max-width: 420px; }
-        .btn-wide { min-width: 170px; }
+        .btn-wide   { min-width: 170px; }
     </style>
 </head>
 <body>
 <header class="container-fluid d-flex align-items-center justify-content-center mt-3">
-    <h1 class="text-uppercase">Challenge - <?= htmlspecialchars($challengeTitle) ?></h1>
+    <h1 class="text-uppercase">Challenge - <?= htmlspecialchars($title) ?></h1>
 </header>
 
-<section class="container-fluid mt-3" style="padding: 10px;">
-    <div class="container-fluid text-center">
-        <div class="row border fw-bold">
-            <div class="col-2">Image</div>
-            <div class="col-2">Title</div>
-            <div class="col-6">Description</div>
-            <div class="col-2">Points</div>
+<section class="container my-4">
+    <?php if (!empty($_SESSION["flash_message"])): ?>
+        <div class="mt-2">
+            <?= $_SESSION["flash_message"]; unset($_SESSION["flash_message"]); ?>
         </div>
-        <div class="row border border-top-0 align-items-center">
-            <div class="col-2 py-2">
-                <img src="<?= BASE_URL ?>assets/img/challengeImages/<?= $Image ? htmlspecialchars($Image) : 'Image Not Found.jpg' ?>" width="100" height="100" alt="Challenge image">
-            </div>
-            <div class="col-2"><?= htmlspecialchars($challengeTitle) ?></div>
-            <div class="col-6 text-start"><?= nl2br(htmlspecialchars($challengeText)) ?></div>
-            <div class="col-2"><?= (int)$pointsValue ?></div>
-        </div>
+    <?php endif; ?>
 
-        <?php if (!empty($_SESSION["flash_message"])): ?>
-            <div class="mt-3">
-                <?= $_SESSION["flash_message"]; unset($_SESSION["flash_message"]); ?>
-            </div>
-        <?php endif; ?>
-
-        <div class="pt-3 text-success fw-bold">Good luck and have fun!</div>
-
-
-<main class="container my-5">
-
-
-    <!-- Challenge Details Table -->
+    <!-- Challenge details -->
     <div class="table-responsive my-4">
-        <table class="table table-bordered table-hover text-center align-middle theme-table mb-0">
+        <table class="table table-bordered table-hover text-center align-middle mb-0">
             <thead>
             <tr>
-                <th style="width:15%">Challenge Image</th>
-                <th style="width:20%">Challenge Name</th>
+                <th style="width:15%">Image</th>
+                <th style="width:20%">Title</th>
                 <th style="width:50%">Description</th>
                 <th style="width:10%">Points</th>
             </tr>
@@ -225,15 +149,15 @@ $deletionTime = $timeInitialised ? date('G:i', strtotime($timeInitialised) + 120
             <tbody>
             <tr>
                 <td>
-                    <?php if ($Image): ?>
-                        <img src="<?= BASE_URL ?>assets/img/challengeImages/<?= htmlspecialchars($Image) ?>" alt="Challenge Image" width="100" height="100">
+                    <?php if ($image): ?>
+                        <img src="<?= BASE_URL ?>assets/img/challengeImages/<?= htmlspecialchars($image) ?>" alt="Challenge Image" width="100" height="100">
                     <?php else: ?>
                         <span class="text-muted">No Image</span>
                     <?php endif; ?>
                 </td>
                 <td><?= htmlspecialchars($title) ?></td>
                 <td class="text-start"><?= nl2br(htmlspecialchars($challengeText)) ?></td>
-                <td class="fw-bold"><?= htmlspecialchars($pointsValue) ?></td>
+                <td class="fw-bold"><?= (int)$pointsValue ?></td>
             </tr>
             </tbody>
         </table>
@@ -242,23 +166,15 @@ $deletionTime = $timeInitialised ? date('G:i', strtotime($timeInitialised) + 120
     <p class="text-success fw-bold text-center mt-3">Good luck and have fun!</p>
     <hr class="my-4 border-2 border-danger opacity-100">
 
-    <!-- Flag Submission -->
-    <form action="challengeDisplay.php?challengeID=<?= $challengeID ?>" method="post" class="mt-3">
-        <div class="form-floating mb-3">
-            <input type="text"
-                   class="form-control flag-input"
-                   id="flag"
-                   name="hiddenflag"
-                   placeholder="CTF{Flag_Here}">
-            <p class="form-text text-start small">
-                Press <b>Enter</b> when finished entering the flag.
-            </p>
-        </div>
+    <!-- Flag submission -->
+    <form action="challengeDisplay.php?challengeID=<?= (int)$challengeID ?>" method="post" class="mt-3">
+        <input type="text" class="form-control flag-input" name="hiddenflag" placeholder="CTF{Flag_Here}" autocomplete="off">
+        <p class="form-text text-start small mb-0">Press <b>Enter</b> when you're done entering your flag.</p>
     </form>
 
-    <!-- Container Info Table -->
+    <!-- Container controls -->
     <div class="table-responsive my-4">
-        <table class="table table-bordered table-striped text-center align-middle theme-table mb-0">
+        <table class="table table-bordered table-striped text-center align-middle mb-0">
             <thead>
             <tr>
                 <th>Container Info</th>
@@ -268,72 +184,46 @@ $deletionTime = $timeInitialised ? date('G:i', strtotime($timeInitialised) + 120
             </thead>
             <tbody>
             <tr>
-                <td>
-                    <?= $timeInitialised ? "IP: $ipAddress<br>Port: $port" : "Container not initialised" ?>
+                <td id="containerInfo">
+                    <?=
+                    $isRunning
+                        ? "IP: " . htmlspecialchars($ipAddress) . "<br>Port: " . htmlspecialchars((string)$port)
+                        : "Container not initialised"
+                    ?>
                 </td>
                 <td>
-                    <button type="button" class="btn btn-success" onclick="startContainer(<?= $challengeID ?>, <?= $userID ?>)">Start Container</button>
+                    <?php if ($isRunning): ?>
+                        <button
+                                id="toggleBtn"
+                                class="btn btn-danger btn-wide"
+                                data-state="running"
+                                onclick="toggleContainer(<?= (int)$challengeID ?>, <?= (int)$userID ?>)">
+                            Stop Container
+                        </button>
+                    <?php else: ?>
+                        <button
+                                id="toggleBtn"
+                                class="btn btn-success btn-wide"
+                                data-state="stopped"
+                                onclick="toggleContainer(<?= (int)$challengeID ?>, <?= (int)$userID ?>)">
+                            Start Container
+                        </button>
+                    <?php endif; ?>
                 </td>
-                <td>
-                    <?= $deletionTime ?>
+                <td id="shutdownCell">
+                    <?= htmlspecialchars($deletionTime) ?>
                 </td>
             </tr>
             </tbody>
         </table>
-        <form method="post" class="d-inline-block">
-            <input type="text" name="hiddenflag" class="form-control flag-input" placeholder="CTF{Flag_Here}" autocomplete="off">
-            <p class="form-text text-start font-size-sm">Press Enter when you're done entering your flag.</p>
-        </form>
+        <div class="small text-muted mt-2">
+            Note: Containers automatically stop <?= (int)$TIME_LIMIT_MINUTES ?> minutes after start.
+        </div>
     </div>
 </section>
 
-<section class="container-fluid" style="padding: 10px;">
-    <div class="container-fluid text-center">
-        <div class="row border fw-bold">
-            <div class="col">Container Info</div>
-            <div class="col">Controls</div>
-            <div class="col">Shutdown Time</div>
-        </div>
-        <div class="row border border-top-0 align-items-center">
-            <div class="col py-2" id="containerInfo">
-                <?php if ($isRunning): ?>
-                    IP: <?= htmlspecialchars($ipAddress) ?><br>
-                    Port: <?= htmlspecialchars((string)$port) ?>
-                <?php else: ?>
-                    Container not initialised
-                <?php endif; ?>
-            </div>
-            <div class="col py-2">
-                <?php if ($isRunning): ?>
-                    <button
-                            id="toggleBtn"
-                            class="btn btn-danger btn-wide"
-                            data-state="running"
-                            onclick="toggleContainer(<?= (int)$ID ?>, <?= (int)$userID ?>)">
-                        Stop Container
-                    </button>
-                <?php else: ?>
-                    <button
-                            id="toggleBtn"
-                            class="btn btn-success btn-wide"
-                            data-state="stopped"
-                            onclick="toggleContainer(<?= (int)$ID ?>, <?= (int)$userID ?>)">
-                        Start Container
-                    </button>
-                <?php endif; ?>
-            </div>
-            <div class="col py-2" id="shutdownCell">
-                <?= htmlspecialchars($deletionTime) ?>
-            </div>
-        </div>
-        <div class="small text-muted mt-2">Note: Containers automatically stop 20 minutes after start.</div>
-    </div>
-
-</main>
-
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
-    // Helper to disable/enable the toggle button
+    // Disable/enable button + label
     function setBtnBusy(busy, label) {
         const btn = document.getElementById('toggleBtn');
         if (!btn) return;
@@ -341,7 +231,7 @@ $deletionTime = $timeInitialised ? date('G:i', strtotime($timeInitialised) + 120
         if (label) btn.textContent = label;
     }
 
-    // Optimistically swap UI state (colour/label) before server confirms
+    // Optimistic swap of button state
     function setBtnState(state) {
         const btn = document.getElementById('toggleBtn');
         if (!btn) return;
@@ -363,50 +253,28 @@ $deletionTime = $timeInitialised ? date('G:i', strtotime($timeInitialised) + 120
 
         const currentState = btn.dataset.state; // 'running' | 'stopped'
         const isStarting = currentState === 'stopped';
-
-        // Prevent double-clicks
-        setBtnBusy(true, isStarting ? 'Starting…' : 'Stopping…');
-
         const url = isStarting
             ? '<?= BASE_URL ?>pages/challenges/docker/startContainer.php'
             : '<?= BASE_URL ?>pages/challenges/docker/stopContainer.php';
 
-        // Optimistic label change
+        // Prevent double-clicks + optimistic UI
+        setBtnBusy(true, isStarting ? 'Starting…' : 'Stopping…');
         setBtnState(isStarting ? 'running' : 'stopped');
 
         axios.post(url, {
             challengeID: challengeID,
             userID: userID
-        }).then(res => {
-            // Give the backend a moment to update DB/containers, then refresh
-            setTimeout(() => {
-                location.reload();
-            }, 800);
+        }).then(() => {
+            // allow DB/binlog to settle, then sync UI
+            setTimeout(() => location.reload(), 800);
         }).catch(err => {
-            // Revert optimistic change on error
+            // revert on error
             setBtnState(currentState);
             setBtnBusy(false, currentState === 'stopped' ? 'Start Container' : 'Stop Container');
             console.error(err);
             alert('Action failed. Please try again.');
         });
     }
-
-    // Dark/Light Mode Table Toggling
-    function applyTableTheme() {
-        const body = document.body;
-        const tables = document.querySelectorAll('.theme-table');
-        tables.forEach(table => {
-            table.classList.remove('table-dark', 'table-light');
-            if (body.classList.contains('bg-dark')) {
-                table.classList.add('table-dark');
-            } else {
-                table.classList.add('table-light');
-            }
-        });
-    }
-
-    applyTableTheme();
-    document.getElementById('modeToggle')?.addEventListener('click', () => {
-        setTimeout(applyTableTheme, 50);
-    });
 </script>
+</body>
+</html>
