@@ -126,6 +126,35 @@ $flash = take_flash();
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <!-- Left -->
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item dropdown">
+                    <a class="nav-link text-black dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Accessibility Features
+                    </a>
+                    <ul class="dropdown-menu p-3" style="min-width: 300px;">
+                            <div>
+                                <h6>Fonts</h6>
+                                <button class="btn btn-sm btn-outline-primary accessibility-font" data-size="small">Small</button>
+                                <button class="btn btn-sm btn-outline-primary accessibility-font" data-size="medium">Medium</button>
+                                <button class="btn btn-sm btn-outline-primary accessibility-font" data-size="large">Large</button>
+                            </div>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <div>
+                                <h6>Line Spacing</h6>
+                                <button class="btn btn-sm btn-outline-primary accessibility-line" data-spacing="1">Normal</button>
+                                <button class="btn btn-sm btn-outline-primary accessibility-line" data-spacing="1.5">1.5x</button>
+                                <button class="btn btn-sm btn-outline-primary accessibility-line" data-spacing="2">2x</button>
+                            </div>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <div>
+                                <h6>High Contrast Mode</h6>
+                                <button id="toggleContrast" class="btn btn-sm btn-outline-primary">Toggle High Contrast</button>
+                            </div>
+                        </li>
+                    </ul>
                 <li class="nav-item"><a href="<?= BASE_URL; ?>index.php" class="nav-link text-black"
                                         style="padding-left: 2rem;">Home</a></li>
                 <li class="nav-item"><a href="<?= BASE_URL; ?>pages/leaderboard/leaderboard.php"
@@ -143,7 +172,7 @@ $flash = take_flash();
                             // Query to get projects
                             $stmt = $conn->query("SELECT project_id, project_name FROM CyberCity.Projects");
 
-                            // Generate list items
+                            // Gene<ul class="navbar-nav me-auto mb-2 mb-lg-0">rate list items
                             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                                 echo '<li><a class="dropdown-item" href="' . BASE_URL . 'pages/challenges/challengesList.php?projectID=' . $row['project_id'] . '">' . htmlspecialchars($row['project_name']) . '</a></li>';
                             }
@@ -283,6 +312,74 @@ $flash = take_flash();
             modeToggleBtn.textContent = 'Switch to Dark Mode';
             localStorage.setItem('theme', 'bg-light text-black');
         }
+    });
+</script>
+<script>
+    // Load saved preferences or set defaults
+    const savedFont = localStorage.getItem('accessibilityFont') || 'medium';
+    const savedLineSpacing = localStorage.getItem('accessibilityLineSpacing') || '1';
+    const savedContrast = localStorage.getItem('accessibilityContrast') === 'true';
+
+    function applyAccessibilitySettings() {
+        document.body.classList.remove('font-small', 'font-medium', 'font-large');
+        document.body.classList.add('font-' + savedFont);
+
+        document.body.classList.remove('line-spacing-1', 'line-spacing-1-5', 'line-spacing-2');
+        if (savedLineSpacing === '1') {
+            document.body.classList.add('line-spacing-1');
+        } else if (savedLineSpacing === '1.5') {
+            document.body.classList.add('line-spacing-1-5');
+        } else if (savedLineSpacing === '2') {
+            document.body.classList.add('line-spacing-2');
+        }
+
+        if (savedContrast) {
+            document.body.classList.add('high-contrast');
+        } else {
+            document.body.classList.remove('high-contrast');
+        }
+    }
+
+    applyAccessibilitySettings();
+
+    // Highlight active buttons
+    document.querySelectorAll('.accessibility-font').forEach(button => {
+        if (button.getAttribute('data-size') === savedFont) {
+            button.classList.add('active');
+        }
+    });
+    document.querySelectorAll('.accessibility-line').forEach(button => {
+        if (button.getAttribute('data-spacing') === savedLineSpacing) {
+            button.classList.add('active');
+        }
+    });
+    if (savedContrast) {
+        document.getElementById('toggleContrast').classList.add('active');
+    }
+
+    // Font size buttons
+    document.querySelectorAll('.accessibility-font').forEach(button => {
+        button.addEventListener('click', () => {
+            const size = button.getAttribute('data-size');
+            localStorage.setItem('accessibilityFont', size);
+            location.reload(); // reload to apply changes cleanly
+        });
+    });
+
+    // Line spacing buttons
+    document.querySelectorAll('.accessibility-line').forEach(button => {
+        button.addEventListener('click', () => {
+            const spacing = button.getAttribute('data-spacing');
+            localStorage.setItem('accessibilityLineSpacing', spacing);
+            location.reload();
+        });
+    });
+
+    // High contrast toggle
+    document.getElementById('toggleContrast').addEventListener('click', () => {
+        const current = localStorage.getItem('accessibilityContrast') === 'true';
+        localStorage.setItem('accessibilityContrast', !current);
+        location.reload();
     });
 </script>
 </body>
