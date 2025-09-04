@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from pymysqlreplication import BinLogStreamReader
 from pymysqlreplication.row_event import WriteRowsEvent, UpdateRowsEvent, DeleteRowsEvent
+import os
 import time
 from datetime import datetime, timedelta, timezone
 import pymysql
@@ -22,7 +23,16 @@ TABLE_CHALLENGES = "Challenges"         # has dockerChallengeID
 CHALLENGE_ROOT = Path("/var/www/CyberCity/dockerStuff")
 
 BASE_PORT, MAX_PORT = 17001, 17999
-SAFETY_GRACE_SECONDS = 90  # protects brand-new containers from clock skew
+
+# --- HARD LIFETIME LIMIT (default 10 minutes) ---
+def _read_time_limit_minutes() -> int:
+    try:
+        v = int(os.getenv("CYBER_DOCKER_TIME_LIMIT_MINUTES", "10"))
+        return max(1, v)  # clamp to >=1 minute
+    except Exception:
+        return 10
+
+TIME_LIMIT_MINUTES = _read_time_limit_minutes()
 
 active_containers = {}  # row_id -> {challengeID, dockerChallengeID, port, delete_time}
 TABLE_COLS = []         # detected order for DockerContainers columns
@@ -46,12 +56,11 @@ def now_utc():
     return datetime.now(timezone.utc)
 
 def compute_delete_time(time_initialised_utc: datetime):
-    """timeInitialised + 20m, but never sooner than now + grace."""
-    delete_time = time_initialised_utc + timedelta(minutes=20)
-    min_delete = now_utc() + timedelta(seconds=SAFETY_GRACE_SECONDS)
-    if delete_time < min_delete:
-        delete_time = min_delete
-    return delete_time
+    """
+    Hard cap: timeInitialised + TIME_LIMIT_MINUTES.
+    No grace extension. No sliding window.
+    """
+    return time_initialised_utc + timedelta(minutes=TIME_LIMIT_MINUTES)
 
 # =========================
 # DB HELPERS
@@ -219,7 +228,6 @@ def time_tracker():
     while True:
         current_time = now_utc()
         try:
-            # Pull dockerChallengeID via JOIN so polling always knows folder
             sql = f"""
             SELECT dc.ID, dc.timeInitialised, dc.userID, dc.challengeID, c.dockerChallengeID, dc.port
             FROM {TABLE_CONTAINERS} dc
@@ -232,10 +240,10 @@ def time_tracker():
                     continue
 
                 t0_utc = to_utc(time_initialised)
-                delete_time = compute_delete_time(t0_utc)
+                hard_deadline = compute_delete_time(t0_utc)
 
-                if current_time > delete_time:
-                    log(f"expiry hit: row={row_id}")
+                if current_time >= hard_deadline:
+                    log(f"expiry hit: row={row_id} deadline={hard_deadline.isoformat()}")
                     remove_container(user_id, challenge_id, docker_challenge_id, port, row_id)
 
         except Exception as e:
@@ -288,7 +296,12 @@ def process_binlog_event():
                     continue
 
                 t0_utc = to_utc(time_init)
-                delete_time = compute_delete_time(t0_utc)
+                # compute hard deadline every time, but never allow extension beyond original cached one
+                computed_deadline = compute_delete_time(t0_utc)
+                cached = active_containers.get(row_id, {})
+                prior_deadline = cached.get("delete_time")
+                # hard cap: take the earliest deadline we know
+                delete_time = min(prior_deadline, computed_deadline) if prior_deadline else computed_deadline
                 docker_challenge_id = get_docker_challenge_id(challenge_id)
 
                 if evt == "INSERT":
@@ -303,16 +316,25 @@ def process_binlog_event():
                         "delete_time": delete_time
                     }
                 elif evt == "UPDATE":
+                    # keep earliest deadline; do not extend
                     if row_id in active_containers:
                         ac = active_containers[row_id]
-                        ac["delete_time"] = delete_time
+                        ac["delete_time"] = min(ac.get("delete_time", delete_time), delete_time)
                         ac["dockerChallengeID"] = docker_challenge_id or ac["dockerChallengeID"]
                         if port: ac["port"] = port
+                    else:
+                        # if not tracked yet (process restarted), start tracking
+                        active_containers[row_id] = {
+                            "challengeID": challenge_id,
+                            "dockerChallengeID": docker_challenge_id,
+                            "port": port,
+                            "delete_time": delete_time
+                        }
 
                 # Opportunistic sweep (UTC)
                 now = now_utc()
                 for rid, info in list(active_containers.items()):
-                    if now > info["delete_time"]:
+                    if now >= info["delete_time"]:
                         remove_container(user_id, info["challengeID"], info["dockerChallengeID"], info["port"], rid)
 
     except KeyboardInterrupt:
@@ -326,6 +348,7 @@ def process_binlog_event():
 # BOOT
 # =========================
 if __name__ == "__main__":
+    log(f"TIME_LIMIT_MINUTES = {TIME_LIMIT_MINUTES}")
     load_cols()  # detect container table column order for binlog mapping
     threading.Thread(target=time_tracker, daemon=True).start()
     process_binlog_event()
