@@ -76,6 +76,7 @@ function checkFlag() {
             exit;
         }
     }
+}
 // ---- Fetch challenge info ----
 $sql = $conn->prepare("
     SELECT ID, moduleName, challengeTitle, challengeText, pointsValue, flag, dockerChallengeID, Image
