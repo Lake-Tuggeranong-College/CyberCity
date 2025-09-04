@@ -1,69 +1,87 @@
 <?php
-require('../../../includes/config.php'); // must set up $conn (PDO)
+/**
+ * Drop-in replacement: pages/challenges/docker/stopContainer.php
+ * Requires: includes/config.php sets up $conn (PDO) and session.
+ */
+declare(strict_types=1);
+
+require('../../../includes/config.php');   // must define $conn (PDO) and session
 /** @var PDO $conn */
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405);
-    exit('Error: POST required.');
+// ---------- Helpers ----------
+function json_out(int $code, array $payload): void {
+    http_response_code($code);
+    header('Content-Type: application/json; charset=utf-8');
+    echo json_encode($payload);
+    exit;
 }
 
-// --- Gather input (form or JSON) ---
-$payload = $_POST;
+// ---------- Method check ----------
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    // Allow CORS preflight if needed
+    if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+        header('Access-Control-Allow-Methods: POST, OPTIONS');
+        header('Access-Control-Allow-Headers: Content-Type');
+        exit; // 204
+    }
+    json_out(405, ['ok' => false, 'error' => 'POST required']);
+}
 
+// ---------- Parse body (form or JSON) ----------
+$payload = $_POST;
 if (empty($payload)) {
     $raw = file_get_contents('php://input');
-    if ($raw) {
-        $json = json_decode($raw, true);
-        if (json_last_error() === JSON_ERROR_NONE && is_array($json)) {
-            $payload = $json;
+    if ($raw !== false && $raw !== '') {
+        $tmp = json_decode($raw, true);
+        if (json_last_error() === JSON_ERROR_NONE && is_array($tmp)) {
+            $payload = $tmp;
         }
     }
 }
 
-// Normalise keys
 $challengeID = $payload['challengeID'] ?? $payload['dChallengeID'] ?? null;
 $userID      = $payload['userID'] ?? null;
 
-// Validate
+// ---------- Validate ----------
 if ($challengeID === null || $challengeID === '') {
-    http_response_code(400);
-    exit('Error: Missing data for challengeID.');
+    json_out(400, ['ok' => false, 'error' => 'Missing challengeID']);
 }
 if ($userID === null || $userID === '') {
-    http_response_code(400);
-    exit('Error: Missing data for userID.');
+    json_out(400, ['ok' => false, 'error' => 'Missing userID']);
 }
 
-// Coerce integers
 $challengeID = filter_var($challengeID, FILTER_VALIDATE_INT);
 $userID      = filter_var($userID, FILTER_VALIDATE_INT);
 
-if ($challengeID === false) {
-    http_response_code(400);
-    exit('Error: challengeID must be an integer.');
-}
-if ($userID === false) {
-    http_response_code(400);
-    exit('Error: userID must be an integer.');
+if ($challengeID === false) json_out(400, ['ok' => false, 'error' => 'challengeID must be an integer']);
+if ($userID === false)      json_out(400, ['ok' => false, 'error' => 'userID must be an integer']);
+
+// ---------- AuthZ: ensure the caller is the same logged-in user ----------
+session_start();
+$sessionUser = $_SESSION['user_id'] ?? null;
+if (!$sessionUser || (int)$sessionUser !== (int)$userID) {
+    // If you prefer to allow admins, add your admin check here.
+    json_out(403, ['ok' => false, 'error' => 'Not authorised for this user']);
 }
 
+// ---------- Delete row (idempotent) ----------
 try {
     $stmt = $conn->prepare("
         DELETE FROM DockerContainers
-        WHERE challengeID = :challengeID AND userID = :userID
+        WHERE challengeID = :c AND userID = :u
+        LIMIT 1
     ");
-    $stmt->execute([
-        ':challengeID' => $challengeID,
-        ':userID'      => $userID
-    ]);
+    $stmt->execute([':c' => $challengeID, ':u' => $userID]);
 
-    header('Content-Type: application/json');
-    echo json_encode([
+    $deleted = $stmt->rowCount();
+
+    // 200 even if already stopped — idempotent success
+    json_out(200, [
         'ok'           => true,
-        'deleted_rows' => $stmt->rowCount()
+        'message'      => $deleted ? 'Container stop requested.' : 'No running container found.',
+        'deleted_rows' => $deleted
     ]);
 } catch (Throwable $e) {
-    http_response_code(500);
-    // verbose error for debugging; comment out later
-    echo 'DB error: ' . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8');
+    // Avoid leaking DB details in production; keep message concise
+    json_out(500, ['ok' => false, 'error' => 'Database error']);
 }
