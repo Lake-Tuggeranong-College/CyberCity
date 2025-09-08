@@ -1,28 +1,16 @@
-/* ---------------- NAVBAR ---------------- */
 .navbar {
-    background: rgba(35,37,38,0.5); /* semi-transparent dark */
+    /* background: #232526; */
+    background: rgba(35,37,38,0.5);
     font-size: 1em;
     text-overflow: ellipsis;
     color: white;
     border-radius: 1rem;
-    margin: 1% 1% 0 1%;
+    margin-left: 1%;
+    margin-right: 1%;
+    margin-top: 1%;
     padding: 0.5%;
-    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Light mode navbar */
-body.bg-light .navbar {
-    background: rgba(255, 255, 255, 0.8);
-    color: #000;
-}
-
-/* Dark mode navbar */
-body.bg-dark .navbar {
-    background: rgba(35, 37, 38, 0.9);
-    color: #f0f0f0;
-}
-
-/* ---------------- SUB BOXES ---------------- */
 .subBox-container {
     display: flex;
     gap: 2rem;
@@ -41,7 +29,7 @@ body.bg-dark .navbar {
 
 /* Light Mode */
 body.bg-light .subBoxWhite {
-    background-color: #fff;
+    background-color: white;
     color: #000;
 }
 
@@ -58,7 +46,6 @@ body.bg-dark .subBoxWhite {
     }
 }
 
-/* ---------------- DYNAMIC BOX ---------------- */
 .dynamicModeBox {
     padding: 10rem;
     border-radius: 12px;
@@ -67,7 +54,7 @@ body.bg-dark .subBoxWhite {
 
 /* Light mode */
 body.bg-light .dynamicModeBox {
-    background-color: #fff;
+    background-color: white;
     color: #000;
 }
 
@@ -77,7 +64,6 @@ body.bg-dark .dynamicModeBox {
     color: #f0f0f0;
 }
 
-/* ---------------- HERO CENTER ---------------- */
 .heroCenter {
     margin-top: 1rem;
     display: flex;
@@ -88,112 +74,82 @@ body.bg-dark .dynamicModeBox {
     text-align: center;
 }
 
-/* ---------------- SHADOWS ---------------- */
 .shadowBox {
     box-shadow: 0 20px 20px rgba(0, 0, 0, 0.15); /* subtle shading */
 }
 
-/* ---------------- THEME-AWARE TABLES ---------------- */
-.theme-table {
-    transition: background-color 0.3s ease, color 0.3s ease;
+/* Font sizes */
+body.font-small {
+    font-size: 1rem;
 }
 
-/* Light mode tables */
-body.bg-light .theme-table {
-    background-color: #fff;
-    color: #212529;
-}
-body.bg-light .theme-table thead {
-    background-color: #f8f9fa;
-    color: #212529;
+body.font-medium {
+    font-size: 1.5rem;
 }
 
-/* Dark mode tables */
-body.bg-dark .theme-table {
-    background-color: #212529;
-    color: #f0f0f0;
-}
-body.bg-dark .theme-table thead {
-    background-color: #343a40;
-    color: #f8f9fa;
-}
-/* Light mode (matches Bootstrap default) */
-body.bg-light .form-text {
-    color: #6c757d; /* Bootstrap's default muted */
+body.font-large {
+    font-size: 2rem;
 }
 
-/* Dark mode - make help text brighter for contrast */
-body.bg-dark .form-text {
-    color: #f0f0f0 !important;
-}
-/* Form input placeholder adapts for dark mode */
-body.bg-dark .form-control::placeholder {
-    color: #e0e0e0 !important;   /* or use #bcbcbc for softer contrast */
-    opacity: 1;                  /* makes sure it's fully visible */
+/* Line spacing classes matching JS */
+body.line-spacing-1 {
+    line-height: 1;
+    letter-spacing: normal;
+    word-spacing: normal;
 }
 
-/* Bonus: Also make sure the input's text is always visible */
-body.bg-dark .form-control {
-    background-color: #232526;
-    color: #fff;
-    border: 1px solid #444;
-    transition: background-color 0.3s, color 0.3s;
+body.line-spacing-1-5 {
+    line-height: 1.5;
+    letter-spacing: 0.12em;
+    word-spacing: 0.16em;
 }
 
-body.bg-light .form-control {
-    background-color: #fff;
-    color: #212529;
-    border: 1px solid #ced4da;
-    transition: background-color 0.3s, color 0.3s;
-}
-/* Light mode styling */
-body.bg-light .form-control.flag-input {
-    background-color: #fff;
-    color: #212529;
-    border: 1px solid #ced4da;
-    transition: background-color 0.3s, color 0.3s;
-}
-body.bg-light .form-control.flag-input::placeholder {
-    color: #6c757d;
+body.line-spacing-2 {
+    line-height: 2;
+    letter-spacing: 0.12em;
+    word-spacing: 0.16em;
 }
 
-/* Dark mode styling */
-body.bg-dark .form-control.flag-input {
-    background-color: #232526 !important;
-    color: #f0f0f0 !important;
-    border: 1px solid #444;
-    transition: background-color 0.3s, color 0.3s;
-}
-body.bg-dark .form-control.flag-input::placeholder {
-    color: #bcbcbc !important;
-    opacity: 1;
+/* Paragraph spacing for line spacing classes */
+body.line-spacing-1 p {
+    margin-bottom: 1em;
 }
 
+body.line-spacing-1-5 p {
+    margin-bottom: 2em;
+}
 
-/* ---------------- ALERT FIXES ---------------- */
-/* Ensure flash messages look consistent */
-body.bg-dark .alert {
-    background-color: #2a2d31;
-    color: #f0f0f0;
-    border: 1px solid #444;
+body.line-spacing-2 p {
+    margin-bottom: 2.5em;
 }
-body.bg-dark .alert-success {
-    background-color: #225d2a;
-    color: #d4f7d8;
-    border-color: #267a31;
+
+/* High contrast mode */
+body.high-contrast {
+    background-color: black !important;
+    color: yellow !important;
 }
-body.bg-dark .alert-danger {
-    background-color: #712626;
-    color: #f7d4d4;
-    border-color: #962b2b;
+
+body.high-contrast a,
+body.high-contrast .nav-link,
+body.high-contrast .dropdown-menu {
+    color: yellow !important;
+    background-color: black !important;
 }
-body.bg-dark .alert-warning {
-    background-color: #665c20;
-    color: #fff2cc;
-    border-color: #807029;
+
+body.high-contrast .btn-outline-primary {
+    color: yellow !important;
+    border-color: yellow !important;
 }
-body.bg-dark .alert-info {
-    background-color: #204e66;
-    color: #d4f0f7;
-    border-color: #2a6880;
+
+body.high-contrast .btn-outline-primary:hover {
+    background-color: yellow !important;
+    color: black !important;
+}
+
+/* Active button highlight */
+.accessibility-font.active,
+#toggleContrast.active,
+.accessibility-line.active {
+    background-color: #0d6efd;
+    color: white;
 }

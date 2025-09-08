@@ -59,8 +59,8 @@ void mqttConnect() {
     // Attempt to connect using the client ID from sensitiveInformation.h
     if (client.connect(mqttClient)) {
       Serial.println("Connected to MQTT");
-      // Subscribe to traffic light control topic
-      client.subscribe("Challenges/TrafficLights");
+      // Subscribe to Train control topic
+      client.subscribe(mqttTopic);
     } else {
       Serial.print("MQTT connection failed, state: ");
       Serial.println(client.state());
@@ -79,6 +79,44 @@ void mqttLoop() {
   client.loop();
 }
 
+
+String currentStatus = "STOPPED";
+String lastDisplayedStatus = "";
+
+void updateDisplay(String status, String details = "") {
+  // Only update if status has changed to save battery
+  if (status != lastDisplayedStatus) {
+    display.clearBuffer();
+    display.setTextColor(EPD_BLACK);
+    display.setTextSize(2);
+    
+    // Display main status
+    display.setCursor(10, 20);
+    display.println("TRAIN STATUS:");
+    
+    display.setTextSize(3);
+    display.setCursor(10, 50);
+    display.println(status);
+    
+    // Add additional details if provided
+    if (details != "") {
+      display.setTextSize(1);
+      display.setCursor(10, 90);
+      display.println(details);
+    }
+    
+    // Add timestamp
+    display.setTextSize(1);
+    display.setCursor(10, 110);
+    display.println("Time: " + String(millis() / 1000) + "s");
+    
+    display.display();
+    lastDisplayedStatus = status;
+    
+    Serial.println("Display updated: " + status);
+  }
+}
+
 void callback(char* topic, byte* payload, unsigned int length) {
   // Convert payload bytes to string
   String message;
@@ -93,17 +131,23 @@ void callback(char* topic, byte* payload, unsigned int length) {
   Serial.println(message);
 
   // Process commands:
-  // "0" = Enable chaos mode (all lights flashing)
+  // "0" = Enable stop mode (brakes on)
   if (message == "0") {
     Serial.println("HALT");
+    currentStatus = "STOPPED";
+    updateDisplay(currentStatus, "Emergency brake activated");
     step(RED, PWM_BRK, 0);
     delay(2000);
+    step(RED, PWM_BRK, 0);
   } 
-  // "1" = Enable normal mode (standard traffic light sequence)
+  // "1" = Enable normal mode (accelerate at speed 3)
   else if (message == "1") {
     Serial.println("ADVANCE");
+    currentStatus = "RUNNING";
+    updateDisplay(currentStatus, "Speed: Level 3");
     step(RED, PWM_FWD3, 0);
     delay(2000);
+    step(RED, PWM_FWD3, 0);
   }
 }
 
@@ -116,6 +160,13 @@ void setup() {
   delay(1000);
   pinMode(21, OUTPUT);
 
+  display.begin(THINKINK_MONO);
+  display.clearBuffer();
+  display.setTextWrap(false);
+  
+  // Show startup message
+  updateDisplay("STARTING", "Connecting to WiFi...");
+  
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
     delay(1000);
@@ -124,9 +175,15 @@ void setup() {
   Serial.print("Connected! IP: ");
   Serial.println(WiFi.localIP());  
 
-  client.setServer(mqttServer, mqttPort);    // Set MQTT broker address and port
-  client.setCallback(callback);              // Set message handler function
-  mqttConnect();                             // Connect to MQTT broker
+  // Update display when WiFi connected
+  updateDisplay("READY", "WiFi: " + WiFi.localIP().toString());
+
+  client.setServer(mqttServer, mqttPort);
+  client.setCallback(callback);
+  mqttConnect();
+  
+  // Final status update
+  updateDisplay("IDLE", "Waiting for commands...");
 }
 
 void loop() {
