@@ -153,3 +153,21 @@ body.high-contrast .btn-outline-primary:hover {
     background-color: #0d6efd;
     color: white;
 }
+
+/* Light mode text */
+body.bg-light {
+    color: #000;
+}
+
+/* Dark mode text */
+body.bg-dark {
+    color: #f0f0f0;
+}
+
+body.bg-light .form-text {
+    color: #212529; /* Bootstrap's default body text color */
+}
+
+body.bg-dark .form-text {
+    color: #f0f0f0; /* Light color for dark mode */
+}
