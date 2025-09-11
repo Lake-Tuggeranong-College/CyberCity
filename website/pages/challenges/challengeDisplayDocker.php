@@ -108,6 +108,11 @@ if ($isRunning) {
         $deletionTime = date('G:i', $t0 + ($TIME_LIMIT_MINUTES * 60));
     }
 }
+
+// Dynamic SSH/SCP snippets (live port if running, placeholder otherwise)
+$sshPort = $isRunning && $port ? (string)$port : "<PORT>";
+$sshCmd  = "ssh -p {$sshPort} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null RoboCop@{$ipAddress}";
+$scpCmd  = "scp -P {$sshPort} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null RoboCop@{$ipAddress}:/home/RoboCop/Alarm.png ./Alarm.png";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -192,23 +197,33 @@ if ($isRunning) {
                     ?>
                 </td>
                 <td>
-                    <?php if ($isRunning): ?>
-                        <button
-                                id="toggleBtn"
-                                class="btn btn-danger btn-wide"
-                                data-state="running"
-                                onclick="toggleContainer(<?= (int)$challengeID ?>, <?= (int)$userID ?>)">
-                            Stop Container
+                    <!-- Stack buttons cleanly; works in light/dark mode -->
+                    <div class="d-grid gap-2">
+                        <?php if ($isRunning): ?>
+                            <button
+                                    id="toggleBtn"
+                                    class="btn btn-danger btn-wide"
+                                    data-state="running"
+                                    onclick="toggleContainer(<?= (int)$challengeID ?>, <?= (int)$userID ?>)">
+                                Stop Container
+                            </button>
+                        <?php else: ?>
+                            <button
+                                    id="toggleBtn"
+                                    class="btn btn-success btn-wide"
+                                    data-state="stopped"
+                                    onclick="toggleContainer(<?= (int)$challengeID ?>, <?= (int)$userID ?>)">
+                                Start Container
+                            </button>
+                        <?php endif; ?>
+
+                        <button type="button"
+                                class="btn btn-outline-secondary btn-wide"
+                                data-bs-toggle="modal"
+                                data-bs-target="#sshHelpModal">
+                            SSH Connection Help
                         </button>
-                    <?php else: ?>
-                        <button
-                                id="toggleBtn"
-                                class="btn btn-success btn-wide"
-                                data-state="stopped"
-                                onclick="toggleContainer(<?= (int)$challengeID ?>, <?= (int)$userID ?>)">
-                            Start Container
-                        </button>
-                    <?php endif; ?>
+                    </div>
                 </td>
                 <td id="shutdownCell">
                     <?= htmlspecialchars($deletionTime) ?>
@@ -216,11 +231,81 @@ if ($isRunning) {
             </tr>
             </tbody>
         </table>
-        <div class="small text-muted mt-2">
+        <div class="small text-body-secondary mt-2">
             Note: Containers automatically stop <?= (int)$TIME_LIMIT_MINUTES ?> minutes after start.
         </div>
     </div>
 </section>
+
+<!-- SSH Help Modal -->
+<div class="modal fade" id="sshHelpModal" tabindex="-1" aria-labelledby="sshHelpModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="sshHelpModalLabel">SSH: Fix Host Key Prompts (Lab Use Only)</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <!-- Quick commands for this challenge -->
+                <h6 class="mb-2">Quick commands</h6>
+                <div class="mb-3">
+                    <div class="small text-body-secondary">SSH:</div>
+                    <pre class="border rounded p-3 bg-body-tertiary"><code><?= htmlspecialchars($sshCmd) ?></code></pre>
+                    <div class="small text-body-secondary">SCP (download example):</div>
+                    <pre class="border rounded p-3 bg-body-tertiary"><code><?= htmlspecialchars($scpCmd) ?></code></pre>
+                    <?php if (!$isRunning): ?>
+                        <div class="small text-body-secondary">
+                            Container is not running yet — the command shows <code>&lt;PORT&gt;</code>. Start the container to see the live port.
+                        </div>
+                    <?php endif; ?>
+                </div>
+
+                <hr class="my-4">
+
+                <ol class="mb-3">
+                    <li><strong>Open your terminal.</strong></li>
+
+                    <li class="mt-2">
+                        <strong>Edit or create the SSH config file:</strong>
+                        <pre class="border rounded p-3 bg-body-tertiary"><code>nano ~/.ssh/config</code></pre>
+                        <div class="small text-body-secondary">If the file does not exist, this will open a blank file.</div>
+                    </li>
+
+                    <li class="mt-2">
+                        <strong>Add this to the file:</strong>
+                        <pre class="border rounded p-3 bg-body-tertiary"><code>Host *
+    StrictHostKeyChecking no
+    UserKnownHostsFile=/dev/null</code></pre>
+
+                        <ul class="small mb-0">
+                            <li><code>Host *</code> applies to all hosts.</li>
+                            <li><code>StrictHostKeyChecking no</code> automatically accepts new host keys.</li>
+                            <li><code>UserKnownHostsFile=/dev/null</code> prevents writing to your <code>known_hosts</code> file.</li>
+                        </ul>
+                    </li>
+
+                    <li class="mt-2">
+                        <strong>Save and exit</strong> in nano: press <code>CTRL+O</code>, then <code>ENTER</code>. Press <code>CTRL+X</code> to close.
+                    </li>
+
+                    <li class="mt-2">
+                        <strong>Set the correct permissions:</strong>
+                        <pre class="border rounded p-3 bg-body-tertiary"><code>chmod 600 ~/.ssh/config</code></pre>
+                    </li>
+                </ol>
+
+                <div class="alert alert-warning small mb-0">
+                    Only use this in a controlled lab. Disabling host key checks is not safe on production networks.
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
     // Disable/enable button + label
