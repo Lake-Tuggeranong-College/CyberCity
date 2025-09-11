@@ -162,6 +162,7 @@ loadChallengeData();
     function applyTableTheme() {
         const body = document.body;
         const tables = document.querySelectorAll('.theme-table');
+
         tables.forEach(table => {
             table.classList.remove('table-dark', 'table-light');
             if (body.classList.contains('bg-dark')) {
@@ -170,10 +171,27 @@ loadChallengeData();
                 table.classList.add('table-light');
             }
         });
+
+        // Change text color by toggling classes on body
+        // Assuming your theme toggle button toggles 'bg-dark' on body,
+        // the CSS will handle text color automatically.
+        // If you want to explicitly toggle text color classes, do it here:
+
+        if (body.classList.contains('bg-dark')) {
+            body.classList.add('text-light');
+            body.classList.remove('text-dark');
+        } else {
+            body.classList.add('text-dark');
+            body.classList.remove('text-light');
+        }
     }
 
+    // Initial call
     applyTableTheme();
+
+    // Re-apply on toggle button click
     document.getElementById('modeToggle')?.addEventListener('click', () => {
         setTimeout(applyTableTheme, 50);
     });
+
 </script>

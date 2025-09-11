@@ -80,11 +80,14 @@ void callback(char* topic, byte* payload, unsigned int length) {
   if ((char)payload[0] == '1') {
     Serial.println("Playing EvangelionTheme");
     playEvangelionTheme();                    // Play the complete melody
-  } else {
-    // Any other command (including '0') deactivates the alarm
+  } else if ((char)payload[0] == '0') {
+    // Only deactivate alarm when receiving '0' command
     Serial.println("LED OFF");
     digitalWrite(LED_BUILTIN, LOW);           // Turn off status LED
-    tone(buzzer, 0);                          // Silence the buzzer
+    noTone(buzzer);                           // Silence the buzzer
+  } else {
+    // For any other command, just log it but don't change alarm state
+    Serial.println("Unknown command - no action taken");
   }
 }
 

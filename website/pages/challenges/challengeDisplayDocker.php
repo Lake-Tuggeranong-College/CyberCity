@@ -142,7 +142,7 @@ $scpCmd  = "scp -P {$sshPort} -o StrictHostKeyChecking=no -o UserKnownHostsFile=
 
     <!-- Challenge details -->
     <div class="table-responsive my-4">
-        <table class="table table-bordered table-hover text-center align-middle mb-0">
+        <table class="table table-bordered table-hover text-center align-middle theme-table mb-0">
             <thead>
             <tr>
                 <th style="width:15%">Image</th>
@@ -171,15 +171,23 @@ $scpCmd  = "scp -P {$sshPort} -o StrictHostKeyChecking=no -o UserKnownHostsFile=
     <p class="text-success fw-bold text-center mt-3">Good luck and have fun!</p>
     <hr class="my-4 border-2 border-danger opacity-100">
 
-    <!-- Flag submission -->
-    <form action="challengeDisplay.php?challengeID=<?= (int)$challengeID ?>" method="post" class="mt-3">
-        <input type="text" class="form-control flag-input" name="hiddenflag" placeholder="CTF{Flag_Here}" autocomplete="off">
-        <p class="form-text text-start small mb-0">Press <b>Enter</b> when you're done entering your flag.</p>
+    <!-- Flag Submission -->
+    <form action="challengeDisplay.php?challengeID=<?= $challengeID ?>" method="post" class="mt-3">
+        <div class="form-floating mb-3">
+            <input type="text"
+                   class="form-control flag-input"
+                   id="flag"
+                   name="hiddenflag"
+                   placeholder="CTF{Flag_Here}">
+            <p class="form-text text-start small">
+                Press <b>Enter</b> when finished entering the flag.
+            </p>
+        </div>
     </form>
 
     <!-- Container controls -->
     <div class="table-responsive my-4">
-        <table class="table table-bordered table-striped text-center align-middle mb-0">
+        <table class="table table-bordered table-striped text-center align-middle theme-table mb-0">
             <thead>
             <tr>
                 <th>Container Info</th>
@@ -332,7 +340,44 @@ $scpCmd  = "scp -P {$sshPort} -o StrictHostKeyChecking=no -o UserKnownHostsFile=
         }
     }
 
-    function toggleContainer(challengeID, userID) {
+    <!-- Dark/Light Mode Table Toggling -->
+    function applyTableTheme() {
+        const body = document.body;
+        const tables = document.querySelectorAll('.theme-table');
+
+        tables.forEach(table => {
+            table.classList.remove('table-dark', 'table-light');
+            if (body.classList.contains('bg-dark')) {
+                table.classList.add('table-dark');
+            } else {
+                table.classList.add('table-light');
+            }
+        });
+
+        // Change text color by toggling classes on body
+        // Assuming your theme toggle button toggles 'bg-dark' on body,
+        // the CSS will handle text color automatically.
+        // If you want to explicitly toggle text color classes, do it here:
+
+        if (body.classList.contains('bg-dark')) {
+            body.classList.add('text-light');
+            body.classList.remove('text-dark');
+        } else {
+            body.classList.add('text-dark');
+            body.classList.remove('text-light');
+        }
+    }
+
+    // Initial call
+    applyTableTheme();
+
+    // Re-apply on toggle button click
+    document.getElementById('modeToggle')?.addEventListener('click', () => {
+        setTimeout(applyTableTheme, 50);
+    });
+
+
+function toggleContainer(challengeID, userID) {
         const btn = document.getElementById('toggleBtn');
         if (!btn) return;
 
