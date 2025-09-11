@@ -154,6 +154,10 @@ body.high-contrast .btn-outline-primary:hover {
     color: white;
 }
 
+/* Add some spacing between Accessibility Features and user menu on right */
+.navbar-nav.ms-auto > li.nav-item.dropdown:first-child {
+    margin-right: 1rem;
+    margin-top: 0.5rem;
 /* Light mode text */
 body.bg-light {
     color: #000;

@@ -126,44 +126,6 @@ $flash = take_flash();
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <!-- Left -->
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item dropdown">
-                    <a class="nav-link text-black dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Accessibility Features
-                    </a>
-                    <ul class="dropdown-menu p-3" style="min-width: 300px;">
-                        <li>
-                            <div>
-                                <h6>Fonts</h6>
-                                <button class="btn btn-sm btn-outline-primary accessibility-font" data-size="small">Small</button>
-                                <button class="btn btn-sm btn-outline-primary accessibility-font" data-size="medium">Medium</button>
-                                <button class="btn btn-sm btn-outline-primary accessibility-font" data-size="large">Large</button>
-                            </div>
-                        </li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li>
-                            <div>
-                                <h6>Line Spacing</h6>
-                                <button class="btn btn-sm btn-outline-primary accessibility-line" data-spacing="1">Normal</button>
-                                <button class="btn btn-sm btn-outline-primary accessibility-line" data-spacing="1.5">1.5x</button>
-                                <button class="btn btn-sm btn-outline-primary accessibility-line" data-spacing="2">2x</button>
-                            </div>
-                        </li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li>
-                            <div>
-                                <h6>High Contrast Mode</h6>
-                                <button id="toggleContrast" class="btn btn-sm btn-outline-primary">Toggle High Contrast</button>
-                            </div>
-                        </li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li>
-                            <div>
-                                <h6>Theme Mode</h6>
-                                <button id="modeToggle" class="btn btn-sm btn-outline-primary">Switch to Dark Mode</button>
-                            </div>
-                        </li>
-                    </ul>
-                </li>
                 <li class="nav-item"><a href="<?= BASE_URL; ?>index.php" class="nav-link text-black"
                                         style="padding-left: 2rem;">Home</a></li>
                 <li class="nav-item"><a href="<?= BASE_URL; ?>pages/leaderboard/leaderboard.php"
@@ -233,6 +195,45 @@ $flash = take_flash();
 
             <!-- Right -->
             <ul class="navbar-nav ms-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link text-black dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Accessibility Features
+                    </a>
+                    <ul class="dropdown-menu p-3" style="min-width: 300px;">
+                        <li>
+                            <div>
+                                <h6>Fonts</h6>
+                                <button class="btn btn-sm btn-outline-primary accessibility-font" data-size="small">Small</button>
+                                <button class="btn btn-sm btn-outline-primary accessibility-font" data-size="medium">Medium</button>
+                                <button class="btn btn-sm btn-outline-primary accessibility-font" data-size="large">Large</button>
+                            </div>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <div>
+                                <h6>Line Spacing</h6>
+                                <button class="btn btn-sm btn-outline-primary accessibility-line" data-spacing="1">Normal</button>
+                                <button class="btn btn-sm btn-outline-primary accessibility-line" data-spacing="1.5">1.5x</button>
+                                <button class="btn btn-sm btn-outline-primary accessibility-line" data-spacing="2">2x</button>
+                            </div>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <div>
+                                <h6>High Contrast Mode</h6>
+                                <button id="toggleContrast" class="btn btn-sm btn-outline-primary">Toggle High Contrast</button>
+                            </div>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <div>
+                                <h6>Theme Mode</h6>
+                                <button id="modeToggle" class="btn btn-sm btn-outline-primary">Switch to Dark Mode</button>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+
                 <?php if (isset($_SESSION['username'])): ?>
                     <li class="nav-link dropdown">
                         <a href="#" class="nav-link dropdown-toggle text-black" id="navbarDropdown"
