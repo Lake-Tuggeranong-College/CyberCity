@@ -73,11 +73,9 @@ function checkFlag() {
             $updateScore->execute([$newScore, $user]);
 
             // Increment module value
-            if ($challengeID == 19) {
-                $conn->exec("UPDATE Challenges SET moduleValue='On' WHERE ID=$challengeID");
-            } else {
-                $conn->exec("UPDATE Challenges SET moduleValue = moduleValue + 1 WHERE ID=$challengeID");
-            }
+
+            $conn->exec("UPDATE Challenges SET moduleValue = 1 WHERE ID=$challengeID");
+            shell_exec('./CyberCity/website/assets/30 sec timer.sh');
 
             set_flash('success', 'Success!');
             header("Location:./challengesList.php?projectID=$projectID");
