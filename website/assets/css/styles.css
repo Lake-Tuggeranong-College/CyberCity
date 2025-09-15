@@ -80,15 +80,15 @@ body.bg-dark .dynamicModeBox {
 
 /* Font sizes */
 body.font-small {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
 }
 
 body.font-medium {
-    font-size: 2rem;
+    font-size: 1.5rem;
 }
 
 body.font-large {
-    font-size: 3rem;
+    font-size: 1.75rem;
 }
 
 /* Line spacing classes matching JS */
@@ -99,28 +99,28 @@ body.line-spacing-1 {
 }
 
 body.line-spacing-1-5 {
-    line-height: 1.5;
+    line-height: 1.25;
     letter-spacing: 0.15em;
     word-spacing: 0.16em;
 }
 
 body.line-spacing-2 {
-    line-height: 2;
+    line-height: 1.75;
     letter-spacing: 0.12em;
     word-spacing: 0.20em;
 }
 
 /* Paragraph spacing for line spacing classes */
 body.line-spacing-1 p {
-    margin-bottom: 2em;
+    margin-bottom: 1.75em;
 }
 
 body.line-spacing-1-5 p {
-    margin-bottom: 2.5em;
+    margin-bottom: 2em;
 }
 
 body.line-spacing-2 p {
-    margin-bottom: 3em;
+    margin-bottom: 2.25em;
 }
 
 /* High contrast mode */
