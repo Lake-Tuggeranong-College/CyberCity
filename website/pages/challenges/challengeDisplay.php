@@ -11,6 +11,18 @@ if (!$challengeToLoad) {
 $challengeID = $title = $challengeText = $pointsValue = $flag = $projectID = null;
 
 /* ------------ FUNCTIONS ------------- */
+
+// Function to convert URLs in text to clickable links
+function makeLinksClickable($text) {
+    // Regex to find URLs (http, https)
+    $pattern = '/(https?:\/\/[^\s]+)/i';
+    // Replace URLs with anchor tags
+    return preg_replace_callback($pattern, function($matches) {
+        $url = htmlspecialchars($matches[0]);
+        return "<a href=\"$url\" target=\"_blank\" rel=\"noopener noreferrer\">$url</a>";
+    }, $text);
+}
+
 function loadChallengeData() {
     global $conn, $challengeToLoad, $challengeID, $title, $challengeText, $pointsValue, $flag, $projectID;
 
@@ -83,6 +95,14 @@ loadChallengeData();
 
 <title>Challenge Information</title>
 
+<style>
+    /* Keep the flag input textbox color consistent regardless of theme */
+    .flag-input {
+        background-color: white !important;
+        color: black !important;
+    }
+</style>
+
 <header class="container text-center mt-4">
     <h1 class="text-uppercase">Challenge - <?= htmlspecialchars($title) ?></h1>
 </header>
@@ -91,7 +111,7 @@ loadChallengeData();
 
     <!-- Challenge Details Table -->
     <div class="table-responsive my-4">
-    <table class="table table-bordered table-hover text-center align-middle theme-table mb-0">
+        <table class="table table-bordered table-hover text-center align-middle theme-table mb-0">
             <thead>
             <tr>
                 <th style="width:15%">Challenge Image</th>
@@ -104,7 +124,7 @@ loadChallengeData();
             <tr>
                 <td><span class="text-muted">No Image</span></td>
                 <td><?= htmlspecialchars($title) ?></td>
-                <td class="text-start"><?= nl2br(htmlspecialchars($challengeText)) ?></td>
+                <td class="text-start"><?= nl2br(makeLinksClickable(htmlspecialchars($challengeText))) ?></td>
                 <td class="fw-bold"><?= htmlspecialchars($pointsValue) ?></td>
             </tr>
             </tbody>
@@ -133,7 +153,7 @@ loadChallengeData();
 <footer class="container my-5">
     <h2 class="ps-1">Recent Data</h2>
     <div class="table-responsive my-4">
-    <table class="table table-bordered table-striped text-center align-middle theme-table mb-0">
+        <table class="table table-bordered table-striped text-center align-middle theme-table mb-0">
             <thead>
             <tr>
                 <th style="width:30%">Date & Time</th>
@@ -146,7 +166,7 @@ loadChallengeData();
             while ($row = $sql->fetch()) {
                 echo '<tr>';
                 echo '<td>' . htmlspecialchars($row["DateTime"]) . '</td>';
-                echo '<td>' . htmlspecialchars($row["Data"]) . '</td>';
+                echo '<td>' . makeLinksClickable(htmlspecialchars($row["Data"])) . '</td>';
                 echo '</tr>';
             }
             ?>
@@ -172,11 +192,6 @@ loadChallengeData();
             }
         });
 
-        // Change text color by toggling classes on body
-        // Assuming your theme toggle button toggles 'bg-dark' on body,
-        // the CSS will handle text color automatically.
-        // If you want to explicitly toggle text color classes, do it here:
-
         if (body.classList.contains('bg-dark')) {
             body.classList.add('text-light');
             body.classList.remove('text-dark');
@@ -193,5 +208,4 @@ loadChallengeData();
     document.getElementById('modeToggle')?.addEventListener('click', () => {
         setTimeout(applyTableTheme, 50);
     });
-
 </script>
