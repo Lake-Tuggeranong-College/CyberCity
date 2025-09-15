@@ -1,6 +1,16 @@
 <?php
 include "../../includes/template.php";
 
+/* ---------- Safe redirect helper (avoids 'headers already sent') ---------- */
+function safe_redirect(string $url): void {
+    if (!headers_sent()) {
+        header("Location: " . $url);
+        exit;
+    }
+    echo '<script>location.replace(' . json_encode($url, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) . ');</script>';
+    exit;
+}
+
 // ---------------------------------------------------------
 // Config: keep this in sync with the watcher
 // ---------------------------------------------------------
@@ -10,20 +20,17 @@ $TIME_LIMIT_MINUTES = (int) (getenv('CYBER_DOCKER_TIME_LIMIT_MINUTES') ?: 10);
 // Auth & inputs
 // ---------------------------------------------------------
 if (!authorisedAccess(false, true, true)) {
-    header("Location: ../../index.php");
-    exit;
+    safe_redirect("../../index.php");
 }
 
 $challengeToLoad = isset($_GET["challengeID"]) ? (int) $_GET["challengeID"] : 0;
 if ($challengeToLoad <= 0) {
-    header("Location: ./challengesList.php");
-    exit;
+    safe_redirect("./challengesList.php");
 }
 
 $userID = $_SESSION["user_id"] ?? null;
 if (!$userID) {
-    header("Location: ../../index.php");
-    exit;
+    safe_redirect("../../index.php");
 }
 
 // ---------------------------------------------------------
@@ -64,8 +71,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["hiddenflag"])) {
         $check->execute([$userID, $challengeID]);
         if ($check->fetch()) {
             $_SESSION["flash_message"] = "<div class='bg-warning text-center p-2'>Flag Success! Challenge already completed, no points awarded.</div>";
-            header("Location: " . $selfUrl);
-            exit;
+            safe_redirect($selfUrl);
         }
 
         // Record solve + add points
@@ -76,12 +82,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["hiddenflag"])) {
         $upd->execute([$pointsValue, $userID]);
 
         $_SESSION["flash_message"] = "<div class='bg-success text-center p-2'>Success!</div>";
-        header("Location: " . $selfUrl);
-        exit;
+        safe_redirect($selfUrl);
     } else {
         $_SESSION["flash_message"] = "<div class='bg-danger text-center p-2'>Flag failed - try again</div>";
-        header("Location: " . $selfUrl);
-        exit;
+        safe_redirect($selfUrl);
     }
 }
 
@@ -124,7 +128,7 @@ $scpCmd  = "scp -P {$sshPort} -o StrictHostKeyChecking=no -o UserKnownHostsFile=
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Axios -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <!-- (Bootstrap assumed available via your template include) -->
+
     <style>
         .flag-input { width: 100%; max-width: 420px; }
         .btn-wide   { min-width: 170px; }
@@ -136,6 +140,35 @@ $scpCmd  = "scp -P {$sshPort} -o StrictHostKeyChecking=no -o UserKnownHostsFile=
             border-color: var(--bs-border-color) !important;
         }
         pre.bg-body-tertiary code { color: inherit; }
+
+        /* ---- Navbar override: in DARK mode make navbar white with black text ---- */
+        [data-bs-theme="dark"] .navbar {
+            background-color: #fff !important;
+            color: #000;
+        }
+        [data-bs-theme="dark"] .navbar .navbar-brand,
+        [data-bs-theme="dark"] .navbar .nav-link,
+        [data-bs-theme="dark"] .navbar .navbar-text {
+            color: #000 !important;
+        }
+        [data-bs-theme="dark"] .navbar .nav-link:hover,
+        [data-bs-theme="dark"] .navbar .nav-link:focus {
+            color: #000 !important; opacity: .75;
+        }
+        [data-bs-theme="dark"] .navbar .dropdown-menu {
+            --bs-dropdown-bg: #fff;
+            --bs-dropdown-color: #000;
+            --bs-dropdown-link-color: #000;
+            --bs-dropdown-link-hover-bg: #f1f1f1;
+            --bs-dropdown-link-hover-color: #000;
+            --bs-dropdown-link-active-bg: #e9ecef;
+            --bs-dropdown-link-active-color: #000;
+            --bs-dropdown-border-color: #dee2e6;
+        }
+        [data-bs-theme="dark"] .navbar .navbar-toggler { border-color: #000; }
+        [data-bs-theme="dark"] .navbar .navbar-toggler-icon {
+            filter: invert(1) grayscale(100%) brightness(0);
+        }
     </style>
 </head>
 <body>
@@ -309,7 +342,7 @@ $scpCmd  = "scp -P {$sshPort} -o StrictHostKeyChecking=no -o UserKnownHostsFile=
 
                     <li class="mt-2">
                         <strong>Set the correct permissions:</strong>
-                        <pre class="border rounded p-3 bg-body-tertiary"><code>chmod 600 ~/.ssh/config</code></pre>
+                        <pre class="border rounded p-3 bg-body-tertiary"><code>chmod 600 ~/.sh/config</code></pre>
                     </li>
                 </ol>
 
@@ -326,6 +359,12 @@ $scpCmd  = "scp -P {$sshPort} -o StrictHostKeyChecking=no -o UserKnownHostsFile=
 </div>
 
 <script>
+    // Sync Bootstrap color mode with the page's body classes (so navbar + modal follow dark mode)
+    function syncBootstrapThemeFromBody() {
+        const theme = document.body.classList.contains('bg-dark') ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-bs-theme', theme);
+    }
+
     // Disable/enable button + label
     function setBtnBusy(busy, label) {
         const btn = document.getElementById('toggleBtn');
@@ -350,13 +389,7 @@ $scpCmd  = "scp -P {$sshPort} -o StrictHostKeyChecking=no -o UserKnownHostsFile=
         }
     }
 
-    // Sync Bootstrap color mode with the page's body classes (so the modal follows dark mode)
-    function syncBootstrapThemeFromBody() {
-        const theme = document.body.classList.contains('bg-dark') ? 'dark' : 'light';
-        document.documentElement.setAttribute('data-bs-theme', theme);
-    }
-
-    // Table theme toggle that reads the canonical Bootstrap theme attribute
+    // Table theme that reads the canonical Bootstrap theme attribute
     function applyTableTheme() {
         const theme = document.documentElement.getAttribute('data-bs-theme') || 'light';
         const tables = document.querySelectorAll('.theme-table');
