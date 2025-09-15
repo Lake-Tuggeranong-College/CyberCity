@@ -49,6 +49,9 @@ $pointsValue   = (int)$challenge["pointsValue"];
 $flag          = $challenge["flag"];
 $image         = $challenge["Image"];
 
+// Build a self URL for redirects (stays on this page)
+$selfUrl = strtok($_SERVER['REQUEST_URI'], '?') . '?challengeID=' . $challengeID;
+
 // ---------------------------------------------------------
 // Handle flag submission
 // ---------------------------------------------------------
@@ -61,7 +64,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["hiddenflag"])) {
         $check->execute([$userID, $challengeID]);
         if ($check->fetch()) {
             $_SESSION["flash_message"] = "<div class='bg-warning text-center p-2'>Flag Success! Challenge already completed, no points awarded.</div>";
-            header("Location: ./challengesList.php");
+            header("Location: " . $selfUrl);
             exit;
         }
 
@@ -73,12 +76,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["hiddenflag"])) {
         $upd->execute([$pointsValue, $userID]);
 
         $_SESSION["flash_message"] = "<div class='bg-success text-center p-2'>Success!</div>";
-        header("Location: ./challengesList.php");
+        header("Location: " . $selfUrl);
         exit;
     } else {
         $_SESSION["flash_message"] = "<div class='bg-danger text-center p-2'>Flag failed - try again</div>";
-        // stay on page
-        header("Location: " . strtok($_SERVER['REQUEST_URI'], '?') . '?challengeID=' . $challengeID);
+        header("Location: " . $selfUrl);
         exit;
     }
 }
@@ -126,6 +128,14 @@ $scpCmd  = "scp -P {$sshPort} -o StrictHostKeyChecking=no -o UserKnownHostsFile=
     <style>
         .flag-input { width: 100%; max-width: 420px; }
         .btn-wide   { min-width: 170px; }
+
+        /* Make code panels follow Bootstrap theme vars */
+        pre.bg-body-tertiary {
+            background-color: var(--bs-tertiary-bg) !important;
+            color: var(--bs-body-color) !important;
+            border-color: var(--bs-border-color) !important;
+        }
+        pre.bg-body-tertiary code { color: inherit; }
     </style>
 </head>
 <body>
@@ -172,7 +182,7 @@ $scpCmd  = "scp -P {$sshPort} -o StrictHostKeyChecking=no -o UserKnownHostsFile=
     <hr class="my-4 border-2 border-danger opacity-100">
 
     <!-- Flag Submission -->
-    <form action="challengeDisplay.php?challengeID=<?= $challengeID ?>" method="post" class="mt-3">
+    <form action="<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>?challengeID=<?= $challengeID ?>" method="post" class="mt-3">
         <div class="form-floating mb-3">
             <input type="text"
                    class="form-control flag-input"
@@ -340,44 +350,47 @@ $scpCmd  = "scp -P {$sshPort} -o StrictHostKeyChecking=no -o UserKnownHostsFile=
         }
     }
 
-    <!-- Dark/Light Mode Table Toggling -->
-    function applyTableTheme() {
-        const body = document.body;
-        const tables = document.querySelectorAll('.theme-table');
+    // Sync Bootstrap color mode with the page's body classes (so the modal follows dark mode)
+    function syncBootstrapThemeFromBody() {
+        const theme = document.body.classList.contains('bg-dark') ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-bs-theme', theme);
+    }
 
+    // Table theme toggle that reads the canonical Bootstrap theme attribute
+    function applyTableTheme() {
+        const theme = document.documentElement.getAttribute('data-bs-theme') || 'light';
+        const tables = document.querySelectorAll('.theme-table');
         tables.forEach(table => {
             table.classList.remove('table-dark', 'table-light');
-            if (body.classList.contains('bg-dark')) {
-                table.classList.add('table-dark');
-            } else {
-                table.classList.add('table-light');
-            }
+            table.classList.add(theme === 'dark' ? 'table-dark' : 'table-light');
         });
 
-        // Change text color by toggling classes on body
-        // Assuming your theme toggle button toggles 'bg-dark' on body,
-        // the CSS will handle text color automatically.
-        // If you want to explicitly toggle text color classes, do it here:
-
-        if (body.classList.contains('bg-dark')) {
-            body.classList.add('text-light');
-            body.classList.remove('text-dark');
+        // Optional: keep body text color in sync
+        if (theme === 'dark') {
+            document.body.classList.add('text-light');
+            document.body.classList.remove('text-dark');
         } else {
-            body.classList.add('text-dark');
-            body.classList.remove('text-light');
+            document.body.classList.add('text-dark');
+            document.body.classList.remove('text-light');
         }
     }
 
-    // Initial call
-    applyTableTheme();
-
-    // Re-apply on toggle button click
-    document.getElementById('modeToggle')?.addEventListener('click', () => {
-        setTimeout(applyTableTheme, 50);
+    // Initial calls after DOM is ready
+    document.addEventListener('DOMContentLoaded', () => {
+        syncBootstrapThemeFromBody();
+        applyTableTheme();
     });
 
+    // Re-apply on theme toggle button (from template.php)
+    document.getElementById('modeToggle')?.addEventListener('click', () => {
+        // Wait a tick for template’s toggle to flip body classes
+        setTimeout(() => {
+            syncBootstrapThemeFromBody();
+            applyTableTheme();
+        }, 60);
+    });
 
-function toggleContainer(challengeID, userID) {
+    function toggleContainer(challengeID, userID) {
         const btn = document.getElementById('toggleBtn');
         if (!btn) return;
 
