@@ -1,1 +1,0 @@
-scp -P <PORT> -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null RoboCop@10.177.202.196:/home/RoboCop/Alarm.png ./Alarm.png

@@ -118,7 +118,7 @@ if ($isRunning) {
 // Dynamic SSH/SCP snippets (live port if running, placeholder otherwise)
 $sshPort = $isRunning && $port ? (string)$port : "<PORT>";
 $sshCmd  = "ssh -p {$sshPort} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null RoboCop@{$ipAddress}";
-$scpCmd  = "scp -P {$sshPort} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null RoboCop@{$ipAddress}:/home/RoboCop/Alarm.png ./Alarm.png";
+$scpCmd  = "scp -P {$sshPort} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null RoboCop@{$ipAddress}:/home/RoboCop/Alarm.png ./(Filename and type)";
 ?>
 <!DOCTYPE html>
 <html lang="en">

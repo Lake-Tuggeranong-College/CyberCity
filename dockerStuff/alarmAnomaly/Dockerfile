@@ -6,7 +6,7 @@ RUN mkdir /var/run/sshd
 
 COPY Alarm.png /home/RoboCop/Alarm.png
 
-COPY README.txt /home/RoboCop/README.txt
+COPY Burgle.txt /home/RoboCop/Burgle.txt
 
 RUN useradd -m -s /bin/bash RoboCop && echo 'RoboCop:TotallySecure01' | chpasswd
 
