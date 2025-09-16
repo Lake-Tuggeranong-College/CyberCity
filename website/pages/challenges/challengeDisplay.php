@@ -24,7 +24,7 @@ function makeLinksClickable($text) {
 }
 
 function loadChallengeData() {
-    global $conn, $challengeToLoad, $challengeID, $title, $challengeText, $pointsValue, $flag, $projectID;
+    global $conn, $challengeToLoad, $challengeID, $title, $challengeText, $pointsValue, $flag, $projectID, $files;
 
     $stmt = $conn->prepare("SELECT ID, challengeTitle, challengeText, pointsValue, flag 
                             FROM Challenges WHERE ID = ?");
@@ -35,6 +35,7 @@ function loadChallengeData() {
         $challengeText = $row["challengeText"];
         $pointsValue   = $row["pointsValue"];
         $flag          = $row["flag"];
+        $files         = $row["files"];
     }
 
     // Project ID
@@ -112,17 +113,23 @@ loadChallengeData();
         <table class="table table-bordered table-hover text-center align-middle theme-table mb-0">
             <thead>
             <tr>
-                <th style="width:15%">Challenge Image</th>
-                <th style="width:20%">Challenge Name</th>
                 <th style="width:50%">Description</th>
+                <th style="width:20%">Files</th>
                 <th style="width:10%">Points</th>
             </tr>
             </thead>
             <tbody>
             <tr>
-                <td><span class="text-muted">No Image</span></td>
-                <td><?= htmlspecialchars($title) ?></td>
                 <td class="text-start"><?= nl2br(makeLinksClickable(htmlspecialchars($challengeText))) ?></td>
+                <td>
+                    <?php if ($filePath && file_exists($filePath)): ?>
+                        <a href="<?= htmlspecialchars($filePath) ?>" download class="btn btn-primary btn-sm">
+                            Download File
+                        </a>
+                    <?php else: ?>
+                        <span class="text-muted">No file available</span>
+                    <?php endif; ?>
+                </td>
                 <td class="fw-bold"><?= htmlspecialchars($pointsValue) ?></td>
             </tr>
             </tbody>

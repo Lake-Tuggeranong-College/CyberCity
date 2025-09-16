@@ -1,0 +1,41 @@
+--------------------
+
+(scratched in the corner, like someone wrote it with a blunt key)
+
+— HEY YOU —
+If you found this, congrats. I left a little souvenir in a picture.
+You won’t see it by looking — you’ll have to pull it out.
+
+Important: **do not** run the download command from inside the SSH session.
+Exit the remote shell and run the SCP command from *your own* computer's terminal / command prompt.
+
+— STEPS (short and sharp) —
+
+1) Exit any SSH session:
+   If you’re logged in on the box, type:
+      exit
+   or press CTRL+D
+
+2) From your local machine (not the remote shell), run this exact command
+   — replace `<PORT>` with the port shown on the challenge page
+   — replace `(Filename and type)` with how you want to save it (e.g. `Alarm.png`)
+
+   scp -P <PORT> -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+   RoboCop@10.177.202.196:/home/RoboCop/Alarm.png ./(Filename and type)
+
+   Example (save as Alarm.png):
+   scp -P 2222 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+   RoboCop@10.177.202.196:/home/RoboCop/Alarm.png ./Alarm.png
+
+3) Once the file is on your computer, open this site in your browser:
+   https://stylesuxx.github.io/steganography/
+   Upload the file you downloaded and follow the site’s steps to extract hidden content.
+
+— HINTS (because I like leaving crumbs) —
+• The secret is embedded in the file, not visually obvious. Use the decoder.
+• If a passphrase is requested, try blank (press Enter)
+
+— WHAT YOU’LL FIND —
+A short code — that’s what flips the alarm back on.
+
+— end of note —

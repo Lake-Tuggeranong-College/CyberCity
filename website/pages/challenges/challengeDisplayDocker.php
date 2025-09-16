@@ -11,6 +11,38 @@ function safe_redirect(string $url): void {
     exit;
 }
 
+/* ---------- HTTP POST helpers (server-side stop attempts) ---------- */
+function http_post_json(string $url, array $payload, int $timeout = 4): array {
+    $ch = curl_init($url);
+    curl_setopt_array($ch, [
+        CURLOPT_POST           => true,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_HTTPHEADER     => ['Content-Type: application/json'],
+        CURLOPT_POSTFIELDS     => json_encode($payload),
+        CURLOPT_TIMEOUT        => $timeout,
+    ]);
+    $respBody = curl_exec($ch);
+    $err      = curl_error($ch);
+    $status   = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+    return ['ok' => $err === '' && $status >= 200 && $status < 300, 'status' => $status, 'error' => $err, 'body' => $respBody];
+}
+
+function http_post_form(string $url, array $payload, int $timeout = 4): array {
+    $ch = curl_init($url);
+    curl_setopt_array($ch, [
+        CURLOPT_POST           => true,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_POSTFIELDS     => http_build_query($payload),
+        CURLOPT_TIMEOUT        => $timeout,
+    ]);
+    $respBody = curl_exec($ch);
+    $err      = curl_error($ch);
+    $status   = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+    return ['ok' => $err === '' && $status >= 200 && $status < 300, 'status' => $status, 'error' => $err, 'body' => $respBody];
+}
+
 // ---------------------------------------------------------
 // Config: keep this in sync with the watcher
 // ---------------------------------------------------------
@@ -65,12 +97,31 @@ $selfUrl = strtok($_SERVER['REQUEST_URI'], '?') . '?challengeID=' . $challengeID
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["hiddenflag"])) {
     $userFlag = sanitise_data($_POST["hiddenflag"]);
 
+    // Best-effort: stop container via HTTP endpoint (JSON then FORM). Also schedule client fallback.
+    $stopContainer = function() use ($challengeID, $userID) {
+        if (!defined('BASE_URL')) return false;
+        $stopUrl = rtrim(BASE_URL, '/') . '/pages/challenges/docker/stopContainer.php';
+        $payload = ['challengeID' => $challengeID, 'userID' => $userID];
+
+        // Try JSON (matches axios default)
+        $resJson = http_post_json($stopUrl, $payload);
+        if ($resJson['ok']) return true;
+
+        // Fallback to form-encoded (in case PHP endpoint expects $_POST vars)
+        $resForm = http_post_form($stopUrl, $payload);
+        return $resForm['ok'];
+    };
+
+    // Always set client fallback to guarantee stop on reload
+    $_SESSION['AUTO_STOP_CONTAINER'] = ['challengeID' => $challengeID, 'userID' => $userID];
+
     if ($userFlag === $flag) {
         // Already solved?
         $check = $conn->prepare("SELECT 1 FROM UserChallenges WHERE userID = ? AND challengeID = ?");
         $check->execute([$userID, $challengeID]);
         if ($check->fetch()) {
-            $_SESSION["flash_message"] = "<div class='bg-warning text-center p-2'>Flag Success! Challenge already completed, no points awarded.</div>";
+            $ok = $stopContainer();
+            $_SESSION["flash_message"] = "<div class='bg-warning text-center p-2'>Flag Success! Challenge already completed, no points awarded." . ($ok ? " Container stopped." : " Stopping container…") . "</div>";
             safe_redirect($selfUrl);
         }
 
@@ -81,7 +132,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["hiddenflag"])) {
         $upd = $conn->prepare("UPDATE Users SET Score = Score + ? WHERE ID = ?");
         $upd->execute([$pointsValue, $userID]);
 
-        $_SESSION["flash_message"] = "<div class='bg-success text-center p-2'>Success!</div>";
+        $ok = $stopContainer();
+
+        $_SESSION["flash_message"] = "<div class='bg-success text-center p-2'>Success!" . ($ok ? " Container stopped." : " Stopping container…") . "</div>";
         safe_redirect($selfUrl);
     } else {
         $_SESSION["flash_message"] = "<div class='bg-danger text-center p-2'>Flag failed - try again</div>";
@@ -118,7 +171,7 @@ if ($isRunning) {
 // Dynamic SSH/SCP snippets (live port if running, placeholder otherwise)
 $sshPort = $isRunning && $port ? (string)$port : "<PORT>";
 $sshCmd  = "ssh -p {$sshPort} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null RoboCop@{$ipAddress}";
-$scpCmd  = "scp -P {$sshPort} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null RoboCop@{$ipAddress}:/home/RoboCop/Alarm.png ./Alarm.png";
+$scpCmd  = "scp -P {$sshPort} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null RoboCop@{$ipAddress}:/home/RoboCop/Alarm.png ./(Filename and type)";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -188,7 +241,7 @@ $scpCmd  = "scp -P {$sshPort} -o StrictHostKeyChecking=no -o UserKnownHostsFile=
         <table class="table table-bordered table-hover text-center align-middle theme-table mb-0">
             <thead>
             <tr>
-                <th style="width:15%">Image</th>
+                <th style="width:15%">Image</</th>
                 <th style="width:20%">Title</th>
                 <th style="width:50%">Description</th>
                 <th style="width:10%">Points</th>
@@ -342,7 +395,7 @@ $scpCmd  = "scp -P {$sshPort} -o StrictHostKeyChecking=no -o UserKnownHostsFile=
 
                     <li class="mt-2">
                         <strong>Set the correct permissions:</strong>
-                        <pre class="border rounded p-3 bg-body-tertiary"><code>chmod 600 ~/.sh/config</code></pre>
+                        <pre class="border rounded p-3 bg-body-tertiary"><code>chmod 600 ~/.ssh/config</code></pre>
                     </li>
                 </ol>
 
@@ -412,6 +465,18 @@ $scpCmd  = "scp -P {$sshPort} -o StrictHostKeyChecking=no -o UserKnownHostsFile=
     document.addEventListener('DOMContentLoaded', () => {
         syncBootstrapThemeFromBody();
         applyTableTheme();
+
+        // ---- Client-side fallback: auto-stop container once after redirect ----
+        <?php
+        if (!empty($_SESSION['AUTO_STOP_CONTAINER']) && $isRunning) {
+            $auto = $_SESSION['AUTO_STOP_CONTAINER'];
+            // Clear the flag immediately so it only runs once
+            unset($_SESSION['AUTO_STOP_CONTAINER']);
+            $cid = (int)$auto['challengeID'];
+            $uid = (int)$auto['userID'];
+            echo "setTimeout(() => toggleContainer($cid, $uid), 250);\n";
+        }
+        ?>
     });
 
     // Re-apply on theme toggle button (from template.php)
