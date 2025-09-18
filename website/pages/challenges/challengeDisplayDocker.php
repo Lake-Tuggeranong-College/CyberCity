@@ -241,23 +241,23 @@ $scpCmd  = "scp -P {$sshPort} -o StrictHostKeyChecking=no -o UserKnownHostsFile=
         <table class="table table-bordered table-hover text-center align-middle theme-table mb-0">
             <thead>
             <tr>
-                <th style="width:15%">Image</</th>
-                <th style="width:20%">Title</th>
                 <th style="width:50%">Description</th>
+                <th style="width:20%">Files</th>
                 <th style="width:10%">Points</th>
             </tr>
             </thead>
             <tbody>
             <tr>
+                <td class="text-start"><?= nl2br(htmlspecialchars($challengeText)) ?></td>
                 <td>
-                    <?php if ($image): ?>
-                        <img src="<?= BASE_URL ?>assets/img/challengeImages/<?= htmlspecialchars($image) ?>" alt="Challenge Image" width="100" height="100">
+                    <?php if ($files): ?>
+                        <a href="<?= htmlspecialchars($files) ?>" download class="btn btn-primary btn-sm">
+                            Download File
+                        </a>
                     <?php else: ?>
-                        <span class="text-muted">No Image</span>
+                        <span class="text-muted">No file required</span>
                     <?php endif; ?>
                 </td>
-                <td><?= htmlspecialchars($title) ?></td>
-                <td class="text-start"><?= nl2br(htmlspecialchars($challengeText)) ?></td>
                 <td class="fw-bold"><?= (int)$pointsValue ?></td>
             </tr>
             </tbody>

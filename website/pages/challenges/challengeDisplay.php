@@ -8,7 +8,7 @@ if (!$challengeToLoad) {
     exit;
 }
 
-$challengeID = $title = $challengeText = $pointsValue = $flag = $projectID = null;
+$challengeID = $title = $challengeText = $pointsValue = $flag = $projectID = $files= null;
 
 /* ------------ FUNCTIONS ------------- */
 
@@ -26,8 +26,7 @@ function makeLinksClickable($text) {
 function loadChallengeData() {
     global $conn, $challengeToLoad, $challengeID, $title, $challengeText, $pointsValue, $flag, $projectID, $files;
 
-    $stmt = $conn->prepare("SELECT ID, challengeTitle, challengeText, pointsValue, flag 
-                            FROM Challenges WHERE ID = ?");
+    $stmt = $conn->prepare("SELECT ID, challengeTitle, challengeText, pointsValue, flag, files FROM Challenges WHERE ID = ?");
     $stmt->execute([$challengeToLoad]);
     if ($row = $stmt->fetch()) {
         $challengeID   = $row["ID"];
@@ -122,12 +121,12 @@ loadChallengeData();
             <tr>
                 <td class="text-start"><?= nl2br(makeLinksClickable(htmlspecialchars($challengeText))) ?></td>
                 <td>
-                    <?php if ($filePath && file_exists($filePath)): ?>
-                        <a href="<?= htmlspecialchars($filePath) ?>" download class="btn btn-primary btn-sm">
+                    <?php if ($files): ?>
+                        <a href="<?= htmlspecialchars($files) ?>" download class="btn btn-primary btn-sm">
                             Download File
                         </a>
                     <?php else: ?>
-                        <span class="text-muted">No file available</span>
+                        <span class="text-muted">No file required</span>
                     <?php endif; ?>
                 </td>
                 <td class="fw-bold"><?= htmlspecialchars($pointsValue) ?></td>
