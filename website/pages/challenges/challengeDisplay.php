@@ -139,7 +139,7 @@ loadChallengeData();
     <hr class="my-4 border-2 border-danger opacity-100">
 
     <!-- Flag Submission -->
-    <form action="challengeDisplay.php?challengeID=<?= $challengeID ?>" method="post" class="mt-3">
+    <form action="<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>?challengeID=<?= $challengeID ?>" method="post" class="mt-3">
         <div class="form-floating mb-3">
             <input type="text"
                    class="form-control flag-input"
