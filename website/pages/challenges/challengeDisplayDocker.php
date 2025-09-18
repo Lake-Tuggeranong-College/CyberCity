@@ -69,7 +69,7 @@ if (!$userID) {
 // Fetch challenge
 // ---------------------------------------------------------
 $stmt = $conn->prepare("
-    SELECT ID, challengeTitle, challengeText, pointsValue, flag, Image
+    SELECT ID, challengeTitle, challengeText, pointsValue, flag, Image, files
     FROM Challenges
     WHERE ID = ?
 ");
