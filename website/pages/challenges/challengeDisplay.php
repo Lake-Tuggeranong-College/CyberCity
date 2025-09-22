@@ -121,7 +121,7 @@ loadChallengeData();
             <tr>
                 <td class="text-start"><?= nl2br(makeLinksClickable(htmlspecialchars($challengeText))) ?></td>
                 <td>
-                    <?php if ($files): ?>
+                    <?php if (!empty($files)): ?>
                         <a href="<?= htmlspecialchars($files) ?>" download class="btn btn-primary btn-sm">
                             Download File
                         </a>
