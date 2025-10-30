@@ -84,11 +84,11 @@ body.font-small {
 }
 
 body.font-medium {
-    font-size: 1.5rem;
+    font-size: 2rem;
 }
 
 body.font-large {
-    font-size: 1.75rem;
+    font-size: 2.5rem;
 }
 
 /* Line spacing classes matching JS */
@@ -99,15 +99,11 @@ body.line-spacing-1 {
 }
 
 body.line-spacing-1-5 {
-    line-height: 1.25;
-    letter-spacing: 0.15em;
-    word-spacing: 0.16em;
+    line-height: 1.75;
 }
 
 body.line-spacing-2 {
-    line-height: 1.75;
-    letter-spacing: 0.12em;
-    word-spacing: 0.20em;
+    line-height: 2;
 }
 
 /* Paragraph spacing for line spacing classes */
@@ -116,7 +112,7 @@ body.line-spacing-1 p {
 }
 
 body.line-spacing-1-5 p {
-    margin-bottom: 2em;
+    margin-bottom: 2.25em
 }
 
 body.line-spacing-2 p {
