@@ -76,7 +76,6 @@ function checkFlag() {
 
             $conn->exec("UPDATE Challenges SET moduleValue = 1 WHERE ID=$challengeID");
             shell_exec('./CyberCity/website/assets/30 sec timer.sh');
-            $conn->exec("UPDATE Challenges SET moduleValue = 0 WHERE ID=$challengeID");
 
             set_flash('success', 'Success!');
             header("Location:./challengesList.php?projectID=$projectID");
