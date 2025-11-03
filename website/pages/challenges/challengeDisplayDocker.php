@@ -133,8 +133,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["hiddenflag"])) {
         $upd->execute([$pointsValue, $userID]);
 
         $conn->exec("UPDATE Challenges SET moduleValue = 1 WHERE ID=$challengeID");
-        sleep (20);
-        $conn->exec("UPDATE Challenges SET moduleValue = 0 WHERE ID=$challengeID");
 
         $ok = $stopContainer();
 
