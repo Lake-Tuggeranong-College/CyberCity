@@ -132,6 +132,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["hiddenflag"])) {
         $upd = $conn->prepare("UPDATE Users SET Score = Score + ? WHERE ID = ?");
         $upd->execute([$pointsValue, $userID]);
 
+        $conn->exec("UPDATE Challenges SET moduleValue = 1 WHERE ID=$challengeID");
+
         $ok = $stopContainer();
 
         $_SESSION["flash_message"] = "<div class='bg-success text-center p-2'>Success!" . ($ok ? " Container stopped." : " Stopping container…") . "</div>";
