@@ -6,93 +6,436 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <style>
-    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;line-height:1.4;margin:0;padding:2rem;max-width:900px}
-    h1{margin:0 0 1rem 0;font-size:1.8rem}
-    .card{border:1px solid #ddd;border-radius:12px;padding:1rem 1.25rem;margin:1rem 0}
-    .muted{color:#666}
-    .hint{background:#f8f9fa;border-color:#e5e7eb}
-    .sr-only{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
-    .invisible-text{color:transparent;user-select:text}
-    .download-hidden{position:absolute;left:-9999px;top:auto}
-    code,pre{background:#f6f8fa;padding:.2rem .35rem;border-radius:6px}
-    .btn{display:inline-block;padding:.6rem 1rem;border:1px solid #ddd;border-radius:10px;text-decoration:none}
-    .btn:hover{background:#f6f8fa}
+    :root{
+      --bg-1:#0b0f19;       /* midnight */
+      --bg-2:#151b2e;       /* deep slate */
+      --ink:#e5e7eb;        /* pale text */
+      --muted:#9aa4b2;      /* muted text */
+      --ring:#273043;       /* borders */
+      --green:#22c55e;
+      --amber:#f59e0b;
+      --red:#ef4444;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--ink);
+      background:
+              radial-gradient(1000px 600px at 10% -10%, rgba(167,139,250,.12), transparent 60%),
+              radial-gradient(800px 500px at 90% 0%, rgba(125,211,252,.10), transparent 60%),
+              linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      overflow-x:hidden;
+    }
+
+    /* CRT scanline overlay */
+    .crt::after{
+      content:""; position:fixed; inset:0; pointer-events:none; z-index:3;
+      background: repeating-linear-gradient(180deg, rgba(255,255,255,.03) 0 1px, transparent 1px 3px);
+      mix-blend-mode:overlay; opacity:.35;
+    }
+
+    /* drifting fog */
+    .fog, .fog::before, .fog::after{
+      position:fixed; inset:-20vh -20vw auto -20vw; height:60vh;
+      background:
+              radial-gradient(closest-side, rgba(255,255,255,.04), transparent 70%) 0 0/45% 80%,
+              radial-gradient(closest-side, rgba(255,255,255,.035), transparent 65%) 40% 10%/55% 85%,
+              radial-gradient(closest-side, rgba(255,255,255,.03), transparent 70%) 80% 0/50% 75%;
+      filter: blur(18px) saturate(120%);
+      pointer-events:none; z-index:0; opacity:.5; animation: drift 36s linear infinite;
+    }
+    .fog::before{content:""; animation-duration: 48s; opacity:.35}
+    .fog::after {content:""; animation-duration: 60s; opacity:.25}
+    @keyframes drift {
+      from { transform: translateX(-10vw) translateY(0) }
+      to   { transform: translateX(10vw)  translateY(-3vh) }
+    }
+
+    .wrap{
+      position:relative; z-index:1;
+      margin:48px auto; width:min(900px, 92vw);
+      background: rgba(8,12,22,.72);
+      border:1px solid var(--ring);
+      border-radius:22px;
+      overflow:hidden;
+      box-shadow:
+              0 15px 40px rgba(0,0,0,.45),
+              inset 0 1px 0 rgba(255,255,255,.04);
+      backdrop-filter: blur(8px);
+    }
+
+    header{
+      display:flex; align-items:center; gap:14px;
+      padding:22px 26px; border-bottom:1px solid var(--ring);
+      background: linear-gradient(180deg, rgba(167,139,250,.06), rgba(125,211,252,.03) 60%, transparent);
+    }
+
+    /* traffic lights (no overlap with title) */
+    .traffic{display:flex; gap:10px; align-items:center; flex:0 0 auto}
+    .light{width:12px;height:12px;border-radius:999px;opacity:.95;box-shadow:0 0 12px currentColor}
+    .red{color:var(--red); background:var(--red)}
+    .amber{color:var(--amber); background:var(--amber)}
+    .green{color:var(--green); background:var(--green)}
+
+    /* glitchy title */
+    h1{ margin:0; font-size:1.35rem; letter-spacing:.4px; font-weight:800 }
+    .glitch{ position:relative }
+    .glitch::before,.glitch::after{
+      content:attr(data-text); position:absolute; left:0; top:0; opacity:.7; clip-path:inset(0 0 0 0);
+    }
+    .glitch::before{ transform:translate(1px,0); color:#60a5fa; animation:gl1 2s infinite linear alternate-reverse }
+    .glitch::after { transform:translate(-1px,0); color:#a78bfa; animation:gl2 2.2s infinite linear alternate-reverse }
+    @keyframes gl1{ 0%{clip-path:inset(0 0 85% 0)} 20%{clip-path:inset(40% 0 40% 0)} 40%{clip-path:inset(70% 0 10% 0)} 60%{clip-path:inset(10% 0 70% 0)} 80%{clip-path:inset(50% 0 30% 0)} 100%{clip-path:inset(0 0 85% 0)} }
+    @keyframes gl2{ 0%{clip-path:inset(85% 0 0 0)} 20%{clip-path:inset(30% 0 50% 0)} 40%{clip-path:inset(10% 0 70% 0)} 60%{clip-path:inset(70% 0 10% 0)} 80%{clip-path:inset(20% 0 60% 0)} 100%{clip-path:inset(85% 0 0 0)} }
+
+    main{padding:26px}
+
+    .lead{
+      color:var(--muted); line-height:1.7; font-size:1.05rem; margin:0 0 12px 0;
+    }
+
+    .card{
+      background: rgba(255,255,255,.02);
+      border:1px solid var(--ring);
+      border-radius:16px;
+      padding:18px 20px; margin-top:16px;
+    }
+    .card h2{margin:0 0 10px 0; font-size:1rem; color:#cbd5e1; letter-spacing:.2px}
+
+    .list{margin:0; padding-left:18px; line-height:1.75}
+    .kbd{
+      display:inline-block; min-width:1.75rem; text-align:center;
+      padding:.18rem .45rem; border:1px solid var(--ring); border-radius:8px;
+      background: rgba(255,255,255,.03); color:#cbd5e1; font-weight:600; font-size:.9rem
+    }
+
+    .btnrow{display:flex; flex-wrap:wrap; gap:10px; margin-top:12px}
+    .btn{
+      border:1px solid var(--ring);
+      background: rgba(255,255,255,.03);
+      color:var(--ink);
+      padding:.65rem 1rem; border-radius:12px;
+      text-decoration:none; transition:transform .08s ease, background .15s ease;
+      cursor:pointer; user-select:none;
+    }
+    .btn:hover{background:rgba(125,211,252,.08)}
+
+    /* ectoplasm divider */
+    .drip{
+      height:10px; margin:18px 0; border-radius:8px;
+      background:linear-gradient(90deg, rgba(125,211,252,.4), rgba(167,139,250,.4));
+      position:relative; overflow:hidden;
+    }
+    .drip::after{
+      content:""; position:absolute; left:10%; top:8px; width:10px; height:14px; border-radius:0 0 10px 10px;
+      background:rgba(125,211,252,.35); box-shadow: 90px 0 0 rgba(167,139,250,.35), 210px 0 0 rgba(125,211,252,.25);
+    }
+
+    /* EMF meter with animated interference overlay */
+    .meter{
+      position:relative;
+      height:10px;border:1px solid var(--ring);border-radius:999px;overflow:hidden;
+      background:rgba(255,255,255,.03)
+    }
+    .meter > i{
+      display:block;height:100%; width:6%;
+      background:linear-gradient(90deg,#22c55e,#f59e0b,#ef4444);
+      box-shadow:0 0 10px rgba(239,68,68,.0);
+      transition: width .08s linear, box-shadow .12s ease;
+    }
+    .meter::before{
+      content:""; position:absolute; inset:0; pointer-events:none;
+      background:
+              repeating-linear-gradient(90deg, rgba(255,255,255,.035) 0 2px, transparent 2px 4px);
+      mix-blend-mode:soft-light; opacity:.45;
+      animation:hiss 0.8s linear infinite;
+    }
+    @keyframes hiss{
+      from{ background-position:0 0 }
+      to  { background-position:50px 0 }
+    }
+    .emf-readout{margin-top:8px;color:var(--muted);font-size:.9rem;user-select:none}
+
+    footer{
+      padding:20px 26px; border-top:1px solid var(--ring);
+      color:var(--muted); font-size:.9rem;
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+    }
+    .candle { filter: drop-shadow(0 0 6px rgba(255,200,120,.5)); animation:flick 1.8s infinite ease-in-out; }
+    @keyframes flick { 0%,100%{ transform:translateY(0) scale(1)} 50%{ transform:translateY(-1px) scale(1.02)} }
+
+    /* spectral orbs (one real, several decoys) */
+    .orb{
+      position:absolute; width:220px; height:220px; border-radius:999px;
+      background:
+              radial-gradient(closest-side, rgba(125,211,252,.22), transparent 70%),
+              radial-gradient(closest-side, rgba(167,139,250,.18), transparent 72%);
+      filter: blur(14px) saturate(120%); opacity:.9; pointer-events:none;
+      animation: float 8s ease-in-out infinite;
+    }
+    .orb.small{width:170px;height:170px;opacity:.7; animation-duration: 11s}
+    .orb.tiny{width:120px;height:120px;opacity:.55; animation-duration: 14s}
+    .orb.a {right:-110px; top:-110px}
+    .orb.b {left:-80px; bottom:-80px}
+    .orb.c {right:22%; bottom:-60px}
+    .orb.d {left:60%; top:-70px}
+    @keyframes float {
+      0%,100%{ transform: translateY(0) }
+      50%    { transform: translateY(-10px) }
+    }
+
+    /* floating bats */
+    .bat { position:absolute; width:26px; height:12px; background:currentColor; color:#93c5fd;
+      clip-path:polygon(0 50%,15% 0,30% 50%,50% 10%,70% 50%,85% 0,100% 50%,85% 100%,70% 50%,50% 90%,30% 50%,15% 100%);
+      opacity:.65; animation:bat 9s linear infinite; }
+    .bat.b2{animation-duration:12s; color:#a78bfa}
+    .bat.b3{animation-duration:14s; color:#60a5fa}
+    @keyframes bat { 0%{ transform:translate(-10vw,0) } 50%{ transform:translate(50vw,-4vh)} 100%{ transform:translate(110vw,0)} }
+
+    /* Inline SVG cobwebs (no images needed) */
+    .web-svg{
+      position:absolute; width:210px; height:210px; opacity:.28; pointer-events:none; z-index:2;
+      filter: drop-shadow(0 0 2px rgba(255,255,255,.08));
+    }
+    .web-svg.tl{ left:0; top:0; transform:scale(1); }
+    .web-svg.tr{ right:0; top:0; transform:scaleX(-1); }
+    .web-svg.bl{ left:0; bottom:0; transform:scaleY(-1); }
+    .web-svg.br{ right:0; bottom:0; transform:scale(-1); }
   </style>
-
-  <!-- Level 1: HTML comment clue -->
-  <!-- hidden-text: The flag is CTF{source_sleuth} -->
 </head>
-<body>
-  <h1>Ghost Note</h1>
-  <div class="card">
-    <p>Sometimes the obvious thing is the one you cannot see. Your tools are stronger than your eyes.</p>
-    <ul class="muted" style="margin:.75rem 0 0 1.25rem">
-      <li>Try viewing the page source.</li>
-      <li>Inspect the elements.</li>
-      <li>Select all text.</li>
-    </ul>
-  </div>
+<body class="crt">
+<div class="fog" aria-hidden="true"></div>
 
-  <div class="card hint">
-    <strong>Hint:</strong>
-    <p>Not all downloads are visible. Some are quiet. Some are shy.</p>
-    <!-- A visible decoy download (harmless) -->
-    <a class="btn" id="decoy" href="data:text/plain;charset=utf-8,Nothing%20to%20see%20here." download="readme.txt">Download readme</a>
-  </div>
+<div class="wrap">
+  <!-- SVG cobwebs -->
+  <svg class="web-svg tl" viewBox="0 0 100 100" aria-hidden="true" role="img">
+    <g stroke="rgba(255,255,255,.35)" stroke-width="0.6" fill="none">
+      <path d="M0,0 Q25,10 50,0" />
+      <path d="M0,0 Q35,18 70,0" />
+      <path d="M0,0 Q45,26 90,0" />
+      <path d="M0,0 Q55,34 100,0" />
+    </g>
+    <g stroke="rgba(255,255,255,.35)" stroke-width="0.7">
+      <line x1="0" y1="0" x2="100" y2="0"/>
+      <line x1="0" y1="0" x2="0"   y2="100"/>
+      <line x1="0" y1="0" x2="70"  y2="10"/>
+      <line x1="0" y1="0" x2="10"  y2="70"/>
+    </g>
+  </svg>
+  <svg class="web-svg tr" viewBox="0 0 100 100" aria-hidden="true" role="img">
+    <g stroke="rgba(255,255,255,.35)" stroke-width="0.6" fill="none">
+      <path d="M0,0 Q25,10 50,0" />
+      <path d="M0,0 Q35,18 70,0" />
+      <path d="M0,0 Q45,26 90,0" />
+      <path d="M0,0 Q55,34 100,0" />
+    </g>
+    <g stroke="rgba(255,255,255,.35)" stroke-width="0.7">
+      <line x1="0" y1="0" x2="100" y2="0"/>
+      <line x1="0" y1="0" x2="0"   y2="100"/>
+      <line x1="0" y1="0" x2="70"  y2="10"/>
+      <line x1="0" y1="0" x2="10"  y2="70"/>
+    </g>
+  </svg>
+  <svg class="web-svg bl" viewBox="0 0 100 100" aria-hidden="true" role="img">
+    <g stroke="rgba(255,255,255,.35)" stroke-width="0.6" fill="none">
+      <path d="M0,0 Q25,10 50,0" />
+      <path d="M0,0 Q35,18 70,0" />
+      <path d="M0,0 Q45,26 90,0" />
+      <path d="M0,0 Q55,34 100,0" />
+    </g>
+    <g stroke="rgba(255,255,255,.35)" stroke-width="0.7">
+      <line x1="0" y1="0" x2="100" y2="0"/>
+      <line x1="0" y1="0" x2="0"   y2="100"/>
+      <line x1="0" y1="0" x2="70"  y2="10"/>
+      <line x1="0" y1="0" x2="10"  y2="70"/>
+    </g>
+  </svg>
+  <svg class="web-svg br" viewBox="0 0 100 100" aria-hidden="true" role="img">
+    <g stroke="rgba(255,255,255,.35)" stroke-width="0.6" fill="none">
+      <path d="M0,0 Q25,10 50,0" />
+      <path d="M0,0 Q35,18 70,0" />
+      <path d="M0,0 Q45,26 90,0" />
+      <path d="M0,0 Q55,34 100,0" />
+    </g>
+    <g stroke="rgba(255,255,255,.35)" stroke-width="0.7">
+      <line x1="0" y1="0" x2="100" y2="0"/>
+      <line x1="0" y1="0" x2="0"   y2="100"/>
+      <line x1="0" y1="0" x2="70"  y2="10"/>
+      <line x1="0" y1="0" x2="10"  y2="70"/>
+    </g>
+  </svg>
 
-  <!-- Level 2: Offscreen text -->
-  <div class="sr-only">CTF{source_sleuth}</div>
+  <header>
+    <div class="traffic" aria-hidden="true">
+      <span class="light red"></span>
+      <span class="light amber"></span>
+      <span class="light green"></span>
+    </div>
+    <h1 class="glitch" data-text="Ghost Note">Ghost Note</h1>
+  </header>
 
-  <!-- Level 3: Transparent text (select to reveal) -->
-  <p class="invisible-text">CTF{source_sleuth}</p>
+  <main>
+    <p class="lead">
+      The Web Ghost is playful tonight. If you want to catch its whisper, power up your kit:
+    </p>
 
-  <!-- Level 4: Zero-width stego payload (copy this paragraph and decode ZW chars) -->
-  <p aria-hidden="true" style="font-size:0" id="zw"></p>
+    <div class="card">
+      <h2>Ghost-Hunting Loadout</h2>
+      <ul class="list">
+        <li><strong>EMF Reader</strong> — sweep the structure. <em>(Right-click → Inspect)</em></li>
+        <li><strong>P.K.E. Meter</strong> — scan the raw page. <em>(Press <span class="kbd">Ctrl</span>+<span class="kbd">U</span>)</em></li>
+        <li><strong>Ecto-Goggles</strong> — highlight hidden auras. <em>(Hover/select nodes in DevTools)</em></li>
+        <li><strong>Spirit Box</strong> — optional. The ghost prefers whispers over words. <em>(Console if needed)</em></li>
+      </ul>
 
-  <!-- Hidden download: real flag as a file (find via Inspect or tabbing) -->
-  <a id="ghost-dl" class="download-hidden" href="#" download="ghost-note.txt">ghost</a>
+      <!-- Red-herring utility buttons -->
+      <div class="btnrow">
+        <button class="btn" onclick="trapMsg('EMF spike detected near… a decoy. Try again.')">EMF Sweep</button>
+        <button class="btn" onclick="trapMsg('P.K.E. reading nominal. The residue moved.')">P.K.E. Scan</button>
+        <button class="btn" onclick="trapMsg('Ecto-Goggles fogged up. Wipe and Inspect the page elements.')">Ecto-Goggles</button>
+        <button class="btn" onclick="trapMsg('Spirit Box hears laughter. The ghost is teasing you.')">Spirit Box</button>
+        <button class="btn" onclick="trapMsg('Containment Unit unavailable. Field capture not required.')">Deploy Trap</button>
+        <button class="btn" onclick="trapMsg('Proton stream unstable. Cross the streams? Probably not.')">Proton Pack</button>
+      </div>
+    </div>
 
-  <script>
-    // ======= CONFIGURE YOUR FLAG HERE =======
-    const FLAG = "CTF{source_sleuth}"; // change me
-    const FILENAME = "ghost-note.txt";
+    <div class="drip" aria-hidden="true"></div>
 
-    // Build zero-width payload (ZWSP for 0, ZWNJ for 1)
-    (function encodeZeroWidth(str){
-      const map = { "0":"\u200B", "1":"\u200C" }; // ZWSP, ZWNJ
-      let bits = "";
-      for (const ch of str) bits += ch.codePointAt(0).toString(2).padStart(8,"0");
-      let zw = "";
-      for (const b of bits) zw += map[b];
-      document.getElementById("zw").textContent = zw;
-    })(FLAG);
+    <div class="card">
+      <h2>Briefing</h2>
+      <p class="lead" style="margin:0 0 10px 0">
+        There is exactly one trace on this page. It is not in the visible text. Inspect attributes and hidden nodes on things that glow.
+      </p>
+      <div class="meter" aria-hidden="true"><i id="emfBar"></i></div>
+      <div class="emf-readout" aria-hidden="true">EMF: <span id="emfVal">0.02</span></div>
+    </div>
+  </main>
 
-    // Prepare hidden download link with the real flag
-    (function prepHiddenDownload(){
-      const a = document.getElementById("ghost-dl");
-      const blob = new Blob([FLAG + "\n"], { type: "text/plain;charset=utf-8" });
-      const url = URL.createObjectURL(blob);
-      a.href = url;
-      a.setAttribute("download", FILENAME);
-      // also expose via keyboard (Tab) without obvious visuals
-      a.tabIndex = 0;
-      a.title = "ghost";
-    })();
-
-    // Optional: keyboard easter egg — press g then d to trigger the hidden download
-    (function secretHotkey(){
-      let seq = "";
-      document.addEventListener("keydown", (e)=>{
-        seq = (seq + e.key.toLowerCase()).slice(-2);
-        if (seq === "gd") {
-          document.getElementById("ghost-dl").click();
-        }
-      });
-    })();
-  </script>
-
-  <footer class="muted" style="margin-top:2rem">
-    <small>Tip: If something looks empty, try selecting it or checking the DOM.</small>
+  <footer>
+    <span>Tip: EMF spikes near luminous phenomena… but not every glow is true.</span>
+    <span class="candle" aria-hidden="true">🕯️</span>
   </footer>
+
+  <!-- REAL spectral orb (flag is inside a collapsed <template>) -->
+  <div class="orb a" id="spectral-orb" role="presentation" aria-hidden="true">
+    <template data-evidence="pke-trace">
+      CTF{source_sleuth}
+    </template>
+  </div>
+
+  <!-- DECOY glows (no secrets here) -->
+  <div class="orb small b" aria-hidden="true">
+    <template data-evidence="false-positive">EMF echo… nothing here.</template>
+  </div>
+  <div class="orb tiny c" aria-hidden="true">
+    <template data-evidence="dust">Residual static. Move along.</template>
+  </div>
+  <div class="orb small d" aria-hidden="true">
+    <template data-evidence="afterimage">Cold spot only.</template>
+  </div>
+
+  <!-- Floating bats -->
+  <div class="bat"  style="top:18%; left:-10vw;"></div>
+  <div class="bat b2" style="top:36%; left:-12vw;"></div>
+  <div class="bat b3" style="top:62%; left:-15vw;"></div>
+</div>
+
+<script>
+  // Red-herring buttons: simple popup, no audio.
+  function trapMsg(msg){
+    alert(msg);
+  }
+
+  // ==== EMF proximity + interference ====
+  const orbs   = Array.from(document.querySelectorAll('.orb'));
+  const emfBar = document.getElementById('emfBar');
+  const emfVal = document.getElementById('emfVal');
+
+  // track pointer
+  let pointerX = window.innerWidth  / 2;
+  let pointerY = window.innerHeight / 2;
+  window.addEventListener('pointermove', e => {
+    pointerX = e.clientX;
+    pointerY = e.clientY;
+  });
+
+  // returns { level:[0..1], nearestId:string|null }
+  function computeLevel(x, y){
+    let maxLevel = 0, nearId = null;
+    for (const el of orbs){
+      const r  = el.getBoundingClientRect();
+      const cx = r.left + r.width / 2;
+      const cy = r.top  + r.height / 2;
+      const dist = Math.hypot(x - cx, y - cy);
+
+      const influence = Math.max(r.width, r.height) * 1.6; // influence radius
+      let l = 1 - (dist / influence);
+      if (l > maxLevel) nearId = el.id || null;
+      if (l > 0) {
+        l = Math.pow(l, 1.6);           // falloff curve
+        if (el.id === 'spectral-orb') l *= 1.12; // subtle bias near the real orb
+        maxLevel = Math.max(maxLevel, l);
+      }
+    }
+    return { level: Math.max(0, Math.min(1, maxLevel)), nearestId: nearId };
+  }
+
+  // Interference state
+  let seed1 = Math.random() * Math.PI * 2;
+  let seed2 = Math.random() * Math.PI * 2;
+  let burst = 0; // decays over time
+  let smoothLevel = 0;
+
+  function interference(base, nearestId, t){
+    // Low-frequency drift (two detuned sines)
+    const lfn = 0.35 * Math.sin(t * 1.3 + seed1) + 0.25 * Math.sin(t * 0.47 + seed2);
+    // High-frequency jitter
+    const hfn = (Math.random() - 0.5) * 0.10; // +/-0.05
+    // Occasional burst spikes
+    if (Math.random() < 0.006 && burst <= 0.001) burst = 1.0;
+    const burstNoise = burst * Math.sin(t * 22);
+    burst *= 0.90; // decay
+    // False-positive wobble near decoys
+    let decoyWobble = 0;
+    if (nearestId && nearestId !== 'spectral-orb' && base > 0.15 && base < 0.65){
+      decoyWobble = 0.07 * Math.sin(t * 6.0);
+    }
+    const mix = (lfn * 0.12) + hfn * 0.6 + burstNoise * 0.22 + decoyWobble;
+    return Math.max(-0.18, Math.min(0.35, mix));
+  }
+
+  function tick(){
+    const t = performance.now() / 1000;
+    const { level:base, nearestId } = computeLevel(pointerX, pointerY);
+    const noise = interference(base, nearestId, t);
+
+    const target = Math.max(0, Math.min(1, base + noise));
+    smoothLevel += (target - smoothLevel) * 0.25; // easing
+
+    if (emfBar){
+      const pct = 6 + smoothLevel * 94; // baseline activity
+      emfBar.style.width = pct + '%';
+
+      const glow = 6 + smoothLevel * 26;
+      const glowAlpha = 0.15 + smoothLevel * 0.55;
+      emfBar.style.boxShadow = `0 0 ${glow}px rgba(239,68,68,${glowAlpha})`;
+    }
+    if (emfVal){
+      emfVal.textContent = (smoothLevel * 5).toFixed(2);
+    }
+
+    requestAnimationFrame(tick);
+  }
+
+  // Prime & run
+  (function init(){
+    const { level } = computeLevel(pointerX, pointerY);
+    smoothLevel = level;
+    requestAnimationFrame(tick);
+  })();
+</script>
 </body>
 </html>
