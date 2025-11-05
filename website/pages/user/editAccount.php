@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $_SESSION['email'] = $email;
 
     // Flash message to indicate that the changes are done successfully
-    $_SESSION["flash_message"] = "<div class='bg-success'>Account Updated!</div>";
+    $_SESSION["flash_message"] = "<div class='bg-success'>Account Updated Successfully!</div>";
 
     // Redirect to this page
 	header("Location:../../index.php");
