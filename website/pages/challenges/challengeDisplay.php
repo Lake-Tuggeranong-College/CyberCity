@@ -1,108 +1,122 @@
 <?php
-include "../../includes/template.php";
+include "../../includes/template.php"; // gives $conn and (likely) set_flash(), sanitise_data(), authorisedAccess()
 /** @var $conn */
 
-$challengeToLoad = $_GET["challengeID"] ?? null;
-if (!$challengeToLoad) {
-    header("location:challengesList.php");
-    exit;
-}
-
-$challengeID = $title = $challengeText = $pointsValue = $flag = $projectID = $files= null;
-
-/* ------------ FUNCTIONS ------------- */
-
-// Function to convert URLs in text to clickable links
-function makeLinksClickable($text) {
-    // Regex to find URLs (http, https)
-    $pattern = '/(https?:\/\/[^\s]+)/i';
-    // Replace URLs with anchor tags
-    return preg_replace_callback($pattern, function($matches) {
-        $url = htmlspecialchars($matches[0]);
-        return "<a href=\"$url\" target=\"_blank\" rel=\"noopener noreferrer\">$url</a>";
-    }, $text);
-}
-
-function loadChallengeData() {
-    global $conn, $challengeToLoad, $challengeID, $title, $challengeText, $pointsValue, $flag, $projectID, $files;
-
-    $stmt = $conn->prepare("SELECT ID, challengeTitle, challengeText, pointsValue, flag, files FROM Challenges WHERE ID = ?");
-    $stmt->execute([$challengeToLoad]);
-    if ($row = $stmt->fetch()) {
-        $challengeID   = $row["ID"];
-        $title         = $row["challengeTitle"];
-        $challengeText = $row["challengeText"];
-        $pointsValue   = $row["pointsValue"];
-        $flag          = $row["flag"];
-        $files         = $row["files"];
-    }
-
-    // Project ID
-    $projectStmt = $conn->prepare("SELECT project_id FROM ProjectChallenges WHERE challenge_id = ?");
-    $projectStmt->execute([$challengeID]);
-    $result = $projectStmt->fetch(PDO::FETCH_ASSOC);
-    $projectID = $result["project_id"] ?? null;
-}
-
-function checkFlag() {
-    global $conn, $challengeID, $flag, $projectID, $pointsValue;
-    if ($_SERVER["REQUEST_METHOD"] === "POST") {
-        $userEnteredFlag = sanitise_data($_POST['hiddenflag']);
-        if ($userEnteredFlag === $flag) {
-            $user = $_SESSION["user_id"];
-            $query = $conn->prepare("SELECT 1 FROM UserChallenges WHERE challengeID=? AND userID=?");
-            $query->execute([$challengeID, $user]);
-
-            if ($query->fetch()) {
-                set_flash('warning', 'Flag Success! Challenge already completed, no points awarded');
-                header("Location:./challengesList.php");
-                exit;
-            }
-
-            // Insert into UserChallenges
-            $insert = $conn->prepare("INSERT INTO UserChallenges (userID, challengeID) VALUES (?, ?)");
-            $insert->execute([$user, $challengeID]);
-
-            // Update user score
-            $scoreStmt = $conn->prepare("SELECT Score FROM Users WHERE ID=?");
-            $scoreStmt->execute([$user]);
-            $userScore = $scoreStmt->fetchColumn();
-            $newScore = $userScore + $pointsValue;
-
-            $updateScore = $conn->prepare("UPDATE Users SET Score=? WHERE ID=?");
-            $updateScore->execute([$newScore, $user]);
-
-            // Increment module value
-
-            $conn->exec("UPDATE Challenges SET moduleValue = 1 WHERE ID=$challengeID");
-            shell_exec('./CyberCity/website/assets/30 sec timer.sh');
-
-            set_flash('success', 'Success!');
-            header("Location:./challengesList.php?projectID=$projectID");
-            exit;
-        } else {
-            set_flash('danger', 'Flag failed - try again');
-            header('Location: ' . $_SERVER['REQUEST_URI']);
+// ---------- Safe redirect (works even if headers already sent) ----------
+if (!function_exists('safe_redirect')) {
+    function safe_redirect(string $url): void {
+        if (!headers_sent()) {
+            header("Location: " . $url);
             exit;
         }
+        echo '<script>location.replace(' . json_encode($url, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) . ');</script>';
+        exit;
     }
 }
 
-loadChallengeData();
-?>
-
-<title>Challenge Information</title>
-
-<style>
-    /* Keep the flag input textbox color consistent regardless of theme */
-    .flag-input {
-        background-color: white !important;
-        color: black !important;
+// ---------- Helpers (guarded so we don't redeclare template functions) ----------
+if (!function_exists('sanitise_data')) {
+    function sanitise_data($v) { return trim((string)$v); }
+}
+if (!function_exists('makeLinksClickable')) {
+    function makeLinksClickable($text) {
+        $pattern = '/(https?:\/\/[^\s<]+)/i';
+        return preg_replace_callback($pattern, function($m) {
+            $url = htmlspecialchars($m[0], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+            return '<a href="' . $url . '" target="_blank" rel="noopener noreferrer">' . $url . '</a>';
+        }, $text);
     }
-</style>
+}
+function flash_msg(string $type, string $msg): void {
+    if (function_exists('set_flash')) { set_flash($type, $msg); return; }
+    $_SESSION['flash'][] = ['type' => $type, 'msg' => $msg];
+}
+
+// ---------- Session/Auth ----------
+if (session_status() !== PHP_SESSION_ACTIVE) { session_start(); }
+if (function_exists('authorisedAccess')) {
+    if (!authorisedAccess(false, true, true)) { safe_redirect("../../index.php"); }
+}
+
+$userID = $_SESSION["user_id"] ?? null;
+if (!$userID) { safe_redirect("../../index.php"); }
+
+// ---------- Inputs ----------
+$challengeToLoad = isset($_GET["challengeID"]) ? (int)$_GET["challengeID"] : 0;
+if ($challengeToLoad <= 0) { safe_redirect("./challengesList.php"); }
+
+// ---------- Load challenge ----------
+$stmt = $conn->prepare("SELECT ID, challengeTitle, challengeText, pointsValue, flag, files FROM Challenges WHERE ID = ?");
+$stmt->execute([$challengeToLoad]);
+$ch = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$ch) {
+    flash_msg('danger', 'Challenge not found.');
+    safe_redirect("./challengesList.php");
+}
+
+$challengeID   = (int)$ch['ID'];
+$title         = (string)$ch['challengeTitle'];
+$challengeText = (string)$ch['challengeText'];
+$pointsValue   = (int)$ch['pointsValue'];
+$flag          = (string)$ch['flag'];
+$files         = (string)$ch['files'];
+
+// Project (for returning to the correct list filter)
+$projStmt = $conn->prepare("SELECT project_id FROM ProjectChallenges WHERE challenge_id = ?");
+$projStmt->execute([$challengeID]);
+$projectID = $projStmt->fetchColumn();
+$listUrl   = "./challengesList.php" . ($projectID ? ("?projectID=" . urlencode((string)$projectID)) : "");
+
+// ---------- POST: check flag then go back to list ----------
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["hiddenflag"])) {
+    $userFlag = sanitise_data($_POST["hiddenflag"]);
+
+    if ($userFlag === $flag) {
+        // Already solved?
+        $chk = $conn->prepare("SELECT 1 FROM UserChallenges WHERE userID = ? AND challengeID = ?");
+        $chk->execute([$userID, $challengeID]);
+        if ($chk->fetch()) {
+            flash_msg('warning', 'Flag Success! Challenge already completed, no points awarded');
+            safe_redirect($listUrl);
+        }
+
+        // Record solve + award points
+        $ins = $conn->prepare("INSERT INTO UserChallenges (userID, challengeID) VALUES (?, ?)");
+        $ins->execute([$userID, $challengeID]);
+
+        $upd = $conn->prepare("UPDATE Users SET Score = Score + ? WHERE ID = ?");
+        $upd->execute([$pointsValue, $userID]);
+
+        // Set moduleValue to 1 on successful flag submit
+        $mv = $conn->prepare("UPDATE Challenges SET moduleValue = 1 WHERE ID = ?");
+        $mv->execute([$challengeID]);
+
+        flash_msg('success', 'Success!');
+        safe_redirect($listUrl);
+    } else {
+        flash_msg('danger', 'Flag failed - try again');
+        // Stay on this page to try again
+        $self = strtok($_SERVER['REQUEST_URI'], '#');
+        safe_redirect($self);
+    }
+}
+
+// ---------- GET render ----------
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Challenge Information</title>
+    <style>
+        .flag-input { background-color: white !important; color: black !important; }
+    </style>
+</head>
+<body>
 
 <header class="container text-center mt-4">
-    <h1 class="text-uppercase">Challenge - <?= htmlspecialchars($title) ?></h1>
+    <h1 class="text-uppercase">Challenge - <?= htmlspecialchars($title, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></h1>
 </header>
 
 <main class="container my-5">
@@ -119,17 +133,18 @@ loadChallengeData();
             </thead>
             <tbody>
             <tr>
-                <td class="text-start"><?= nl2br(makeLinksClickable(htmlspecialchars($challengeText))) ?></td>
+                <td class="text-start">
+                    <?= nl2br(makeLinksClickable(htmlspecialchars($challengeText, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'))) ?>
+                </td>
                 <td>
                     <?php if (!empty($files)): ?>
-                        <a href="<?= htmlspecialchars($files) ?>" download class="btn btn-primary btn-sm">
-                            Download File
-                        </a>
+                        <a href="<?= htmlspecialchars($files, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>"
+                           download class="btn btn-primary btn-sm">Download File</a>
                     <?php else: ?>
                         <span class="text-muted">No file required</span>
                     <?php endif; ?>
                 </td>
-                <td class="fw-bold"><?= htmlspecialchars($pointsValue) ?></td>
+                <td class="fw-bold"><?= htmlspecialchars((string)$pointsValue, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?></td>
             </tr>
             </tbody>
         </table>
@@ -139,13 +154,15 @@ loadChallengeData();
     <hr class="my-4 border-2 border-danger opacity-100">
 
     <!-- Flag Submission -->
-    <form action="<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>?challengeID=<?= $challengeID ?>" method="post" class="mt-3">
+    <form action="<?= htmlspecialchars($_SERVER['REQUEST_URI'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>"
+          method="post" class="mt-3">
         <div class="form-floating mb-3">
             <input type="text"
                    class="form-control flag-input"
                    id="flag"
                    name="hiddenflag"
-                   placeholder="CTF{Flag_Here}">
+                   placeholder="CTF{Flag_Here}"
+                   autocomplete="off">
             <p class="form-text text-start small">
                 Press <b>Enter</b> when finished entering the flag.
             </p>
@@ -166,11 +183,12 @@ loadChallengeData();
             </thead>
             <tbody>
             <?php
-            $sql = $conn->query("SELECT * FROM ModuleData WHERE ModuleID=" . $challengeID);
-            while ($row = $sql->fetch()) {
+            $md = $conn->prepare("SELECT DateTime, Data FROM ModuleData WHERE ModuleID = ?");
+            $md->execute([$challengeID]);
+            while ($row = $md->fetch(PDO::FETCH_ASSOC)) {
                 echo '<tr>';
-                echo '<td>' . htmlspecialchars($row["DateTime"]) . '</td>';
-                echo '<td>' . makeLinksClickable(htmlspecialchars($row["Data"])) . '</td>';
+                echo '<td>' . htmlspecialchars($row["DateTime"], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '</td>';
+                echo '<td>' . makeLinksClickable(htmlspecialchars($row["Data"], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')) . '</td>';
                 echo '</tr>';
             }
             ?>
@@ -179,37 +197,26 @@ loadChallengeData();
     </div>
 </footer>
 
-<?php checkFlag(); ?>
-
-<!-- Dark/Light Mode Table Toggling -->
 <script>
+    // Keep tables matching dark/light mode if your template toggles classes
     function applyTableTheme() {
         const body = document.body;
         const tables = document.querySelectorAll('.theme-table');
 
         tables.forEach(table => {
             table.classList.remove('table-dark', 'table-light');
-            if (body.classList.contains('bg-dark')) {
-                table.classList.add('table-dark');
-            } else {
-                table.classList.add('table-light');
-            }
+            table.classList.add(body.classList.contains('bg-dark') ? 'table-dark' : 'table-light');
         });
 
         if (body.classList.contains('bg-dark')) {
-            body.classList.add('text-light');
-            body.classList.remove('text-dark');
+            body.classList.add('text-light'); body.classList.remove('text-dark');
         } else {
-            body.classList.add('text-dark');
-            body.classList.remove('text-light');
+            body.classList.add('text-dark'); body.classList.remove('text-light');
         }
     }
-
-    // Initial call
     applyTableTheme();
-
-    // Re-apply on toggle button click
-    document.getElementById('modeToggle')?.addEventListener('click', () => {
-        setTimeout(applyTableTheme, 50);
-    });
+    document.getElementById('modeToggle')?.addEventListener('click', () => setTimeout(applyTableTheme, 60));
 </script>
+
+</body>
+</html>
