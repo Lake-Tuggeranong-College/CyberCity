@@ -164,11 +164,12 @@
 </main>
 
 <!-- ===== Background Music (user-controlled) ===== -->
-<audio id="bgmAudio" preload="auto" loop playsinline autoplay>
+<audio id="bgmAudio" preload="auto" loop playsinline>
+    <!-- Change this to your file path -->
     <source src="<?= rtrim(BASE_URL, '/'); ?>/assets/Audio/cyber-ambience.mp3" type="audio/mpeg">
+    <!-- Optional fallback (Ogg) -->
     <source src="<?= rtrim(BASE_URL, '/'); ?>/assets/Audio/cyber-ambience.ogg" type="audio/ogg">
 </audio>
-
 
 <div class="bgm" role="group" aria-label="Background music controls">
     <button class="btn" id="bgmToggle" aria-pressed="false" title="Play/Pause">▶</button>
@@ -183,65 +184,42 @@
         const status  = document.getElementById('bgmStatus');
         const vol     = document.getElementById('bgmVol');
 
-        const DEFAULT_VOL = 0.15; // quieter by default
+        // Restore saved prefs
+        const savedEnabled = localStorage.getItem('bgmEnabled') === 'true';
+        const savedVol = parseFloat(localStorage.getItem('bgmVolume') || '0.4');
+        vol.value = isNaN(savedVol) ? 0.4 : savedVol;
+        audio.volume = vol.value;
 
-        // Restore saved volume (or use quiet default)
-        const savedVol = parseFloat(localStorage.getItem('bgmVolume') || DEFAULT_VOL);
-        const clamped  = isNaN(savedVol) ? DEFAULT_VOL : Math.max(0, Math.min(1, savedVol));
-        vol.value = clamped;
-        audio.volume = clamped;
-
-        // Helper: fade to target volume
-        function fadeTo(target, ms = 800){
-            const start = audio.volume;
-            const delta = target - start;
-            if (Math.abs(delta) < 0.001) return;
-            const t0 = performance.now();
-            function step(t){
-                const k = Math.min(1, (t - t0) / ms);
-                audio.volume = start + delta * k;
-                if (k < 1) requestAnimationFrame(step);
-            }
-            requestAnimationFrame(step);
-        }
-
-        // Try autoplay quietly
-        (async () => {
-            try {
-                audio.muted = false;
-                await audio.play();
-                // Success: show pause icon and status
+        // Try to resume automatically only if user previously enabled
+        if (savedEnabled) {
+            audio.play().then(() => {
                 toggle.textContent = '❚❚';
                 toggle.setAttribute('aria-pressed', 'true');
                 status.textContent = 'Playing';
-                localStorage.setItem('bgmEnabled', 'true');
-                // Ensure we’re quietly at the chosen level
-                fadeTo(clamped, 500);
-            } catch {
-                // Autoplay with sound blocked: start muted so music is "running"
-                audio.muted = true;
-                try { await audio.play(); } catch {}
+            }).catch(() => {
+                // Autoplay blocked; show Play state
                 toggle.textContent = '▶';
                 toggle.setAttribute('aria-pressed', 'false');
-                status.textContent = 'Muted — click Play';
-                localStorage.setItem('bgmEnabled', 'false');
-            }
-        })();
+                status.textContent = 'Click Play';
+            });
+        } else {
+            status.textContent = 'Muted';
+        }
 
-        // Button toggles play/pause + mute state
         toggle.addEventListener('click', async () => {
             if (audio.paused) {
-                // unmute and play
-                audio.muted = false;
                 try {
                     await audio.play();
                     toggle.textContent = '❚❚';
                     toggle.setAttribute('aria-pressed', 'true');
                     status.textContent = 'Playing';
                     localStorage.setItem('bgmEnabled', 'true');
-                    fadeTo(parseFloat(vol.value || DEFAULT_VOL), 300);
-                } catch {
+                } catch(e) {
+                    // If play fails (policy), prompt user with a quick retry hint
                     status.textContent = 'Click again to allow';
+                    toggle.textContent = '▶';
+                    toggle.setAttribute('aria-pressed', 'false');
+                    localStorage.setItem('bgmEnabled', 'false');
                 }
             } else {
                 audio.pause();
@@ -252,11 +230,14 @@
             }
         });
 
-        // Volume slider
         vol.addEventListener('input', () => {
-            const v = Math.max(0, Math.min(1, parseFloat(vol.value) || 0));
-            audio.volume = v;
-            localStorage.setItem('bgmVolume', v);
+            audio.volume = vol.value;
+            localStorage.setItem('bgmVolume', vol.value);
+        });
+
+        // Keep control readable on theme toggle
+        document.getElementById('modeToggle')?.addEventListener('click', () => {
+            // no-op, CSS uses theme vars
         });
     })();
 </script>
