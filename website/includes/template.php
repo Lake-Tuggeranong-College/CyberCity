@@ -159,7 +159,7 @@ $flash = take_flash();
                                target="_blank">Tutorials</a></li>
                     </ul>
                 </li>
-                <li class="nav-item"><a href="https://forms.gle/jgYrmMZesgtVhBZ39" class="nav-link text-black"
+                <li class="nav-item"><a href="https://forms.gle/bWi4bJoe5Xg8Hz5g8" class="nav-link text-black"
                                         target="_blank">Feedback</a></li>
 
                 <!-- Admin Panel -->
