@@ -173,7 +173,7 @@
 <div class="bgm" role="group" aria-label="Background music controls">
     <button class="btn" id="bgmToggle" aria-pressed="false" title="Play/Pause">▶</button>
     <div class="status" id="bgmStatus">Muted</div>
-    <input type="range" id="bgmVol" min="0" max="1" step="0.01" value="0.1" aria-label="Volume">
+    <input type="range" id="bgmVol" min="0" max="1" step="0.01" value="0.4" aria-label="Volume">
 </div>
 
 <script>
@@ -183,7 +183,7 @@
         const status  = document.getElementById('bgmStatus');
         const vol     = document.getElementById('bgmVol');
 
-        const DEFAULT_VOL = 0.001; // quieter by default
+        const DEFAULT_VOL = 0.15; // quieter by default
 
         // Restore saved volume (or use quiet default)
         const savedVol = parseFloat(localStorage.getItem('bgmVolume') || DEFAULT_VOL);
