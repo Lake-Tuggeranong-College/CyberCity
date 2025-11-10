@@ -166,9 +166,9 @@
 <!-- ===== Background Music (user-controlled) ===== -->
 <audio id="bgmAudio" preload="auto" loop playsinline>
     <!-- Change this to your file path -->
-    <source src="<?= rtrim(BASE_URL, '/'); ?>/assets/Audio/cyber-ambience.mp3" type="audio/mpeg">
+    <source src="<?= rtrim(BASE_URL, '/'); ?>/assets/audio/cyber-ambience.mp3" type="audio/mpeg">
     <!-- Optional fallback (Ogg) -->
-    <source src="<?= rtrim(BASE_URL, '/'); ?>/assets/Audio/cyber-ambience.ogg" type="audio/ogg">
+    <source src="<?= rtrim(BASE_URL, '/'); ?>/assets/audio/cyber-ambience.ogg" type="audio/ogg">
 </audio>
 
 <div class="bgm" role="group" aria-label="Background music controls">

@@ -319,7 +319,7 @@ $rest     = array_slice($userScore, 3, 7);
 
 <!-- ===== Background Music (same toggle logic as index page) ===== -->
 <audio id="bgmAudio" preload="auto" loop playsinline>
-    <source src="<?= rtrim(BASE_URL, '/'); ?>/assets/Audio/cyber-leaderboard.mp3" type="audio/mpeg">
+    <source src="<?= rtrim(BASE_URL, '/'); ?>/assets/audio/cyber-leaderboard.mp3" type="audio/mpeg">
     <!-- optional: <source src="<?= rtrim(BASE_URL, '/'); ?>/assets/audio/cyber-leaderboard.ogg" type="audio/ogg"> -->
 </audio>
 

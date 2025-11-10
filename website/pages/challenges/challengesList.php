@@ -235,7 +235,7 @@ function displayResultsByCategory(PDO $conn, int $projectID, ?int $userID): void
 
     <!-- ===== Background Music (toggle remembers user’s choice) ===== -->
     <audio id="bgmAudio" preload="auto" loop playsinline>
-        <source src="<?= rtrim(BASE_URL, '/'); ?>/assets/Audio/cyber-challenges.mp3" type="audio/mpeg">
+        <source src="<?= rtrim(BASE_URL, '/'); ?>/assets/audio/cyber-challenges.mp3" type="audio/mpeg">
         <!-- optional ogg: <source src="<?= rtrim(BASE_URL, '/'); ?>/assets/audio/cyber-challenges.ogg" type="audio/ogg"> -->
     </audio>
 
