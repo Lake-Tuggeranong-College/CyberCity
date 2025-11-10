@@ -75,9 +75,6 @@ function createChallengeCard(array $challengeData, bool $isCompleted): void
 
                 <?php if ($isCompleted): ?>
                     <a href="<?= e($href) ?>" class="btn btn-outline-success mt-auto">View Challenge</a>
-                    <?php /* To fully disable instead:
-                    <button class="btn btn-outline-success mt-auto" disabled>Completed</button>
-                    */ ?>
                 <?php else: ?>
                     <a href="<?= e($href) ?>" class="btn btn-warning mt-auto">Start Challenge</a>
                 <?php endif; ?>
@@ -158,15 +155,11 @@ function displayResultsByCategory(PDO $conn, int $projectID, ?int $userID): void
 }
 ?>
 
-    <!-- Theme-aware styles for letterbox + cards -->
+    <!-- Theme-aware styles for letterbox + cards + music control -->
     <style>
         /* Letterbox behind images */
-        .img-letterbox{
-            background-color: var(--bs-tertiary-bg, #f8f9fa);
-        }
-        body.bg-dark .img-letterbox{
-            background-color: #1f2330;
-        }
+        .img-letterbox{ background-color: var(--bs-tertiary-bg, #f8f9fa); }
+        body.bg-dark .img-letterbox{ background-color: #1f2330; }
 
         /* Card theming that follows light/dark mode */
         .card-theme{
@@ -175,27 +168,60 @@ function displayResultsByCategory(PDO $conn, int $projectID, ?int $userID): void
             border:1px solid var(--bs-border-color, #dee2e6);
             transition: background-color .2s ease, border-color .2s ease, box-shadow .2s ease;
         }
-        /* If your template uses data-bs-theme */
         [data-bs-theme="dark"] .card-theme{
-            --bs-card-bg: #0f1422;    /* deep navy */
+            --bs-card-bg: #0f1422;
             --bs-border-color: #2b3243;
             background-color: var(--bs-card-bg);
             border-color: var(--bs-border-color);
         }
-        /* Fallback if your template toggles body.bg-dark */
         body.bg-dark .card-theme{
             background-color: #0f1422;
             border-color: #2b3243;
         }
-
-        /* Optional slightly brighter title in dark mode */
         [data-bs-theme="dark"] .card-theme .card-title,
-        body.bg-dark .card-theme .card-title{
-            color:#e6e9ef;
-        }
+        body.bg-dark .card-theme .card-title{ color:#e6e9ef; }
         [data-bs-theme="dark"] .card-theme .text-muted,
-        body.bg-dark .card-theme .text-muted{
-            color:#9aa3b2 !important;
+        body.bg-dark .card-theme .text-muted{ color:#9aa3b2 !important; }
+
+        /* ===== Background music controller (same pattern as other pages) ===== */
+        .bgm{
+            position: fixed; right: 18px; bottom: 18px; z-index: 1000;
+            display: flex; align-items: center; gap: 10px;
+            border-radius: 14px;
+            border: 1px solid var(--bs-border-color, #dee2e6);
+            background: var(--bs-card-bg, #ffffff);
+            box-shadow: 0 18px 50px rgba(0,0,0,.12);
+            padding: 10px 12px;
+            backdrop-filter: blur(8px);
+            color: var(--bs-body-color, #0f172a);
+        }
+        body.bg-dark .bgm{
+            border-color: #2b3243;
+            background: rgba(17, 24, 39, 0.92);
+            box-shadow: 0 18px 50px rgba(0,0,0,.45);
+            color: #e6e9ef;
+        }
+        .bgm .btn{
+            display:inline-flex; align-items:center; justify-content:center;
+            width: 36px; height: 36px; border-radius: 10px;
+            border: 1px solid var(--bs-border-color, #dee2e6);
+            background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+            color: inherit; cursor: pointer; user-select:none; font-weight: 800;
+        }
+        .bgm .btn:active{ transform: translateY(1px); }
+        .bgm .status{ font-size:.85rem; opacity:.85; min-width: 90px; }
+        .bgm input[type="range"]{
+            width: 120px; height: 6px; border-radius: 999px; outline:none;
+            background: linear-gradient(90deg, var(--bs-primary, #0d6efd), var(--bs-success, #198754));
+            appearance: none; -webkit-appearance: none; border: none;
+        }
+        .bgm input[type="range"]::-webkit-slider-thumb{
+            -webkit-appearance: none; appearance: none; width:14px; height:14px; border-radius:50%;
+            background: #fff; border: 2px solid rgba(0,0,0,.25);
+        }
+        @media (max-width: 560px){
+            .bgm .status{ display:none; }
+            .bgm input[type="range"]{ width: 90px; }
         }
     </style>
 
@@ -207,8 +233,79 @@ function displayResultsByCategory(PDO $conn, int $projectID, ?int $userID): void
         <?php displayResultsByCategory($conn, $projectID, $userID); ?>
     </div>
 
-    </body>
-    </html>
+    <!-- ===== Background Music (toggle remembers user’s choice) ===== -->
+    <audio id="bgmAudio" preload="auto" loop playsinline>
+        <source src="<?= rtrim(BASE_URL, '/'); ?>/assets/audio/cyber-challenges.mp3" type="audio/mpeg">
+        <!-- optional ogg: <source src="<?= rtrim(BASE_URL, '/'); ?>/assets/audio/cyber-challenges.ogg" type="audio/ogg"> -->
+    </audio>
+
+    <div class="bgm" role="group" aria-label="Background music controls">
+        <button class="btn" id="bgmToggle" aria-pressed="false" title="Play/Pause">▶</button>
+        <div class="status" id="bgmStatus">Muted</div>
+        <input type="range" id="bgmVol" min="0" max="1" step="0.01" value="0.4" aria-label="Volume">
+    </div>
+
+    <script>
+        (function(){
+            const audio   = document.getElementById('bgmAudio');
+            const toggle  = document.getElementById('bgmToggle');
+            const status  = document.getElementById('bgmStatus');
+            const vol     = document.getElementById('bgmVol');
+
+            // Restore saved prefs (shared across pages)
+            const savedEnabled = localStorage.getItem('bgmEnabled') === 'true';
+            const savedVol = parseFloat(localStorage.getItem('bgmVolume') || '0.35');
+            vol.value = isNaN(savedVol) ? 0.35 : savedVol;
+            audio.volume = vol.value;
+
+            // Resume only if previously enabled (respects browser autoplay policy)
+            if (savedEnabled) {
+                audio.play().then(() => {
+                    toggle.textContent = '❚❚';
+                    toggle.setAttribute('aria-pressed', 'true');
+                    status.textContent = 'Playing';
+                }).catch(() => {
+                    toggle.textContent = '▶';
+                    toggle.setAttribute('aria-pressed', 'false');
+                    status.textContent = 'Click Play';
+                });
+            } else {
+                status.textContent = 'Muted';
+            }
+
+            toggle.addEventListener('click', async () => {
+                if (audio.paused) {
+                    try {
+                        await audio.play();
+                        toggle.textContent = '❚❚';
+                        toggle.setAttribute('aria-pressed', 'true');
+                        status.textContent = 'Playing';
+                        localStorage.setItem('bgmEnabled', 'true');
+                    } catch(e) {
+                        status.textContent = 'Click again to allow';
+                        toggle.textContent = '▶';
+                        toggle.setAttribute('aria-pressed', 'false');
+                        localStorage.setItem('bgmEnabled', 'false');
+                    }
+                } else {
+                    audio.pause();
+                    toggle.textContent = '▶';
+                    toggle.setAttribute('aria-pressed', 'false');
+                    status.textContent = 'Paused';
+                    localStorage.setItem('bgmEnabled', 'false');
+                }
+            });
+
+            vol.addEventListener('input', () => {
+                audio.volume = vol.value;
+                localStorage.setItem('bgmVolume', vol.value);
+            });
+
+            // Optional: react to your site theme toggle if it exists
+            document.getElementById('modeToggle')?.addEventListener('click', () => {});
+        })();
+    </script>
+
 <?php
 // Flush the buffer only after we've done potential redirects above
 ob_end_flush();
